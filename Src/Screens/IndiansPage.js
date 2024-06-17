@@ -7,17 +7,17 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {wp} from '../Themes/Fonts';
+import { wp } from '../Themes/Fonts';
 
 export default function IndiansPage() {
   const tabs = [
-    {id: 1, label: 'INDIANS'},
-    {id: 2, label: 'PAGES'},
+    { id: 1, label: 'INDIANS' },
+    { id: 2, label: 'PAGES' },
   ];
   const [tabType, setTabType] = useState('All');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
@@ -34,7 +34,7 @@ export default function IndiansPage() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   return (
@@ -83,7 +83,7 @@ export default function IndiansPage() {
             styles.animationView,
             {
               left: tabSelection == 'INDIANS' ? 5 : 7,
-              transform: [{translateX: buttonTranslateX}],
+              transform: [{ translateX: buttonTranslateX }],
             },
           ]}
         />

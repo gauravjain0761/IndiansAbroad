@@ -19,7 +19,7 @@ export const fontname = {
 export function defaultFontStyle(fontName, fontSize, color, fontWeight) {
   return {
     fontFamily: fontName,
-    fontSize: actuatedNormalize(fontSize),
+    fontSize: fontSize,
     color: color,
     fontWeight: fontWeight,
   };

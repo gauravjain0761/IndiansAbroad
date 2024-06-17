@@ -10,15 +10,18 @@ import MyTabbar from '../Components/MyTabbar';
 import ChatScreen from '../Screens/ChatScreen';
 import ProfileScreen from '../Screens/ProfileScreen';
 
+
+
+
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
     <Tab.Navigator tabBar={props => <MyTabbar {...props} />}
-    initialRouteName={screenName.indiansPage}
+      initialRouteName={screenName.indiansPage}
       screenOptions={({ route }) => ({
         tabBarHideOnKeyboard: true,
-        
+
       })}>
       <Tab.Screen name={screenName.homeScreen} component={HomeScreen} />
       {/* <Tab.Screen name={screenName.indiansPage} component={IndiansPage} /> */}
@@ -41,7 +44,7 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyTabs} /> */}
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyTabs} />
         <Stack.Screen
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.indiansPage}
