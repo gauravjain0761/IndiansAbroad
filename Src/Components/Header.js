@@ -59,8 +59,8 @@ export default function Header({ showLeft = false, showRight = false, title, isH
         <Image source={Icons.logo} style={ImageStyle(23, 23)} />
         <Text
           style={[
-            FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
-            { marginLeft: 8, textAlign: 'center' },
+            FontStyle(fontname.actor_regular, 16, colors.neutral_900,"700"),
+            {marginLeft: 8, textAlign: 'center'},
           ]}>
           {title}
         </Text>

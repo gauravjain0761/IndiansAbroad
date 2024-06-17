@@ -6,20 +6,26 @@ import {
   Animated,
   Dimensions,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { wp } from '../Themes/Fonts';
+import {fontname, hp, wp} from '../Themes/Fonts';
+import {FontStyle} from '../utils/commonFunction';
+import colors from '../Themes/Colors';
+import SearchBar from '../Components/SearchBar';
+import ConnectCard from '../Components/ConnectCard';
 
 export default function IndiansPage() {
   const tabs = [
-    { id: 1, label: 'INDIANS' },
-    { id: 2, label: 'PAGES' },
+    {id: 1, label: 'INDIANS'},
+    {id: 2, label: 'PAGES'},
   ];
   const [tabType, setTabType] = useState('All');
+  const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('buyers');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
@@ -34,7 +40,7 @@ export default function IndiansPage() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
+    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
   }, []);
 
   return (
@@ -54,9 +60,25 @@ export default function IndiansPage() {
             styles.tabItemView,
           ]}>
           {tabSelection == 'INDIANS' ? (
-            <Text>{'INDIANS'}</Text>
+            <Text
+              style={FontStyle(
+                fontname.actor_regular,
+                14,
+                colors.primary_6a7e,
+                '700',
+              )}>
+              {'INDIANS'}
+            </Text>
           ) : (
-            <Text>{'INDIANS'}</Text>
+            <Text
+              style={FontStyle(
+                fontname.actor_regular,
+                14,
+                colors.neutral_600,
+                '700',
+              )}>
+              {'INDIANS'}
+            </Text>
           )}
         </TouchableOpacity>
         <TouchableOpacity
@@ -73,9 +95,25 @@ export default function IndiansPage() {
             styles.tabItemView,
           ]}>
           {tabSelection == 'PAGES' ? (
-            <Text>{'PAGES'}</Text>
+            <Text
+              style={FontStyle(
+                fontname.actor_regular,
+                14,
+                colors.primary_6a7e,
+                '700',
+              )}>
+              {'PAGES'}
+            </Text>
           ) : (
-            <Text textColor1>{'PAGES'}</Text>
+            <Text
+              style={FontStyle(
+                fontname.actor_regular,
+                14,
+                colors.neutral_600,
+                '700',
+              )}>
+              {'PAGES'}
+            </Text>
           )}
         </TouchableOpacity>
         <Animated.View
@@ -83,11 +121,23 @@ export default function IndiansPage() {
             styles.animationView,
             {
               left: tabSelection == 'INDIANS' ? 5 : 7,
-              transform: [{ translateX: buttonTranslateX }],
+              transform: [{translateX: buttonTranslateX}],
             },
           ]}
         />
       </View>
+      <SearchBar
+        value={searchText}
+        onChangeText={text => setSearchText(text)}
+        placeholder={'Search Indians here'}
+      />
+      <Text
+        style={
+          ([FontStyle(fontname.abeezee, 14, colors.neutral_900, '700')],
+          {marginHorizontal: wp(16), marginVertical: 8})
+        }>
+        {'People may you know'}
+      </Text>
       <PagerView
         style={{}}
         initialPage={tabSelectionIndex}
@@ -98,10 +148,39 @@ export default function IndiansPage() {
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
         <View key={'1'}>
-          <Text>asdasd</Text>
+          <FlatList
+            style={{
+              paddingHorizontal: wp(16),
+              // marginBottom: wp(250),
+            }}
+            columnWrapperStyle={{
+              // justifyContent: 'space-between',
+              width: '100%',
+              columnGap: wp(10),
+              rowGap: hp(16),
+            }}
+            numColumns={2}
+            bounces={false}
+            data={[1, 2, 3]}
+            renderItem={({item}) => {
+              return <ConnectCard />;
+            }}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
         <View key={'2'}>
-          <Text>asdasd</Text>
+          <FlatList
+            style={{
+              paddingHorizontal: wp(20),
+              marginBottom: wp(250),
+            }}
+            bounces={false}
+            data={[1, 2, 3]}
+            renderItem={({item}) => {
+              return <Text>sda</Text>;
+            }}
+            showsVerticalScrollIndicator={false}
+          />
         </View>
       </PagerView>
     </View>
