@@ -6,7 +6,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
 
-export default function Header({ showLeft = false, showRight = false, title, isHome = false,onLeftPress }) {
+export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onClickPlus }) {
 
   if (isHome) {
     return (
@@ -32,7 +32,7 @@ export default function Header({ showLeft = false, showRight = false, title, isH
           ApplicationStyles.row,
           { gap: 10 }
         ]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onClickPlus()}>
             <Image source={Icons.plusHome} style={ImageStyle(26, 24)} />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -59,8 +59,8 @@ export default function Header({ showLeft = false, showRight = false, title, isH
         <Image source={Icons.logo} style={ImageStyle(23, 23)} />
         <Text
           style={[
-            FontStyle(fontname.actor_regular, 16, colors.neutral_900,"700"),
-            {marginLeft: 8, textAlign: 'center'},
+            FontStyle(fontname.actor_regular, 16, colors.neutral_900, "700"),
+            { marginLeft: 8, textAlign: 'center' },
           ]}>
           {title}
         </Text>
@@ -82,11 +82,11 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(16),
     marginVertical: 12,
   },
-  backIcon:{
-    borderWidth:1,
-    paddingHorizontal:10,
-    paddingVertical:3,
-    borderRadius:12,
-    borderColor:colors.primary_500
+  backIcon: {
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 12,
+    borderColor: colors.primary_500
   }
 });
