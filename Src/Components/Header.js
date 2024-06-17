@@ -6,7 +6,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
 
-export default function Header({ showLeft = false, showRight = false, title, isHome = false }) {
+export default function Header({ showLeft = false, showRight = false, title, isHome = false,onLeftPress }) {
 
   if (isHome) {
     return (
@@ -45,8 +45,8 @@ export default function Header({ showLeft = false, showRight = false, title, isH
   return (
     <View style={[ApplicationStyles.row, styles.header]}>
       {showLeft ? (
-        <TouchableOpacity>
-          <Image source={Icons.bell} style={ImageStyle(18, 18)} />
+        <TouchableOpacity onPress={onLeftPress} style={styles.backIcon}>
+          <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
         </TouchableOpacity>
       ) : (
         <View />
@@ -82,4 +82,11 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(16),
     marginVertical: 12,
   },
+  backIcon:{
+    borderWidth:1,
+    paddingHorizontal:10,
+    paddingVertical:3,
+    borderRadius:12,
+    borderColor:colors.primary_500
+  }
 });

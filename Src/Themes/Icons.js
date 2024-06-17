@@ -12,8 +12,8 @@ export const Icons = {
     Arrow_circle_right: require('../assets/Icons/Arrow_circle_right.png'),
     plusHome: require('../assets/Icons/plusHome.png'),
     menus: require('../assets/Icons/menus.png'),
-    // logo: require('../assets/Icons/logo.png'),
-    // logo: require('../assets/Icons/logo.png'),
+    left_arrow: require('../assets/Icons/left-arrow.png'),
+    more: require('../assets/Icons/more.png'),
     // logo: require('../assets/Icons/logo.png'),
     // logo: require('../assets/Icons/logo.png'),
 

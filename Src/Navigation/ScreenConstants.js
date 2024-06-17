@@ -1,6 +1,7 @@
 export const screenName = {
   homeScreen: 'HomeScreen',
   indiansPage: 'IndiansPage',
+  indiansDetails: 'IndiansDetails',
   discussionForum: 'DiscussionForum',
   chatScreen: 'ChatScreen',
   profileScreen: 'ProfileScreen',

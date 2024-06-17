@@ -16,10 +16,11 @@ import {fontname, screen_width, wp} from '../Themes/Fonts';
 export default function SearchBar({
   value,
   onChangeText,
-  placeholder
+  placeholder,
+  containerStyles
 }) {
   return (
-    <View style={[styles.header]}>
+    <View style={[styles.header,containerStyles]}>
       <View style={[ApplicationStyles.row, styles.textInput]}>
         <Image source={Icons.bell} style={ImageStyle(18, 18)} />
         <TextInput
