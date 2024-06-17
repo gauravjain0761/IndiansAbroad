@@ -46,6 +46,7 @@ export function defaultFontStyle(fontWeight, fontSize, color) {
 }
 
 import {Dimensions, Platform, PixelRatio} from 'react-native';
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
 
@@ -60,3 +61,14 @@ export function actuatedNormalize(size) {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
   }
 }
+
+
+Dimensions.get('window');
+
+export const hp = (i) => {
+  return heightPercentageToDP((i * 100) / SCREEN_HEIGHT);
+};
+
+export const wp = (i) => {
+  return widthPercentageToDP((i * 100) / SCREEN_WIDTH);
+};
