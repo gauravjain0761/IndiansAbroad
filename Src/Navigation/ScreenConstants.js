@@ -11,4 +11,5 @@ export const screenName = {
   Enquiry: 'Enquiry',
   Terms: 'Terms',
   Privacy: 'Privacy',
+  PostDetail: 'PostDetail'
 };

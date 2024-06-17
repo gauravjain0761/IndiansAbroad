@@ -59,7 +59,7 @@ export default function Header({ showLeft = false, showRight = false, title, isH
         <Image source={Icons.logo} style={ImageStyle(23, 23)} />
         <Text
           style={[
-            FontStyle(fontname.actor_regular, 16, colors.neutral_900, "700"),
+            FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
             { marginLeft: 8, textAlign: 'center' },
           ]}>
           {title}
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: wp(16),
     marginVertical: 12,
+    height: 30
   },
   backIcon: {
     borderWidth: 1,

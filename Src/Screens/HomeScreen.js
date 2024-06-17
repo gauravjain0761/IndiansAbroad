@@ -24,6 +24,8 @@ import PostCard from '../Components/PostCard';
 import ModalContainer from '../Components/ModalContainer';
 import { Icons } from '../Themes/Icons';
 import CreatePost from '../Components/CreatePost';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const [tabType, setTabType] = useState('All');
@@ -34,6 +36,7 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false)
   const [postText, setpostText] = useState('')
+  const navigation = useNavigation()
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
       toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
@@ -51,12 +54,16 @@ export default function HomeScreen() {
   }, []);
 
   const renderItem = ({ item, index }) => {
-    return (<PostCard item={item} index={index} />)
+    return (
+      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.PostDetail)}>
+        <PostCard item={item} index={index} />
+      </TouchableOpacity>
+    )
   }
 
   return (
     <View style={ApplicationStyles.applicationView}>
-      <Header title={'IndianAbroad'} showRight={true} isHome={true} onClickPlus={() => setcreatePostModal(true)} />
+      <Header title={'IndiansAbroad'} showRight={true} isHome={true} onClickPlus={() => setcreatePostModal(true)} />
       <View style={styles.tabMainView}>
         <TouchableOpacity
           onPress={() => {
