@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { defaultFontStyle, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
+import { screenName } from '../Navigation/ScreenConstants';
 
 export default function MyTabbar({ state, descriptors, navigation }) {
     return (
@@ -32,15 +33,15 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                     }
 
                     let iconName;
-                    if (route.name === 'Home') {
+                    if (route.name === screenName.homeScreen) {
                         iconName = Icons.homeIcon;
-                    } else if (route.name === 'Indians') {
+                    } else if (route.name === screenName.indiansPage) {
                         iconName = Icons.peopleIcon;
-                    } else if (route.name === 'Discussion') {
+                    } else if (route.name === screenName.discussionForum) {
                         iconName = Icons.discussionIcon;
-                    } else if (route.name === 'Chatbox') {
+                    } else if (route.name === screenName.chatScreen) {
                         iconName = Icons.chatIcon;
-                    } else if (route.name === 'Profile') {
+                    } else if (route.name === screenName.profileScreen) {
                         iconName = Icons.profileIcon
                     }
 

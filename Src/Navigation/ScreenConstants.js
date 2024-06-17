@@ -1,4 +1,8 @@
 
 export const screenName = {
-  indiansPage: 'IndiansPage'
+  homeScreen: 'HomeScreen',
+  indiansPage: 'IndiansPage',
+  discussionForum: 'DiscussionForum',
+  chatScreen: 'ChatScreen',
+  profileScreen: 'ProfileScreen',
 };

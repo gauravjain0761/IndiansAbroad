@@ -4,7 +4,7 @@ import ApplicationStyles from '../Themes/ApplicationStyles';
 import {Icons} from '../Themes/Icons';
 import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {wp} from '../Themes/Fonts';
+import {fontname, wp} from '../Themes/Fonts';
 
 export default function Header({showLeft = false, showRight = false,title}) {
   return (
@@ -24,7 +24,7 @@ export default function Header({showLeft = false, showRight = false,title}) {
         <Image source={Icons.logo} style={ImageStyle(20, 20)} />
         <Text
           style={[
-            FontStyle(100, 16, colors.black),
+            FontStyle(fontname.actor_regular, 16, colors.black),
             {marginLeft: 8, textAlign: 'center'},
           ]}>
           {title}

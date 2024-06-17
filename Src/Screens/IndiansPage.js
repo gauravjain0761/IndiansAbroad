@@ -11,7 +11,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
-import TopTabAnimation from '../Components/TopTabAnimation';
 import PagerView from 'react-native-pager-view';
 import {wp} from '../Themes/Fonts';
 

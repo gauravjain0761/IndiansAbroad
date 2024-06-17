@@ -43,3 +43,13 @@ export const hp = (i) => {
 export const wp = (i) => {
   return widthPercentageToDP((i * 100) / SCREEN_WIDTH);
 };
+
+
+export function actuatedNormalize(size) {
+  const newSize = size * scale;
+  if (Platform.OS === 'ios') {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize));
+  } else {
+    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 3;
+  }
+}

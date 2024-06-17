@@ -7,20 +7,24 @@ import IndiansPage from '../Screens/IndiansPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DiscussionForum from '../Screens/DiscussionForum';
 import MyTabbar from '../Components/MyTabbar';
+import ChatScreen from '../Screens/ChatScreen';
+import ProfileScreen from '../Screens/ProfileScreen';
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
     <Tab.Navigator tabBar={props => <MyTabbar {...props} />}
+    initialRouteName={screenName.indiansPage}
       screenOptions={({ route }) => ({
         tabBarHideOnKeyboard: true,
+        
       })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Indians" component={IndiansPage} />
-      <Tab.Screen name="Discussion" component={DiscussionForum} />
-      <Tab.Screen name="Chatbox" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={IndiansPage} />
+      <Tab.Screen name={screenName.homeScreen} component={HomeScreen} />
+      {/* <Tab.Screen name={screenName.indiansPage} component={IndiansPage} /> */}
+      <Tab.Screen name={screenName.discussionForum} component={DiscussionForum} />
+      <Tab.Screen name={screenName.chatScreen} component={ChatScreen} />
+      <Tab.Screen name={screenName.profileScreen} component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -37,7 +41,7 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyTabs} />
+        {/* <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyTabs} /> */}
         <Stack.Screen
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.indiansPage}
