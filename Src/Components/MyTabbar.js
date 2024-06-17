@@ -67,7 +67,7 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                                     ...styles.iconStyle,
                                     tintColor: isFocused
                                         ? colors.primary_8091ba
-                                        : colors.black,
+                                        : undefined,
                                 }}
                                 source={iconName}
                             />

@@ -1,0 +1,131 @@
+import {
+    StyleSheet,
+    Text,
+    View,
+    ViewStyle,
+    TouchableOpacity,
+    SafeAreaView,
+    Image,
+    Switch,
+} from 'react-native';
+import React from 'react'
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { Icons } from '../Themes/Icons';
+import { SCREEN_HEIGHT, defaultFontStyle, fontname, hp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
+import colors from '../Themes/Colors';
+import ApplicationStyles from '../Themes/ApplicationStyles';
+
+export default function CustomDrawer() {
+    const navigation = useNavigation();
+    let data = [
+        // { name: 'Live tracking', screen: screenName.LiveTrackingScreen, image: Icons.liveTracking },
+        {
+            name: 'My Page',
+            screen: screenName.MyPageScreen,
+        },
+        {
+            name: 'Invite Friends',
+            screen: screenName.InviteFriendScreen,
+        },
+        {
+            name: 'Feedback Forum',
+            screen: screenName.FeedBackForum,
+        },
+        {
+            name: 'Enquiry',
+            screen: screenName.Enquiry,
+        },
+        {
+            name: 'Terms & Conditions',
+            screen: screenName.Terms,
+        },
+        {
+            name: 'Privacy Policy',
+            screen: screenName.Privacy,
+        }
+
+        // { name: 'Support', screen: screenName.SupportScreen, image: Icons.support },
+    ];
+
+    return (
+        <View style={styles.mainView}>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        style={{ flexDirection: 'row' }}
+                        onPress={() => navigation.navigate(screenName.profileScreen)}>
+                        <Image source={Icons.userImage} style={styles.userImage} />
+                    </TouchableOpacity>
+                    <View style={ApplicationStyles.flex}>
+                        <Text numberOfLines={1} style={styles.username}>
+                            Harshal Jadhav
+                        </Text>
+                        <Text numberOfLines={1} style={styles.username}>
+                            jadhavharshal.h@gmail.com
+                        </Text>
+                    </View>
+                </View>
+            </SafeAreaView>
+            <View style={styles.middleView}>
+                {data.map((item, index) => {
+                    return (
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => navigation.navigate(item.screen)}>
+                            <View style={styles.drawerItem}>
+                                <Text style={styles.drawerItemText}>{item.name}</Text>
+                                <Image source={Icons.Arrow_circle_right} style={styles.drawerItemImage} />
+
+                            </View>
+                        </TouchableOpacity>
+                    );
+                })}
+                <TouchableOpacity
+                    style={styles.drawerItem}
+                >
+                    <Text style={styles.drawerItemText}>{'Logout'}</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: hp(15),
+        paddingVertical: hp(15),
+    },
+    container: {
+        backgroundColor: colors.white,
+
+    },
+    userImage: {
+        height: 63,
+        width: 63,
+        borderRadius: 63 / 2,
+    },
+    username: {
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+        paddingLeft: 5,
+    },
+    drawerItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: hp(15),
+        paddingVertical: hp(10),
+    },
+    drawerItemImage: {
+        height: 24,
+        width: 24,
+        // marginRight: hp(20),
+    },
+    drawerItemText: {
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    },
+})
