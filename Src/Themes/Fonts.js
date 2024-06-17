@@ -1,66 +1,37 @@
 export function getFontType(fontWeight) {
-  if (fontWeight == '600') {
-    return 'SFUIText-Semibold';
-  } else if (fontWeight == 'normal') {
-    return 'SFUIText-Regular';
-  } else if (fontWeight == 'bold') {
-    return 'SFUIText-Bold';
-  } else if (fontWeight == '300') {
-    return 'SFUIText-Light';
-  } else if (fontWeight == '900') {
-    return 'SFUIText-Heavy';
-  } else if (fontWeight == '500') {
-    return 'SFUIText-Medium';
-  } else if (fontWeight == 'italicMedium') {
-    return 'SFUIText-MediumItalic';
-  } else if (fontWeight == 'italicHeavy') {
-    return 'SFUIText-HeavyItalic';
+  if (fontWeight == fontname.abeezeeItalic) {
+    return 'ABeeZee-Italic';
+  } else if (fontWeight == fontname.abeezee) {
+    return 'ABeeZee-Regular';
+  } else if (fontWeight == fontname.actor_regular) {
+    return 'Actor-Regular';
   } else {
-    return 'SFUIText-Regular';
+    return 'Actor-Regular';
   }
 }
 
-export function getFontSize(fontSize) {
-  if (fontSize == '16px') {
-    return actuatedNormalize(14);
-  } else if (fontSize == '14px') {
-    return actuatedNormalize(12);
-  } else if (fontSize == '13px') {
-    return actuatedNormalize(11);
-  } else if (fontSize == '12px') {
-    return actuatedNormalize(10);
-  } else if (fontSize == '10px') {
-    return actuatedNormalize(8);
-  } else if (fontSize == '20px') {
-    return actuatedNormalize(18);
-  } else {
-    return fontSize;
-  }
+export const fontname = {
+  actor_regular: 'Actor-Regular',
+  abeezee: 'AbeeZee-Regular',
+  abeezeeItalic: 'AbeeZee-Italic',
 }
-export function defaultFontStyle(fontWeight, fontSize, color) {
+
+export function defaultFontStyle(fontName, fontSize, color, fontWeight) {
   return {
-    fontFamily: getFontType(fontWeight),
-    fontSize: getFontSize(fontSize),
+    fontFamily: fontName,
+    fontSize: fontSize,
     color: color,
+    fontWeight: fontWeight,
   };
 }
 
-import {Dimensions, Platform, PixelRatio} from 'react-native';
+import { Dimensions, Platform, PixelRatio } from 'react-native';
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 
-const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // based on iphone 5s's scale
 const scale = SCREEN_WIDTH / 320;
-
-export function actuatedNormalize(size) {
-  const newSize = size * scale;
-  if (Platform.OS === 'ios') {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize));
-  } else {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
-  }
-}
 
 
 Dimensions.get('window');
