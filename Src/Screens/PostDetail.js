@@ -43,7 +43,6 @@ export default function PostDetail() {
 
     const RenderItem = ({ item, itemIndex }) => {
         const replyData = itemIndex == 0 ? [0] : [0, 1, 2, 3]
-        console.log(itemIndex)
         return <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
                 <RenderUserIcon height={53} isBorder />

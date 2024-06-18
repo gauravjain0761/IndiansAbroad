@@ -28,6 +28,7 @@ export default function EditProfile() {
 
 const styles = StyleSheet.create({
     userIcon: {
-        alignSelf: 'center'
+        alignSelf: 'center',
+
     }
 })

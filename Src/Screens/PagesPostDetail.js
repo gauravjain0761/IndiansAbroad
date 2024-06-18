@@ -9,14 +9,14 @@ import {
   SafeAreaView,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import PostCard from '../Components/PostCard';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
-import {Icons} from '../Themes/Icons';
-import {fontname} from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import PagePostCard from '../Components/PagePostCard';
@@ -25,18 +25,18 @@ export default function PagesPostDetail() {
   const navigation = useNavigation();
   const [commentText, setcommentText] = useState('');
 
-  const RenderReply = ({item, index, isLastIndex}) => {
+  const RenderReply = ({ item, index, isLastIndex }) => {
     return (
       <View style={styles.replyCommentView}>
         <View
           style={[
             styles.replyCommnt,
-            {alignItems: isLastIndex ? 'flex-start' : 'center'},
+            { alignItems: isLastIndex ? 'flex-start' : 'center' },
           ]}>
           <View
             style={[
               styles.verticalLine,
-              {height: isLastIndex ? '50%' : '100%'},
+              { height: isLastIndex ? '50%' : '100%' },
             ]}
           />
           <View style={styles.horizontalLine} />
@@ -44,10 +44,10 @@ export default function PagesPostDetail() {
             <RenderUserIcon height={38} isBorder />
             <View style={styles.commentBg}>
               <View style={ApplicationStyles.flex}>
-                <Text style={[styles.username, {fontSize: 9}]}>
+                <Text style={[styles.username, { fontSize: 9 }]}>
                   Nikita Khairnar
                 </Text>
-                <Text style={[styles.degreeText, {fontSize: 7}]}>
+                <Text style={[styles.degreeText, { fontSize: 7 }]}>
                   PhD Student, Seoul
                 </Text>
                 <Text style={styles.commentText}>Nice</Text>
@@ -65,11 +65,10 @@ export default function PagesPostDetail() {
     );
   };
 
-  const RenderItem = ({item, itemIndex}) => {
+  const RenderItem = ({ item, itemIndex }) => {
     const replyData = itemIndex == 0 ? [0] : [0, 1, 2, 3];
-    console.log(itemIndex);
     return (
-      <View style={{marginBottom: 10}}>
+      <View style={{ marginBottom: 10 }}>
         <View style={styles.headerView}>
           <View style={styles.imageView}>
             <Image source={Icons.logo} style={styles.userImage} />
@@ -95,7 +94,7 @@ export default function PagesPostDetail() {
         {(itemIndex == 0 || itemIndex == 1) && (
           <FlatList
             data={replyData}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return (
                 <RenderReply
                   item={item}
@@ -120,12 +119,12 @@ export default function PagesPostDetail() {
         }}
       />
       <ScrollView>
-        <View style={{marginBottom: 10}}>
+        <View style={{ marginBottom: 10 }}>
           <PagePostCard />
         </View>
         <FlatList
           data={[0, 1, 2, 3]}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return <RenderItem itemIndex={index} item={item} />;
           }}
         />
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
   userImage: {
     height: 45,
     width: 45,
-    resizeMode:'contain'
+    resizeMode: 'contain'
   },
   username: {
     ...FontStyle(fontname.actor_regular, 13, colors.neutral_900, '700'),

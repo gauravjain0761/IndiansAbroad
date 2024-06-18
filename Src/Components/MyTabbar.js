@@ -55,7 +55,7 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                         };
 
                         return (
-                            <TouchableOpacity accessibilityRole="button" accessibilityState={isFocused ? { selected: true } : {}} accessibilityLabel={options.tabBarAccessibilityLabel} testID={options.tabBarTestID} onPress={onPress} onLongPress={onLongPress} style={styles.itemContainer}>
+                            <TouchableOpacity key={index} accessibilityRole="button" accessibilityState={isFocused ? { selected: true } : {}} accessibilityLabel={options.tabBarAccessibilityLabel} testID={options.tabBarTestID} onPress={onPress} onLongPress={onLongPress} style={styles.itemContainer}>
                                 <Image style={{ ...styles.iconStyle, tintColor: isFocused ? colors.primary_8091ba : undefined, }} source={iconName} />
                                 {isFocused && <Text style={{ ...styles.labelTextStyle, color: isFocused ? colors.primary_8091ba : colors.black, }}>
                                     {label}

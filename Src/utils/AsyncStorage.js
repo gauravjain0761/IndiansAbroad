@@ -10,7 +10,7 @@ export const clearAsync = async () => {
   await AsyncStorage.multiRemove([asyncKeys.token, asyncKeys.user_info]);
 };
 
-export const setAsyncToken = async (token: string) => {
+export const setAsyncToken = async (token) => {
   await AsyncStorage.setItem(asyncKeys.token, JSON.stringify(token));
 };
 
@@ -23,7 +23,7 @@ export const getAsyncToken = async () => {
   }
 };
 
-export const setAsyncUserInfo = async (user: any) => {
+export const setAsyncUserInfo = async (user) => {
   await AsyncStorage.setItem(asyncKeys.user_info, JSON.stringify(user));
 };
 

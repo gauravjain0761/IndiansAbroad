@@ -26,6 +26,10 @@ import { Icons } from '../Themes/Icons';
 import CreatePost from '../Components/CreatePost';
 import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../Navigation/ScreenConstants';
+import { getalluserposts } from '../Services/PostServices';
+import axios from 'axios';
+import { dispatchAction } from '../utils/apiGlobal';
+import { IS_LOADING } from '../Redux/ActionTypes';
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const [tabType, setTabType] = useState('All');
@@ -35,8 +39,26 @@ export default function HomeScreen() {
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false)
-  const [postText, setpostText] = useState('')
   const navigation = useNavigation()
+
+
+  // useEffect(() => {
+  //   dispatchAction(dispatch, IS_LOADING, true)
+  // }, [])
+
+  // useEffect(() => {
+
+  //   let obj = {
+  //     data: {
+  //       createdBy: "663331ecdd27304e5c393167",
+  //       page: '1',
+  //       limit: ''
+  //     }
+  //   }
+  //   dispatch(getalluserposts(obj))
+  // }, [])
+
+
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
       toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
@@ -44,14 +66,6 @@ export default function HomeScreen() {
     }).start();
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
-
-  useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
-  }, []);
-
-  useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
-  }, []);
 
   const renderItem = ({ item, index }) => {
     return (

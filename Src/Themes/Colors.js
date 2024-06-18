@@ -18,6 +18,17 @@ const colors = {
   neutral_300: '#DEE1E6FF',
   neutral_800: '#1E2128FF',
   buttonBlue: '#5071BEFF',
-  btnBg: '#F4F4F4FF'
+  btnBg: '#F4F4F4FF',
+
+
+
+
+  green_20CA60: '#20CA60',
+  green_2DD971: '#2DD971',
+  green_36AE18: '#36AE18',
+  green_1DB456: '#1DB456',
+  red_ED7C7C: '#ED7C7C',
+  red_DE6161: '#DE6161',
+  red_EE5858: '#EE5858'
 };
 export default colors;
