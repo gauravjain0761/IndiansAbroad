@@ -8,25 +8,23 @@ import {
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
+import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
+import RenderUserIcon from './RenderUserIcon';
 
-export default function ConnectedIndians({indians, cardPress}) {
+export default function ConnectedIndians({ indians, cardPress }) {
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
-      <View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
-        <View style={styles.imageStyle}>
-          {/* <Image source={Icons.bell} style={ImageStyle(45, 45)} /> */}
-        </View>
+      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+        <RenderUserIcon height={40} isBorder />
         <Text numberOfLines={1} style={styles.text1}>
           Vikas Mane
         </Text>
       </View>
-
       <TouchableOpacity style={styles.btnView}>
-         <Image source={Icons.more} style={ImageStyle(14, 14)} />
+        <Image source={Icons.more} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -39,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: hp(16),
-    paddingVertical:hp(5)
+    paddingVertical: hp(5)
   },
   textInput: {
     borderRadius: 8,
@@ -52,17 +50,8 @@ const styles = StyleSheet.create({
     width: screen_width * 0.85,
     ...FontStyle(fontname.actor_regular, 14, colors.black, '500'),
   },
-  imageStyle: {
-    width: wp(45),
-    height: wp(45),
-    borderWidth: 1,
-    alignItems: 'center',
-    borderColor: colors.neutral_500,
-    flexDirection: 'row',
-    borderRadius: wp(45) / 2,
-  },
   text1: {
-    marginLeft:12,
+    marginLeft: 12,
     ...FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
   },
 });

@@ -8,16 +8,18 @@ import {
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
+import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
+import RenderUserIcon from './RenderUserIcon';
 
-export default function ConnectCard({indians,cardPress}) {
+export default function ConnectCard({ indians, cardPress }) {
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={styles.imageStyle}>
-        <Image source={Icons.bell} style={ImageStyle(18, 18)} />
+        <RenderUserIcon height={78} />
+        {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
       </View>
       <Text numberOfLines={1} style={styles.text1}>
         Vikas Mane
@@ -25,7 +27,7 @@ export default function ConnectCard({indians,cardPress}) {
       <Text numberOfLines={1} style={styles.text2}>
         MS Student
       </Text>
-     {indians && <Text numberOfLines={1} style={styles.text3}>
+      {indians && <Text numberOfLines={1} style={styles.text3}>
         London University
       </Text>}
       <TouchableOpacity style={styles.btnView}>
@@ -62,10 +64,11 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: wp(92),
     height: hp(82),
-    borderWidth: 1,
+    // borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor:colors.neutral_500
+    backgroundColor: colors.white
+    // borderColor: colors.neutral_500
   },
   text1: {
     marginTop: 5,
@@ -89,8 +92,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginVertical: hp(12),
   },
-  btnText:{
+  btnText: {
     ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),
-    lineHeight:18
+    lineHeight: 18
   }
 });

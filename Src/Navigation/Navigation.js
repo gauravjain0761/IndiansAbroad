@@ -86,22 +86,22 @@ function MyDrawer() {
   );
 }
 
-const StackIndiansPage = () => {
-  return (
-    <Stack.Navigator initialRouteName=''>
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.indiansPage}
-        component={IndiansPage}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.indiansDetails}
-        component={IndiansDetails}
-      />
-    </Stack.Navigator>
-  );
-};
+// const StackIndiansPage = () => {
+//   return (
+//     <Stack.Navigator initialRouteName=''>
+//       <Stack.Screen
+//         options={({ navigation }) => ({ ...headerStyleTransparent })}
+//         name={screenName.indiansPage}
+//         component={IndiansPage}
+//       />
+//       <Stack.Screen
+//         options={({ navigation }) => ({ ...headerStyleTransparent })}
+//         name={screenName.indiansDetails}
+//         component={IndiansDetails}
+//       />
+//     </Stack.Navigator>
+//   );
+// };
 
 const Tab = createBottomTabNavigator();
 
@@ -124,7 +124,7 @@ function MyTabs() {
           title: 'Indians',
         })}
         name={screenName.indiansPage}
-        component={StackIndiansPage}
+        component={IndiansPage}
       />
       <Tab.Screen
         options={({ navigation }) => ({
@@ -178,6 +178,11 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.PostDetail}
           component={PostDetail}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.indiansDetails}
+          component={IndiansDetails}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -10,26 +10,27 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useNavigation} from '@react-navigation/native';
-import {Icons} from '../Themes/Icons';
+import { useNavigation } from '@react-navigation/native';
+import { Icons } from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
+import RenderUserIcon from '../Components/RenderUserIcon';
 
 export default function IndiansDetails() {
   const tabs = [
-    {id: 1, label: 'Posts'},
-    {id: 2, label: 'Connected Indians'},
+    { id: 1, label: 'Posts' },
+    { id: 2, label: 'Connected Indians' },
   ];
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
@@ -54,7 +55,7 @@ export default function IndiansDetails() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   return (
@@ -68,17 +69,21 @@ export default function IndiansDetails() {
       />
       <ScrollView>
         <View style={styles.userViewStyle}>
-          <Image source={Icons.userImage} style={styles.userImage} />
+          <View style={styles.imageView}>
+            <RenderUserIcon height={100} isBorder />
+
+          </View>
+          {/* <Image source={Icons.userImage} style={styles.userImage} /> */}
           <Text style={styles.userText}>Dhruv Solanki</Text>
           <Text style={styles.userText1}>
             (Believe in yourself no matter what)
           </Text>
-          <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
+          <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
             <TouchableOpacity style={styles.btnView}>
               <Text style={styles.btnText}>Connect</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.btnView, {marginLeft: 8, marginRight: 2}]}>
+              style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
               <Text style={styles.btnText}>Message</Text>
             </TouchableOpacity>
             <TouchableOpacity>
@@ -177,7 +182,7 @@ export default function IndiansDetails() {
               styles.animationView,
               {
                 left: tabSelection == 'INDIANS' ? 16 : 7,
-                transform: [{translateX: buttonTranslateX}],
+                transform: [{ translateX: buttonTranslateX }],
                 width: tabSelection == 'INDIANS' ? 170 : `${88 / tabs.length}%`,
                 borderWidth: 0.9,
                 borderColor: colors.primary_4574ca,
@@ -210,7 +215,7 @@ export default function IndiansDetails() {
                 numColumns={2}
                 bounces={false}
                 data={[1, 2]}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   return <Text>sda</Text>;
                 }}
                 showsVerticalScrollIndicator={false}
@@ -223,14 +228,14 @@ export default function IndiansDetails() {
                 value={searchText}
                 onChangeText={text => setSearchText(text)}
                 placeholder={'Search Indians here'}
-                containerStyles={{backgroundColor: colors.white, marginTop: 5}}
+                containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
               />
               <FlatList
                 style={{
                   paddingHorizontal: wp(16),
                 }}
                 data={[1, 2]}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   return <ConnectedIndians />;
                 }}
                 showsVerticalScrollIndicator={false}
@@ -318,4 +323,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
   },
+  imageView: {
+    alignSelf: 'center'
+  }
 });
