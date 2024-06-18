@@ -9,15 +9,15 @@ export default function RenderUserIcon({ height, isBorder = false }) {
     const navigation = useNavigation()
     let styles = StyleSheet.create({
         userImage: {
-            height: height,
-            width: height,
+            height: height - (isBorder ? 6 : 0),
+            width: height - (isBorder ? 6 : 0),
             borderRadius: height / 2,
         }
     })
     return (
         <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)} style={{
-            height: height + (isBorder ? 6 : 0),
-            width: height + (isBorder ? 6 : 0),
+            height: height,
+            width: height,
             borderWidth: 2,
             borderRadius: 200,
             alignItems: 'center',

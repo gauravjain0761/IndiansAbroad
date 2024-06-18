@@ -18,7 +18,7 @@ export default function ConnectedIndians({ indians, cardPress }) {
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-        <RenderUserIcon height={40} isBorder />
+        <RenderUserIcon height={45} isBorder />
         <Text numberOfLines={1} style={styles.text1}>
           Vikas Mane
         </Text>
