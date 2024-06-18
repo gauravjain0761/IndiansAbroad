@@ -17,4 +17,6 @@ export const screenName = {
   Setting: 'Setting',
   EditProfile: 'EditProfile',
   PagesPostDetail: 'PagesPostDetail',
+  DiscussionForumDetail: 'DiscussionForumDetail',
+  CreateDiscussion: 'CreateDiscussion',
 };

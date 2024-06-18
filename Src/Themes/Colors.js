@@ -10,6 +10,8 @@ const colors = {
   secondary_d9e2: '#D9E2F3FF',
   primary_6a7e: '#6A7EB0FF',
   neutral_600: '#565D6DFF',
+  neutral_100: '#5E78B4FF',
+  neutral_700: '#323743FF',
   neutral_900: '#171A1FFF',
   borderColor: '#E1E6EE',
   placeHolderColor: '#BAC2CC',

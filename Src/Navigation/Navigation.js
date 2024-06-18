@@ -26,6 +26,8 @@ import PagesDetails from '../Screens/PagesDetails';
 import Setting from '../Screens/Setting';
 import EditProfile from '../Screens/EditProfile';
 import PagesPostDetail from '../Screens/PagesPostDetail';
+import DiscussionForumDetail from '../Screens/DiscussionForumDetail';
+import CreateDiscussion from '../Screens/CreateDiscussion';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -208,6 +210,18 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.PagesPostDetail}
           component={PagesPostDetail}
+
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.DiscussionForumDetail}
+          component={DiscussionForumDetail}
+
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.CreateDiscussion}
+          component={CreateDiscussion}
 
         />
       </Stack.Navigator>
