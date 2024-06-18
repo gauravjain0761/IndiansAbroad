@@ -58,7 +58,7 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
-    if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
+    // if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
   }, [])
 
   useEffect(() => {
