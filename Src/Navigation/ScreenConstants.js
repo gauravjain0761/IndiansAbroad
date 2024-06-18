@@ -1,3 +1,4 @@
+
 export const screenName = {
   homeScreen: 'HomeScreen',
   indiansPage: 'IndiansPage',
@@ -13,4 +14,6 @@ export const screenName = {
   Privacy: 'Privacy',
   PostDetail: 'PostDetail',
   pagesDetails: 'PagesDetails',
+  Setting: 'Setting',
+  EditProfile: 'EditProfile'
 };

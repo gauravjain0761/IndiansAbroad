@@ -23,6 +23,8 @@ import Privacy from '../Screens/Privacy';
 import IndiansDetails from '../Screens/IndiansDetails';
 import PostDetail from '../Screens/PostDetail';
 import PagesDetails from '../Screens/PagesDetails';
+import Setting from '../Screens/Setting';
+import EditProfile from '../Screens/EditProfile';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -189,6 +191,16 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.pagesDetails}
           component={PagesDetails}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.Setting}
+          component={Setting}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.EditProfile}
+          component={EditProfile}
         />
       </Stack.Navigator>
     </NavigationContainer>

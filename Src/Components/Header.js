@@ -7,7 +7,7 @@ import colors from '../Themes/Colors';
 import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onClickPlus }) {
+export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onRightPress, onClickPlus, icon, logoShow = true }) {
   const navigation = useNavigation()
   if (isHome) {
     return (
@@ -52,23 +52,40 @@ export default function Header({ showLeft = false, showRight = false, title, isH
       ) : (
         <View />
       )}
-      {title !== "" && <View
-        style={[
-          ApplicationStyles.row,
-          { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
-        ]}>
-        <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-        <Text
+      {!logoShow ?
+        <View
           style={[
-            FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
-            { marginLeft: 8, textAlign: 'center' },
+            ApplicationStyles.row,
+            { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
           ]}>
-          {title}
-        </Text>
-      </View>}
+          <Text
+            style={[
+              FontStyle(fontname.actor_regular, 16, colors.neutral_900),
+              { textAlign: 'center' },
+            ]}>
+            {title}
+          </Text>
+        </View>
+        :
+        title !== "" && <View
+          style={[
+            ApplicationStyles.row,
+            { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
+          ]}>
+          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
+          <Text
+            style={[
+              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
+              { marginLeft: 8, textAlign: 'center' },
+            ]}>
+            {title}
+          </Text>
+        </View>
+      }
+
       {showRight ? (
-        <TouchableOpacity>
-          <Image source={Icons.bell} style={ImageStyle(24, 24)} />
+        <TouchableOpacity onPress={() => onRightPress()}>
+          <Image source={icon ? icon : Icons.bell} style={ImageStyle(24, 24)} />
         </TouchableOpacity>
       ) : (
         <View />

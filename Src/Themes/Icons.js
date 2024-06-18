@@ -25,6 +25,6 @@ export const Icons = {
     heartFilled: require('../assets/Icons/heartFilled.png'),
     replyIcon: require('../assets/Icons/replyIcon.png'),
     send: require('../assets/Icons/send.png'),
-    // logo: require('../assets/Icons/logo.png'),
+    setting: require('../assets/Icons/setting.png'),
 
 }  

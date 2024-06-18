@@ -99,7 +99,7 @@ export default function IndiansDetails() {
               style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
               <Text style={styles.btnText}>Message</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>setmenuModal(true)}>
+            <TouchableOpacity onPress={() => setmenuModal(true)}>
               <Image
                 source={Icons.more}
                 resizeMode="contain"
@@ -216,10 +216,10 @@ export default function IndiansDetails() {
           }}>
           <View key={'1'}>
             <ScrollView>
-            <FlatList
-            data={[0, 1, 2, 3, 4]}
-            renderItem={renderItem}
-          />
+              <FlatList
+                data={[0, 1, 2, 3, 4]}
+                renderItem={renderItem}
+              />
             </ScrollView>
           </View>
           <View key={'2'}>
@@ -231,9 +231,6 @@ export default function IndiansDetails() {
                 containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
               />
               <FlatList
-                style={{
-                  paddingHorizontal: wp(16),
-                }}
                 data={[1, 2]}
                 renderItem={({ item }) => {
                   return <ConnectedIndians />;
@@ -244,7 +241,7 @@ export default function IndiansDetails() {
           </View>
         </PagerView>
       </ScrollView>
-      <PostShareModal shareView={true} menuModal={menuModal} setmenuModal={()=>setmenuModal(false)} />
+      <PostShareModal shareView={true} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
 
     </View>
   );

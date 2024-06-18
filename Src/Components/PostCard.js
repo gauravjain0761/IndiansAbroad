@@ -9,8 +9,9 @@ import ReactNativeModal from 'react-native-modal'
 import ModalContainer from './ModalContainer'
 import RenderUserIcon from './RenderUserIcon'
 import PostShareModal from './PostShareModal'
+import UpdateDeleteMenu from './UpdateDeleteMenu'
 
-export default function PostCard({ item, index }) {
+export default function PostCard({ item, index, isUser = false }) {
     const [menuModal, setmenuModal] = useState(false)
     return (
         <View key={index}>
@@ -20,18 +21,18 @@ export default function PostCard({ item, index }) {
                 </TouchableOpacity>
                 <View style={ApplicationStyles.flex}>
                     <Text style={styles.username}>Nikita Khairnar</Text>
-                    <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+                    {!isUser && <Text style={styles.degreeText}>PhD Student, Seoul</Text>}
                     <Text style={styles.degreeText}>15 hours ago</Text>
                 </View>
-                <View>
+                {!isUser && <View>
                     <TouchableOpacity style={styles.messageView}>
                         <Image source={Icons.messageIcon} style={ImageStyle(30, 30, 'cover')} />
                         <Text style={styles.degreeText}>Message</Text>
                     </TouchableOpacity>
-                </View>
+                </View>}
             </View>
             <View>
-                <Text style={styles.description}>Delicious dessert and Pretty view</Text>
+                <Text style={styles.description}>Festival of Cultures {'\n'}Event in Edinburgh</Text>
             </View>
             <View>
                 <Image source={Icons.postViewImage} style={styles.postImage} />
@@ -51,12 +52,16 @@ export default function PostCard({ item, index }) {
                         <Text style={styles.username}>Share</Text>
                     </TouchableOpacity>
                 </View>
+                {isUser ?
+                    <UpdateDeleteMenu icon={(<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />)} />
+                    :
+                    <TouchableOpacity onPress={() => setmenuModal(true)} style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
+                        <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
+                    </TouchableOpacity>
+                }
 
-                <TouchableOpacity onPress={() => setmenuModal(true)} style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
-                    <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
-                </TouchableOpacity>
             </View>
-           <PostShareModal menuModal={menuModal} setmenuModal={()=>setmenuModal(false)} />
+            <PostShareModal menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
         </View>
     )
 }
