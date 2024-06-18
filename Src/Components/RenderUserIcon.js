@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
 import colors from '../Themes/Colors'
 
-export default function RenderUserIcon({ height, isBorder = false }) {
+export default function RenderUserIcon({ height, isBorder = false, url }) {
     const navigation = useNavigation()
     let styles = StyleSheet.create({
         userImage: {
@@ -25,7 +25,7 @@ export default function RenderUserIcon({ height, isBorder = false }) {
             borderColor: isBorder ? '#C5B80F' : 'transparent',
             backgroundColor: colors.white
         }}>
-            <Image source={Icons.userImage} style={styles.userImage} />
+            <Image source={url ? { uri: url } : Icons.userImage} style={styles.userImage} />
         </TouchableOpacity>
     )
 }

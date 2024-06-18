@@ -22,9 +22,9 @@ export const Icons = {
     dotMenu: require('../assets/Icons/dotMenu.png'),
     photoUpload: require('../assets/Icons/photoUpload.png'),
     videoUpload: require('../assets/Icons/videoUpload.png'),
-    // logo: require('../assets/Icons/logo.png'),
-    // logo: require('../assets/Icons/logo.png'),
-    // logo: require('../assets/Icons/logo.png'),
+    heartFilled: require('../assets/Icons/heartFilled.png'),
+    replyIcon: require('../assets/Icons/replyIcon.png'),
+    send: require('../assets/Icons/send.png'),
     // logo: require('../assets/Icons/logo.png'),
 
 }  

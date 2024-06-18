@@ -17,6 +17,7 @@ const colors = {
   tertiary1_500: '#8090BAFF',
   neutral_300: '#DEE1E6FF',
   neutral_800: '#1E2128FF',
-  buttonBlue: '#5071BEFF'
+  buttonBlue: '#5071BEFF',
+  btnBg: '#F4F4F4FF'
 };
 export default colors;

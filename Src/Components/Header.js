@@ -5,13 +5,14 @@ import { Icons } from '../Themes/Icons';
 import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onClickPlus,showTitle }) {
-
+export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onClickPlus }) {
+  const navigation = useNavigation()
   if (isHome) {
     return (
       <View style={[ApplicationStyles.row, styles.header]}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.toggleDrawer()} >
           <Image source={Icons.menus} style={ImageStyle(24, 24)} />
         </TouchableOpacity>
         <View
@@ -51,7 +52,7 @@ export default function Header({ showLeft = false, showRight = false, title, isH
       ) : (
         <View />
       )}
-     {title !== "" && <View
+      {title !== "" && <View
         style={[
           ApplicationStyles.row,
           { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 12,
-    borderColor: colors.primary_500
+    borderColor: colors.primary_500,
+    backgroundColor: colors.btnBg
   }
 });
