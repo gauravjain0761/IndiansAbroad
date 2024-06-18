@@ -10,6 +10,7 @@ import {SCREEN_WIDTH, fontname, wp} from '../Themes/Fonts';
 import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import DiscussionForumCard from '../Components/DiscussionForumCard';
+import { screenName } from '../Navigation/ScreenConstants';
 
 export default function DiscussionForum() {
   const {navigate, goBack} = useNavigation();
@@ -20,7 +21,7 @@ export default function DiscussionForum() {
 
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.PostDetail)}>
+      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.DiscussionForumDetail)}>
         <DiscussionForumCard item={item} index={index} />
       </TouchableOpacity>
     )
@@ -82,7 +83,7 @@ export default function DiscussionForum() {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigate(screenName.CreateDiscussion)}>
           <Image source={Icons.penEdit} style={ImageStyle(30, 30)} />
         </TouchableOpacity>
       </View>
