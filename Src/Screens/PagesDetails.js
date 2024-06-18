@@ -27,6 +27,7 @@ import RenderUserIcon from '../Components/RenderUserIcon';
 import PostCard from '../Components/PostCard';
 import { screenName } from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
+import PagePostCard from '../Components/PagePostCard';
 
 export default function PagesDetails() {
   const tabs = [
@@ -56,8 +57,8 @@ export default function PagesDetails() {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        onPress={() => navigation.navigate(screenName.PostDetail)}>
-        <PostCard item={item} index={index} />
+        onPress={() => navigation.navigate(screenName.PagesPostDetail)}>
+        <PagePostCard item={item} index={index} />
       </TouchableOpacity>
     );
   };

@@ -25,6 +25,7 @@ import PostDetail from '../Screens/PostDetail';
 import PagesDetails from '../Screens/PagesDetails';
 import Setting from '../Screens/Setting';
 import EditProfile from '../Screens/EditProfile';
+import PagesPostDetail from '../Screens/PagesPostDetail';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -201,6 +202,13 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.EditProfile}
           component={EditProfile}
+
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.PagesPostDetail}
+          component={PagesPostDetail}
+
         />
       </Stack.Navigator>
     </NavigationContainer>

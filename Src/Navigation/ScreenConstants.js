@@ -15,5 +15,6 @@ export const screenName = {
   PostDetail: 'PostDetail',
   pagesDetails: 'PagesDetails',
   Setting: 'Setting',
-  EditProfile: 'EditProfile'
+  EditProfile: 'EditProfile',
+  PagesPostDetail: 'PagesPostDetail',
 };

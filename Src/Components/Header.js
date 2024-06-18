@@ -1,38 +1,50 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {Icons} from '../Themes/Icons';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
-import { useNavigation } from '@react-navigation/native';
+import {SCREEN_WIDTH, fontname, wp} from '../Themes/Fonts';
+import {useNavigation} from '@react-navigation/native';
 
-export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onRightPress, onClickPlus, icon, logoShow = true }) {
-  const navigation = useNavigation()
+export default function Header({
+  showLeft = false,
+  showRight = false,
+  title,
+  isHome = false,
+  onLeftPress,
+  onRightPress,
+  onClickPlus,
+  icon,
+  logoShow = true,
+  titleStyle
+}) {
+  const navigation = useNavigation();
   if (isHome) {
     return (
       <View style={[ApplicationStyles.row, styles.header]}>
-        <TouchableOpacity onPress={() => navigation.toggleDrawer()} >
+        <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
           <Image source={Icons.menus} style={ImageStyle(24, 24)} />
         </TouchableOpacity>
         <View
           style={[
             ApplicationStyles.row,
-            { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
+            {
+              position: 'absolute',
+              justifyContent: 'center',
+              width: SCREEN_WIDTH - wp(32),
+            },
           ]}>
           <Image source={Icons.logo} style={ImageStyle(23, 23)} />
           <Text
             style={[
               FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
-              { marginLeft: 8, textAlign: 'center' },
+              {marginLeft: 8, textAlign: 'center'},
             ]}>
             {title}
           </Text>
         </View>
-        <View style={[
-          ApplicationStyles.row,
-          { gap: 10 }
-        ]}>
+        <View style={[ApplicationStyles.row, {gap: 10}]}>
           <TouchableOpacity onPress={() => onClickPlus()}>
             <Image source={Icons.plusHome} style={ImageStyle(26, 24)} />
           </TouchableOpacity>
@@ -41,7 +53,7 @@ export default function Header({ showLeft = false, showRight = false, title, isH
           </TouchableOpacity>
         </View>
       </View>
-    )
+    );
   }
   return (
     <View style={[ApplicationStyles.row, styles.header]}>
@@ -52,36 +64,53 @@ export default function Header({ showLeft = false, showRight = false, title, isH
       ) : (
         <View />
       )}
-      {!logoShow ?
+      {!logoShow ? (
         <View
           style={[
             ApplicationStyles.row,
-            { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
+            {
+              position: 'absolute',
+              justifyContent: 'center',
+              width: SCREEN_WIDTH - wp(32),
+            },
           ]}>
           <Text
             style={[
               FontStyle(fontname.actor_regular, 16, colors.neutral_900),
-              { textAlign: 'center' },
+              {textAlign: 'center'},
+              titleStyle
             ]}>
             {title}
           </Text>
         </View>
-        :
-        title !== "" && <View
-          style={[
-            ApplicationStyles.row,
-            { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
-          ]}>
-          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-          <Text
+      ) : (
+        title !== '' && (
+          <View
             style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
-              { marginLeft: 8, textAlign: 'center' },
+              ApplicationStyles.row,
+              {
+                position: 'absolute',
+                justifyContent: 'center',
+                width: SCREEN_WIDTH - wp(32),
+              },
             ]}>
-            {title}
-          </Text>
-        </View>
-      }
+            <Image source={Icons.logo} style={ImageStyle(23, 23)} />
+            <Text
+              style={[
+                FontStyle(
+                  fontname.actor_regular,
+                  16,
+                  colors.neutral_900,
+                  '700',
+                ),
+                {marginLeft: 8, textAlign: 'center'},
+                titleStyle
+              ]}>
+              {title}
+            </Text>
+          </View>
+        )
+      )}
 
       {showRight ? (
         <TouchableOpacity onPress={() => onRightPress()}>
@@ -99,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: wp(16),
     marginVertical: 12,
-    height: 30
+    height: 30,
   },
   backIcon: {
     borderWidth: 1,
@@ -107,6 +136,6 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 12,
     borderColor: colors.primary_500,
-    backgroundColor: colors.btnBg
-  }
+    backgroundColor: colors.btnBg,
+  },
 });

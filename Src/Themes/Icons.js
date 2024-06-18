@@ -26,5 +26,6 @@ export const Icons = {
     replyIcon: require('../assets/Icons/replyIcon.png'),
     send: require('../assets/Icons/send.png'),
     setting: require('../assets/Icons/setting.png'),
+    penEdit: require('../assets/Icons/penEdit.png'),
 
 }  
