@@ -4,7 +4,7 @@ const initialState = {
   loading: false,
   preLoader: false,
   allPost: undefined,
-  totalPostCount: 0
+  allPostsCount: 0
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -12,8 +12,7 @@ export default function (state = initialState, action) {
       return { ...state, preLoader: action.payload };
     }
     case SET_ALL_POST: {
-      console.log('action---', action?.payload)
-      return { ...state, allPost: action.payload, totalPostCount: action.paload };
+      return { ...state, allPost: action.payload.data, allPostsCount: action.payload.allPostsCount };
     }
     default:
       return state;

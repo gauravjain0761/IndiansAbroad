@@ -1,35 +1,21 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { fontname, hp, wp } from '../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { fontname, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
-import ConnectCard from '../Components/ConnectCard';
 import PostCard from '../Components/PostCard';
-import ModalContainer from '../Components/ModalContainer';
-import { Icons } from '../Themes/Icons';
 import CreatePost from '../Components/CreatePost';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { screenName } from '../Navigation/ScreenConstants';
 import { getalluserposts } from '../Services/PostServices';
-import axios from 'axios';
 import { dispatchAction } from '../utils/apiGlobal';
 import { IS_LOADING } from '../Redux/ActionTypes';
+
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const [tabType, setTabType] = useState('All');
@@ -40,24 +26,44 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false)
   const navigation = useNavigation()
+  const { allPost, allPostsCount } = useSelector(e => e.common)
+  const isFocuse = useIsFocused()
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [page, setpage] = useState(1)
+  const [loading, setloading] = useState(false);
 
+  console.log('allPost--------', allPost)
 
-  // useEffect(() => {
-  //   dispatchAction(dispatch, IS_LOADING, true)
-  // }, [])
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getPostList(1)
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
-  // useEffect(() => {
+  const getPostList = (page) => {
+    let obj = {
+      data: {
+        createdBy: "663331ecdd27304e5c393167",
+        page: page,
+        limit: 10
+      },
+      onSuccess: () => {
+        setpage(page)
+        setloading(false)
+      }
+    }
+    dispatch(getalluserposts(obj))
+  }
 
-  //   let obj = {
-  //     data: {
-  //       createdBy: "663331ecdd27304e5c393167",
-  //       page: '1',
-  //       limit: ''
-  //     }
-  //   }
-  //   dispatch(getalluserposts(obj))
-  // }, [])
+  useEffect(() => {
+    if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
+  }, [])
 
+  useEffect(() => {
+    if (isFocuse) getPostList(1)
+  }, [isFocuse])
 
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
@@ -67,6 +73,7 @@ export default function HomeScreen() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
+
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.PostDetail)}>
@@ -74,6 +81,16 @@ export default function HomeScreen() {
       </TouchableOpacity>
     )
   }
+
+  const fetchMoreData = () => {
+    if (allPost) {
+      if (allPost.length < allPostsCount) {
+        setloading(true)
+        getPostList(page + 1)
+      }
+    }
+  };
+
 
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -114,8 +131,20 @@ export default function HomeScreen() {
         }}>
         <View key={'1'}>
           <FlatList
-            data={[0, 1, 2, 3, 4]}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            data={allPost}
             renderItem={renderItem}
+            onEndReached={fetchMoreData}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={
+              () => {
+                return (
+                  (allPost && loading) ? <View>
+                    <ActivityIndicator size={'large'} color={colors.black} />
+                  </View> : null
+                )
+              }
+            }
           />
         </View>
         <View key={'2'}>
