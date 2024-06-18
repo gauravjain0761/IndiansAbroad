@@ -8,6 +8,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
 import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
+import RenderUserIcon from '../Components/RenderUserIcon';
 
 export default function PostDetail() {
     const navigation = useNavigation()
@@ -16,7 +17,7 @@ export default function PostDetail() {
         return <View>
             <View style={styles.headerView}>
                 <TouchableOpacity style={styles.userImage}>
-                    <Image source={Icons.userImage} style={ImageStyle(57, 57, 'cover')} />
+                    <RenderUserIcon height={57} />
                 </TouchableOpacity>
                 <View style={styles.commentBg}>
                     <View style={ApplicationStyles.flex}>
@@ -26,12 +27,11 @@ export default function PostDetail() {
                     </View>
                     <View>
                         <TouchableOpacity style={styles.messageView}>
-                            <Image source={Icons.messageIcon} style={ImageStyle(36, 36, 'cover')} />
+                            <Image source={Icons.messageIcon} style={ImageStyle(30, 30, 'cover')} />
                             <Text style={styles.degreeText}>Message</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-
             </View>
         </View>
     }

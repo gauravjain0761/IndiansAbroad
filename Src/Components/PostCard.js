@@ -7,6 +7,7 @@ import { SCREEN_WIDTH, fontname } from '../Themes/Fonts'
 import colors from '../Themes/Colors'
 import ReactNativeModal from 'react-native-modal'
 import ModalContainer from './ModalContainer'
+import RenderUserIcon from './RenderUserIcon'
 
 export default function PostCard({ item, index }) {
     const [menuModal, setmenuModal] = useState(false)
@@ -14,7 +15,7 @@ export default function PostCard({ item, index }) {
         <View key={index}>
             <View style={styles.headerView}>
                 <TouchableOpacity style={styles.userImage}>
-                    <Image source={Icons.userImage} style={ImageStyle(57, 57, 'cover')} />
+                    <RenderUserIcon height={57} isBorder />
                 </TouchableOpacity>
                 <View style={ApplicationStyles.flex}>
                     <Text style={styles.username}>Nikita Khairnar</Text>
@@ -23,7 +24,7 @@ export default function PostCard({ item, index }) {
                 </View>
                 <View>
                     <TouchableOpacity style={styles.messageView}>
-                        <Image source={Icons.messageIcon} style={ImageStyle(36, 36, 'cover')} />
+                        <Image source={Icons.messageIcon} style={ImageStyle(30, 30, 'cover')} />
                         <Text style={styles.degreeText}>Message</Text>
                     </TouchableOpacity>
                 </View>
@@ -129,7 +130,6 @@ const styles = StyleSheet.create({
         gap: 10,
         justifyContent: 'center',
         paddingVertical: 10
-
     },
     modalView: {
         backgroundColor: colors.neutral_300,

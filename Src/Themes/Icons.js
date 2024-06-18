@@ -7,7 +7,7 @@ export const Icons = {
     peopleIcon: require('../assets/Icons/peopleIcon.png'),
     discussionIcon: require('../assets/Icons/peopleIcon.png'),
     chatIcon: require('../assets/Icons/chatIcon.png'),
-    profileIcon: require('../assets/Icons/chatIcon.png'),
+    profileIcon: require('../assets/Icons/account_circle.png'),
     userImage: require('../assets/Icons/userImage.png'),
     Arrow_circle_right: require('../assets/Icons/Arrow_circle_right.png'),
     plusHome: require('../assets/Icons/plusHome.png'),
