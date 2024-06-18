@@ -8,6 +8,7 @@ import colors from '../Themes/Colors'
 import ReactNativeModal from 'react-native-modal'
 import ModalContainer from './ModalContainer'
 import RenderUserIcon from './RenderUserIcon'
+import PostShareModal from './PostShareModal'
 
 export default function PostCard({ item, index }) {
     const [menuModal, setmenuModal] = useState(false)
@@ -55,24 +56,7 @@ export default function PostCard({ item, index }) {
                     <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
                 </TouchableOpacity>
             </View>
-            <ModalContainer isVisible={menuModal} onClose={() => setmenuModal(false)} transparent={true}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalUserName}>Nikita Khairnar</Text>
-                    <View style={styles.line} />
-                    <TouchableOpacity>
-                        <Text style={styles.modalText}>Disconnect</Text>
-                    </TouchableOpacity>
-                    <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-                    <TouchableOpacity>
-                        <Text style={styles.modalText}>Block/Unblock</Text>
-                    </TouchableOpacity>
-                    <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-                    <TouchableOpacity>
-                        <Text style={styles.modalText}>Report</Text>
-                    </TouchableOpacity>
-                    <View style={styles.line} />
-                </View>
-            </ModalContainer>
+           <PostShareModal menuModal={menuModal} setmenuModal={()=>setmenuModal(false)} />
         </View>
     )
 }

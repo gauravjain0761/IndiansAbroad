@@ -235,7 +235,7 @@ export default function IndiansPage() {
                 return (
                   <ConnectCard
                     cardPress={() => {
-                      navigate(screenName.indiansDetails);
+                      navigate(screenName.pagesDetails);
                     }}
                     indians={tabSelection == 'INDIANS'}
                   />
@@ -270,7 +270,7 @@ export default function IndiansPage() {
                 return (
                   <ConnectCard
                     cardPress={() => {
-                      navigate(screenName.indiansDetails);
+                      navigate(screenName.pagesDetails);
                     }}
                     indians={tabSelection == 'INDIANS'}
                   />

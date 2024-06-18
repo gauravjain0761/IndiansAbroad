@@ -6,7 +6,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
 
-export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onClickPlus }) {
+export default function Header({ showLeft = false, showRight = false, title, isHome = false, onLeftPress, onClickPlus,showTitle }) {
 
   if (isHome) {
     return (
@@ -51,7 +51,7 @@ export default function Header({ showLeft = false, showRight = false, title, isH
       ) : (
         <View />
       )}
-      <View
+     {title !== "" && <View
         style={[
           ApplicationStyles.row,
           { position: 'absolute', justifyContent: 'center', width: SCREEN_WIDTH - wp(32) },
@@ -64,7 +64,7 @@ export default function Header({ showLeft = false, showRight = false, title, isH
           ]}>
           {title}
         </Text>
-      </View>
+      </View>}
       {showRight ? (
         <TouchableOpacity>
           <Image source={Icons.bell} style={ImageStyle(24, 24)} />

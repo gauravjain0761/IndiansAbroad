@@ -22,6 +22,7 @@ import Terms from '../Screens/Terms';
 import Privacy from '../Screens/Privacy';
 import IndiansDetails from '../Screens/IndiansDetails';
 import PostDetail from '../Screens/PostDetail';
+import PagesDetails from '../Screens/PagesDetails';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -183,6 +184,11 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.indiansDetails}
           component={IndiansDetails}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.pagesDetails}
+          component={PagesDetails}
         />
       </Stack.Navigator>
     </NavigationContainer>

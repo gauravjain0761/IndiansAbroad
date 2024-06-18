@@ -10,71 +10,62 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import { useNavigation } from '@react-navigation/native';
-import { Icons } from '../Themes/Icons';
+import {useNavigation} from '@react-navigation/native';
+import {Icons} from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import PostCard from '../Components/PostCard';
-import { screenName } from '../Navigation/ScreenConstants';
+import {screenName} from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
 
-export default function IndiansDetails() {
+export default function PagesDetails() {
   const tabs = [
-    { id: 1, label: 'Posts' },
-    { id: 2, label: 'Connected Indians' },
+    {id: 1, label: 'Posts'},
+    {id: 2, label: 'Connected Indians'},
   ];
-  const navigation = useNavigation()
-  const [menuModal, setmenuModal] = useState(false)
-  const { navigate, goBack } = useNavigation();
+  const showCurrent = false;
+
+  const navigation = useNavigation();
+  const [menuModal, setmenuModal] = useState(false);
+  const {navigate, goBack} = useNavigation();
   const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
-  const [tabSelection, setTabSelection] = useState('INDIANS');
+  const [tabSelection, setTabSelection] = useState('ABOUT');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
-
-  const handleTabPress = (id, index) => {
-    // setTabValue(id);
-    Animated.spring(buttonTranslateX, {
-      toValue: index * 200, // Assuming each tab has a width of 100
-      useNativeDriver: true,
-    }).start();
-  };
-
-  useEffect(() => {
-    tabSelection == 'INDIANS' && handleTabPress(1, 0);
-    tabSelection !== 'INDIANS' && handleTabPress(2, 1);
-  }, [tabSelection]);
 
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
+    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
   }, []);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.PostDetail)}>
+      <TouchableOpacity
+        activeOpacity={1}
+        onPress={() => navigation.navigate(screenName.PostDetail)}>
         <PostCard item={item} index={index} />
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   return (
     <View style={ApplicationStyles.applicationView}>
       <Header
-        title={'IndiansAbroad'}
+        title={''}
         showLeft={true}
         onLeftPress={() => {
           goBack();
@@ -83,32 +74,29 @@ export default function IndiansDetails() {
       <ScrollView>
         <View style={styles.userViewStyle}>
           <View style={styles.imageView}>
-            <RenderUserIcon height={100} isBorder />
-
+            <Image source={Icons.logo} style={styles.userImage} />
           </View>
-          {/* <Image source={Icons.userImage} style={styles.userImage} /> */}
-          <Text style={styles.userText}>Dhruv Solanki</Text>
-          <Text style={styles.userText1}>
-            (Believe in yourself no matter what)
-          </Text>
-          <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
-            <TouchableOpacity style={styles.btnView}>
-              <Text style={styles.btnText}>Connect</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
-              <Text style={styles.btnText}>Message</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={()=>setmenuModal(true)}>
-              <Image
-                source={Icons.more}
-                resizeMode="contain"
-                style={ImageStyle(22, 22)}
-              />
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.userText}>IndiansAbroad</Text>
+          <Text style={styles.userText1}>(Connecting Indians Worldwide)</Text>
         </View>
-        <View style={styles.detailsView}>
+        <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
+          {showCurrent ? (
+            <TouchableOpacity style={styles.btnView}>
+              <Text style={styles.btnText}>My page Chatroom</Text>
+            </TouchableOpacity>
+          ) : (
+            <>
+              <TouchableOpacity style={styles.btnView}>
+                <Text style={styles.btnText}>Connect</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.btnView, {marginLeft: 8, marginRight: 2}]}>
+                <Text style={styles.btnText}>Message</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+        {/* <View style={styles.detailsView}>
           <Text style={styles.text1}>About</Text>
           <Text style={styles.text2}>From</Text>
           <Text style={styles.text1}>Mumbai,Maharshtra</Text>
@@ -118,12 +106,12 @@ export default function IndiansDetails() {
           <Text style={styles.text1}>PhD Student</Text>
           <Text style={styles.text2}>Link</Text>
           <Text style={styles.text1}>app.visily.ai</Text>
-        </View>
+        </View> */}
 
         <View style={styles.tabMainView}>
           <TouchableOpacity
             onPress={() => {
-              setTabSelection('INDIANS');
+              setTabSelection('ABOUT');
               setIsLeftButtonActive(true);
               ref.current?.setPage(0);
             }}
@@ -133,32 +121,34 @@ export default function IndiansDetails() {
               },
               styles.tabItemView,
             ]}>
-            {tabSelection == 'INDIANS' ? (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.primary_6a7e,
-                  '700',
-                )}>
-                {'Posts(7)'}
-              </Text>
+            {tabSelection == 'ABOUT' ? (
+              <Text style={styles.tabText}>{'ABOUT'}</Text>
             ) : (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.neutral_600,
-                  '700',
-                )}>
-                {'Posts(7)'}
-              </Text>
+              <Text style={styles.tabText1}>{'ABOUT'}</Text>
             )}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              setTabSelection('PAGES');
+              setTabSelection('ACTIVITIES');
+              setIsLeftButtonActive(true);
               ref.current?.setPage(1);
+            }}
+            style={[
+              {
+                marginRight: wp(5),
+              },
+              styles.tabItemView,
+            ]}>
+            {tabSelection == 'ACTIVITIES' ? (
+              <Text style={styles.tabText}>{'ACTIVITIES'}</Text>
+            ) : (
+              <Text style={styles.tabText1}>{'ACTIVITIES'}</Text>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setTabSelection('CONNECTED INDIANS');
+              ref.current?.setPage(2);
               setIsLeftButtonActive(false);
             }}
             style={[
@@ -168,25 +158,13 @@ export default function IndiansDetails() {
               },
               styles.tabItemView,
             ]}>
-            {tabSelection == 'PAGES' ? (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.primary_6a7e,
-                  '700',
-                )}>
-                {'Connected Indians(79)'}
+            {tabSelection == 'CONNECTED INDIANS' ? (
+              <Text style={[styles.tabText, {bottom: 12}]}>
+                {'CONNECTED INDIANS'}
               </Text>
             ) : (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.neutral_600,
-                  '700',
-                )}>
-                {'Connected Indians(79)'}
+              <Text style={[styles.tabText1, {bottom: 12}]}>
+                {'CONNECTED INDIANS'}
               </Text>
             )}
           </TouchableOpacity>
@@ -194,9 +172,19 @@ export default function IndiansDetails() {
             style={[
               styles.animationView,
               {
-                left: tabSelection == 'INDIANS' ? 16 : 7,
-                transform: [{ translateX: buttonTranslateX }],
-                width: tabSelection == 'INDIANS' ? 170 : `${88 / tabs.length}%`,
+                left:
+                  tabSelection == 'ABOUT'
+                    ? 0
+                    : tabSelection == 'ACTIVITIES'
+                    ? SCREEN_WIDTH * 0.32
+                    : SCREEN_WIDTH * 0.65,
+                // transform: [{translateX: buttonTranslateX}],
+                width:
+                  tabSelection == 'ABOUT'
+                    ? 130
+                    : tabSelection == 'ACTIVITIES'
+                    ? 135
+                    : `${80 / tabs.length}%`,
                 borderWidth: 0.9,
                 borderColor: colors.primary_4574ca,
               },
@@ -209,33 +197,51 @@ export default function IndiansDetails() {
           ref={ref}
           onPageSelected={e => {
             setTabSelection(
-              e?.nativeEvent?.position == 0 ? 'INDIANS' : 'PAGES',
+              e?.nativeEvent?.position == 0
+                ? 'ABOUT'
+                : e?.nativeEvent?.position == 1
+                ? 'ACTIVITIES'
+                : 'CONNECTED INDIANS',
             );
             setTabSelectionIndex(e?.nativeEvent?.position);
             setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
           }}>
           <View key={'1'}>
-            <ScrollView>
-            <FlatList
-            data={[0, 1, 2, 3, 4]}
-            renderItem={renderItem}
-          />
+            <ScrollView style={{marginHorizontal:wp(12)}}>
+              <Text style={styles.textView}>This is a official page of IndiansAbroad app.</Text>
+              <View style={ApplicationStyles.row}>
+                <Text style={styles.text1}>Website</Text>
+                <Text style={styles.text2}>http:www.indiansabroad.online</Text>
+              </View>
+              <View style={ApplicationStyles.row}>
+                <Text style={styles.text1}>City</Text>
+                <Text style={styles.text2}>Pune</Text>
+              </View>
+              <View style={ApplicationStyles.row}>
+                <Text style={styles.text1}>Country</Text>
+                <Text style={styles.text2}>India</Text>
+              </View>
             </ScrollView>
           </View>
           <View key={'2'}>
+            <ScrollView>
+              <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
+            </ScrollView>
+          </View>
+          <View key={'3'}>
             <ScrollView>
               <SearchBar
                 value={searchText}
                 onChangeText={text => setSearchText(text)}
                 placeholder={'Search Indians here'}
-                containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
+                containerStyles={{backgroundColor: colors.white, marginTop: 5}}
               />
               <FlatList
                 style={{
                   paddingHorizontal: wp(16),
                 }}
                 data={[1, 2]}
-                renderItem={({ item }) => {
+                renderItem={({item}) => {
                   return <ConnectedIndians />;
                 }}
                 showsVerticalScrollIndicator={false}
@@ -244,8 +250,11 @@ export default function IndiansDetails() {
           </View>
         </PagerView>
       </ScrollView>
-      <PostShareModal shareView={true} menuModal={menuModal} setmenuModal={()=>setmenuModal(false)} />
-
+      <PostShareModal
+        shareView={true}
+        menuModal={menuModal}
+        setmenuModal={() => setmenuModal(false)}
+      />
     </View>
   );
 }
@@ -281,8 +290,8 @@ const styles = StyleSheet.create({
     paddingVertical: hp(10),
   },
   userImage: {
-    width: wp(110),
-    height: wp(110),
+    width: wp(100),
+    height: wp(100),
     resizeMode: 'contain',
     alignSelf: 'center',
   },
@@ -293,15 +302,17 @@ const styles = StyleSheet.create({
   userText1: {
     ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
     textAlign: 'center',
+    marginBottom: 10,
   },
   btnView: {
     backgroundColor: colors.primary_4574ca,
-    width: wp(78),
+    // width: wp(78),
     alignItems: 'center',
     height: hp(32),
     borderRadius: 4,
     marginVertical: hp(12),
     justifyContent: 'center',
+    paddingHorizontal: wp(15),
   },
   btnText: {
     ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),
@@ -313,19 +324,36 @@ const styles = StyleSheet.create({
   },
   text1: {
     lineHeight: 20,
+    width:80,
+    marginVertical:6,
     ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+  },
+  textView: {
+    lineHeight: 20,
+    marginBottom:12,
+    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '400'),
   },
   text2: {
     lineHeight: 20,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_500, '400'),
+    ...FontStyle(fontname.actor_regular, 15, colors.primary_8091ba, '400'),
   },
   animationView: {
     borderColor: colors.primary_500,
     position: 'absolute',
-    bottom: 0,
+    bottom: 20,
     left: 0,
   },
   imageView: {
-    alignSelf: 'center'
-  }
+    alignSelf: 'center',
+    backgroundColor: colors.white,
+    padding: 5,
+  },
+  tabText: {
+    textAlign: 'center',
+    ...FontStyle(fontname.actor_regular, 12, colors.primary_6a7e, '400'),
+  },
+  tabText1: {
+    textAlign: 'center',
+    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+  },
 });
