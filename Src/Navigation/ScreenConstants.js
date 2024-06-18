@@ -19,4 +19,5 @@ export const screenName = {
   PagesPostDetail: 'PagesPostDetail',
   DiscussionForumDetail: 'DiscussionForumDetail',
   CreateDiscussion: 'CreateDiscussion',
+  MyConnections: 'MyConnections',
 };

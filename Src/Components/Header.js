@@ -17,9 +17,43 @@ export default function Header({
   onClickPlus,
   icon,
   logoShow = true,
-  titleStyle
+  titleStyle,
+  isChat,
+  chatLeftPress
 }) {
   const navigation = useNavigation();
+  if (isChat) {
+    return (
+      <View style={[ApplicationStyles.row, styles.header]}>
+        <TouchableOpacity onPress={chatLeftPress}>
+          <Image source={Icons.contact} style={ImageStyle(24, 24)} />
+        </TouchableOpacity>
+        <View
+          style={[
+            ApplicationStyles.row,
+            {
+              position: 'absolute',
+              justifyContent: 'center',
+              width: SCREEN_WIDTH - wp(32),
+            },
+          ]}>
+          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
+          <Text
+            style={[
+              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
+              {marginLeft: 8, textAlign: 'center'},
+            ]}>
+            {title}
+          </Text>
+        </View>
+        <View style={[ApplicationStyles.row, {gap: 10}]}>
+          <TouchableOpacity onPress={() => onClickPlus()}>
+            <Image source={Icons.postAdd} style={ImageStyle(26, 24)} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
   if (isHome) {
     return (
       <View style={[ApplicationStyles.row, styles.header]}>

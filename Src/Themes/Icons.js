@@ -30,5 +30,10 @@ export const Icons = {
     userChat: require('../assets/Icons/userChat.png'),
     connect: require('../assets/Icons/connect.png'),
     trash: require('../assets/Icons/trash.png'),
+    addImage: require('../assets/Icons/addImage.png'),
+    checkbox: require('../assets/Icons/checkbox.png'),
+    checkbox1: require('../assets/Icons/checkbox1.png'),
+    contact: require('../assets/Icons/contact.png'),
+    postAdd: require('../assets/Icons/postAdd.png'),
 
 }  

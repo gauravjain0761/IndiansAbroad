@@ -7,7 +7,7 @@ import { FontStyle } from '../utils/commonFunction';
 import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 
-export default function UpdateDeleteMenu({ icon }) {
+export default function UpdateDeleteMenu({ icon ,containerStyle}) {
     const [visible, setVisible] = useState(false);
 
     const hideMenu = () => setVisible(false);
@@ -15,7 +15,7 @@ export default function UpdateDeleteMenu({ icon }) {
     const showMenu = () => setVisible(true);
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={[{ flex: 1,},containerStyle]}>
             <Menu
                 visible={visible}
                 anchor={<TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} onPress={showMenu}>

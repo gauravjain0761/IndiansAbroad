@@ -10,35 +10,36 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import { useNavigation } from '@react-navigation/native';
-import { Icons } from '../Themes/Icons';
+import {useNavigation} from '@react-navigation/native';
+import {Icons} from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import PostCard from '../Components/PostCard';
-import { screenName } from '../Navigation/ScreenConstants';
+import {screenName} from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
 import PagePostCard from '../Components/PagePostCard';
+import UpdateDeleteMenu from '../Components/UpdateDeleteMenu';
 
 export default function PagesDetails() {
   const tabs = [
-    { id: 1, label: 'Posts' },
-    { id: 2, label: 'Connected Indians' },
+    {id: 1, label: 'Posts'},
+    {id: 2, label: 'Connected Indians'},
   ];
   const showCurrent = false;
 
   const navigation = useNavigation();
   const [menuModal, setmenuModal] = useState(false);
-  const { navigate, goBack } = useNavigation();
+  const {navigate, goBack} = useNavigation();
   const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
@@ -50,10 +51,10 @@ export default function PagesDetails() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
+    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
   }, []);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -74,13 +75,18 @@ export default function PagesDetails() {
       />
       <ScrollView>
         <View style={styles.userViewStyle}>
+          <UpdateDeleteMenu
+            containerStyle={{position:'absolute',right: 10}}
+            icon={<Image source={Icons.dotMenu} style={[ImageStyle(28, 28),{ transform: [{rotate: '90deg'}],}]} />}
+          />
+
           <View style={styles.imageView}>
             <Image source={Icons.logo} style={styles.userImage} />
           </View>
           <Text style={styles.userText}>IndiansAbroad</Text>
           <Text style={styles.userText1}>(Connecting Indians Worldwide)</Text>
         </View>
-        <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
+        <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
           {showCurrent ? (
             <TouchableOpacity style={styles.btnView}>
               <Text style={styles.btnText}>My page Chatroom</Text>
@@ -91,7 +97,7 @@ export default function PagesDetails() {
                 <Text style={styles.btnText}>Connect</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
+                style={[styles.btnView, {marginLeft: 8, marginRight: 2}]}>
                 <Text style={styles.btnText}>Message</Text>
               </TouchableOpacity>
             </>
@@ -160,11 +166,11 @@ export default function PagesDetails() {
               styles.tabItemView,
             ]}>
             {tabSelection == 'CONNECTED INDIANS' ? (
-              <Text style={[styles.tabText, { bottom: 12 }]}>
+              <Text style={[styles.tabText, {bottom: 12}]}>
                 {'CONNECTED INDIANS'}
               </Text>
             ) : (
-              <Text style={[styles.tabText1, { bottom: 12 }]}>
+              <Text style={[styles.tabText1, {bottom: 12}]}>
                 {'CONNECTED INDIANS'}
               </Text>
             )}
@@ -177,15 +183,15 @@ export default function PagesDetails() {
                   tabSelection == 'ABOUT'
                     ? 0
                     : tabSelection == 'ACTIVITIES'
-                      ? SCREEN_WIDTH * 0.32
-                      : SCREEN_WIDTH * 0.65,
+                    ? SCREEN_WIDTH * 0.32
+                    : SCREEN_WIDTH * 0.65,
                 // transform: [{translateX: buttonTranslateX}],
                 width:
                   tabSelection == 'ABOUT'
                     ? 130
                     : tabSelection == 'ACTIVITIES'
-                      ? 135
-                      : `${80 / tabs.length}%`,
+                    ? 135
+                    : `${80 / tabs.length}%`,
                 borderWidth: 0.9,
                 borderColor: colors.primary_4574ca,
               },
@@ -201,15 +207,17 @@ export default function PagesDetails() {
               e?.nativeEvent?.position == 0
                 ? 'ABOUT'
                 : e?.nativeEvent?.position == 1
-                  ? 'ACTIVITIES'
-                  : 'CONNECTED INDIANS',
+                ? 'ACTIVITIES'
+                : 'CONNECTED INDIANS',
             );
             setTabSelectionIndex(e?.nativeEvent?.position);
             setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
           }}>
           <View key={'1'}>
-            <ScrollView style={{ marginHorizontal: wp(12) }}>
-              <Text style={styles.textView}>This is a official page of IndiansAbroad app.</Text>
+            <ScrollView style={{marginHorizontal: wp(12)}}>
+              <Text style={styles.textView}>
+                This is a official page of IndiansAbroad app.
+              </Text>
               <View style={ApplicationStyles.row}>
                 <Text style={styles.text1}>Website</Text>
                 <Text style={styles.text2}>http:www.indiansabroad.online</Text>
@@ -235,11 +243,11 @@ export default function PagesDetails() {
                 value={searchText}
                 onChangeText={text => setSearchText(text)}
                 placeholder={'Search Indians here'}
-                containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
+                containerStyles={{backgroundColor: colors.white, marginTop: 5}}
               />
               <FlatList
                 data={[1, 2]}
-                renderItem={({ item }) => {
+                renderItem={({item}) => {
                   return <ConnectedIndians />;
                 }}
                 showsVerticalScrollIndicator={false}
