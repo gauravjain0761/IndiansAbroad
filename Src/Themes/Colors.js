@@ -2,7 +2,7 @@ const colors = {
   white: '#FFFFFF',
   black: '#000000',
   primary_8091ba: '#8091ba',
-  primary_500: '#5071BEFF;',
+  primary_500: '#5071BEFF',
   primary_4574ca: '#4574CAFF',
   neutral_400: '#BDC1CAFF',
   neutral_500: '#9095A1FF',
@@ -19,7 +19,7 @@ const colors = {
   neutral_900: '#171A1FFF',
   borderColor: '#E1E6EE',
   placeHolderColor: '#BAC2CC',
-  inputBg: "#F4F3F8FF",
+  inputBg: '#F4F3F8FF',
   tertiary1_500: '#8090BAFF',
   neutral_300: '#DEE1E6FF',
   neutral_800: '#1E2128FF',
@@ -27,15 +27,12 @@ const colors = {
   btnBg: '#F4F4F4FF',
   danger_500: '#DE3B40FF',
 
-
-
-
   green_20CA60: '#20CA60',
   green_2DD971: '#2DD971',
   green_36AE18: '#36AE18',
   green_1DB456: '#1DB456',
   red_ED7C7C: '#ED7C7C',
   red_DE6161: '#DE6161',
-  red_EE5858: '#EE5858'
+  red_EE5858: '#EE5858',
 };
 export default colors;
