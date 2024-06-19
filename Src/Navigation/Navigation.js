@@ -31,6 +31,15 @@ import CreateDiscussion from '../Screens/CreateDiscussion';
 import MyConnections from '../Screens/MyConnections';
 import CreateGroup from '../Screens/CreateGroup';
 import NotificationScreen from '../Screens/NotificationScreen';
+import IndiansPageMore from '../Screens/IndiansPageMore';
+import IndiansPageUpdate from '../Screens/IndiansPageUpdate';
+import ChangePasswordNew from '../Screens/Setting/ChangePasswordNew';
+import ChangePasswordVerify from '../Screens/Setting/ChangePasswordVerify';
+import ChangePasswordEmail from '../Screens/Setting/ChangePasswordEmail';
+import Subscription from '../Screens/Setting/Subscription';
+import BlockedUsers from '../Screens/Setting/BlockedUsers';
+import ChangePhone from '../Screens/Setting/ChangePhone';
+import ChangePhoneVerify from '../Screens/Setting/ChangePhoneVerify';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -237,6 +246,51 @@ export default function Navigation() {
           options={({navigation}) => ({...headerStyleTransparent})}
           name={screenName.NotificationScreen}
           component={NotificationScreen}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.IndiansPageMore}
+          component={IndiansPageMore}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.IndiansPageUpdate}
+          component={IndiansPageUpdate}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.ChangePasswordEmail}
+          component={ChangePasswordEmail}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.ChangePasswordVerify}
+          component={ChangePasswordVerify}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.ChangePasswordNew}
+          component={ChangePasswordNew}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.Subscription}
+          component={Subscription}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.BlockedUsers}
+          component={BlockedUsers}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.ChangePhone}
+          component={ChangePhone}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.ChangePhoneVerify}
+          component={ChangePhoneVerify}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -9,6 +9,7 @@ import RenderUserIcon from './RenderUserIcon'
 import PostShareModal from './PostShareModal'
 
 export default function DiscussionForum({ item, index, isUser = false }) {
+    const [menuModal, setmenuModal] = useState(false)
     return (
         <View key={index}>
             <View style={styles.headerView}>
@@ -23,12 +24,12 @@ export default function DiscussionForum({ item, index, isUser = false }) {
                 {isUser ? <View>
                     <TouchableOpacity style={styles.messageView}>
                         <Image source={Icons.connect} style={ImageStyle(30, 30, 'cover')} />
-                        <Text style={[styles.degreeText, { lineHeight: 16 }]}>Connect</Text>
+                        <Text style={[styles.degreeText,{lineHeight:16}]}>Connect</Text>
                     </TouchableOpacity>
-                </View> : <TouchableOpacity style={styles.messageView}>
-                    <Image source={Icons.trash} style={ImageStyle(30, 30, 'cover')} />
-
-                </TouchableOpacity>}
+                </View> :  <TouchableOpacity style={styles.messageView}>
+                        <Image source={Icons.trash} style={ImageStyle(30, 30, 'cover')} />
+                        
+                    </TouchableOpacity> }
             </View>
             <View>
                 <Text style={styles.description}>Shop from Indian websites with international shipping</Text>
@@ -37,6 +38,7 @@ export default function DiscussionForum({ item, index, isUser = false }) {
             <View>
                 <Image source={Icons.postViewImage} style={styles.postImage} />
             </View>
+            <PostShareModal menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
         </View>
     )
 }

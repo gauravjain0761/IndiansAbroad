@@ -9,6 +9,7 @@ import {
   FlatList,
   ScrollView,
   Image,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch} from 'react-redux';
@@ -29,6 +30,7 @@ import {screenName} from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
 import PagePostCard from '../Components/PagePostCard';
 import UpdateDeleteMenu from '../Components/UpdateDeleteMenu';
+import DeletePopModal from '../Components/DeletePopModal';
 
 export default function PagesDetails() {
   const tabs = [
@@ -45,6 +47,7 @@ export default function PagesDetails() {
   const [tabSelection, setTabSelection] = useState('ABOUT');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
+  const [deletePop, setDeletePop] = useState(false);
 
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
@@ -76,12 +79,13 @@ export default function PagesDetails() {
         <View style={styles.userViewStyle}>
           <UpdateDeleteMenu
             containerStyle={{position: 'absolute', right: 10}}
-            icon={
-              <Image
-                source={Icons.more1}
-                style={[ImageStyle(28, 28)]}
-              />
-            }
+            onDeletePress={() => {
+              setDeletePop(true);
+            }}
+            onUpdatePress={() => {
+              navigate(screenName.IndiansPageUpdate);
+            }}
+            icon={<Image source={Icons.more1} style={[ImageStyle(28, 28)]} />}
           />
 
           <View style={styles.imageView}>
@@ -260,6 +264,10 @@ export default function PagesDetails() {
           </View>
         </PagerView>
       </ScrollView>
+      <DeletePopModal
+        isVisible={deletePop}
+        onClose={() => setDeletePop(false)}
+      />
     </View>
   );
 }

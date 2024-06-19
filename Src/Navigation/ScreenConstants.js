@@ -21,4 +21,13 @@ export const screenName = {
   MyConnections: 'MyConnections',
   CreateGroup: 'CreateGroup',
   NotificationScreen: 'NotificationScreen',
+  IndiansPageMore: 'IndiansPageMore',
+  IndiansPageUpdate: 'IndiansPageUpdate',
+  ChangePasswordNew: 'ChangePasswordNew',
+  ChangePasswordVerify: 'ChangePasswordVerify',
+  ChangePasswordEmail: 'ChangePasswordEmail',
+  Subscription: 'Subscription',
+  BlockedUsers: 'BlockedUsers',
+  ChangePhone: 'ChangePhone',
+  ChangePhoneVerify: 'ChangePhoneVerify',
 };

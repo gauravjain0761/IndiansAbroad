@@ -7,15 +7,16 @@ import colors from '../Themes/Colors'
 import { Icons } from '../Themes/Icons'
 import { FontStyle, ImageStyle } from '../utils/commonFunction'
 import { fontname, hp } from '../Themes/Fonts'
+import { screenName } from '../Navigation/ScreenConstants'
 
 export default function Setting() {
     const navigation = useNavigation()
     let data = [
         { title: 'Edit Profile', onPress: () => { navigation.navigate('EditProfile') } },
-        { title: 'Change Phone Number', onPress: () => { } },
-        { title: 'Change Password', onPress: () => { } },
-        { title: 'Change Password', onPress: () => { } },
-        { title: 'Blocked Users', onPress: () => { } },
+        { title: 'Change Phone Number', onPress: () => {navigation.navigate(screenName.ChangePhone) } },
+        { title: 'Change Password', onPress: () => {navigation.navigate(screenName.ChangePasswordEmail) } },
+        { title: 'Subscription', onPress: () => {navigation.navigate(screenName.Subscription) } },
+        { title: 'Blocked Users', onPress: () => { navigation.navigate(screenName.BlockedUsers)} },
 
     ]
     return (

@@ -45,4 +45,8 @@ export const Icons = {
     Discussion: require('../assets/Icons/Discussion.png'),
     account: require('../assets/Icons/account.png'),
     peopleIcon1: require('../assets/Icons/peopleIcon1.png'),
+    check: require('../assets/Icons/check.png'),
+    sent: require('../assets/Icons/sent.png'),
+    close: require('../assets/Icons/close.png'),
+    down_arrow: require('../assets/Icons/down_arrow.png'),
 }  

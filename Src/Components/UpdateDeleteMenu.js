@@ -7,7 +7,12 @@ import {FontStyle} from '../utils/commonFunction';
 import {fontname} from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 
-export default function UpdateDeleteMenu({icon, containerStyle}) {
+export default function UpdateDeleteMenu({
+  icon,
+  containerStyle,
+  onUpdatePress,
+  onDeletePress,
+}) {
   const [visible, setVisible] = useState(false);
 
   const hideMenu = () => setVisible(false);
@@ -27,10 +32,18 @@ export default function UpdateDeleteMenu({icon, containerStyle}) {
         }
         onRequestClose={hideMenu}
         style={styles.menu}>
-        <MenuItem textStyle={styles.itemText} onPress={hideMenu}>
+        <MenuItem
+          textStyle={styles.itemText}
+          onPress={() => {
+            hideMenu(), onUpdatePress();
+          }}>
           Update
         </MenuItem>
-        <MenuItem textStyle={styles.itemText} onPress={hideMenu}>
+        <MenuItem
+          textStyle={styles.itemText}
+          onPress={() => {
+            hideMenu(), onDeletePress();
+          }}>
           Delete
         </MenuItem>
       </Menu>
