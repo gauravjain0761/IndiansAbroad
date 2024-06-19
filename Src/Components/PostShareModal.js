@@ -15,10 +15,6 @@ import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 
 export default function PostShareModal({
-  value,
-  onChangeText,
-  placeholder,
-  containerStyles,
   shareView,
   menuModal,
   setmenuModal,
@@ -30,7 +26,7 @@ export default function PostShareModal({
       onClose={() => setmenuModal(false)}
       transparent={true}>
       <View style={styles.modalView}>
-        <Text style={styles.modalUserName}>Nikita Khairnar</Text>
+        <Text style={styles.modalUserName}>{item ? `${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}` : 'Nikita Khairnar'}</Text>
         <View style={styles.line} />
         {shareView && (
           <>
@@ -43,16 +39,16 @@ export default function PostShareModal({
           </>
         )}
         <TouchableOpacity>
-          <Text style={styles.modalText}>Disconnect</Text>
+          <Text style={styles.modalText}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</Text>
         </TouchableOpacity>
         <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
         <TouchableOpacity>
-          <Text style={styles.modalText}>Block/Unblock</Text>
+          <Text style={styles.modalText}>{item?.isPostBlocked ? 'Unblock' : 'Block'}</Text>
         </TouchableOpacity>
         <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-        <TouchableOpacity>
+        {!item?.isReported ? <TouchableOpacity>
           <Text style={styles.modalText}>Report</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> : null}
         <View style={styles.line} />
       </View>
     </ModalContainer>
@@ -68,6 +64,7 @@ const styles = StyleSheet.create({
     ...FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
     paddingVertical: 15,
     textAlign: 'center',
+    textTransform: 'capitalize'
   },
   line: {
     borderBottomWidth: 1,

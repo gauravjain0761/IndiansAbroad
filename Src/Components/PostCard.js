@@ -17,9 +17,6 @@ export default function PostCard({ item, index, isUser = false }) {
     const [menuModal, setmenuModal] = useState(false)
     const { allPost, allPostsCount } = useSelector(e => e.common)
 
-    if (index == 0) {
-        console.log('item--', item, allPost?.length)
-    }
     if (item?.createdBy) {
         return (
             <View key={index}>
@@ -46,14 +43,12 @@ export default function PostCard({ item, index, isUser = false }) {
                         }
                     </View>}
                 </View>
-                <View>
+                {item?.message !== '' && <View>
                     <Text style={styles.description}>{item?.message}</Text>
-                </View>
+                </View>}
                 {item?.mediaFiles.length > 0 &&
-
                     <PostCarousal images={item?.mediaFiles} />
                 }
-
                 <View style={styles.bottomRow}>
                     <View style={styles.middlerow}>
                         <TouchableOpacity style={styles.innerRow}>
@@ -76,7 +71,6 @@ export default function PostCard({ item, index, isUser = false }) {
                             <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
                         </TouchableOpacity>
                     }
-
                 </View>
                 <PostShareModal item={item} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
             </View>
@@ -128,7 +122,6 @@ export default function PostCard({ item, index, isUser = false }) {
                         <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
                     </TouchableOpacity>
                 }
-
             </View>
             <PostShareModal menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
         </View>
@@ -148,7 +141,8 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 13, colors.neutral_900)
+        ...FontStyle(fontname.actor_regular, 13, colors.neutral_900),
+        textTransform: 'capitalize'
     },
     degreeText: {
         ...FontStyle(fontname.actor_regular, 11, colors.neutral_900)

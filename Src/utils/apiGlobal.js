@@ -120,9 +120,6 @@ export const handleSuccessRes = (res, req, dispatch, fun) => {
 }
 
 export const handleErrorRes = (err, req, dispatch, fun) => {
-    console.log('---------------', err, req, dispatch, fun)
-
-
     if (err?.response?.status == 401) {
         dispatchAction(dispatch, IS_LOADING, false)
         removeAuthorization()

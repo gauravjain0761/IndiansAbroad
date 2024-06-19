@@ -44,7 +44,6 @@ export default function DiscussionForumDetail() {
 
     const RenderItem = ({ item, itemIndex }) => {
         const replyData = itemIndex == 0 ? [0] : [0, 1, 2, 3]
-        console.log(itemIndex)
         return <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
                 <RenderUserIcon height={53} isBorder />
@@ -107,10 +106,10 @@ export default function DiscussionForumDetail() {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.sendButton}>
                         <Image source={Icons.share} style={ImageStyle(24, 24, 'cover')} />
-                        <Text style={[styles.shareText,{lineHeight:16}]}>Share</Text>
+                        <Text style={[styles.shareText, { lineHeight: 16 }]}>Share</Text>
                     </TouchableOpacity>
                 </View>
-                
+
             </SafeAreaView>
         </View>
     )
@@ -165,8 +164,8 @@ const styles = StyleSheet.create({
         ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
     },
     commentText1: {
-        textAlign:'center',
-        marginBottom:8,
+        textAlign: 'center',
+        marginBottom: 8,
         ...FontStyle(fontname.actor_regular, 13, colors.neutral_100)
     },
     commentText2: {
@@ -211,6 +210,6 @@ const styles = StyleSheet.create({
     },
     sendButton: {
         paddingHorizontal: 10,
-        alignItems:'center'
+        alignItems: 'center'
     }
 })

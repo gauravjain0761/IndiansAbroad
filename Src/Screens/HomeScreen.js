@@ -9,22 +9,22 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {fontname, wp} from '../Themes/Fonts';
-import {FontStyle} from '../utils/commonFunction';
+import { fontname, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import CreatePost from '../Components/CreatePost';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
-import {getalluserposts} from '../Services/PostServices';
-import {dispatchAction} from '../utils/apiGlobal';
-import {IS_LOADING} from '../Redux/ActionTypes';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { getalluserposts } from '../Services/PostServices';
+import { dispatchAction } from '../utils/apiGlobal';
+import { IS_LOADING } from '../Redux/ActionTypes';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -36,13 +36,11 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const {allPost, allPostsCount} = useSelector(e => e.common);
+  const { allPost, allPostsCount } = useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
-
-  console.log('allPost--------', allPost?.length);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -57,7 +55,7 @@ export default function HomeScreen() {
       data: {
         createdBy: '663331ecdd27304e5c393167',
         page: page,
-        limit: 10,
+        limit: 20,
       },
       onSuccess: () => {
         setpage(page);
@@ -68,7 +66,7 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    // if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
+    if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
   }, []);
 
   useEffect(() => {
@@ -83,7 +81,7 @@ export default function HomeScreen() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -123,12 +121,7 @@ export default function HomeScreen() {
             ref.current?.setPage(0);
           }}
           style={styles.tabItemView}>
-          <Text
-            style={
-              tabSelection == 'Activity'
-                ? styles.selectedText
-                : styles.unSewlectedText
-            }>
+          <Text style={tabSelection == 'Activity' ? styles.selectedText : styles.unSewlectedText}>
             {'Activity'}
           </Text>
         </TouchableOpacity>
@@ -139,12 +132,7 @@ export default function HomeScreen() {
             setIsLeftButtonActive(false);
           }}
           style={styles.tabItemView}>
-          <Text
-            style={
-              tabSelection == 'Events'
-                ? styles.selectedText
-                : styles.unSewlectedText
-            }>
+          <Text style={tabSelection == 'Events' ? styles.selectedText : styles.unSewlectedText}>
             {'Events'}
           </Text>
         </TouchableOpacity>
@@ -155,7 +143,7 @@ export default function HomeScreen() {
         placeholder={'Search users, posts, forums'}
       />
       <PagerView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -173,13 +161,14 @@ export default function HomeScreen() {
             data={allPost}
             renderItem={renderItem}
             onEndReached={fetchMoreData}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={0.3}
             ListFooterComponent={() => {
-              return allPost && loading ? (
+              return (
                 <View>
-                  <ActivityIndicator size={'large'} color={colors.black} />
+                  {(allPost && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
+                  <View style={{ height: 50 }} />
                 </View>
-              ) : null;
+              )
             }}
           />
         </View>
