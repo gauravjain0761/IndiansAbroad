@@ -38,13 +38,13 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                         if (route.name === screenName.homeScreen) {
                             iconName = Icons.homeIcon;
                         } else if (route.name === screenName.indiansPage) {
-                            iconName = Icons.peopleIcon;
+                            iconName = Icons.peopleIcon1;
                         } else if (route.name === screenName.discussionForum) {
-                            iconName = Icons.discussionIcon;
+                            iconName = Icons.DiscussionOff;
                         } else if (route.name === screenName.chatScreen) {
                             iconName = Icons.chatIcon;
                         } else if (route.name === screenName.profileScreen) {
-                            iconName = Icons.profileIcon
+                            iconName = Icons.account
                         }
 
                         const onLongPress = () => {

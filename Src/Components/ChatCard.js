@@ -28,7 +28,7 @@ export default function ChatCard({indians, cardPress}) {
         HI Anay, How are you . .
       </Text>
       <View style={styles.btnView}>
-        <Image source={Icons.chatIcon} style={styles.chatIcon} />
+        <Image source={Icons.sent} style={styles.chatIcon} />
         <Text style={styles.btnText}>13.06</Text>
       </View>
     </TouchableOpacity>
@@ -76,8 +76,9 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   chatIcon: {
-    width: 20,
-    height: 20,
-    marginRight:5
+    width: 18,
+    height: 18,
+    marginRight:0,
+    resizeMode:'contain'
   },
 });

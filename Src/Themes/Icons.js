@@ -38,4 +38,11 @@ export const Icons = {
     addImage1: require('../assets/Icons/addImages.png'),
 
     personAdd: require('../assets/Icons/personAdd.png'),
+    play: require('../assets/Icons/play.png'),
+    image: require('../assets/Icons/image.png'),
+    more1: require('../assets/Icons/more1.png'),
+    DiscussionOff: require('../assets/Icons/DiscussionOff.png'),
+    Discussion: require('../assets/Icons/Discussion.png'),
+    account: require('../assets/Icons/account.png'),
+    peopleIcon1: require('../assets/Icons/peopleIcon1.png'),
 }  
