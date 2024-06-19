@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {fontname, screen_width, wp} from '../Themes/Fonts';
+import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 
 export default function PostShareModal({
@@ -22,6 +22,7 @@ export default function PostShareModal({
   shareView,
   menuModal,
   setmenuModal,
+  item
 }) {
   return (
     <ModalContainer
@@ -37,18 +38,18 @@ export default function PostShareModal({
               <Text style={styles.modalText}>Share Profile</Text>
             </TouchableOpacity>
             <View
-              style={[styles.line, {borderBottomColor: colors.neutral_500}]}
+              style={[styles.line, { borderBottomColor: colors.neutral_500 }]}
             />
           </>
         )}
         <TouchableOpacity>
           <Text style={styles.modalText}>Disconnect</Text>
         </TouchableOpacity>
-        <View style={[styles.line, {borderBottomColor: colors.neutral_500}]} />
+        <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
         <TouchableOpacity>
           <Text style={styles.modalText}>Block/Unblock</Text>
         </TouchableOpacity>
-        <View style={[styles.line, {borderBottomColor: colors.neutral_500}]} />
+        <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
         <TouchableOpacity>
           <Text style={styles.modalText}>Report</Text>
         </TouchableOpacity>

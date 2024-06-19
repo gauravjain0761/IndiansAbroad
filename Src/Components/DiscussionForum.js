@@ -9,7 +9,6 @@ import RenderUserIcon from './RenderUserIcon'
 import PostShareModal from './PostShareModal'
 
 export default function DiscussionForum({ item, index, isUser = false }) {
-    const [menuModal, setmenuModal] = useState(false)
     return (
         <View key={index}>
             <View style={styles.headerView}>
@@ -24,12 +23,12 @@ export default function DiscussionForum({ item, index, isUser = false }) {
                 {isUser ? <View>
                     <TouchableOpacity style={styles.messageView}>
                         <Image source={Icons.connect} style={ImageStyle(30, 30, 'cover')} />
-                        <Text style={[styles.degreeText,{lineHeight:16}]}>Connect</Text>
+                        <Text style={[styles.degreeText, { lineHeight: 16 }]}>Connect</Text>
                     </TouchableOpacity>
-                </View> :  <TouchableOpacity style={styles.messageView}>
-                        <Image source={Icons.trash} style={ImageStyle(30, 30, 'cover')} />
-                        
-                    </TouchableOpacity> }
+                </View> : <TouchableOpacity style={styles.messageView}>
+                    <Image source={Icons.trash} style={ImageStyle(30, 30, 'cover')} />
+
+                </TouchableOpacity>}
             </View>
             <View>
                 <Text style={styles.description}>Shop from Indian websites with international shipping</Text>
@@ -38,7 +37,6 @@ export default function DiscussionForum({ item, index, isUser = false }) {
             <View>
                 <Image source={Icons.postViewImage} style={styles.postImage} />
             </View>
-            <PostShareModal menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
         </View>
     )
 }
@@ -68,13 +66,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     description: {
-        ...FontStyle(fontname.abeezee, 16, colors.neutral_900,"700"),
+        ...FontStyle(fontname.abeezee, 16, colors.neutral_900, "700"),
         paddingBottom: 10,
         paddingHorizontal: 20,
-        marginTop:10
+        marginTop: 10
     },
     description1: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900,"400"),
+        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, "400"),
         paddingBottom: 10,
         paddingHorizontal: 20
     },

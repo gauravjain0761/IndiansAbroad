@@ -35,7 +35,6 @@ export default function ProfileScreen() {
         { id: 2, label: 'Connected Indians' },
     ];
     const navigation = useNavigation()
-    const [menuModal, setmenuModal] = useState(false)
     const { navigate, goBack } = useNavigation();
     const [tabType, setTabType] = useState('All');
     const [searchText, setSearchText] = useState('');
@@ -169,8 +168,6 @@ export default function ProfileScreen() {
                     </View>
                 </PagerView>
             </ScrollView>
-            <PostShareModal shareView={true} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
-
         </View>
     )
 }

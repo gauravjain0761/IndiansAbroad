@@ -1,16 +1,16 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {SCREEN_WIDTH, fontname} from '../Themes/Fonts';
+import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
 
-export default function PagePostCard({item, index}) {
+export default function PagePostCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
   return (
     <View key={index}>
@@ -58,7 +58,7 @@ export default function PagePostCard({item, index}) {
 
         <TouchableOpacity
           onPress={() => setmenuModal(true)}
-          style={[styles.innerRow, {...ApplicationStyles.flex}]}>
+          style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
           <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
         </TouchableOpacity>
       </View>

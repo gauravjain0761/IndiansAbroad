@@ -37,4 +37,5 @@ export const Icons = {
     postAdd: require('../assets/Icons/postAdd.png'),
     addImage1: require('../assets/Icons/addImages.png'),
 
+    personAdd: require('../assets/Icons/personAdd.png'),
 }  

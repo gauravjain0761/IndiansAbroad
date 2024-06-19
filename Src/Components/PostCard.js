@@ -10,9 +10,78 @@ import ModalContainer from './ModalContainer'
 import RenderUserIcon from './RenderUserIcon'
 import PostShareModal from './PostShareModal'
 import UpdateDeleteMenu from './UpdateDeleteMenu'
+import { useSelector } from 'react-redux'
+import PostCarousal from './PostCarousal'
 
 export default function PostCard({ item, index, isUser = false }) {
     const [menuModal, setmenuModal] = useState(false)
+    const { allPost, allPostsCount } = useSelector(e => e.common)
+
+    if (index == 0) {
+        console.log('item--', item, allPost?.length)
+    }
+    if (item?.createdBy) {
+        return (
+            <View key={index}>
+                <View style={styles.headerView}>
+                    <TouchableOpacity style={styles.userImage}>
+                        <RenderUserIcon height={57} isBorder />
+                    </TouchableOpacity>
+                    <View style={ApplicationStyles.flex}>
+                        <Text style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
+                        {/* {!isUser && <Text style={styles.degreeText}>PhD Student, Seoul</Text>} */}
+                        <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
+                    </View>
+                    {!isUser && <View>
+                        {item?.isFollowing ?
+                            <TouchableOpacity style={styles.messageView}>
+                                <Image source={Icons.messageIcon} style={ImageStyle(30, 30, 'cover')} />
+                                <Text style={styles.degreeText}>Message</Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.messageView}>
+                                <Image source={Icons.personAdd} style={ImageStyle(30, 30, 'cover')} />
+                                <Text style={styles.degreeText}>Connect</Text>
+                            </TouchableOpacity>
+                        }
+                    </View>}
+                </View>
+                <View>
+                    <Text style={styles.description}>{item?.message}</Text>
+                </View>
+                {item?.mediaFiles.length > 0 &&
+
+                    <PostCarousal images={item?.mediaFiles} />
+                }
+
+                <View style={styles.bottomRow}>
+                    <View style={styles.middlerow}>
+                        <TouchableOpacity style={styles.innerRow}>
+                            <Image source={item?.isLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(22, 22)} />
+                            <Text style={styles.username}>{item?.likeCount} Likes</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.innerRow}>
+                            <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
+                            <Text style={styles.username}>{item?.commentCount} Comments</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.innerRow}>
+                            <Image source={Icons.share} style={ImageStyle(22, 22)} />
+                            <Text style={styles.username}>Share</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {isUser ?
+                        <UpdateDeleteMenu icon={(<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />)} />
+                        :
+                        <TouchableOpacity onPress={() => setmenuModal(true)} style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
+                            <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
+                        </TouchableOpacity>
+                    }
+
+                </View>
+                <PostShareModal item={item} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
+            </View>
+        )
+    }
     return (
         <View key={index}>
             <View style={styles.headerView}>
@@ -95,7 +164,7 @@ const styles = StyleSheet.create({
     },
     postImage: {
         height: SCREEN_WIDTH - 5,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
         width: SCREEN_WIDTH - 5,
         borderRadius: 4,
         alignSelf: 'center'
