@@ -10,6 +10,7 @@ const colors = {
   neutral_150: '#F8F9FAFF',
   secondary_500: '#C3D0F2FF',
   secondary_600: '#6A7DACFF',
+  secondary_700: '#F3F2F7FF',
   secondary_d9e2: '#D9E2F3FF',
   primary_6a7e: '#6A7EB0FF',
   neutral_600: '#565D6DFF',
@@ -24,6 +25,7 @@ const colors = {
   neutral_800: '#1E2128FF',
   buttonBlue: '#5071BEFF',
   btnBg: '#F4F4F4FF',
+  danger_500: '#DE3B40FF',
 
 
 
