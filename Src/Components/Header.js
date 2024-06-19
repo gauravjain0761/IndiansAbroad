@@ -19,7 +19,8 @@ export default function Header({
   logoShow = true,
   titleStyle,
   isChat,
-  chatLeftPress
+  chatLeftPress,
+  chatRightPress
 }) {
   const navigation = useNavigation();
   if (isChat) {
@@ -47,7 +48,7 @@ export default function Header({
           </Text>
         </View>
         <View style={[ApplicationStyles.row, {gap: 10}]}>
-          <TouchableOpacity onPress={() => onClickPlus()}>
+          <TouchableOpacity onPress={() => chatRightPress()}>
             <Image source={Icons.postAdd} style={ImageStyle(26, 24)} />
           </TouchableOpacity>
         </View>

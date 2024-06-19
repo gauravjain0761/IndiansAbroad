@@ -40,6 +40,7 @@ export default function ChatScreen() {
         showRight={true}
         isChat={true}
         chatLeftPress={() => navigate(screenName.MyConnections)}
+        chatRightPress={() => navigate(screenName.CreateGroup)}
       />
       <Text style={styles.chatText}>Chat Room</Text>
       <SearchBar

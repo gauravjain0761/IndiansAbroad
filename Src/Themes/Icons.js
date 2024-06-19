@@ -35,5 +35,6 @@ export const Icons = {
     checkbox1: require('../assets/Icons/checkbox1.png'),
     contact: require('../assets/Icons/contact.png'),
     postAdd: require('../assets/Icons/postAdd.png'),
+    addImage1: require('../assets/Icons/addImages.png'),
 
 }  
