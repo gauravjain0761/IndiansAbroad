@@ -13,12 +13,10 @@ export const getalluserposts =
             })
                 .then(async (response) => {
                     handleSuccessRes(response, request, dispatch, () => {
-                        console.log('ayaaaaaaa', response)
-                        dispatchAction(dispatch, SET_ALL_POST, response?.data)
+                        dispatchAction(dispatch, SET_ALL_POST, { ...response?.data, current_page: request?.data?.page })
                     });
                 })
                 .catch(error => {
-                    console.log('errrrr', error)
                     handleErrorRes(error, request, dispatch);
                 });
         };

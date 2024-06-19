@@ -12,7 +12,7 @@ export default function (state = initialState, action) {
       return { ...state, preLoader: action.payload };
     }
     case SET_ALL_POST: {
-      return { ...state, allPost: action.payload.data, allPostsCount: action.payload.allPostsCount };
+      return { ...state, allPost: action.payload.current_page == 1 ? action.payload.data : [...state.allPost, ...action.payload.data], allPostsCount: action.payload.allPostsCount };
     }
     default:
       return state;

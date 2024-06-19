@@ -32,7 +32,7 @@ export default function HomeScreen() {
   const [page, setpage] = useState(1)
   const [loading, setloading] = useState(false);
 
-  console.log('allPost--------', allPost)
+  console.log('allPost--------', allPost?.length)
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
