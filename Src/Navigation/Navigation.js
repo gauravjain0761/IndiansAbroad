@@ -30,6 +30,7 @@ import DiscussionForumDetail from '../Screens/DiscussionForumDetail';
 import CreateDiscussion from '../Screens/CreateDiscussion';
 import MyConnections from '../Screens/MyConnections';
 import CreateGroup from '../Screens/CreateGroup';
+import NotificationScreen from '../Screens/NotificationScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -231,6 +232,11 @@ export default function Navigation() {
           options={({navigation}) => ({...headerStyleTransparent})}
           name={screenName.CreateGroup}
           component={CreateGroup}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.NotificationScreen}
+          component={NotificationScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

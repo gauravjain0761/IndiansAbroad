@@ -1,4 +1,3 @@
-
 export const screenName = {
   homeScreen: 'HomeScreen',
   indiansPage: 'IndiansPage',
@@ -21,4 +20,5 @@ export const screenName = {
   CreateDiscussion: 'CreateDiscussion',
   MyConnections: 'MyConnections',
   CreateGroup: 'CreateGroup',
+  NotificationScreen: 'NotificationScreen',
 };

@@ -20,7 +20,7 @@ export default function Header({
   titleStyle,
   isChat,
   chatLeftPress,
-  chatRightPress
+  chatRightPress,
 }) {
   const navigation = useNavigation();
   if (isChat) {
@@ -83,7 +83,7 @@ export default function Header({
           <TouchableOpacity onPress={() => onClickPlus()}>
             <Image source={Icons.plusHome} style={ImageStyle(26, 24)} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onRightPress()}>
             <Image source={Icons.bell} style={ImageStyle(24, 24)} />
           </TouchableOpacity>
         </View>
@@ -113,7 +113,7 @@ export default function Header({
             style={[
               FontStyle(fontname.actor_regular, 16, colors.neutral_900),
               {textAlign: 'center'},
-              titleStyle
+              titleStyle,
             ]}>
             {title}
           </Text>
@@ -139,7 +139,7 @@ export default function Header({
                   '700',
                 ),
                 {marginLeft: 8, textAlign: 'center'},
-                titleStyle
+                titleStyle,
               ]}>
               {title}
             </Text>
