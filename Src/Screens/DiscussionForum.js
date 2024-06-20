@@ -91,6 +91,7 @@ export default function DiscussionForum() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search Threads'}
+        containerStyles={{marginTop: 5,}}
       />
        <FlatList
             data={[0, 1, 2, 3, 4]}

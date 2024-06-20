@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
 import colors from '../Themes/Colors'
 
-export default function RenderUserIcon({ height, isBorder = false, url }) {
+export default function RenderUserIcon({ height, isBorder = false, url ,activeOpacity}) {
     const navigation = useNavigation()
     let styles = StyleSheet.create({
         userImage: {
@@ -15,7 +15,7 @@ export default function RenderUserIcon({ height, isBorder = false, url }) {
         }
     })
     return (
-        <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)} style={{
+        <TouchableOpacity activeOpacity={activeOpacity} onPress={() => navigation.navigate(screenName.indiansDetails)} style={{
             height: height,
             width: height,
             borderWidth: 2,

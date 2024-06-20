@@ -13,7 +13,7 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
 import ChatCard from '../Components/ChatCard';
 
-export default function ChatScreen() {
+export default function ChatDetailsScreen() {
   const [searchText, setSearchText] = useState('');
   const {navigate} = useNavigation();
 
@@ -38,17 +38,10 @@ export default function ChatScreen() {
       <Header
         title={'IndiansAbroad'}
         showRight={true}
-        isChat={true}
+        isChatDetails={true}
         chatLeftPress={() => navigate(screenName.MyConnections)}
         chatRightPress={() => navigate(screenName.CreateGroup)}
-      />
-      <Text style={styles.chatText}>Chat Room</Text>
-      <SearchBar
-        value={searchText}
-        onChangeText={text => setSearchText(text)}
-        placeholder={'Search Chats here'}
-      />
-      <ChatList />
+      /> 
       <FlatList
         style={{
           paddingHorizontal: wp(8),
@@ -65,7 +58,7 @@ export default function ChatScreen() {
           return (
             <ChatCard
               cardPress={() => {
-                navigate(screenName.ChatDetailsScreen);
+                navigate(screenName.indiansDetails);
               }}
               
             />

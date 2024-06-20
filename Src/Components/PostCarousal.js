@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
         height: SCREEN_WIDTH - 5,
         resizeMode: 'cover',
         width: SCREEN_WIDTH - 5,
-        borderRadius: 4,
+        // borderRadius: 4,
         alignSelf: 'center'
     },
     indexText: {

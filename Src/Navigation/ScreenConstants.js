@@ -30,4 +30,5 @@ export const screenName = {
   BlockedUsers: 'BlockedUsers',
   ChangePhone: 'ChangePhone',
   ChangePhoneVerify: 'ChangePhoneVerify',
+  ChatDetailsScreen: 'ChatDetailsScreen',
 };

@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     lineHeight: hp(26),
   },
   categoriesTitle: {
-    ...FontStyle(fontname.actor_regular, 14, colors.black, '400'),
+    ...FontStyle(fontname.abeezeeItalic, 14, colors.black, '400'),
     lineHeight: hp(22),
   },
   categoriesContainer: {
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   time: {
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_500, '400'),
+    ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_500, '400'),
   },
   separator: {
     borderBottomWidth: 1,

@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     likesText: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(fontname.abeezeeItalic, 12, colors.neutral_900)
     },
     innerRow: {
         flexDirection: 'row',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     commentText1: {
         textAlign: 'center',
         marginBottom: 8,
-        ...FontStyle(fontname.actor_regular, 13, colors.neutral_100)
+        ...FontStyle(fontname.abeezee, 13, colors.neutral_100)
     },
     commentText2: {
         ...FontStyle(fontname.actor_regular, 16, colors.neutral_900)

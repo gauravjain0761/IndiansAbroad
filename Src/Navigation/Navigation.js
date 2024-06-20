@@ -40,6 +40,7 @@ import Subscription from '../Screens/Setting/Subscription';
 import BlockedUsers from '../Screens/Setting/BlockedUsers';
 import ChangePhone from '../Screens/Setting/ChangePhone';
 import ChangePhoneVerify from '../Screens/Setting/ChangePhoneVerify';
+import ChatDetailsScreen from '../Screens/ChatDetailsScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -291,6 +292,11 @@ export default function Navigation() {
           options={({navigation}) => ({...headerStyleTransparent})}
           name={screenName.ChangePhoneVerify}
           component={ChangePhoneVerify}
+        />
+        <Stack.Screen
+          options={({navigation}) => ({...headerStyleTransparent})}
+          name={screenName.ChatDetailsScreen}
+          component={ChatDetailsScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

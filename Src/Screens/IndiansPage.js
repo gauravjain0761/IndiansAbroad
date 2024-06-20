@@ -59,7 +59,7 @@ export default function IndiansPage() {
           }}
           style={[
             {
-              marginRight: wp(5),
+              // marginRight: wp(5),
             },
             styles.tabItemView,
           ]}>
@@ -93,8 +93,8 @@ export default function IndiansPage() {
           }}
           style={[
             {
-              marginLeft: wp(5),
-              flex: 1,
+              // marginLeft: wp(5),
+              // flex: 1,
             },
             styles.tabItemView,
           ]}>
@@ -120,25 +120,17 @@ export default function IndiansPage() {
             </Text>
           )}
         </TouchableOpacity>
-        <Animated.View
-          style={[
-            styles.animationView,
-            {
-              left: tabSelection == 'INDIANS' ? 5 : 7,
-              transform: [{translateX: buttonTranslateX}],
-            },
-          ]}
-        />
       </View>
       <SearchBar
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search Indians here'}
+        containerStyles={{top:-18}}
       />
       <Text
         style={[
           FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          {marginHorizontal: wp(16), marginVertical: 8},
+          {marginHorizontal: wp(16), marginVertical: 8,marginTop:-12},
         ]}>
         {tabSelection == 'INDIANS'
           ? 'People you may know'
@@ -185,7 +177,11 @@ export default function IndiansPage() {
                 {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
               ]}>
               <View style={styles.lineView} />
-              <TouchableOpacity style={styles.seeBtn} onPress={()=>navigate(screenName.IndiansPageMore,{dataList:"INDIANS"})}>
+              <TouchableOpacity
+                style={styles.seeBtn}
+                onPress={() =>
+                  navigate(screenName.IndiansPageMore, {dataList: 'INDIANS'})
+                }>
                 <Text style={styles.seeBtnText}>See More</Text>
               </TouchableOpacity>
               <View style={styles.lineView} />
@@ -249,7 +245,11 @@ export default function IndiansPage() {
                 {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
               ]}>
               <View style={styles.lineView} />
-              <TouchableOpacity style={styles.seeBtn} onPress={()=>navigate(screenName.IndiansPageMore,{dataList:"PAGES"})}>
+              <TouchableOpacity
+                style={styles.seeBtn}
+                onPress={() =>
+                  navigate(screenName.IndiansPageMore, {dataList: 'PAGES'})
+                }>
                 <Text style={styles.seeBtnText}>See More</Text>
               </TouchableOpacity>
               <View style={styles.lineView} />
@@ -289,10 +289,13 @@ export default function IndiansPage() {
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
+    top: -14,
+    // alignSelf:'center'
+    justifyContent: 'space-evenly',
   },
   tabItemView: {
-    flex: 1,
-    padding: wp(15),
+    // flex: 1,
+    padding: wp(14),
     borderRadius: 50,
     alignItems: 'center',
   },

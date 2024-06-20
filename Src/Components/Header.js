@@ -21,8 +21,42 @@ export default function Header({
   isChat,
   chatLeftPress,
   chatRightPress,
+  isChatDetails,
 }) {
   const navigation = useNavigation();
+  if (isChatDetails) {
+    return (
+      <View style={[ApplicationStyles.row, styles.headerMain]}>
+           <TouchableOpacity onPress={onLeftPress} style={styles.backIcon}>
+          <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
+        </TouchableOpacity>
+        <View
+          style={[
+            ApplicationStyles.row,
+            {
+              // position: 'absolute',
+              // justifyContent: 'center',
+              // width: SCREEN_WIDTH - wp(32),
+              flex:1
+            },
+          ]}>
+          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
+          <Text
+            style={[
+              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
+              {marginLeft: 8, textAlign: 'center'},
+            ]}>
+            {title}
+          </Text>
+        </View>
+        <View style={[ApplicationStyles.row, {gap: 10}]}>
+          <TouchableOpacity onPress={() => chatRightPress()}>
+            <Image source={Icons.more} style={ImageStyle(12, 12)} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
   if (isChat) {
     return (
       <View style={[ApplicationStyles.row, styles.header]}>
@@ -79,7 +113,7 @@ export default function Header({
             {title}
           </Text>
         </View>
-        <View style={[ApplicationStyles.row, {gap: 10}]}>
+        <View style={[ApplicationStyles.row, {gap: 15}]}>
           <TouchableOpacity onPress={() => onClickPlus()}>
             <Image source={Icons.plusHome} style={ImageStyle(26, 24)} />
           </TouchableOpacity>
@@ -111,7 +145,7 @@ export default function Header({
           ]}>
           <Text
             style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900),
+              FontStyle(fontname.actor_regular, 16, colors.neutral_900,"700"),
               {textAlign: 'center'},
               titleStyle,
             ]}>
@@ -161,6 +195,11 @@ export default function Header({
 const styles = StyleSheet.create({
   header: {
     justifyContent: 'space-between',
+    marginHorizontal: wp(16),
+    marginVertical: 12,
+    height: 30,
+  },
+  headerMain:{
     marginHorizontal: wp(16),
     marginVertical: 12,
     height: 30,

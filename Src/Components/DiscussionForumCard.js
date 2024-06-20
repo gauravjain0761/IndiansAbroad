@@ -22,16 +22,16 @@ export default function DiscussionForumCard({item, index}) {
           {'So I will share my view. I am in Tokyo right .....'}
         </Text>
         <View style={[ApplicationStyles.row]}>
-          <Text style={[styles.degreeText, {color: colors.neutral_700}]}>
+          <Text style={[styles.degreeText1, {color: colors.neutral_700}]}>
             Aditya Patil
           </Text>
           <View style={[ApplicationStyles.row]}>
             <View style={styles.lineStyle} />
-            <Text style={styles.degreeText}>3 months ago</Text>
+            <Text style={styles.degreeText1}>3 months ago</Text>
           </View>
         </View>
-        <View style={[ApplicationStyles.row, {marginTop: 5}]}>
-          <Text>13</Text>
+        <View style={[ApplicationStyles.row, {marginTop: 3}]}>
+          <Text style={styles.valueText}>13</Text>
           <TouchableOpacity>
             <Image
               source={Icons.userChat}
@@ -43,7 +43,7 @@ export default function DiscussionForumCard({item, index}) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{marginLeft: 28}}>
+      <View style={{marginLeft: 30}}>
         <Image source={Icons.userImage} style={styles.userImage} />
       </View>
     </View>
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
   cardView: {
     borderBottomWidth: 3,
     borderBottomColor: colors.secondary_500,
-    paddingHorizontal: 16,
-    paddingVertical: 15,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
   },
   userImage: {
     height: 77,
@@ -67,11 +67,15 @@ const styles = StyleSheet.create({
     resizeMode:'contain'
   },
   username: {
-    ...FontStyle(fontname.actor_regular, 17, colors.neutral_900, '700'),
+    ...FontStyle(fontname.abeezeeItalic, 17, colors.neutral_900, '700'),
   },
   degreeText: {
-    marginVertical: 4,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_600),
+    marginVertical: 3,
+    ...FontStyle(fontname.actor_regular, 17, colors.neutral_600,"400"),
+  },
+  degreeText1: {
+    // lineHeight:18,
+    ...FontStyle(fontname.actor_regular, 14, colors.neutral_600),
   },
   lineStyle: {
     height: 8,
@@ -82,4 +86,7 @@ const styles = StyleSheet.create({
     marginRight: 3,
     borderColor: colors.neutral_600,
   },
+  valueText:{
+    ...FontStyle(fontname.abeezeeItalic, 14, colors.danger_500,"600"),
+  }
 });

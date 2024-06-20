@@ -13,14 +13,17 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
+import { screenName } from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ConnectCard({ indians, cardPress }) {
+  const navigation = useNavigation() 
   return (
-    <TouchableOpacity onPress={cardPress} style={[styles.header]}>
-      <View style={styles.imageStyle}>
-        <RenderUserIcon height={78} />
+    <TouchableOpacity activeOpacity={0.9} onPress={cardPress} style={[styles.header]}>
+      <TouchableOpacity onPress={()=>{navigation.navigate(screenName.indiansDetails)}} style={styles.imageStyle}>
+        <RenderUserIcon height={78} activeOpacity={1}/>
         {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
-      </View>
+      </TouchableOpacity>
       <Text numberOfLines={1} style={styles.text1}>
         Vikas Mane
       </Text>
@@ -40,14 +43,14 @@ export default function ConnectCard({ indians, cardPress }) {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.secondary_500,
-    borderRadius: wp(20),
+    // borderRadius: wp(20),
     paddingHorizontal: wp(10),
     // justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: hp(10),
+    paddingTop: hp(7),
     // paddingBottom: hp(28),
     width: '49%',
-    marginBottom: hp(16),
+    marginBottom: hp(7),
     minHeight: hp(160),
   },
   textInput: {
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: hp(20),
     borderRadius: 4,
-    marginVertical: hp(12),
+    marginVertical: hp(10),
   },
   btnText: {
     ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),

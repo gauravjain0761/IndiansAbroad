@@ -82,6 +82,7 @@ export default function HomeScreen() {
   const ref = React.createRef(PagerView);
 
   const renderItem = ({ item, index }) => {
+    console.log('item',JSON.stringify(item));
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -103,6 +104,7 @@ export default function HomeScreen() {
   const onPressBell = () => {
     navigation.navigate(screenName.NotificationScreen);
   };
+  console.log('allPost',allPost);
 
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -141,6 +143,7 @@ export default function HomeScreen() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search users, posts, forums'}
+        containerStyles={{top:-14}}
       />
       <PagerView
         style={{ flex: 1 }}
@@ -187,10 +190,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
+    top:-8,
+    // alignSelf:'center'
+    justifyContent:'space-evenly'
   },
   tabItemView: {
-    flex: 1,
-    padding: wp(15),
+    // flex: 1,
+    padding: wp(14),
     borderRadius: 50,
     alignItems: 'center',
   },

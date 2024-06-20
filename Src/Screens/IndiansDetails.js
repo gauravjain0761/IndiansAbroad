@@ -74,7 +74,7 @@ export default function IndiansDetails() {
   return (
     <View style={ApplicationStyles.applicationView}>
       <Header
-        title={'IndiansAbroad'}
+        title={''}
         showLeft={true}
         onLeftPress={() => {
           goBack();
