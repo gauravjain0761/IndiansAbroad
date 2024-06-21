@@ -25,6 +25,7 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { getalluserposts } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
 import { IS_LOADING } from '../Redux/ActionTypes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -107,7 +108,7 @@ export default function HomeScreen() {
   console.log('allPost',allPost);
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'IndiansAbroad'}
         showRight={true}
@@ -183,7 +184,7 @@ export default function HomeScreen() {
         createPostModal={createPostModal}
         setcreatePostModal={setcreatePostModal}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

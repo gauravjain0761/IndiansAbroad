@@ -78,7 +78,7 @@ export default function DiscussionForumDetail() {
     }
 
     return (
-        <View style={ApplicationStyles.applicationView}>
+        <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header
                 title={''}
                 showLeft={true}
@@ -112,7 +112,7 @@ export default function DiscussionForumDetail() {
                 </View>
 
             </SafeAreaView>
-        </View>
+        </SafeAreaView>
     )
 }
 

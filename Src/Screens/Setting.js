@@ -8,6 +8,7 @@ import { Icons } from '../Themes/Icons'
 import { FontStyle, ImageStyle } from '../utils/commonFunction'
 import { fontname, hp } from '../Themes/Fonts'
 import { screenName } from '../Navigation/ScreenConstants'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Setting() {
     const navigation = useNavigation()
@@ -20,7 +21,7 @@ export default function Setting() {
 
     ]
     return (
-        <View style={ApplicationStyles.applicationView}>
+        <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header
                 title={'IndiansAbroad'}
                 showLeft
@@ -40,7 +41,7 @@ export default function Setting() {
                     )
                 })}
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

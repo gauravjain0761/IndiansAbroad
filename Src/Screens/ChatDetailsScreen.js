@@ -12,6 +12,7 @@ import ConnectCard from '../Components/ConnectCard';
 import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
 import ChatCard from '../Components/ChatCard';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChatDetailsScreen() {
   const [searchText, setSearchText] = useState('');
@@ -34,7 +35,7 @@ export default function ChatDetailsScreen() {
   };
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'IndiansAbroad'}
         showRight={true}
@@ -66,7 +67,7 @@ export default function ChatDetailsScreen() {
         }}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

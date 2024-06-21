@@ -27,6 +27,7 @@ import RenderUserIcon from '../Components/RenderUserIcon';
 import PostCard from '../Components/PostCard';
 import { screenName } from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndiansDetails() {
   const tabs = [
@@ -72,7 +73,7 @@ export default function IndiansDetails() {
   }
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={''}
         showLeft={true}
@@ -243,7 +244,7 @@ export default function IndiansDetails() {
       </ScrollView>
       <PostShareModal shareView={true} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
 
-    </View>
+    </SafeAreaView>
   );
 }
 

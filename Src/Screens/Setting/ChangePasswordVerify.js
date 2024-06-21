@@ -23,6 +23,7 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import { screenName } from '../../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChangePasswordVerify() {
   const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ export default function ChangePasswordVerify() {
   });
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
       <KeyboardAwareScrollView style={{marginHorizontal: wp(16), flex: 1}}>
         <Text style={styles.headerText}>Change Password</Text>
@@ -99,7 +100,7 @@ export default function ChangePasswordVerify() {
           </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

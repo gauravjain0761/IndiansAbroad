@@ -18,7 +18,7 @@ export default function DiscussionForum({item, index, isUser = false}) {
         </TouchableOpacity>
         <View style={ApplicationStyles.flex}>
           <Text style={styles.username}>Ranjani raman</Text>
-          {!isUser && <Text style={styles.degreeText}>Founder</Text>}
+          {!isUser && <Text style={styles.degreeText1}>Founder</Text>}
           <Text style={styles.degreeText}>15 hours ago</Text>
         </View>
         {isUser ? (
@@ -72,11 +72,15 @@ const styles = StyleSheet.create({
     borderRadius: 57 / 2,
   },
   username: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 13, colors.neutral_900,"700"),
     // lineHeight:18
   },
   degreeText: {
     ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_900),
+    // lineHeight:18
+  },
+  degreeText1: {
+    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900),
     // lineHeight:18
   },
   messageView: {
@@ -85,14 +89,14 @@ const styles = StyleSheet.create({
   },
   description: {
     ...FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
-    paddingBottom: 10,
-    paddingHorizontal: 20,
+    paddingBottom: 4,
+    paddingHorizontal: 8,
     marginTop: 10,
   },
   description1: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900, '400'),
     paddingBottom: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 8,
   },
   postImage: {
     height: SCREEN_WIDTH - 5,

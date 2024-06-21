@@ -127,7 +127,7 @@ export default function Header({
   return (
     <View style={[ApplicationStyles.row, styles.header]}>
       {showLeft ? (
-        <TouchableOpacity onPress={onLeftPress} style={styles.backIcon}>
+        <TouchableOpacity onPress={()=>navigation.goBack()} style={styles.backIcon}>
           <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
         </TouchableOpacity>
       ) : (

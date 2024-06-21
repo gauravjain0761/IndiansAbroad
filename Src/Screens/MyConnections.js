@@ -22,6 +22,7 @@ import ConnectCard from '../Components/ConnectCard';
 import {useNavigation} from '@react-navigation/native';
 import {screenName} from '../Navigation/ScreenConstants';
 import RenderUserIcon from '../Components/RenderUserIcon';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function MyConnections() {
   const {navigate, goBack} = useNavigation();
@@ -47,7 +48,7 @@ export default function MyConnections() {
   };
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'IndiansAbroad'}
         showLeft={true}
@@ -79,7 +80,7 @@ export default function MyConnections() {
           // style={{flex: 1}}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -15,7 +15,7 @@ import {FontStyle} from '../utils/commonFunction';
 
 export default function MyTabbar({state, descriptors, navigation}) {
   return (
-    <SafeAreaView>
+    <>
       <View style={styles.container}>
         <View style={styles.rowStyle}>
           {state.routes.map((route, index) => {
@@ -92,7 +92,7 @@ export default function MyTabbar({state, descriptors, navigation}) {
           })}
         </View>
       </View>
-    </SafeAreaView>
+    </>
   );
 }
 

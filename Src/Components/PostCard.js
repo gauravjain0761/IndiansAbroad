@@ -37,7 +37,7 @@ export default function PostCard({item, index, isUser = false}) {
             {!isUser && (
               <TouchableOpacity
                 onPress={() => navigation.navigate(screenName.indiansDetails)}>
-                <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+                <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
               </TouchableOpacity>
             )}
             <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
@@ -117,8 +117,8 @@ export default function PostCard({item, index, isUser = false}) {
           <RenderUserIcon height={57} isBorder />
         </TouchableOpacity>
         <View style={ApplicationStyles.flex}>
-          <Text style={styles.username}>Nikita Khairnar</Text>
-          {!isUser && <Text style={styles.degreeText}>PhD Student, Seoul</Text>}
+          <Text style={styles.username1}>Nikita Khairnar</Text>
+          {!isUser && <Text style={styles.degreeText1}>PhD Student, Seoul</Text>}
           <Text style={styles.degreeText}>15 hours ago</Text>
         </View>
         {!isUser && (
@@ -201,12 +201,15 @@ const styles = StyleSheet.create({
   degreeText: {
     ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_900),
   },
+  degreeText1: {marginTop:2,
+    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900),
+  },
   messageView: {
     paddingHorizontal: 10,
     alignItems: 'center',
   },
   description: {
-    ...FontStyle(fontname.actor_regular, 13, colors.neutral_900),
+    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
     paddingBottom: 10,
     paddingHorizontal: 20,
   },

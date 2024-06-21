@@ -11,6 +11,7 @@ import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import DiscussionForumCard from '../Components/DiscussionForumCard';
 import { screenName } from '../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DiscussionForum() {
   const {navigate, goBack} = useNavigation();
@@ -28,7 +29,7 @@ export default function DiscussionForum() {
   }
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'Discussion Forum'}
         logoShow={false}
@@ -97,7 +98,7 @@ export default function DiscussionForum() {
             data={[0, 1, 2, 3, 4]}
             renderItem={renderItem}
           />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -16,6 +16,7 @@ import {SCREEN_WIDTH, fontname, hp, wp} from '../../Themes/Fonts';
 import {FontStyle} from '../../utils/commonFunction';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {screenName} from '../../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Subscription() {
   const [email, setEmail] = useState('');
@@ -23,7 +24,7 @@ export default function Subscription() {
   const [selectTab, setSelectTab] = useState(0);
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
       <KeyboardAwareScrollView style={{marginHorizontal: wp(16), flex: 1}}>
         <Text style={styles.headerText}>Subscription</Text>
@@ -88,7 +89,7 @@ export default function Subscription() {
           </View>
         </View>
       </KeyboardAwareScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

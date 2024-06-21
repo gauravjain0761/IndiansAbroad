@@ -76,7 +76,7 @@ export default function PostDetail() {
     }
 
     return (
-        <View style={ApplicationStyles.applicationView}>
+        <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header
                 title={'IndiansAbroad'}
                 showLeft={true}
@@ -104,7 +104,7 @@ export default function PostDetail() {
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
         ...FontStyle(fontname.actor_regular, 13, colors.neutral_900, '700')
     },
     degreeText: {
+        marginTop:2,
         ...FontStyle(fontname.actor_regular, 11, colors.neutral_900)
     },
     commentBg: {

@@ -25,6 +25,7 @@ import {screenName} from '../../Navigation/ScreenConstants';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import {Icons} from '../../Themes/Icons';
 import {Menu, MenuItem} from 'react-native-material-menu';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function BlockedUsers() {
   const {navigate, goBack} = useNavigation();
@@ -78,7 +79,7 @@ export default function BlockedUsers() {
   };
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'IndiansAbroad'}
         showLeft={true}
@@ -110,7 +111,7 @@ export default function BlockedUsers() {
           style={{flex: 1}}
         />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

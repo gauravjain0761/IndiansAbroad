@@ -21,6 +21,7 @@ import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
 import {useNavigation} from '@react-navigation/native';
 import {screenName} from '../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndiansPage() {
   const tabs = [
@@ -48,7 +49,7 @@ export default function IndiansPage() {
   }, []);
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={'IndiansAbroad'} showRight={true} />
       <View style={styles.tabMainView}>
         <TouchableOpacity
@@ -137,7 +138,7 @@ export default function IndiansPage() {
           : 'Pages from your area'}
       </Text>
       <PagerView
-        style={{}}
+         style={{ flex: 1 }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -146,10 +147,11 @@ export default function IndiansPage() {
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
         <View key={'1'}>
-          <ScrollView>
+          <ScrollView style={{flex:1}}>
             <FlatList
               style={{
                 paddingHorizontal: wp(16),
+                flex:1
               }}
               columnWrapperStyle={{
                 width: '100%',
@@ -189,6 +191,7 @@ export default function IndiansPage() {
             <FlatList
               style={{
                 paddingHorizontal: wp(16),
+                flex:1
               }}
               columnWrapperStyle={{
                 width: '100%',
@@ -282,7 +285,7 @@ export default function IndiansPage() {
           </ScrollView>
         </View>
       </PagerView>
-    </View>
+    </SafeAreaView>
   );
 }
 

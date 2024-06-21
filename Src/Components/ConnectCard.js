@@ -79,12 +79,13 @@ const styles = StyleSheet.create({
   },
   text2: {
     marginTop: 2,
-    lineHeight: 16,
+    // lineHeight: 16,
     ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
   },
   text3: {
     // marginTop:2,
-    lineHeight: 16,
+    // lineHeight: 16,
+    top:-2,
     ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
   },
   btnView: {
@@ -93,7 +94,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: hp(20),
     borderRadius: 4,
-    marginVertical: hp(10),
+    marginTop:5,
+    marginBottom: hp(9),
   },
   btnText: {
     ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),

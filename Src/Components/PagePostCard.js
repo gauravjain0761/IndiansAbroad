@@ -19,7 +19,7 @@ export default function PagePostCard({ item, index }) {
           <Image source={Icons.logo} style={styles.userImage} />
         </TouchableOpacity>
         <View style={ApplicationStyles.flex}>
-          <Text style={styles.username}>Nikita Khairnar</Text>
+          <Text style={styles.username1}>Nikita Khairnar</Text>
 
           <Text style={styles.degreeText}>15 hours ago</Text>
         </View>
@@ -85,7 +85,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   username: {
-    ...FontStyle(fontname.abeezeeItalic, 13, colors.neutral_900),
+    ...FontStyle(fontname.abeezeeItalic, 15, colors.neutral_900,),
+  },
+  username1: {
+    ...FontStyle(fontname.abeezeeItalic, 15, colors.neutral_900,"700"),
   },
   degreeText: {
     ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_900),

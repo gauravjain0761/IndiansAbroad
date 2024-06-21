@@ -25,6 +25,7 @@ import {useNavigation} from '@react-navigation/native';
 import {screenName} from '../Navigation/ScreenConstants';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import {Icons} from '../Themes/Icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreateGroup() {
   const {navigate, goBack} = useNavigation();
@@ -56,7 +57,7 @@ export default function CreateGroup() {
   };
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={''}
         showLeft={true}
@@ -96,7 +97,7 @@ export default function CreateGroup() {
           // style={{flex: 1}}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -111,18 +111,6 @@ export default function PagesDetails() {
             </>
           )}
         </View>
-        {/* <View style={styles.detailsView}>
-          <Text style={styles.text1}>About</Text>
-          <Text style={styles.text2}>From</Text>
-          <Text style={styles.text1}>Mumbai,Maharshtra</Text>
-          <Text style={styles.text2}>Now</Text>
-          <Text style={styles.text1}>Seoul University, Seoul,Korea</Text>
-          <Text style={styles.text2}>As</Text>
-          <Text style={styles.text1}>PhD Student</Text>
-          <Text style={styles.text2}>Link</Text>
-          <Text style={styles.text1}>app.visily.ai</Text>
-        </View> */}
-
         <View style={styles.tabMainView}>
           <TouchableOpacity
             onPress={() => {
@@ -339,12 +327,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     width: 80,
     marginVertical: 6,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '400'),
   },
   textView: {
     lineHeight: 20,
     marginBottom: 12,
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '400'),
+    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
   },
   text2: {
     lineHeight: 20,

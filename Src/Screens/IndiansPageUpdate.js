@@ -26,6 +26,7 @@ import {screenName} from '../Navigation/ScreenConstants';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import {Icons} from '../Themes/Icons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TextInputView = ({value, onChangeText, placeholder, label}) => {
   return (
@@ -59,7 +60,7 @@ export default function IndiansPageUpdate() {
   const [searchText, setSearchText] = useState('');
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={''}
         showRight={false}
@@ -88,7 +89,7 @@ export default function IndiansPageUpdate() {
           <Text style={styles.btnText}>Update Page</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

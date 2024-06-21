@@ -15,6 +15,7 @@ import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import {Icons} from '../Themes/Icons';
 import {useNavigation} from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Data = [
   {
@@ -129,7 +130,7 @@ const NotificationScreen = () => {
   };
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header logoShow={false} onLeftPress={onPressBack} showLeft />
       <Text style={styles.title}>{'Notifications'}</Text>
       <View style={styles.categoriesContainer}>
@@ -213,7 +214,7 @@ const NotificationScreen = () => {
           </>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

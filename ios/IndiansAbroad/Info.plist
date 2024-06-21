@@ -26,12 +26,23 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+		<key>NSPhotoLibraryUsageDescription</key>
+	<string>Update your profile picture using the photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Update your profile picture using the camera</string>
+	 <key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ABeeZee-Italic.ttf</string>
+		<string>Actor-Regular.ttf</string>
+		<string>Actor-Regular.ttf</string>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

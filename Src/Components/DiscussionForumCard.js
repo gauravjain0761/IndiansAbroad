@@ -27,7 +27,7 @@ export default function DiscussionForumCard({item, index}) {
           </Text>
           <View style={[ApplicationStyles.row]}>
             <View style={styles.lineStyle} />
-            <Text style={styles.degreeText1}>3 months ago</Text>
+            <Text style={[styles.degreeText1,{color: colors.neutral_700}]}>3 months ago</Text>
           </View>
         </View>
         <View style={[ApplicationStyles.row, {marginTop: 3}]}>
@@ -71,11 +71,12 @@ const styles = StyleSheet.create({
   },
   degreeText: {
     marginVertical: 3,
-    ...FontStyle(fontname.actor_regular, 17, colors.neutral_600,"400"),
+    ...FontStyle(fontname.actor_regular, 14, colors.neutral_600,"400"),
   },
   degreeText1: {
     // lineHeight:18,
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_600),
+    marginBottom:2,
+    ...FontStyle(fontname.abeezee, 14, colors.neutral_600),
   },
   lineStyle: {
     height: 8,

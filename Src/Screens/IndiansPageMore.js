@@ -21,6 +21,7 @@ import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {screenName} from '../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndiansPageMore() {
   const tabs = [
@@ -49,7 +50,7 @@ export default function IndiansPageMore() {
   }, []);
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={'IndiansAbroad'} showRight={false}  showLeft={true} onLeftPress={()=>goBack()} />
       <View style={styles.tabMainView}>
         <TouchableOpacity
@@ -213,7 +214,7 @@ export default function IndiansPageMore() {
           </ScrollView>
         </View>
       </PagerView>
-    </View>
+    </SafeAreaView>
   );
 }
 

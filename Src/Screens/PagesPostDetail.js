@@ -110,7 +110,7 @@ export default function PagesPostDetail() {
   };
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'IndiansAbroad'}
         showLeft={true}
@@ -142,7 +142,7 @@ export default function PagesPostDetail() {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-    </View>
+    </SafeAreaView>
   );
 }
 

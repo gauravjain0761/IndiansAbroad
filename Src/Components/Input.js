@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Platform,
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(20),
     borderRadius: 5,
     paddingLeft: 12,
-    paddingVertical:6,
+    paddingVertical:Platform.OS == 'ios' ? 19 : 6,
     // marginTop:12
   },
 });

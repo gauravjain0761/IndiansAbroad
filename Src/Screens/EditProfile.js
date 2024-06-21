@@ -11,6 +11,7 @@ import RenderUserIcon from '../Components/RenderUserIcon';
 import Input from '../Components/Input';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DeleteModal from '../Components/DeleteModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function EditProfile() {
   const navigation = useNavigation();
@@ -30,14 +31,14 @@ export default function EditProfile() {
   const [deleteModal, setDeleteModal] = useState(false);
 
   return (
-    <View style={ApplicationStyles.applicationView}>
+    <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
         title={'Update Profile'}
         showLeft
         onLeftPress={() => navigation.goBack()}
         logoShow={false}
       />
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{flex:1}}>
         <View style={styles.userIcon}>
           <RenderUserIcon height={100} />
         </View>
@@ -101,7 +102,7 @@ export default function EditProfile() {
           }}
         />
       </KeyboardAwareScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

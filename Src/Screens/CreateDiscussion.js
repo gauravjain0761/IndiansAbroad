@@ -19,6 +19,7 @@ import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import DiscussionForumCard from '../Components/DiscussionForumCard';
 import {screenName} from '../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreateDiscussion() {
   const {navigate, goBack} = useNavigation();
@@ -29,7 +30,7 @@ export default function CreateDiscussion() {
   const [postText, setpostText] = useState('');
 
   return (
-    <View
+    <SafeAreaView
       style={[
         ApplicationStyles.applicationView,
         {backgroundColor: colors.secondary_500},
@@ -73,7 +74,7 @@ export default function CreateDiscussion() {
       <TouchableOpacity onPress={() => {}} style={styles.blueButton}>
         <Text style={styles.publishText}>Publish</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
