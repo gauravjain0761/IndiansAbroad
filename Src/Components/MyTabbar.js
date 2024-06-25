@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
@@ -6,26 +6,27 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Platform,
 } from 'react-native';
-import {defaultFontStyle, fontname} from '../Themes/Fonts';
+import { defaultFontStyle, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
-import {Icons} from '../Themes/Icons';
-import {screenName} from '../Navigation/ScreenConstants';
-import {FontStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { screenName } from '../Navigation/ScreenConstants';
+import { FontStyle } from '../utils/commonFunction';
 
-export default function MyTabbar({state, descriptors, navigation}) {
+export default function MyTabbar({ state, descriptors, navigation }) {
   return (
-    <>
+    <SafeAreaView style={{ backgroundColor: colors.white }}>
       <View style={styles.container}>
         <View style={styles.rowStyle}>
           {state.routes.map((route, index) => {
-            const {options} = descriptors[route.key];
+            const { options } = descriptors[route.key];
             const label =
               options.tabBarLabel !== undefined
                 ? options.tabBarLabel
                 : options.title !== undefined
-                ? options.title
-                : route.name;
+                  ? options.title
+                  : route.name;
 
             const isFocused = state.index === index;
 
@@ -65,7 +66,7 @@ export default function MyTabbar({state, descriptors, navigation}) {
               <TouchableOpacity
                 key={index}
                 accessibilityRole="button"
-                accessibilityState={isFocused ? {selected: true} : {}}
+                accessibilityState={isFocused ? { selected: true } : {}}
                 accessibilityLabel={options.tabBarAccessibilityLabel}
                 testID={options.tabBarTestID}
                 onPress={onPress}
@@ -74,25 +75,25 @@ export default function MyTabbar({state, descriptors, navigation}) {
                 <Image
                   style={{
                     ...styles.iconStyle,
-                    tintColor: isFocused ? colors.primary_6a7e : undefined,
+                    tintColor: isFocused ? colors.primary_4574ca : colors.neutral_900,
                   }}
                   source={iconName}
                 />
-                {isFocused && (
-                  <Text
-                    style={{
-                      ...styles.labelTextStyle,
-                      color: isFocused ? colors.primary_6a7e : colors.black,
-                    }}>
-                    {label}
-                  </Text>
-                )}
+                {/* {isFocused && ( */}
+                <Text
+                  style={{
+                    ...styles.labelTextStyle,
+                    color: isFocused ? colors.primary_4574ca : colors.neutral_900,
+                  }}>
+                  {label}
+                </Text>
+                {/* )} */}
               </TouchableOpacity>
             );
           })}
         </View>
       </View>
-    </>
+    </SafeAreaView>
   );
 }
 
@@ -109,18 +110,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
   },
   labelTextStyle: {
-    ...FontStyle(fontname.actor_regular, 11, colors.primary_8091ba,"700"),
+    ...FontStyle(fontname.actor_regular, 11, colors.primary_8091ba, "700"),
     marginTop: 1,
   },
   itemContainer: {
     flex: 1,
-    height: 70,
+    height: Platform.OS == 'ios' ? 50 : 70,
     alignItems: 'center',
     justifyContent: 'center',
   },
   iconStyle: {
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
     resizeMode: 'contain',
   },
 });

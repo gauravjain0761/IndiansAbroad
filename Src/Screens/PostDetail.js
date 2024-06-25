@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 13, colors.neutral_900, '700')
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700')
     },
     degreeText: {
-        marginTop:2,
-        ...FontStyle(fontname.actor_regular, 11, colors.neutral_900)
+        marginTop: 2,
+        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
     },
     commentBg: {
         flexDirection: 'row',
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     commentText: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900)
     },
     commentText2: {
         ...FontStyle(fontname.actor_regular, 16, colors.neutral_900)

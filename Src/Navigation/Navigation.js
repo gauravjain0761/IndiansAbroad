@@ -1,19 +1,19 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Screens/HomeScreen';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import {screenName} from './ScreenConstants';
+import { screenName } from './ScreenConstants';
 import IndiansPage from '../Screens/IndiansPage';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DiscussionForum from '../Screens/DiscussionForum';
 import MyTabbar from '../Components/MyTabbar';
 import ChatScreen from '../Screens/ChatScreen';
 import ProfileScreen from '../Screens/ProfileScreen';
 import CustomDrawer from '../Components/CustomDrawer';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import MyPageScreen from '../Screens/MyPageScreen';
 import InviteFriendScreen from '../Screens/InviteFriendScreen';
 import FeedBackForum from '../Screens/FeedBackForum';
@@ -48,54 +48,54 @@ function MyDrawer() {
     <Drawer.Navigator
       screenOptions={{
         drawerType: 'front',
-        drawerStyle: {width: '80%'},
+        drawerStyle: { width: '75%' },
         overlayColor: 'rgba(0,0,0,0.6)',
       }}
       drawerContent={props => <CustomDrawer {...props} />}>
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.homeScreen}
         component={MyTabs}
       />
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.MyPageScreen}
         component={MyPageScreen}
       />
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.InviteFriendScreen}
         component={InviteFriendScreen}
       />
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.FeedBackForum}
         component={FeedBackForum}
       />
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.Enquiry}
         component={Enquiry}
       />
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.Terms}
         component={Terms}
       />
       <Drawer.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.Privacy}
@@ -129,16 +129,16 @@ function MyTabs() {
     <Tab.Navigator
       tabBar={props => <MyTabbar {...props} />}
       // initialRouteName={screenName.indiansPage}
-      screenOptions={({route}) => ({
+      screenOptions={({ route }) => ({
         tabBarHideOnKeyboard: true,
       })}>
       <Tab.Screen
-        options={({navigation}) => ({...headerStyleTransparent, title: 'Home'})}
+        options={({ navigation }) => ({ ...headerStyleTransparent, title: 'Home' })}
         name={screenName.homeScreen}
         component={HomeScreen}
       />
       <Tab.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
           title: 'Indians',
         })}
@@ -146,7 +146,7 @@ function MyTabs() {
         component={IndiansPage}
       />
       <Tab.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
           title: 'Discussion',
         })}
@@ -154,7 +154,7 @@ function MyTabs() {
         component={DiscussionForum}
       />
       <Tab.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
           title: 'Chatbox',
         })}
@@ -162,7 +162,7 @@ function MyTabs() {
         component={ChatScreen}
       />
       <Tab.Screen
-        options={({navigation}) => ({
+        options={({ navigation }) => ({
           ...headerStyleTransparent,
           title: 'Profile',
         })}
@@ -184,117 +184,117 @@ export default function Navigation() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name="Home"
           component={MyDrawer}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.indiansPage}
           component={IndiansPage}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.PostDetail}
           component={PostDetail}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.indiansDetails}
           component={IndiansDetails}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.pagesDetails}
           component={PagesDetails}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.Setting}
           component={Setting}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.EditProfile}
           component={EditProfile}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.PagesPostDetail}
           component={PagesPostDetail}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.DiscussionForumDetail}
           component={DiscussionForumDetail}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.CreateDiscussion}
           component={CreateDiscussion}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.MyConnections}
           component={MyConnections}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.CreateGroup}
           component={CreateGroup}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.NotificationScreen}
           component={NotificationScreen}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.IndiansPageMore}
           component={IndiansPageMore}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.IndiansPageUpdate}
           component={IndiansPageUpdate}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChangePasswordEmail}
           component={ChangePasswordEmail}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChangePasswordVerify}
           component={ChangePasswordVerify}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChangePasswordNew}
           component={ChangePasswordNew}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.Subscription}
           component={Subscription}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.BlockedUsers}
           component={BlockedUsers}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChangePhone}
           component={ChangePhone}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChangePhoneVerify}
           component={ChangePhoneVerify}
         />
         <Stack.Screen
-          options={({navigation}) => ({...headerStyleTransparent})}
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChatDetailsScreen}
           component={ChatDetailsScreen}
         />

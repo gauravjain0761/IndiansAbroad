@@ -17,11 +17,11 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
 
 export default function ConnectCard({ indians, cardPress }) {
-  const navigation = useNavigation() 
+  const navigation = useNavigation()
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={cardPress} style={[styles.header]}>
-      <TouchableOpacity onPress={()=>{navigation.navigate(screenName.indiansDetails)}} style={styles.imageStyle}>
-        <RenderUserIcon height={78} activeOpacity={1}/>
+      <TouchableOpacity onPress={() => { navigation.navigate(screenName.indiansDetails) }} style={styles.imageStyle}>
+        <RenderUserIcon height={78} activeOpacity={1} />
         {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
       </TouchableOpacity>
       <Text numberOfLines={1} style={styles.text1}>
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     paddingTop: hp(7),
     // paddingBottom: hp(28),
     width: '49%',
+    flex: 1,
     marginBottom: hp(7),
     minHeight: hp(160),
   },
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   text3: {
     // marginTop:2,
     // lineHeight: 16,
-    top:-2,
+    top: -2,
     ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
   },
   btnView: {
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: hp(20),
     borderRadius: 4,
-    marginTop:5,
+    marginTop: 5,
     marginBottom: hp(9),
   },
   btnText: {

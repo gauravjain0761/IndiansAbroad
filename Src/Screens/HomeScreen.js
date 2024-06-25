@@ -83,7 +83,7 @@ export default function HomeScreen() {
   const ref = React.createRef(PagerView);
 
   const renderItem = ({ item, index }) => {
-    console.log('item',JSON.stringify(item));
+    console.log('item', JSON.stringify(item));
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -105,17 +105,20 @@ export default function HomeScreen() {
   const onPressBell = () => {
     navigation.navigate(screenName.NotificationScreen);
   };
-  console.log('allPost',allPost);
+  console.log('allPost', allPost);
 
   return (
-    <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header
-        title={'IndiansAbroad'}
-        showRight={true}
-        isHome={true}
-        onRightPress={onPressBell}
-        onClickPlus={() => setcreatePostModal(true)}
-      />
+    <View style={ApplicationStyles.applicationView}>
+      <SafeAreaView edges={['top']}  >
+        <Header
+          title={'IndiansAbroad'}
+          showRight={true}
+          isHome={true}
+          onRightPress={onPressBell}
+          onClickPlus={() => setcreatePostModal(true)}
+        />
+      </SafeAreaView>
+
       <View style={styles.tabMainView}>
         <TouchableOpacity
           onPress={() => {
@@ -144,10 +147,10 @@ export default function HomeScreen() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search users, posts, forums'}
-        containerStyles={{top:-14}}
+      // containerStyles={{top:-14}}
       />
       <PagerView
-        style={{ flex: 1 }}
+        style={{ flex: 1, }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -184,20 +187,21 @@ export default function HomeScreen() {
         createPostModal={createPostModal}
         setcreatePostModal={setcreatePostModal}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
-    top:-8,
+    // top: -8,
     // alignSelf:'center'
-    justifyContent:'space-evenly'
+    justifyContent: 'space-evenly',
   },
   tabItemView: {
     // flex: 1,
-    padding: wp(14),
+    paddingBottom: wp(14),
+    paddingHorizontal: wp(14),
     borderRadius: 50,
     alignItems: 'center',
   },

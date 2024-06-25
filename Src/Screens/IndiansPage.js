@@ -9,27 +9,27 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndiansPage() {
   const tabs = [
-    {id: 1, label: 'INDIANS'},
-    {id: 2, label: 'PAGES'},
+    { id: 1, label: 'INDIANS' },
+    { id: 2, label: 'PAGES' },
   ];
   const [tabType, setTabType] = useState('All');
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('INDIANS');
@@ -45,12 +45,14 @@ export default function IndiansPage() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   return (
-    <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header title={'IndiansAbroad'} showRight={true} />
+    <View style={ApplicationStyles.applicationView}>
+      <SafeAreaView edges={['top']}  >
+        <Header title={'IndiansAbroad'} showRight={true} />
+      </SafeAreaView>
       <View style={styles.tabMainView}>
         <TouchableOpacity
           onPress={() => {
@@ -126,19 +128,19 @@ export default function IndiansPage() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search Indians here'}
-        containerStyles={{top:-18}}
+        containerStyles={{ top: -18 }}
       />
       <Text
         style={[
           FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          {marginHorizontal: wp(16), marginVertical: 8,marginTop:-12},
+          { marginHorizontal: wp(16), marginVertical: 8, marginTop: -12 },
         ]}>
         {tabSelection == 'INDIANS'
           ? 'People you may know'
           : 'Pages from your area'}
       </Text>
       <PagerView
-         style={{ flex: 1 }}
+        style={{ flex: 1 }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -147,21 +149,21 @@ export default function IndiansPage() {
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
         <View key={'1'}>
-          <ScrollView style={{flex:1}}>
+          <ScrollView style={{}}>
             <FlatList
               style={{
                 paddingHorizontal: wp(16),
-                flex:1
+                flex: 1
               }}
               columnWrapperStyle={{
                 width: '100%',
                 columnGap: wp(10),
-                rowGap: hp(16),
+                // rowGap: hp(16),
               }}
               numColumns={2}
               bounces={false}
               data={[1, 2]}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
@@ -176,13 +178,13 @@ export default function IndiansPage() {
             <View
               style={[
                 ApplicationStyles.row,
-                {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
+                { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
               ]}>
               <View style={styles.lineView} />
               <TouchableOpacity
                 style={styles.seeBtn}
                 onPress={() =>
-                  navigate(screenName.IndiansPageMore, {dataList: 'INDIANS'})
+                  navigate(screenName.IndiansPageMore, { dataList: 'INDIANS' })
                 }>
                 <Text style={styles.seeBtnText}>See More</Text>
               </TouchableOpacity>
@@ -191,7 +193,7 @@ export default function IndiansPage() {
             <FlatList
               style={{
                 paddingHorizontal: wp(16),
-                flex:1
+                flex: 1
               }}
               columnWrapperStyle={{
                 width: '100%',
@@ -201,7 +203,7 @@ export default function IndiansPage() {
               numColumns={2}
               bounces={false}
               data={[1, 2, 3, 2, 3, 5, 6]}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
@@ -213,7 +215,7 @@ export default function IndiansPage() {
               }}
               showsVerticalScrollIndicator={false}
             />
-            <View style={{height: 190}} />
+            <View style={{ height: 190 }} />
           </ScrollView>
         </View>
         <View key={'2'}>
@@ -230,7 +232,7 @@ export default function IndiansPage() {
               numColumns={2}
               bounces={false}
               data={[1, 2]}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
@@ -245,13 +247,13 @@ export default function IndiansPage() {
             <View
               style={[
                 ApplicationStyles.row,
-                {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
+                { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
               ]}>
               <View style={styles.lineView} />
               <TouchableOpacity
                 style={styles.seeBtn}
                 onPress={() =>
-                  navigate(screenName.IndiansPageMore, {dataList: 'PAGES'})
+                  navigate(screenName.IndiansPageMore, { dataList: 'PAGES' })
                 }>
                 <Text style={styles.seeBtnText}>See More</Text>
               </TouchableOpacity>
@@ -269,7 +271,7 @@ export default function IndiansPage() {
               numColumns={2}
               bounces={false}
               data={[1, 2, 3, 2, 3, 5, 6]}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
@@ -281,11 +283,11 @@ export default function IndiansPage() {
               }}
               showsVerticalScrollIndicator={false}
             />
-            <View style={{height: 190}} />
+            <View style={{ height: 190 }} />
           </ScrollView>
         </View>
       </PagerView>
-    </SafeAreaView>
+    </View>
   );
 }
 

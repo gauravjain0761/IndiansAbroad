@@ -1,12 +1,12 @@
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import colors from '../Themes/Colors';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
-import {SCREEN_WIDTH, fontname, wp} from '../Themes/Fonts';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
 import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import DiscussionForumCard from '../Components/DiscussionForumCard';
@@ -14,7 +14,7 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DiscussionForum() {
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [selectTab, setSelectTab] = useState(0);
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation()
@@ -29,20 +29,22 @@ export default function DiscussionForum() {
   }
 
   return (
-    <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header
-        title={'Discussion Forum'}
-        logoShow={false}
-        titleStyle={{color: colors.primary_6a7e}}
-        showLeft={true}
-        onLeftPress={() => {
-          goBack();
-        }}
-      />
+    <View style={ApplicationStyles.applicationView}>
+      <SafeAreaView edges={['top']}  >
+        <Header
+          title={'Discussion Forum'}
+          logoShow={false}
+          titleStyle={{ color: colors.primary_6a7e }}
+          showLeft={true}
+          onLeftPress={() => {
+            goBack();
+          }}
+        />
+      </SafeAreaView>
       <View
         style={[
           ApplicationStyles.row,
-          {marginHorizontal: wp(16), justifyContent: 'space-between', top: -8},
+          { marginHorizontal: wp(16), justifyContent: 'space-between', marginBottom: 5 },
         ]}>
         <View style={styles.topHeader}>
           <TouchableOpacity
@@ -84,7 +86,7 @@ export default function DiscussionForum() {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={()=>navigate(screenName.CreateDiscussion)}>
+        <TouchableOpacity onPress={() => navigate(screenName.CreateDiscussion)}>
           <Image source={Icons.penEdit} style={ImageStyle(30, 30)} />
         </TouchableOpacity>
       </View>
@@ -92,13 +94,13 @@ export default function DiscussionForum() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search Threads'}
-        containerStyles={{marginTop: 5,}}
+        containerStyles={{ marginTop: 5, }}
       />
-       <FlatList
-            data={[0, 1, 2, 3, 4]}
-            renderItem={renderItem}
-          />
-    </SafeAreaView>
+      <FlatList
+        data={[0, 1, 2, 3, 4]}
+        renderItem={renderItem}
+      />
+    </View>
   );
 }
 

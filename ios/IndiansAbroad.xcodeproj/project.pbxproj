@@ -12,6 +12,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1F5531CE2C2A9E96004F8917 /* ABeeZee-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F5531CB2C2A9E96004F8917 /* ABeeZee-Italic.ttf */; };
+		1F5531CF2C2A9E96004F8917 /* Actor-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F5531CC2C2A9E96004F8917 /* Actor-Regular.ttf */; };
+		1F5531D02C2A9E96004F8917 /* ABeeZee-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F5531CD2C2A9E96004F8917 /* ABeeZee-Regular.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-IndiansAbroad-IndiansAbroadTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-IndiansAbroad-IndiansAbroadTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		98D4B959CDF4315A2CA85BD9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C74B54794AC23EEE49A54DF0 /* PrivacyInfo.xcprivacy */; };
@@ -39,6 +42,9 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = IndiansAbroad/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = IndiansAbroad/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-IndiansAbroad-IndiansAbroadTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IndiansAbroad-IndiansAbroadTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F5531CB2C2A9E96004F8917 /* ABeeZee-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ABeeZee-Italic.ttf"; sourceTree = "<group>"; };
+		1F5531CC2C2A9E96004F8917 /* Actor-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Actor-Regular.ttf"; sourceTree = "<group>"; };
+		1F5531CD2C2A9E96004F8917 /* ABeeZee-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ABeeZee-Regular.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-IndiansAbroad.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndiansAbroad.debug.xcconfig"; path = "Target Support Files/Pods-IndiansAbroad/Pods-IndiansAbroad.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-IndiansAbroad.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndiansAbroad.release.xcconfig"; path = "Target Support Files/Pods-IndiansAbroad/Pods-IndiansAbroad.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-IndiansAbroad-IndiansAbroadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndiansAbroad-IndiansAbroadTests.debug.xcconfig"; path = "Target Support Files/Pods-IndiansAbroad-IndiansAbroadTests/Pods-IndiansAbroad-IndiansAbroadTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -101,6 +107,16 @@
 			name = IndiansAbroad;
 			sourceTree = "<group>";
 		};
+		1F5531CA2C2A9E96004F8917 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				1F5531CB2C2A9E96004F8917 /* ABeeZee-Italic.ttf */,
+				1F5531CC2C2A9E96004F8917 /* Actor-Regular.ttf */,
+				1F5531CD2C2A9E96004F8917 /* ABeeZee-Regular.ttf */,
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +137,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				1F5531CA2C2A9E96004F8917 /* fonts */,
 				13B07FAE1A68108700A75B9A /* IndiansAbroad */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* IndiansAbroadTests */,
@@ -248,6 +265,9 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				1F5531CE2C2A9E96004F8917 /* ABeeZee-Italic.ttf in Resources */,
+				1F5531D02C2A9E96004F8917 /* ABeeZee-Regular.ttf in Resources */,
+				1F5531CF2C2A9E96004F8917 /* Actor-Regular.ttf in Resources */,
 				98D4B959CDF4315A2CA85BD9 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -594,7 +614,8 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -669,7 +690,8 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					" ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

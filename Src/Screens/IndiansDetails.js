@@ -40,21 +40,21 @@ export default function IndiansDetails() {
   const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
-  const [tabSelection, setTabSelection] = useState('INDIANS');
+  const [tabSelection, setTabSelection] = useState('POST');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
 
   const handleTabPress = (id, index) => {
     // setTabValue(id);
     Animated.spring(buttonTranslateX, {
-      toValue: index * 200, // Assuming each tab has a width of 100
+      toValue: index * (SCREEN_WIDTH - 20) / 2, // Assuming each tab has a width of 100
       useNativeDriver: true,
     }).start();
   };
 
   useEffect(() => {
-    tabSelection == 'INDIANS' && handleTabPress(1, 0);
-    tabSelection !== 'INDIANS' && handleTabPress(2, 1);
+    tabSelection == 'POST' && handleTabPress(1, 0);
+    tabSelection !== 'POST' && handleTabPress(2, 1);
   }, [tabSelection]);
 
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ export default function IndiansDetails() {
           goBack();
         }}
       />
-      <ScrollView>
+      <ScrollView nestedScrollEnabled style={{ flex: 1, }} contentContainerStyle={{ flex: 1 }}>
         <View style={styles.userViewStyle}>
           <View style={styles.imageView}>
             <RenderUserIcon height={100} isBorder />
@@ -100,7 +100,7 @@ export default function IndiansDetails() {
               style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
               <Text style={styles.btnText}>Message</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setmenuModal(true)}>
+            <TouchableOpacity style={{ position: 'absolute', right: -22, }} onPress={() => setmenuModal(true)}>
               <Image
                 source={Icons.more}
                 resizeMode="contain"
@@ -110,7 +110,7 @@ export default function IndiansDetails() {
           </View>
         </View>
         <View style={styles.detailsView}>
-          <Text style={styles.text1}>About</Text>
+          <Text style={[styles.text1, { ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '700') }]}>About</Text>
           <Text style={styles.text2}>From</Text>
           <Text style={styles.text1}>Mumbai,Maharshtra</Text>
           <Text style={styles.text2}>Now</Text>
@@ -120,125 +120,56 @@ export default function IndiansDetails() {
           <Text style={styles.text2}>Link</Text>
           <Text style={styles.text1}>app.visily.ai</Text>
         </View>
-
         <View style={styles.tabMainView}>
           <TouchableOpacity
             onPress={() => {
-              setTabSelection('INDIANS');
+              setTabSelection('POST');
               setIsLeftButtonActive(true);
               ref.current?.setPage(0);
-            }}
-            style={[
-              {
-                marginRight: wp(5),
-              },
-              styles.tabItemView,
-            ]}>
-            {tabSelection == 'INDIANS' ? (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.primary_6a7e,
-                  '700',
-                )}>
-                {'Posts(7)'}
-              </Text>
-            ) : (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.neutral_600,
-                  '700',
-                )}>
-                {'Posts(7)'}
-              </Text>
-            )}
+            }} style={[{}, styles.tabItemView]}>
+            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(7)'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              setTabSelection('PAGES');
+              setTabSelection('INDIANS');
               ref.current?.setPage(1);
               setIsLeftButtonActive(false);
             }}
-            style={[
-              {
-                marginLeft: wp(5),
-                flex: 1,
-              },
-              styles.tabItemView,
-            ]}>
-            {tabSelection == 'PAGES' ? (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.primary_6a7e,
-                  '700',
-                )}>
-                {'Connected Indians(79)'}
-              </Text>
-            ) : (
-              <Text
-                style={FontStyle(
-                  fontname.actor_regular,
-                  14,
-                  colors.neutral_600,
-                  '700',
-                )}>
-                {'Connected Indians(79)'}
-              </Text>
-            )}
+            style={styles.tabItemView}>
+            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(79)'}</Text>
           </TouchableOpacity>
-          <Animated.View
-            style={[
-              styles.animationView,
-              {
-                left: tabSelection == 'INDIANS' ? 16 : 7,
-                transform: [{ translateX: buttonTranslateX }],
-                width: tabSelection == 'INDIANS' ? 170 : `${88 / tabs.length}%`,
-                borderWidth: 0.9,
-                borderColor: colors.primary_4574ca,
-              },
-            ]}
-          />
+          <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
         </View>
         <PagerView
-          style={{}}
+          style={{ flex: 1, }}
           initialPage={tabSelectionIndex}
           ref={ref}
           onPageSelected={e => {
-            setTabSelection(
-              e?.nativeEvent?.position == 0 ? 'INDIANS' : 'PAGES',
-            );
+            setTabSelection(e?.nativeEvent?.position == 0 ? 'POST' : 'INDIANS');
             setTabSelectionIndex(e?.nativeEvent?.position);
             setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
           }}>
           <View key={'1'}>
-            <ScrollView>
-              <FlatList
-                data={[0, 1, 2, 3, 4]}
-                renderItem={renderItem}
-              />
-            </ScrollView>
+            {/* <ScrollView style={{flex:1}}> */}
+            <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
+            {/* </ScrollView> */}
           </View>
           <View key={'2'}>
-            <ScrollView>
-              <SearchBar
-                value={searchText}
-                onChangeText={text => setSearchText(text)}
-                placeholder={'Search Indians here'}
-                containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
-              />
-              <FlatList
-                data={[1, 2]}
-                renderItem={({ item }) => {
-                  return <ConnectedIndians />;
-                }}
-                showsVerticalScrollIndicator={false}
-              />
-            </ScrollView>
+            {/* <ScrollView> */}
+            <SearchBar
+              value={searchText}
+              onChangeText={text => setSearchText(text)}
+              placeholder={'Search Indians here'}
+              containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
+            />
+            <FlatList
+              data={[1, 2]}
+              renderItem={({ item }) => {
+                return <ConnectedIndians />;
+              }}
+              showsVerticalScrollIndicator={false}
+            />
+            {/* </ScrollView> */}
           </View>
         </PagerView>
       </ScrollView>
@@ -251,10 +182,11 @@ export default function IndiansDetails() {
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
+    marginHorizontal: 10,
   },
   tabItemView: {
     flex: 1,
-    padding: wp(15),
+    paddingVertical: wp(15),
     borderRadius: 50,
     alignItems: 'center',
   },

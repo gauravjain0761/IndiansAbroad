@@ -10,32 +10,33 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useNavigation} from '@react-navigation/native';
-import {Icons} from '../Themes/Icons';
+import { useNavigation } from '@react-navigation/native';
+import { Icons } from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import PostCard from '../Components/PostCard';
-import {screenName} from '../Navigation/ScreenConstants';
+import { screenName } from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import RenderTab from '../Components/RenderTab';
 
 export default function ProfileScreen() {
   const tabs = [
-    {id: 1, label: 'My Posts'},
-    {id: 2, label: 'Connected Indians'},
+    { id: 1, label: 'My Posts' },
+    { id: 2, label: 'Connected Indians' },
   ];
   const navigation = useNavigation();
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
@@ -45,7 +46,7 @@ export default function ProfileScreen() {
   const handleTabPress = (id, index) => {
     // setTabValue(id);
     Animated.spring(buttonTranslateX, {
-      toValue: index * 200, // Assuming each tab has a width of 100
+      toValue: index * (SCREEN_WIDTH - 20) / 2, // Assuming each tab has a width of 100
       useNativeDriver: true,
     }).start();
   };
@@ -59,10 +60,10 @@ export default function ProfileScreen() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -73,111 +74,77 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header
-        title={'IndiansAbroad'}
-        showRight={true}
-        icon={Icons.setting}
-        onRightPress={() => navigate(screenName.Setting)}
-      />
+    <View style={ApplicationStyles.applicationView}>
+      <SafeAreaView edges={['top']}  >
+        <Header
+          title={'IndiansAbroad'}
+          showRight={true}
+          icon={Icons.setting}
+          onRightPress={() => navigate(screenName.Setting)}
+        />
+      </SafeAreaView>
       {/* <ScrollView style={{flex:1}}> */}
-        <View style={styles.userViewStyle}>
-          <View style={styles.imageView}>
-            <RenderUserIcon height={100} isBorder />
-          </View>
-          <Text style={styles.userText}>Harshal Jadhav</Text>
-          <Text style={styles.userText1}>(In London)</Text>
+      <View style={styles.userViewStyle}>
+        <View style={styles.imageView}>
+          <RenderUserIcon height={100} isBorder />
         </View>
-        <View style={styles.tabMainView}>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('POST');
-              setIsLeftButtonActive(true);
-              ref.current?.setPage(0);
-            }}
-            style={[{marginRight: wp(5)}, styles.tabItemView]}>
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                tabSelection == 'POST'
-                  ? colors.primary_6a7e
-                  : colors.neutral_900,
-              )}>
-              {'My Posts (10)'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('INDIANS');
-              ref.current?.setPage(1);
-              setIsLeftButtonActive(false);
-            }}
-            style={[
-              {
-                marginLeft: wp(5),
-                flex: 1,
-              },
-              styles.tabItemView,
-            ]}>
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                tabSelection == 'INDIANS'
-                  ? colors.primary_6a7e
-                  : colors.neutral_900,
-              )}>
-              {'Connected Indians (79)'}
-            </Text>
-          </TouchableOpacity>
-          <Animated.View
-            style={[
-              styles.animationView,
-              {
-                left: tabSelection == 'POST' ? 16 : 7,
-                transform: [{translateX: buttonTranslateX}],
-                width: tabSelection == 'POST' ? 170 : `${88 / tabs.length}%`,
-                borderWidth: 0.9,
-                borderColor: colors.primary_4574ca,
-              },
-            ]}
+        <Text style={styles.userText}>Harshal Jadhav</Text>
+        <Text style={styles.userText1}>(In London)</Text>
+      </View>
+      <View style={styles.tabMainView}>
+        <TouchableOpacity
+          onPress={() => {
+            setTabSelection('POST');
+            setIsLeftButtonActive(true);
+            ref.current?.setPage(0);
+          }} style={[{}, styles.tabItemView]}>
+          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900,)}>{'My Posts (10)'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setTabSelection('INDIANS');
+            ref.current?.setPage(1);
+            setIsLeftButtonActive(false);
+          }}
+          style={styles.tabItemView}>
+          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900,)}>{'Connected Indians (79)'}</Text>
+        </TouchableOpacity>
+        <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
+      </View>
+      <PagerView
+        style={{ flex: 1 }}
+        initialPage={tabSelectionIndex}
+        ref={ref}
+        onPageSelected={e => {
+          setTabSelection(e?.nativeEvent?.position == 0 ? 'POST' : 'INDIANS');
+          setTabSelectionIndex(e?.nativeEvent?.position);
+          setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
+        }}>
+        <View key={'1'}>
+          {/* <ScrollView style={{flex:1}}> */}
+          <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
+          {/* </ScrollView> */}
+        </View>
+        <View key={'2'}>
+          {/* <ScrollView> */}
+          <SearchBar
+            value={searchText}
+            onChangeText={text => setSearchText(text)}
+            placeholder={'Search Indians here'}
+            containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
           />
+          <FlatList
+            data={[1, 2]}
+            renderItem={({ item }) => {
+              return <ConnectedIndians />;
+            }}
+            showsVerticalScrollIndicator={false}
+          />
+          {/* </ScrollView> */}
         </View>
-        <PagerView
-          style={{flex:1}}
-          initialPage={tabSelectionIndex}
-          ref={ref}
-          onPageSelected={e => {
-            setTabSelection(e?.nativeEvent?.position == 0 ? 'POST' : 'INDIANS');
-            setTabSelectionIndex(e?.nativeEvent?.position);
-            setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
-          }}>
-          <View key={'1'}>
-            {/* <ScrollView style={{flex:1}}> */}
-              <FlatList style={{flex:1}} data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
-            {/* </ScrollView> */}
-          </View>
-          <View key={'2'}>
-            {/* <ScrollView> */}
-              <SearchBar
-                value={searchText}
-                onChangeText={text => setSearchText(text)}
-                placeholder={'Search Indians here'}
-                containerStyles={{backgroundColor: colors.white, marginTop: 5}}
-              />
-              <FlatList
-                data={[1, 2]}
-                renderItem={({item}) => {
-                  return <ConnectedIndians />;
-                }}
-                showsVerticalScrollIndicator={false}
-              />
-            {/* </ScrollView> */}
-          </View>
-        </PagerView>
+      </PagerView>
       {/* </ScrollView> */}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -188,7 +155,7 @@ const styles = StyleSheet.create({
   },
   tabItemView: {
     flex: 1,
-    padding: wp(15),
+    paddingVertical: wp(15),
     borderRadius: 50,
     alignItems: 'center',
   },

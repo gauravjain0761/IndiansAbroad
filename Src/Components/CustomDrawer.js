@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
         borderRadius: 63 / 2,
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
         paddingLeft: 5,
     },
     drawerItem: {
@@ -121,11 +121,11 @@ const styles = StyleSheet.create({
         paddingVertical: hp(10),
     },
     drawerItemImage: {
-        height: 24,
-        width: 24,
+        height: 26,
+        width: 26,
         // marginRight: hp(20),
     },
     drawerItemText: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
     },
 })

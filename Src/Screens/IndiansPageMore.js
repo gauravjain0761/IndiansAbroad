@@ -9,83 +9,52 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function IndiansPageMore() {
   const tabs = [
-    {id: 1, label: 'INDIANS'},
-    {id: 2, label: 'PAGES'},
+    { id: 1, label: 'INDIANS' },
+    { id: 2, label: 'PAGES' },
   ];
-  const {params}=useRoute()
+  const { params } = useRoute()
   const [tabType, setTabType] = useState('All');
-  const {navigate,goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [tabSelectionIndex, setTabSelectionIndex] = useState(params?.dataList == "INDIANS" ? 0 :1);
+  const [tabSelectionIndex, setTabSelectionIndex] = useState(params?.dataList == "INDIANS" ? 0 : 1);
   const [tabSelection, setTabSelection] = useState(params?.dataList);
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
-  useEffect(() => {
-    Animated.timing(buttonTranslateX, {
-      toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
-      duration: 400,
-    }).start();
-  }, [isLeftButtonActive]);
+
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header title={'IndiansAbroad'} showRight={false}  showLeft={true} onLeftPress={()=>goBack()} />
+      <Header title={'IndiansAbroad'} showRight={false} showLeft={true} onLeftPress={() => goBack()} />
       <View style={styles.tabMainView}>
         <TouchableOpacity
           onPress={() => {
             setTabSelection('INDIANS');
             setIsLeftButtonActive(true);
             ref.current?.setPage(0);
-          }}
-          style={[
-            {
-              marginRight: wp(5),
-            },
-            styles.tabItemView,
-          ]}>
-          {tabSelection == 'INDIANS' ? (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.primary_6a7e,
-                '700',
-              )}>
-              {'INDIANS'}
-            </Text>
-          ) : (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.neutral_600,
-                '700',
-              )}>
-              {'INDIANS'}
-            </Text>
-          )}
+          }} style={[{}, styles.tabItemView]}>
+          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'INDIANS'}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -93,44 +62,10 @@ export default function IndiansPageMore() {
             ref.current?.setPage(1);
             setIsLeftButtonActive(false);
           }}
-          style={[
-            {
-              marginLeft: wp(5),
-              flex: 1,
-            },
-            styles.tabItemView,
-          ]}>
-          {tabSelection == 'PAGES' ? (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.primary_6a7e,
-                '700',
-              )}>
-              {'PAGES'}
-            </Text>
-          ) : (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.neutral_600,
-                '700',
-              )}>
-              {'PAGES'}
-            </Text>
-          )}
+          style={styles.tabItemView}>
+          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'PAGES' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'PAGES'}</Text>
         </TouchableOpacity>
-        <Animated.View
-          style={[
-            styles.animationView,
-            {
-              left: tabSelection == 'INDIANS' ? 5 : 7,
-              transform: [{translateX: buttonTranslateX}],
-            },
-          ]}
-        />
+        {/* <Animated.View style={[styles.animationView, { left: tabSelection == 'INDIANS' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} /> */}
       </View>
       <SearchBar
         value={searchText}
@@ -140,7 +75,7 @@ export default function IndiansPageMore() {
       <Text
         style={[
           FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          {marginHorizontal: wp(16), marginVertical: 8},
+          { marginHorizontal: wp(16), marginVertical: 8 },
         ]}>
         {tabSelection == 'INDIANS'
           ? 'People may you know'
@@ -169,7 +104,7 @@ export default function IndiansPageMore() {
               numColumns={2}
               bounces={false}
               data={[1, 2]}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
@@ -181,7 +116,7 @@ export default function IndiansPageMore() {
               }}
               showsVerticalScrollIndicator={false}
             />
-            <View style={{height: 170}} />
+            <View style={{ height: 170 }} />
           </ScrollView>
         </View>
         <View key={'2'}>
@@ -198,7 +133,7 @@ export default function IndiansPageMore() {
               numColumns={2}
               bounces={false}
               data={[1, 2]}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
@@ -210,7 +145,7 @@ export default function IndiansPageMore() {
               }}
               showsVerticalScrollIndicator={false}
             />
-            <View style={{height: 170}} />
+            <View style={{ height: 170 }} />
           </ScrollView>
         </View>
       </PagerView>
