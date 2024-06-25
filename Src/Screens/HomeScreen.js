@@ -130,7 +130,7 @@ export default function HomeScreen() {
           }}
           style={styles.tabItemView}>
           <Text style={tabSelection == 'Activity' ? styles.selectedText : styles.unSewlectedText}>
-            {'Activity'}
+            {'ACTIVITY'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -141,7 +141,7 @@ export default function HomeScreen() {
           }}
           style={styles.tabItemView}>
           <Text style={tabSelection == 'Events' ? styles.selectedText : styles.unSewlectedText}>
-            {'Events'}
+            {'EVENTS'}
           </Text>
         </TouchableOpacity>
       </View>

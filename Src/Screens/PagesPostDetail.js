@@ -44,10 +44,10 @@ export default function PagesPostDetail() {
             <RenderUserIcon height={38} isBorder />
             <View style={styles.commentBg}>
               <View style={ApplicationStyles.flex}>
-                <Text style={[styles.username, { fontSize: 9 }]}>
+                <Text style={[styles.username, { fontSize: 15 }]}>
                   Nikita Khairnar
                 </Text>
-                <Text style={[styles.degreeText, { fontSize: 7 }]}>
+                <Text style={[styles.degreeText, { fontSize: 12 }]}>
                   PhD Student, Seoul
                 </Text>
                 <Text style={styles.commentText}>Nice</Text>
@@ -160,10 +160,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   username: {
-    ...FontStyle(fontname.actor_regular, 13, colors.neutral_900, '700'),
+    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
   },
   degreeText: {
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900),
+    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
   },
   commentBg: {
     flexDirection: 'row',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   commentText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
   },
   commentText2: {
     ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),

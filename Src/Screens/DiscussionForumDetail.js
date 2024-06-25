@@ -25,8 +25,8 @@ export default function DiscussionForumDetail() {
                         <RenderUserIcon height={38} isBorder />
                         <View style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
-                                <Text style={[styles.username, { fontSize: 9 }]}>Nikita Khairnar</Text>
-                                <Text style={[styles.degreeText, { fontSize: 7 }]}>PhD Student, Seoul</Text>
+                                <Text style={[styles.username, { fontSize: 15 }]}>Nikita Khairnar</Text>
+                                <Text style={[styles.degreeText, { fontSize: 12 }]}>PhD Student, Seoul</Text>
                                 <Text style={styles.commentText}>Nice</Text>
                             </View>
                             <View style={styles.innerRow}>
@@ -127,10 +127,10 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 13, colors.neutral_900, '700')
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700')
     },
     degreeText: {
-        ...FontStyle(fontname.actor_regular, 11, colors.neutral_900)
+        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
     },
     shareText: {
         ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     commentText: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900)
     },
     commentText1: {
         textAlign: 'center',

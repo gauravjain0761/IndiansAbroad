@@ -79,7 +79,7 @@ export default function PagesDetails() {
         />
       </SafeAreaView>
 
-      <ScrollView>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
         <View style={styles.userViewStyle}>
           <UpdateDeleteMenu
             containerStyle={{ position: 'absolute', right: 10 }}
@@ -199,7 +199,7 @@ export default function PagesDetails() {
           />
         </View>
         <PagerView
-          style={{}}
+          style={{ flex: 1 }}
           initialPage={tabSelectionIndex}
           ref={ref}
           onPageSelected={e => {
@@ -213,8 +213,8 @@ export default function PagesDetails() {
             setTabSelectionIndex(e?.nativeEvent?.position);
             setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
           }}>
-          <View key={'1'}>
-            <ScrollView style={{ marginHorizontal: wp(12) }}>
+          <View style={{ flex: 1 }} key={'1'}>
+            <ScrollView style={{ marginHorizontal: wp(12), flex: 1 }}>
               <Text style={styles.textView}>
                 This is a official page of IndiansAbroad app.
               </Text>
