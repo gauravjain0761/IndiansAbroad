@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   username: {
-    ...FontStyle(fontname.abeezeeItalic, 15, colors.neutral_900,),
+    ...FontStyle(fontname.abeezee, 15, colors.neutral_900,),
   },
   username1: {
-    ...FontStyle(fontname.abeezeeItalic, 15, colors.neutral_900,"700"),
+    ...FontStyle(fontname.abeezee, 15, colors.neutral_900, "700"),
   },
   degreeText: {
-    ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
   },
   messageView: {
     paddingHorizontal: 10,

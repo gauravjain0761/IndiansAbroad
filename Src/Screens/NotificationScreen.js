@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
-import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
-import {Icons} from '../Themes/Icons';
-import {useNavigation} from '@react-navigation/native';
+import { Icons } from '../Themes/Icons';
+import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Data = [
@@ -70,12 +70,12 @@ const Data = [
 
 const NotificationScreen = () => {
   const [categories, setCategories] = useState('All');
-  const {goBack} = useNavigation();
+  const { goBack } = useNavigation();
 
   const onPressBack = () => {
     goBack();
   };
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <>
         {item?.type == 'general' ? (
@@ -85,7 +85,7 @@ const NotificationScreen = () => {
                 source={item?.image}
                 style={[
                   ImageStyle(44, 44),
-                  {borderRadius: 100, overflow: 'hidden'},
+                  { borderRadius: 100, overflow: 'hidden' },
                 ]}
                 resizeMode="contain"
               />
@@ -104,7 +104,7 @@ const NotificationScreen = () => {
                 source={item?.image}
                 style={[
                   ImageStyle(44, 44),
-                  {borderRadius: 100, overflow: 'hidden'},
+                  { borderRadius: 100, overflow: 'hidden' },
                 ]}
                 resizeMode="contain"
               />
@@ -197,8 +197,8 @@ const NotificationScreen = () => {
             <View style={styles.notificationcontainer}>
               <FlatList
                 data={Data}
-                renderItem={({item, index}) =>
-                  item?.type == 'Requests' && renderItem({item, index})
+                renderItem={({ item, index }) =>
+                  item?.type == 'Requests' && renderItem({ item, index })
                 }
               />
             </View>
@@ -207,8 +207,8 @@ const NotificationScreen = () => {
             </View>
             <FlatList
               data={Data}
-              renderItem={({item, index}) =>
-                item?.type == 'Requests' && renderItem({item, index})
+              renderItem={({ item, index }) =>
+                item?.type == 'Requests' && renderItem({ item, index })
               }
             />
           </>
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     lineHeight: hp(26),
   },
   categoriesTitle: {
-    ...FontStyle(fontname.abeezeeItalic, 14, colors.black, '400'),
+    ...FontStyle(fontname.abeezee, 14, colors.black, '400'),
     lineHeight: hp(22),
   },
   categoriesContainer: {
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   time: {
-    ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_500, '400'),
+    ...FontStyle(fontname.abeezee, 11, colors.neutral_500, '400'),
   },
   separator: {
     borderBottomWidth: 1,

@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   username: {
-    ...FontStyle(fontname.abeezeeItalic, 17, colors.neutral_900, '700'),
+    ...FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
   },
   degreeText: {
     marginVertical: 3,
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral_600,
   },
   valueText: {
-    ...FontStyle(fontname.abeezeeItalic, 14, colors.danger_500, "600"),
+    ...FontStyle(fontname.abeezee, 14, colors.danger_500, "600"),
   }
 });

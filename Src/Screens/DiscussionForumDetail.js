@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     likesText: {
-        ...FontStyle(fontname.abeezeeItalic, 12, colors.neutral_900)
+        ...FontStyle(fontname.abeezee, 12, colors.neutral_900)
     },
     innerRow: {
         flexDirection: 'row',

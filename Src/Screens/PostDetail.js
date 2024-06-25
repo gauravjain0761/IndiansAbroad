@@ -24,8 +24,8 @@ export default function PostDetail() {
                         <RenderUserIcon height={38} isBorder />
                         <View style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
-                                <Text style={[styles.username, { fontSize: 9 }]}>Nikita Khairnar</Text>
-                                <Text style={[styles.degreeText, { fontSize: 7 }]}>PhD Student, Seoul</Text>
+                                <Text style={[styles.username, { fontSize: 15 }]}>Nikita Khairnar</Text>
+                                <Text style={[styles.degreeText, { fontSize: 12 }]}>PhD Student, Seoul</Text>
                                 <Text style={styles.commentText}>Nice</Text>
                             </View>
                             <View style={styles.innerRow}>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     likesText: {
-        ...FontStyle(fontname.abeezeeItalic, 12, colors.neutral_900)
+        ...FontStyle(fontname.abeezee, 12, colors.neutral_900)
     },
     innerRow: {
         flexDirection: 'row',

@@ -1,23 +1,23 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {SCREEN_WIDTH, fontname} from '../Themes/Fonts';
+import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
 import UpdateDeleteMenu from './UpdateDeleteMenu';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import PostCarousal from './PostCarousal';
-import {screenName} from '../Navigation/ScreenConstants';
-import {useNavigation} from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
 
-export default function PostCard({item, index, isUser = false}) {
+export default function PostCard({ item, index, isUser = false }) {
   const [menuModal, setmenuModal] = useState(false);
-  const {allPost, allPostsCount} = useSelector(e => e.common);
+  const { allPost, allPostsCount } = useSelector(e => e.common);
   const navigation = useNavigation();
 
   if (item?.createdBy) {
@@ -97,7 +97,7 @@ export default function PostCard({item, index, isUser = false}) {
           ) : (
             <TouchableOpacity
               onPress={() => setmenuModal(true)}
-              style={[styles.innerRow, {...ApplicationStyles.flex}]}>
+              style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
               <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
             </TouchableOpacity>
           )}
@@ -163,7 +163,7 @@ export default function PostCard({item, index, isUser = false}) {
         ) : (
           <TouchableOpacity
             onPress={() => setmenuModal(true)}
-            style={[styles.innerRow, {...ApplicationStyles.flex}]}>
+            style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
             <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
           </TouchableOpacity>
         )}
@@ -191,17 +191,18 @@ const styles = StyleSheet.create({
     borderRadius: 57 / 2,
   },
   username: {
-    ...FontStyle(fontname.abeezeeItalic, 13, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 13, colors.neutral_900),
     textTransform: 'capitalize',
   },
   username1: {
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_900,"700"),
+    ...FontStyle(fontname.abeezee, 13, colors.neutral_900, "700"),
     textTransform: 'capitalize',
   },
   degreeText: {
-    ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
   },
-  degreeText1: {marginTop:2,
+  degreeText1: {
+    marginTop: 2,
     ...FontStyle(fontname.actor_regular, 11, colors.neutral_900),
   },
   messageView: {

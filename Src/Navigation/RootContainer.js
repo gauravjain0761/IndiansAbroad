@@ -13,7 +13,7 @@ export default function RootContainer() {
 
   return (
     <View style={ApplicationStyles.applicationView}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <Navigation />
       {preLoader ? <Loader /> : null}
     </View>

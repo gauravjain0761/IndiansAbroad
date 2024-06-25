@@ -1,14 +1,14 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {SCREEN_WIDTH, fontname} from '../Themes/Fonts';
+import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
 
-export default function DiscussionForum({item, index, isUser = false}) {
+export default function DiscussionForum({ item, index, isUser = false }) {
   const [menuModal, setmenuModal] = useState(false);
   return (
     <View key={index}>
@@ -28,7 +28,7 @@ export default function DiscussionForum({item, index, isUser = false}) {
                 source={Icons.connect}
                 style={ImageStyle(30, 30, 'cover')}
               />
-              <Text style={[styles.degreeText, {lineHeight: 16}]}>Connect</Text>
+              <Text style={[styles.degreeText, { lineHeight: 16 }]}>Connect</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
     borderRadius: 57 / 2,
   },
   username: {
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_900,"700"),
+    ...FontStyle(fontname.abeezee, 13, colors.neutral_900, "700"),
     // lineHeight:18
   },
   degreeText: {
-    ...FontStyle(fontname.abeezeeItalic, 11, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
     // lineHeight:18
   },
   degreeText1: {
