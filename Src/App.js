@@ -4,15 +4,19 @@ import RootContainer from './Navigation/RootContainer';
 import { View, Text, TextInput, SafeAreaView, StyleSheet, LogBox } from 'react-native';
 import ApplicationStyles from './Themes/ApplicationStyles';
 import { setAuthorization } from './utils/apiGlobal';
-import { setAsyncToken, setAsyncUserInfo } from './utils/AsyncStorage';
-import { Provider } from 'react-redux';
+import { getAsyncToken, getAsyncUserInfo, setAsyncToken, setAsyncUserInfo } from './utils/AsyncStorage';
+import { Provider, useDispatch } from 'react-redux';
 import store from './Redux';
 import Toast from 'react-native-toast-message';
 import { SCREEN_WIDTH, fontname } from './Themes/Fonts';
 import colors from './Themes/Colors';
 import { FontStyle } from './utils/commonFunction';
+import { onGetUserInfoApi, onLoginApi, oncheckSession } from './Services/AuthServices';
+import Loader from './Components/Loader';
 
 function App() {
+  const dispatch = useDispatch()
+  const [loading, setloading] = useState(true)
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
     LogBox.ignoreLogs([
@@ -30,77 +34,60 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setAsyncUserInfo(JSON.stringify({
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzMzMWVjZGQyNzMwNGU1YzM5MzE2NyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzE4NzA1MTQ4LCJleHAiOjE3MjA3Nzg3NDh9.KcqAcnemPMYjFGjSIr-XghGto59K7RDUHPMzXP-4Hlc",
-      "err": 200,
-      "msg": "Logged in successfully",
-      "data": {
-        "_id": "663331ecdd27304e5c393167",
-        "avtar": "",
-        "userAvatar": {
-          "key": "",
-          "metadata": "",
-          "location": "",
-          "contentType": "",
-          "cdnlocation": ""
+
+    checkSession()
+  }, [])
+
+  const checkSession = async () => {
+    let token = await getAsyncToken()
+    if (token) {
+      let obj = {
+        params: {
+          token: token
         },
-        "first_Name": "Abhishek",
-        "last_Name": "Harshe",
-        "email": "abhiharshe1191@gmail.com",
-        "gender": "male",
-        "birthDate": "01/01/1993",
-        "city": "Kolhapur",
-        "district": "Kolhapur",
-        "state": "Maharastra",
-        "country": "Canada",
-        "countryId": {
-          "_id": "651ba7da115e1b0accdf8129",
-          "countryName": "Canada"
-        },
-        "region": "Brampton",
-        "universityORcompany": "207-Feet Cakes and Chocolates",
-        "phonenumber": "+918983185204",
-        "language": [],
-        "isVerified": false,
-        "otp": 0,
-        "catchLine": "",
-        "passCode": "$2a$10$DStlsbngwRR7DZ1Rqd/wFO7ifThOmecqSw9c/8RT8m/jaIr33s0by",
-        "step": "2",
-        "followers": 0,
-        "following": 0,
-        "key": "",
-        "isOnline": "0",
-        "subscribedMember": true,
-        "subscriptionPlanId": "64d3767d313efe85449595d7",
-        "plan": "basic",
-        "planExpiryDate": "2024-05-02T06:23:01.676Z",
-        "firebaseToken": "",
-        "accountDeleted": false,
-        "deletedAt": "",
-        "createdAt": "2024-05-02T06:25:48.962Z",
-        "updatedAt": "2024-06-18T10:05:21.897Z",
-        "__v": 0,
-        "app_features": {
-          "signin": true,
-          "signup": true,
-          "browsing": true,
-          "post": true,
-          "chat": true,
-          "discussion_thread": {
-            "browse": true,
-            "crud": true
-          },
-          "community_pages": {
-            "browse": true,
-            "join": true,
-            "crud": true
+        onSuccess: async (response) => {
+          await setAuthorization(token)
+          let user = await getAsyncUserInfo()
+          console.log('user--', user)
+          if (user) {
+            dispatch(onGetUserInfoApi({
+              params: {
+                userId: user._id
+              }
+            }))
+            setloading(false)
+          } else {
+            doLogin()
           }
+          setloading(false)
+        },
+        onFailure: (error) => {
+          doLogin()
         }
       }
-    }))
-    setAsyncToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzMzMWVjZGQyNzMwNGU1YzM5MzE2NyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzE4NzA1MTQ4LCJleHAiOjE3MjA3Nzg3NDh9.KcqAcnemPMYjFGjSIr-XghGto59K7RDUHPMzXP-4Hlc')
-    setAuthorization('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzMzMWVjZGQyNzMwNGU1YzM5MzE2NyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzE4NzA1MTQ4LCJleHAiOjE3MjA3Nzg3NDh9.KcqAcnemPMYjFGjSIr-XghGto59K7RDUHPMzXP-4Hlc')
-  }, [])
+      dispatch(oncheckSession(obj))
+    } else {
+      doLogin()
+    }
+  }
+
+  const doLogin = async () => {
+    let obj = {
+      data: {
+        email: 'jadhavharshal.510@gmail.com',
+        passCode: 'Trtr#789'
+      },
+      onSuccess: async (response) => {
+        setloading(false)
+        // await setAuthorization(token)
+      },
+      onFailure: (error) => {
+        setloading(false)
+        // doLogin()
+      }
+    }
+    dispatch(onLoginApi(obj))
+  }
 
   const toastConfig = {
     success: ({ text1, text2, type, props, ...rest }) =>
@@ -124,7 +111,7 @@ function App() {
     },
   };
   return (
-    <Provider store={store}>
+    !loading ?
       <View style={ApplicationStyles.applicationView}>
         <RootContainer />
         <Toast
@@ -133,8 +120,8 @@ function App() {
           topOffset={0}
         />
       </View>
-    </Provider>
-
+      :
+      <Loader />
   );
 }
 export default App;

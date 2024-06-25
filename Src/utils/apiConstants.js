@@ -1,7 +1,11 @@
 export const api = {
     BASE_URL: "https://express.indiansabroad.online/api",
 
-    getalluserposts: '/post/getalluserposts/new'
+
+    login: '/user/login',
+    getalluserposts: '/post/getalluserposts/new',
+    checkSession: '/user/check-session',
+    getUser: '/user/getuser',
 
 }
 

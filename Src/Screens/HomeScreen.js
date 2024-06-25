@@ -71,6 +71,11 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
+
+  }, [])
+
+
+  useEffect(() => {
     if (isFocuse) getPostList(1);
   }, [isFocuse]);
 
@@ -83,7 +88,6 @@ export default function HomeScreen() {
   const ref = React.createRef(PagerView);
 
   const renderItem = ({ item, index }) => {
-    console.log('item', JSON.stringify(item));
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -105,8 +109,6 @@ export default function HomeScreen() {
   const onPressBell = () => {
     navigation.navigate(screenName.NotificationScreen);
   };
-  console.log('allPost', allPost);
-
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView edges={['top']}  >
