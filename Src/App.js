@@ -41,6 +41,7 @@ function App() {
 
   const checkSession = async () => {
     let token = await getAsyncToken()
+    console.log(token)
     if (token) {
       let obj = {
         params: {
@@ -57,11 +58,12 @@ function App() {
                 userId: user._id
               }
             }))
-            setloading(false)
+            setTimeout(() => {
+              setloading(false)
+            }, 500);
           } else {
             doLogin()
           }
-          setloading(false)
         },
         onFailure: (error) => {
           doLogin()
@@ -80,12 +82,12 @@ function App() {
         passCode: 'Trtr#789'
       },
       onSuccess: async (response) => {
-        setloading(false)
-        // await setAuthorization(token)
+        setTimeout(() => {
+          setloading(false)
+        }, 500);
       },
       onFailure: (error) => {
         setloading(false)
-        // doLogin()
       }
     }
     dispatch(onLoginApi(obj))

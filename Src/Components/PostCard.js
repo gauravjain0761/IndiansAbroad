@@ -117,7 +117,7 @@ export default function PostCard({ item, index, isUser = false }) {
         </View>
         {item?.message !== '' && (
           <View>
-            <Text style={styles.description}>{item?.message}</Text>
+            <Text numberOfLines={3} style={styles.description}>{item?.message}</Text>
           </View>
         )}
         {item?.mediaFiles.length > 0 && (

@@ -1,5 +1,5 @@
 import { SET_ALL_POST, SET_USER } from "../Redux/ActionTypes";
-import { setAsyncUserInfo } from "../utils/AsyncStorage";
+import { setAsyncToken, setAsyncUserInfo } from "../utils/AsyncStorage";
 import { GET, POST, api } from "../utils/apiConstants";
 import { dispatchAction, handleErrorRes, handleSuccessRes, makeAPIRequest, setAuthorization } from "../utils/apiGlobal";
 
@@ -31,6 +31,7 @@ export const onLoginApi =
             })
                 .then(async (response) => {
                     handleSuccessRes(response, request, dispatch, () => {
+                        setAsyncToken(response?.data?.token)
                         setAuthorization(response?.data?.token)
                         setAsyncUserInfo(response?.data?.data)
                         dispatchAction(dispatch, SET_USER, response?.data?.data)
