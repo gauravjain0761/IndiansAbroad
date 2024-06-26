@@ -1,4 +1,4 @@
-import { IS_LOADING, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST } from "./ActionTypes";
+import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST } from "./ActionTypes";
 
 const initialState = {
   user: undefined,
@@ -10,7 +10,10 @@ const initialState = {
   allIndianCount: 0,
   allPagesCount: 0,
   likedUserList: undefined,
-  blockUserList: undefined
+  blockUserList: undefined,
+  activePost: undefined,
+  activePostAllComments: undefined,
+  repliesComments: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -61,6 +64,22 @@ export default function (state = initialState, action) {
       let blockUserList = Object.assign([], state.blockUserList)
       blockUserList = blockUserList.filter(obj => obj.blockedUserId !== action.payload)
       return { ...state, blockUserList }
+    }
+    case SET_ACTIVE_POST: {
+      return { ...state, activePost: action.payload }
+    }
+    case SET_ACTIVE_POST_COMMENTS: {
+      return { ...state, activePostAllComments: action.payload }
+    }
+    case SET_LIKE_COMMENTS: {
+      let activePostAllComments = Object.assign([], state.activePostAllComments)
+      let index = activePostAllComments.findIndex(item => item._id == action.payload.commentId)
+      activePostAllComments[index].isCommentLiked = action.payload.action == 'like' ? true : false
+      activePostAllComments[index].commentlikeCount = action.payload.action == 'like' ? activePostAllComments[index].commentlikeCount + 1 : activePostAllComments[index].commentlikeCount - 1
+      return { ...state, activePostAllComments }
+    }
+    case SET_REPLIES_COMMENTS: {
+      return { ...state, repliesComments: action.payload }
     }
     default:
       return state;

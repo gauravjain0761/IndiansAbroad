@@ -6,13 +6,13 @@ import FastImage from 'react-native-fast-image';
 import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 
-export default function PostCarousal({ images }) {
+export default function PostCarousal({ images, isDetailScreen }) {
     const [currentIndex, setindex] = useState(0)
     return (
         <View>
             {images.length == 1 ?
                 <View>
-                    <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: images[0].location }} style={styles.postImage} />
+                    <FastImage resizeMode={isDetailScreen ? FastImage.resizeMode.contain : FastImage.resizeMode.cover} source={{ uri: images[0].location }} style={styles.postImage} />
                 </View>
                 :
                 <View>
@@ -30,7 +30,7 @@ export default function PostCarousal({ images }) {
                         snapEnabled={true}
                         renderItem={({ item, index }) => (
                             <View>
-                                <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: item.location }} style={styles.postImage} />
+                                <FastImage resizeMode={isDetailScreen ? FastImage.resizeMode.contain : FastImage.resizeMode.cover} source={{ uri: item.location }} style={styles.postImage} />
                             </View>
                         )}
                         loop={false}

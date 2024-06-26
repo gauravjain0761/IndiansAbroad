@@ -18,7 +18,6 @@ export default function LikesScreen() {
     const { likedUserList } = useSelector(e => e.common)
     const dispatch = useDispatch()
     const { params } = useRoute()
-    console.log(likedUserList)
 
     useEffect(() => {
         dispatch(onGetLikedUserList({

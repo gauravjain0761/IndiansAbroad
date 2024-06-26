@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
@@ -9,10 +9,50 @@ import { Icons } from '../Themes/Icons';
 import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
+import { useDispatch, useSelector } from 'react-redux';
+import { onCommentLike, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
+import { api } from '../utils/apiConstants';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
+import { screenName } from '../Navigation/ScreenConstants';
 
 export default function PostDetail() {
     const navigation = useNavigation()
     const [commentText, setcommentText] = useState('')
+    const { activePost, user, activePostAllComments } = useSelector(e => e.common)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(onGetSinglePost({
+            data: {
+                postId: activePost?._id,
+                loginUserId: user._id
+            }
+        }))
+        dispatch(onGetAllComments({
+            data: {
+                postId: activePost?._id,
+                loginId: user._id
+            }
+        }))
+    }, [])
+
+    const onLikeComment = (item) => {
+        const isLike = item?.isCommentLiked
+        dispatchAction(dispatch, SET_LIKE_COMMENTS, { commentId: item?._id, action: isLike ? 'unlike' : 'like' })
+        let obj = {
+            data: {
+                commentId: item?._id,
+                postId: item?.postId,
+                createdBy: user._id,
+                action: isLike ? 'unlike' : 'like'
+            },
+            onFailure: () => {
+                dispatchAction(dispatch, SET_LIKE_COMMENTS, { commentId: item?._id, action: item?.isCommentLiked ? 'unlike' : 'like' })
+            }
+        }
+        dispatch(onCommentLike(obj))
+    }
+
 
     const RenderReply = ({ item, index, isLastIndex }) => {
         return (
@@ -41,64 +81,57 @@ export default function PostDetail() {
         )
     }
 
+    const onOpenReplies = (item) => {
+        dispatchAction(dispatch, SET_REPLIES_COMMENTS, undefined)
+        navigation.navigate(screenName.RepliesComments, {
+            commentId: item?._id,
+            postId: item?.postId,
+        })
+    }
+
     const RenderItem = ({ item, itemIndex }) => {
-        const replyData = itemIndex == 0 ? [0] : [0, 1, 2, 3]
         return <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
-                <RenderUserIcon height={53} isBorder />
+                <RenderUserIcon url={api.IMAGE_URL + item?.user?.avtar} height={53} isBorder />
                 <View style={styles.commentBg}>
                     <View style={ApplicationStyles.flex}>
-                        <Text style={styles.username}>Nikita Khairnar</Text>
+                        <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
                         <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-                        <Text style={styles.commentText2}>Great</Text>
+                        <Text style={styles.commentText2}>{item?.comment}</Text>
                     </View>
                     <View style={styles.innerRow}>
-                        <TouchableOpacity style={styles.likesRow}>
-                            <Image source={Icons.heart} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>1 Likes</Text>
+                        <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
+                            <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
+                            <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.likesRow}>
+                        <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
                             <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>Reply</Text>
+                            <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
-            {(itemIndex == 0 || itemIndex == 1) &&
-                <FlatList
-                    data={replyData}
-                    renderItem={({ item, index }) => {
-                        return <RenderReply item={item} index={index} isLastIndex={replyData.length - 1 == index} />
-                    }}
-                />
-            }
         </View>
     }
 
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
-            <Header
-                title={'IndiansAbroad'}
-                showLeft={true}
-                onLeftPress={() => {
-                    navigation.goBack();
-                }}
-            />
+            <Header title={'IndiansAbroad'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
             <ScrollView>
                 <View style={{ marginBottom: 10 }}>
-                    <PostCard />
+                    <PostCard isDetailScreen={true} item={activePost} />
                 </View>
-                <FlatList
-                    data={[0, 1, 2, 3]}
+                {activePostAllComments && activePostAllComments.length > 0 && <FlatList
+                    data={activePostAllComments}
                     renderItem={({ item, index }) => {
                         return <RenderItem itemIndex={index} item={item} />
                     }}
-                />
+                />}
             </ScrollView>
             <SafeAreaView>
                 <View style={styles.commnetInput}>
                     <RenderUserIcon height={46} isBorder />
-                    <TextInput style={styles.input} placeholder=' Add Comment' placeholderTextColor={colors.neutral_500} />
+                    <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                     <TouchableOpacity style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
                     </TouchableOpacity>
@@ -120,7 +153,7 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700')
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
     },
     degreeText: {
         marginTop: 2,

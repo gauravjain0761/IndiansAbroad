@@ -21,15 +21,17 @@ import { api } from '../utils/apiConstants';
 import { onBlockUserApi, onConnectRequest } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 
-export default function PostCard({ item, index, isUser = false }) {
+export default function PostCard({ item, index, isUser = false, isDetailScreen = false }) {
   const [menuModal, setmenuModal] = useState(false);
   const navigation = useNavigation();
   const { user } = useSelector(e => e.common);
   const dispatch = useDispatch()
   const [blockModal, setblockModal] = useState(false)
+  const [textShown, setTextShown] = useState(false);
+
 
   const onPostLike = (isLiked) => {
-    let liked = isLiked
+    const liked = isLiked
     dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: liked ? 'unlike' : 'like' })
     let obj = {
       data: {
@@ -39,7 +41,7 @@ export default function PostCard({ item, index, isUser = false }) {
       },
       onSuccess: () => { },
       onFailure: () => {
-        dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id })
+        dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: item?.isLiked ? 'unlike' : 'like' })
       }
     }
     dispatch(onLikePost(obj))
@@ -115,13 +117,19 @@ export default function PostCard({ item, index, isUser = false }) {
             </View>
           )}
         </View>
-        {item?.message !== '' && (
-          <View>
-            <Text numberOfLines={3} style={styles.description}>{item?.message}</Text>
-          </View>
-        )}
+
+        {item?.message !== '' && <Text style={styles.description} >
+          {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
+        </Text>}
+
+        {item?.message !== '' && item?.message.length > 120 ?
+          <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
+            <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>
+          </TouchableOpacity>
+          : null}
+
         {item?.mediaFiles.length > 0 && (
-          <PostCarousal images={item?.mediaFiles} />
+          <PostCarousal isDetailScreen={isDetailScreen} images={item?.mediaFiles} />
         )}
         <View style={styles.bottomRow}>
           <View style={styles.middlerow}>
@@ -327,6 +335,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
-  touchableView: { height: 42, justifyContent: 'center', }
-
+  touchableView: { height: 42, justifyContent: 'center', },
+  aboutTextMore: {
+    ...FontStyle(fontname.actor_regular, 14, colors.primary_500),
+    paddingBottom: 10,
+    alignSelf: 'flex-end',
+    marginHorizontal: 20,
+    marginTop: -25,
+    paddingTop: 10
+  }
 });

@@ -24,7 +24,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { screenName } from '../Navigation/ScreenConstants';
 import { getalluserposts } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { IS_LOADING } from '../Redux/ActionTypes';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
@@ -88,7 +88,11 @@ export default function HomeScreen() {
     return (
       <TouchableOpacity
         activeOpacity={1}
-        onPress={() => navigation.navigate(screenName.PostDetail)}>
+        onPress={() => {
+          dispatchAction(dispatch, SET_ACTIVE_POST, item)
+          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
+          navigation.navigate(screenName.PostDetail)
+        }}>
         <PostCard item={item} index={index} />
       </TouchableOpacity>
     );
