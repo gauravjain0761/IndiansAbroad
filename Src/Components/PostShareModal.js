@@ -13,13 +13,47 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
 
 export default function PostShareModal({
   shareView,
   menuModal,
   setmenuModal,
-  item
+  item,
+  onPressBlock
 }) {
+  const insets = useSafeAreaInsets();
+  const { user } = useSelector((state) => state.common);
+  const dispatch = useDispatch()
+
+  const onPressConnect = () => {
+    setmenuModal(false)
+    if (item?.createdBy) {
+      let obj = {
+        data: {
+          userId: user._id,
+          followingId: item?.createdBy?._id
+        },
+        postId: item?._id
+      }
+      if (item?.isFollowing) {
+        dispatch(onUnFollowRequest(obj))
+      } else {
+        dispatch(onConnectRequest(obj))
+      }
+    }
+
+  }
+
+  const onBlock = () => {
+    setmenuModal(false)
+    setTimeout(() => {
+      if (item?.createdBy) { onPressBlock() }
+    }, 500);
+  }
+
   return (
     <ModalContainer
       isVisible={menuModal}
@@ -38,18 +72,19 @@ export default function PostShareModal({
             />
           </>
         )}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => onPressConnect()}>
           <Text style={styles.modalText}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</Text>
         </TouchableOpacity>
         <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-        <TouchableOpacity>
-          <Text style={styles.modalText}>{item?.isPostBlocked ? 'Unblock' : 'Block'}</Text>
+        <TouchableOpacity onPress={() => onBlock()}>
+          <Text style={styles.modalText}>{'Block'}</Text>
         </TouchableOpacity>
         <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
         {!item?.isReported ? <TouchableOpacity>
           <Text style={styles.modalText}>Report</Text>
         </TouchableOpacity> : null}
         <View style={styles.line} />
+        <View style={{ paddingBottom: insets.bottom }} />
       </View>
     </ModalContainer>
   );

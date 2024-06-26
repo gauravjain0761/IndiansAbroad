@@ -37,7 +37,7 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const { allPost, allPostsCount } = useSelector(e => e.common);
+  const { allPost, allPostsCount, user } = useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
@@ -54,9 +54,9 @@ export default function HomeScreen() {
   const getPostList = page => {
     let obj = {
       data: {
-        createdBy: '663331ecdd27304e5c393167',
+        createdBy: user?._id,
         page: page,
-        limit: 20,
+        limit: 0,
       },
       onSuccess: () => {
         setpage(page);
@@ -109,6 +109,7 @@ export default function HomeScreen() {
   const onPressBell = () => {
     navigation.navigate(screenName.NotificationScreen);
   };
+
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView edges={['top']}  >

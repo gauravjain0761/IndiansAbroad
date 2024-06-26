@@ -10,33 +10,84 @@ import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
 import UpdateDeleteMenu from './UpdateDeleteMenu';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PostCarousal from './PostCarousal';
 import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
+import { onLikePost } from '../Services/PostServices';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
+import { api } from '../utils/apiConstants';
+import { onBlockUserApi, onConnectRequest } from '../Services/OtherUserServices';
+import ConfirmationModal from './ConfirmationModal';
 
 export default function PostCard({ item, index, isUser = false }) {
   const [menuModal, setmenuModal] = useState(false);
-  const { allPost, allPostsCount } = useSelector(e => e.common);
   const navigation = useNavigation();
+  const { user } = useSelector(e => e.common);
+  const dispatch = useDispatch()
+  const [blockModal, setblockModal] = useState(false)
+
+  const onPostLike = (isLiked) => {
+    let liked = isLiked
+    dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: liked ? 'unlike' : 'like' })
+    let obj = {
+      data: {
+        postId: item._id,
+        createdBy: user._id,
+        action: liked ? 'unlike' : 'like'
+      },
+      onSuccess: () => { },
+      onFailure: () => {
+        dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id })
+      }
+    }
+    dispatch(onLikePost(obj))
+  }
+
+  const openLikeScreen = () => {
+    navigation.navigate(screenName.LikesScreen, {
+      postId: item._id,
+    })
+  }
+
+  const onPressConnect = () => {
+    console.log(item?.createdBy)
+    let obj = {
+      data: {
+        userId: user._id,
+        followingId: item?.createdBy?._id
+      }
+    }
+    dispatch(onConnectRequest(obj))
+  }
+
+  const onBlockuser = () => {
+    setblockModal(false)
+    let obj = {
+      data: {
+        userId: item?.createdBy?._id,
+        action: 'block'
+      }
+    }
+    dispatch(onBlockUserApi(obj))
+  }
 
   if (item?.createdBy) {
     return (
       <View key={index}>
         <View style={styles.headerView}>
           <TouchableOpacity style={styles.userImage}>
-            <RenderUserIcon height={57} isBorder />
+            <RenderUserIcon url={api.IMAGE_URL + item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
           </TouchableOpacity>
           <View style={ApplicationStyles.flex}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(screenName.indiansDetails)}>
+            <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)}>
               <Text style={styles.username1}>
                 {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
               </Text>
             </TouchableOpacity>
             {!isUser && (
-              <TouchableOpacity
-                onPress={() => navigation.navigate(screenName.indiansDetails)}>
+              <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)}>
                 <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
               </TouchableOpacity>
             )}
@@ -53,7 +104,7 @@ export default function PostCard({ item, index, isUser = false }) {
                   <Text style={styles.degreeText}>Message</Text>
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity style={styles.messageView}>
+                <TouchableOpacity onPress={() => onPressConnect()} style={styles.messageView}>
                   <Image
                     source={Icons.personAdd}
                     style={ImageStyle(30, 30, 'cover')}
@@ -74,13 +125,18 @@ export default function PostCard({ item, index, isUser = false }) {
         )}
         <View style={styles.bottomRow}>
           <View style={styles.middlerow}>
-            <TouchableOpacity style={styles.innerRow}>
-              <Image
-                source={item?.isLiked ? Icons.heartFilled : Icons.heart}
-                style={ImageStyle(22, 22)}
-              />
-              <Text style={styles.username}>{item?.likeCount} Likes</Text>
-            </TouchableOpacity>
+            <View style={styles.innerRow}>
+              <TouchableOpacity style={styles.touchableView} onPress={() => onPostLike(item?.isLiked)} >
+                <Image
+                  source={item?.isLiked ? Icons.heartFilled : Icons.heart}
+                  style={ImageStyle(22, 22)}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.touchableView} onPress={() => openLikeScreen()}>
+                <Text style={styles.username}>{item?.likeCount} Likes</Text>
+              </TouchableOpacity>
+            </View>
+
             <TouchableOpacity style={styles.innerRow}>
               <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>{item?.commentCount} Comments</Text>
@@ -106,6 +162,16 @@ export default function PostCard({ item, index, isUser = false }) {
           item={item}
           menuModal={menuModal}
           setmenuModal={() => setmenuModal(false)}
+          onPressBlock={() => setblockModal(true)}
+        />
+        <ConfirmationModal
+          visible={blockModal}
+          onClose={() => setblockModal(false)}
+          title={`Do you want to block ${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}?`}
+          successBtn={'Yes'}
+          canselBtn={'No'}
+          onPressCancel={() => setblockModal(false)}
+          onPressSuccess={() => onBlockuser()}
         />
       </View>
     );
@@ -239,7 +305,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     justifyContent: 'center',
-    paddingVertical: 10,
+    height: 42,
+
+    // width: '20%'
   },
   modalView: {
     backgroundColor: colors.neutral_300,
@@ -259,4 +327,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
+  touchableView: { height: 42, justifyContent: 'center', }
+
 });

@@ -1,11 +1,30 @@
 export const api = {
     BASE_URL: "https://express.indiansabroad.online/api",
+    IMAGE_URL: "https://cdn.indiansabroad.online/",
 
 
     login: '/user/login',
-    getalluserposts: '/post/getalluserposts/new',
+
     checkSession: '/user/check-session',
     getUser: '/user/getuser',
+
+
+
+    // post
+    getalluserposts: '/post/getalluserposts',
+    likedislike: '/postlike/likedislike',
+    likeduserlist: '/postlike/userlist',
+
+
+
+    // other user
+    followRequest: '/follow/request',
+    unFollowRequest: '/followunfollow/unfollow',
+    blockUser: '/blockuser/action',
+
+
+    //profile
+    blockUserList: "/blockuser/list",
 
 }
 

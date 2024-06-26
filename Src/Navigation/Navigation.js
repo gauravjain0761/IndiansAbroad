@@ -41,6 +41,7 @@ import BlockedUsers from '../Screens/Setting/BlockedUsers';
 import ChangePhone from '../Screens/Setting/ChangePhone';
 import ChangePhoneVerify from '../Screens/Setting/ChangePhoneVerify';
 import ChatDetailsScreen from '../Screens/ChatDetailsScreen';
+import LikesScreen from '../Screens/LikesScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -297,6 +298,11 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.ChatDetailsScreen}
           component={ChatDetailsScreen}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.LikesScreen}
+          component={LikesScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

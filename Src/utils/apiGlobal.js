@@ -114,7 +114,7 @@ export const handleSuccessRes = (res, req, dispatch, fun) => {
             if (req?.onSuccess) req?.onSuccess(res?.data);
         } else {
             if (req?.onFailure) req.onFailure(res?.data);
-            errorToast(res?.data?.message)
+            errorToast(res?.data?.msg)
         }
     }
 }
@@ -140,5 +140,4 @@ export const handleErrorRes = (err, req, dispatch, fun) => {
         if (fun) fun()
         if (req?.onFailure) req.onFailure(err?.response);
     }
-
 }

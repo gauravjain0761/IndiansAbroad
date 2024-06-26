@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
 import colors from '../Themes/Colors'
 
-export default function RenderUserIcon({ height, isBorder = false, url ,activeOpacity}) {
+export default function RenderUserIcon({ height, isBorder = false, url, activeOpacity }) {
     const navigation = useNavigation()
     let styles = StyleSheet.create({
         userImage: {

@@ -31,4 +31,5 @@ export const screenName = {
   ChangePhone: 'ChangePhone',
   ChangePhoneVerify: 'ChangePhoneVerify',
   ChatDetailsScreen: 'ChatDetailsScreen',
+  LikesScreen: 'LikesScreen'
 };

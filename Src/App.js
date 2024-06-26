@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RootContainer from './Navigation/RootContainer';
 import { View, Text, TextInput, SafeAreaView, StyleSheet, LogBox } from 'react-native';
 import ApplicationStyles from './Themes/ApplicationStyles';
-import { setAuthorization } from './utils/apiGlobal';
+import { dispatchAction, setAuthorization } from './utils/apiGlobal';
 import { getAsyncToken, getAsyncUserInfo, setAsyncToken, setAsyncUserInfo } from './utils/AsyncStorage';
 import { Provider, useDispatch } from 'react-redux';
 import store from './Redux';
@@ -13,6 +13,7 @@ import colors from './Themes/Colors';
 import { FontStyle } from './utils/commonFunction';
 import { onGetUserInfoApi, onLoginApi, oncheckSession } from './Services/AuthServices';
 import Loader from './Components/Loader';
+import { SET_USER } from './Redux/ActionTypes';
 
 function App() {
   const dispatch = useDispatch()
@@ -48,6 +49,7 @@ function App() {
         onSuccess: async (response) => {
           await setAuthorization(token)
           let user = await getAsyncUserInfo()
+          dispatchAction(dispatch, SET_USER, user)
           console.log('user--', user)
           if (user) {
             dispatch(onGetUserInfoApi({
