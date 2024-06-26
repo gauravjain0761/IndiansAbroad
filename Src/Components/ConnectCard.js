@@ -16,6 +16,22 @@ import RenderUserIcon from './RenderUserIcon';
 import {screenName} from '../Navigation/ScreenConstants';
 import {useNavigation} from '@react-navigation/native';
 import {api} from '../utils/apiConstants';
+import {
+  onCancelRequest,
+  onConnectRequest,
+  onDisConnect,
+  onPagesConnectRequest,
+  onPagesDisConnectRequest,
+} from '../Services/OtherUserServices';
+import {useDispatch, useSelector} from 'react-redux';
+import {dispatchAction} from '../utils/apiGlobal';
+import {
+  SET_POST_CANCEL_REQUEST,
+  SET_POST_CONNECT,
+  SET_POST_DISCONNECT,
+  SET_POST_PAGES_CONNECT,
+  SET_POST_PAGES_DISCONNECT,
+} from '../Redux/ActionTypes';
 
 export default function ConnectCard({
   indians,
@@ -28,12 +44,101 @@ export default function ConnectCard({
   isFollowingRequested,
   isFollower,
   index,
-  isfollowing
+  isfollowing,
+  followingId,
 }) {
   const navigation = useNavigation();
+  const {user} = useSelector(e => e.common);
+  const dispatch = useDispatch();
+
+  const onPressConnect = () => {
+    let obj = {
+      data: {
+        userId: user._id,
+        followingId: followingId,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_POST_CONNECT, {
+          postId: followingId,
+          action: isFollowingRequested == 1 ? 0 : 1,
+        });
+      },
+      onFailure: () => {},
+    };
+    dispatch(onConnectRequest(obj));
+  };
+
+  const onPressCancelRequest = () => {
+    let obj = {
+      data: {
+        userId: user._id,
+        followingId: followingId,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_POST_CANCEL_REQUEST, {
+          postId: followingId,
+          action: isFollowingRequested == 1 ? 0 : 1,
+        });
+      },
+      onFailure: () => {},
+    };
+    dispatch(onCancelRequest(obj));
+  };
+
+  const onPressDisConnect = () => {
+    let obj = {
+      data: {
+        userId: user._id,
+        followingId: followingId,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_POST_DISCONNECT, {
+          postId: followingId,
+          action: isFollowing == 1 ? 0 : 1,
+        });
+      },
+      onFailure: () => {},
+    };
+    dispatch(onDisConnect(obj));
+  };
+
+  const onPressPagesDisConnect = () => {
+    let obj = {
+      data: {
+        cpId: followingId,
+        followingId: user._id,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_POST_PAGES_DISCONNECT, {
+          postId: followingId,
+          action: isfollowing == true ? false : true,
+        });
+      },
+      onFailure: () => {},
+    };
+    dispatch(onPagesDisConnectRequest(obj));
+  };
+
+  const onPressPagesConnect = () => {
+    let obj = {
+      data: {
+        cpId: followingId,
+        followingId: user._id,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_POST_PAGES_CONNECT, {
+          postId: followingId,
+          action: isfollowing == true ? false : true,
+        });
+      },
+      onFailure: () => {},
+    };
+    dispatch(onPagesConnectRequest(obj));
+  };
+
   return (
     <TouchableOpacity
-    key={index}
+      key={index}
       activeOpacity={0.9}
       onPress={cardPress}
       style={[styles.header]}>
@@ -68,27 +173,37 @@ export default function ConnectCard({
         </Text>
       )}
 
-      {indians ? isFollowing == 1 ? (
-        <TouchableOpacity style={styles.btnView}>
-          <Text style={styles.btnText}>DisConnect</Text>
-        </TouchableOpacity>
-      ) : isFollowingRequested == 1 ? (
-        <TouchableOpacity style={styles.btnView}>
-          <Text style={styles.btnText}>Cancel request</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.btnView}>
-          <Text style={styles.btnText}>Connect</Text>
-        </TouchableOpacity>
+      {indians ? (
+        isFollowing == 1 ? (
+          <TouchableOpacity
+            onPress={() => onPressDisConnect()}
+            style={styles.btnView}>
+            <Text style={styles.btnText}>DisConnect</Text>
+          </TouchableOpacity>
+        ) : isFollowingRequested == 1 ? (
+          <TouchableOpacity
+            onPress={() => {
+              onPressCancelRequest();
+            }}
+            style={styles.btnView}>
+            <Text style={styles.btnText}>Cancel request</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => onPressConnect()}
+            style={styles.btnView}>
+            <Text style={styles.btnText}>Connect</Text>
+          </TouchableOpacity>
+        )
       ) : isfollowing == true ? (
-        <TouchableOpacity style={styles.btnView}>
+        <TouchableOpacity onPress={onPressPagesDisConnect} style={styles.btnView}>
           <Text style={styles.btnText}>DisConnect</Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity style={styles.btnView}>
+        <TouchableOpacity onPress={onPressPagesConnect} style={styles.btnView}>
           <Text style={styles.btnText}>Connect</Text>
         </TouchableOpacity>
-      ) }
+      )}
     </TouchableOpacity>
   );
 }

@@ -227,6 +227,7 @@ export default function IndiansPageMore() {
                     navigate(screenName.indiansDetails);
                   }}
                   index={index}
+                  followingId={item?._id}
                   name={`${item?.first_Name} ${item?.last_Name}`}
                   universityORcompany={item?.universityORcompany}
                   userAvtar={item?.avtar}

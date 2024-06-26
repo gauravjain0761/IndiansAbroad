@@ -18,12 +18,15 @@ export const api = {
     //Indians
     indiansList: "/user/suggestion/filter",
     pageList: "/cp/tab/list",
+    pageFollow: "/cp/follow",
+    pageUnFollow: "/cp/unfollow",
 
 
     // other user
     followRequest: '/follow/request',
     unFollowRequest: '/followunfollow/unfollow',
     blockUser: '/blockuser/action',
+    cancelRequest: '/follow/cancel/request',
 
     //profile
     blockUserList: "/blockuser/list",

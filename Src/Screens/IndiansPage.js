@@ -49,7 +49,7 @@ export default function IndiansPage() {
   const [pagePages, setPagePages] = useState(1);
   const [loading, setloading] = useState(false);
 
-  console.log('allIndian', JSON.stringify(allIndian));
+  console.log('allIndian', JSON.stringify(allIndian?.slice(0, 1)));
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
       toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
@@ -243,6 +243,7 @@ export default function IndiansPage() {
                         cardPress={() => {
                           navigate(screenName.indiansDetails);
                         }}
+                        followingId={item?._id}
                         name={`${item?.first_Name} ${item?.last_Name}`}
                         universityORcompany={item?.universityORcompany}
                         userAvtar={item?.avtar}
@@ -292,6 +293,7 @@ export default function IndiansPage() {
                         cardPress={() => {
                           navigate(screenName.indiansDetails);
                         }}
+                        followingId={item?._id}
                         name={`${item?.first_Name} ${item?.last_Name}`}
                         universityORcompany={item?.universityORcompany}
                         userAvtar={item?.avtar}
@@ -355,6 +357,7 @@ export default function IndiansPage() {
                         cardPress={() => {
                           navigate(screenName.pagesDetails);
                         }}
+                        followingId={item?._id}
                         name={`${item?.title}`}
                         universityORcompany={item?.universityORcompany}
                         userAvtar={item?.logo}
@@ -398,6 +401,7 @@ export default function IndiansPage() {
                         cardPress={() => {
                           navigate(screenName.pagesDetails);
                         }}
+                        followingId={item?._id}
                         name={`${item?.title}`}
                         universityORcompany={item?.universityORcompany}
                         userAvtar={item?.logo}

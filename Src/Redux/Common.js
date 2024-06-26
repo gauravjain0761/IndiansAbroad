@@ -1,4 +1,24 @@
-import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST } from "./ActionTypes";
+import {
+  IS_LOADING,
+  SET_ACTIVE_POST,
+  SET_ALL_INDIANS,
+  SET_ALL_PAGES,
+  SET_ACTIVE_POST_COMMENTS,
+  SET_ALL_POST,
+  SET_BLOCK_USER_LIST,
+  SET_LIKED_USER_LIST,
+  SET_LIKE_COMMENTS,
+  SET_LIKE_DISLIKE,
+  SET_REPLIES_COMMENTS,
+  SET_USER,
+  UPDATE_BLOCK_LIST,
+  UPDATE_POST_LIST,
+  SET_POST_CONNECT,
+  SET_POST_DISCONNECT,
+  SET_POST_CANCEL_REQUEST,
+  SET_POST_PAGES_CONNECT,
+  SET_POST_PAGES_DISCONNECT,
+} from './ActionTypes';
 
 const initialState = {
   user: undefined,
@@ -13,73 +33,177 @@ const initialState = {
   blockUserList: undefined,
   activePost: undefined,
   activePostAllComments: undefined,
-  repliesComments: undefined
+  repliesComments: undefined,
 };
 export default function (state = initialState, action) {
   switch (action.type) {
     case IS_LOADING: {
-      return { ...state, preLoader: action.payload };
+      return {...state, preLoader: action.payload};
     }
     case SET_ALL_POST: {
-      return { ...state, allPost: action.payload.current_page == 1 ? action.payload.data : [...state.allPost, ...action.payload.data], allPostsCount: action.payload.allPostsCount };
+      return {
+        ...state,
+        allPost:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.allPost, ...action.payload.data],
+        allPostsCount: action.payload.allPostsCount,
+      };
     }
     case SET_ALL_INDIANS: {
-      return { ...state, allIndian: action.payload.current_page == 1 ? action.payload.data : [...state.allIndian, ...action.payload.data], allIndianCount: action.payload.total };
+      return {
+        ...state,
+        allIndian:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.allIndian, ...action.payload.data],
+        allIndianCount: action.payload.total,
+      };
     }
     case SET_ALL_PAGES: {
-      return { ...state, allPages: action.payload.current_page == 1 ? action.payload.data : [...state.allPages, ...action.payload.data], allPagesCount: action.payload.totalCount };
+      return {
+        ...state,
+        allPages:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.allPages, ...action.payload.data],
+        allPagesCount: action.payload.totalCount,
+      };
     }
     case SET_USER: {
-      return { ...state, user: action.payload }
+      return {...state, user: action.payload};
     }
     case SET_LIKE_DISLIKE: {
-      let allPost = Object.assign([], state.allPost)
-      let index = allPost.findIndex(item => item._id == action.payload.postId)
-      allPost[index].isLiked = action.payload.action == 'like' ? true : false
-      allPost[index].likeCount = action.payload.action == 'like' ? allPost[index].likeCount + 1 : allPost[index].likeCount - 1
-      return { ...state, allPost }
+      let allPost = Object.assign([], state.allPost);
+      let index = allPost.findIndex(item => item._id == action.payload.postId);
+      allPost[index].isLiked = action.payload.action == 'like' ? true : false;
+      allPost[index].likeCount =
+        action.payload.action == 'like'
+          ? allPost[index].likeCount + 1
+          : allPost[index].likeCount - 1;
+      return {...state, allPost};
     }
     case SET_LIKED_USER_LIST: {
-      return { ...state, likedUserList: action.payload }
+      return {...state, likedUserList: action.payload};
     }
     case UPDATE_POST_LIST: {
-      let allPost = Object.assign([], state.allPost)
+      let allPost = Object.assign([], state.allPost);
 
       if (action.payload.type == 'unfollow') {
-        let index = allPost.findIndex(item => item._id == action.payload.postId)
-        allPost[index].isFollowing = !allPost[index].isFollowing
+        let index = allPost.findIndex(
+          item => item._id == action.payload.postId,
+        );
+        allPost[index].isFollowing = !allPost[index].isFollowing;
       } else if (action.payload.type == 'block') {
-        let temp = allPost.filter(obj => obj.createdBy?._id !== action.payload.userId)
-        allPost = temp
+        let temp = allPost.filter(
+          obj => obj.createdBy?._id !== action.payload.userId,
+        );
+        allPost = temp;
       }
       return {
         ...state,
-        allPost: allPost
-      }
+        allPost: allPost,
+      };
     }
     case SET_BLOCK_USER_LIST: {
-      return { ...state, blockUserList: action.payload }
+      return {...state, blockUserList: action.payload};
     }
     case UPDATE_BLOCK_LIST: {
-      let blockUserList = Object.assign([], state.blockUserList)
-      blockUserList = blockUserList.filter(obj => obj.blockedUserId !== action.payload)
-      return { ...state, blockUserList }
+      let blockUserList = Object.assign([], state.blockUserList);
+      blockUserList = blockUserList.filter(
+        obj => obj.blockedUserId !== action.payload,
+      );
+      return {...state, blockUserList};
     }
     case SET_ACTIVE_POST: {
-      return { ...state, activePost: action.payload }
+      return {...state, activePost: action.payload};
     }
     case SET_ACTIVE_POST_COMMENTS: {
-      return { ...state, activePostAllComments: action.payload }
+      return {...state, activePostAllComments: action.payload};
     }
     case SET_LIKE_COMMENTS: {
-      let activePostAllComments = Object.assign([], state.activePostAllComments)
-      let index = activePostAllComments.findIndex(item => item._id == action.payload.commentId)
-      activePostAllComments[index].isCommentLiked = action.payload.action == 'like' ? true : false
-      activePostAllComments[index].commentlikeCount = action.payload.action == 'like' ? activePostAllComments[index].commentlikeCount + 1 : activePostAllComments[index].commentlikeCount - 1
-      return { ...state, activePostAllComments }
+      let activePostAllComments = Object.assign(
+        [],
+        state.activePostAllComments,
+      );
+      let index = activePostAllComments.findIndex(
+        item => item._id == action.payload.commentId,
+      );
+      activePostAllComments[index].isCommentLiked =
+        action.payload.action == 'like' ? true : false;
+      activePostAllComments[index].commentlikeCount =
+        action.payload.action == 'like'
+          ? activePostAllComments[index].commentlikeCount + 1
+          : activePostAllComments[index].commentlikeCount - 1;
+      return {...state, activePostAllComments};
     }
     case SET_REPLIES_COMMENTS: {
-      return { ...state, repliesComments: action.payload }
+      return {...state, repliesComments: action.payload};
+    }
+    case SET_POST_CONNECT: {
+      const update = state.allIndian.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isFollowingRequested: action.payload.action,
+          };
+        } else {
+          return {...item};
+        }
+      });
+      return {...state, allIndian: update};
+    }
+    case SET_POST_CANCEL_REQUEST: {
+      const updates = state.allIndian.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isFollowingRequested: action.payload.action,
+          };
+        } else {
+          return {...item};
+        }
+      });
+      return {...state, allIndian: updates};
+    }
+    case SET_POST_DISCONNECT: {
+      const updates = state.allIndian.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isFollowing: action.payload.action,
+          };
+        } else {
+          return {...item};
+        }
+      });
+      return {...state, allIndian: updates};
+    }
+    case SET_POST_PAGES_CONNECT: {
+      const updates = state.allPages.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isfollowing: action.payload.action,
+          };
+        } else {
+          return {...item};
+        }
+      });
+      return {...state, allPages: updates};
+    }
+    case SET_POST_PAGES_DISCONNECT: {
+      const updates = state.allPages.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isfollowing: action.payload.action,
+          };
+        } else {
+          return {...item};
+        }
+      });
+      return {...state, allPages: updates};
     }
     default:
       return state;
