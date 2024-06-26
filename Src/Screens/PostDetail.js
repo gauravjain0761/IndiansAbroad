@@ -92,7 +92,7 @@ export default function PostDetail() {
     const RenderItem = ({ item, itemIndex }) => {
         return <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
-                <RenderUserIcon url={api.IMAGE_URL + item?.user?.avtar} height={53} isBorder />
+                <RenderUserIcon url={item?.user?.avtar} height={53} isBorder />
                 <View style={styles.commentBg}>
                     <View style={ApplicationStyles.flex}>
                         <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
@@ -130,7 +130,7 @@ export default function PostDetail() {
             </ScrollView>
             <SafeAreaView>
                 <View style={styles.commnetInput}>
-                    <RenderUserIcon height={46} isBorder />
+                    <RenderUserIcon url={user?.avtar} height={46} isBorder />
                     <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                     <TouchableOpacity style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
+        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900, '700'),
     },
     degreeText: {
         marginTop: 2,

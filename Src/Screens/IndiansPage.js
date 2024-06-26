@@ -10,19 +10,19 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getallIndianUser,
   getallPagesUser,
@@ -31,17 +31,17 @@ import {
 
 export default function IndiansPage() {
   const tabs = [
-    {id: 1, label: 'INDIANS'},
-    {id: 2, label: 'PAGES'},
+    { id: 1, label: 'INDIANS' },
+    { id: 2, label: 'PAGES' },
   ];
   const [tabType, setTabType] = useState('All');
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('INDIANS');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
-  const {user, allIndian, allPages} = useSelector(e => e.common);
+  const { user, allIndian, allPages } = useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [pagesRefreshing, setPagesRefreshing] = React.useState(false);
@@ -60,7 +60,7 @@ export default function IndiansPage() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   const onRefresh = React.useCallback(() => {
@@ -197,19 +197,19 @@ export default function IndiansPage() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search Indians here'}
-        containerStyles={{top: -18}}
+      // containerStyles={{ top: -18 }}
       />
       <Text
         style={[
           FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          {marginHorizontal: wp(16), marginVertical: 8, marginTop: -12},
+          { marginHorizontal: wp(16), marginVertical: 8, },
         ]}>
         {tabSelection == 'INDIANS'
           ? 'People you may know'
           : 'Pages from your area'}
       </Text>
       <PagerView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -237,7 +237,7 @@ export default function IndiansPage() {
                   numColumns={2}
                   bounces={false}
                   data={allIndian?.slice(0, 2)}
-                  renderItem={({item}) => {
+                  renderItem={({ item }) => {
                     return (
                       <ConnectCard
                         cardPress={() => {
@@ -260,7 +260,7 @@ export default function IndiansPage() {
                 <View
                   style={[
                     ApplicationStyles.row,
-                    {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
+                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
                   ]}>
                   <View style={styles.lineView} />
                   <TouchableOpacity
@@ -287,7 +287,7 @@ export default function IndiansPage() {
                   numColumns={2}
                   bounces={false}
                   data={allIndian.slice(2, 6)}
-                  renderItem={({item}) => {
+                  renderItem={({ item }) => {
                     return (
                       <ConnectCard
                         cardPress={() => {
@@ -310,7 +310,7 @@ export default function IndiansPage() {
                 <View
                   style={[
                     ApplicationStyles.row,
-                    {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
+                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
                   ]}>
                   <View style={styles.lineView} />
                   <TouchableOpacity
@@ -324,7 +324,7 @@ export default function IndiansPage() {
                   </TouchableOpacity>
                   <View style={styles.lineView} />
                 </View>
-                <View style={{height: 10}} />
+                <View style={{ height: 10 }} />
               </>
             )}
           </ScrollView>
@@ -351,7 +351,7 @@ export default function IndiansPage() {
                   numColumns={2}
                   bounces={false}
                   data={allPages?.slice(0, 2)}
-                  renderItem={({item}) => {
+                  renderItem={({ item }) => {
                     return (
                       <ConnectCard
                         cardPress={() => {
@@ -371,13 +371,13 @@ export default function IndiansPage() {
                 <View
                   style={[
                     ApplicationStyles.row,
-                    {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
+                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
                   ]}>
                   <View style={styles.lineView} />
                   <TouchableOpacity
                     style={styles.seeBtn}
                     onPress={() =>
-                      navigate(screenName.IndiansPageMore, {dataList: 'PAGES'})
+                      navigate(screenName.IndiansPageMore, { dataList: 'PAGES' })
                     }>
                     <Text style={styles.seeBtnText}>See More</Text>
                   </TouchableOpacity>
@@ -395,7 +395,7 @@ export default function IndiansPage() {
                   numColumns={2}
                   bounces={false}
                   data={allPages?.slice(2, 4)}
-                  renderItem={({item}) => {
+                  renderItem={({ item }) => {
                     return (
                       <ConnectCard
                         cardPress={() => {
@@ -415,19 +415,19 @@ export default function IndiansPage() {
                 <View
                   style={[
                     ApplicationStyles.row,
-                    {alignSelf: 'center', marginBottom: hp(15), marginTop: 3},
+                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
                   ]}>
                   <View style={styles.lineView} />
                   <TouchableOpacity
                     style={styles.seeBtn}
                     onPress={() =>
-                      navigate(screenName.IndiansPageMore, {dataList: 'PAGES'})
+                      navigate(screenName.IndiansPageMore, { dataList: 'PAGES' })
                     }>
                     <Text style={styles.seeBtnText}>See More</Text>
                   </TouchableOpacity>
                   <View style={styles.lineView} />
                 </View>
-                <View style={{height: 10}} />
+                <View style={{ height: 10 }} />
               </>
             )}
           </ScrollView>
@@ -440,13 +440,14 @@ export default function IndiansPage() {
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
-    top: -14,
+    // top: -14,
     // alignSelf:'center'
     justifyContent: 'space-evenly',
   },
   tabItemView: {
     // flex: 1,
-    padding: wp(14),
+    paddingBottom: wp(14),
+    paddingHorizontal: wp(14),
     borderRadius: 50,
     alignItems: 'center',
   },

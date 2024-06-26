@@ -16,7 +16,7 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
 import { onLikePost } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
+import { SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
 import { api } from '../utils/apiConstants';
 import { onBlockUserApi, onConnectRequest } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
@@ -48,6 +48,7 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
   }
 
   const openLikeScreen = () => {
+    dispatchAction(dispatch, SET_LIKED_USER_LIST, undefined)
     navigation.navigate(screenName.LikesScreen, {
       postId: item._id,
     })
@@ -80,7 +81,7 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
       <View key={index}>
         <View style={styles.headerView}>
           <TouchableOpacity style={styles.userImage}>
-            <RenderUserIcon url={api.IMAGE_URL + item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
+            <RenderUserIcon url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
           </TouchableOpacity>
           <View style={ApplicationStyles.flex}>
             <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)}>
@@ -103,7 +104,7 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
                     source={Icons.messageIcon}
                     style={ImageStyle(30, 30, 'cover')}
                   />
-                  <Text style={styles.degreeText}>Message</Text>
+                  <Text style={styles.degreeText3}>Message</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity onPress={() => onPressConnect()} style={styles.messageView}>
@@ -111,7 +112,7 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
                     source={Icons.personAdd}
                     style={ImageStyle(30, 30, 'cover')}
                   />
-                  <Text style={styles.degreeText}>Connect</Text>
+                  <Text style={styles.degreeText3}>Connect</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -269,15 +270,18 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   username1: {
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_900, "700"),
+    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, "700"),
     textTransform: 'capitalize',
   },
   degreeText: {
-    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 12, colors.neutral_900),
   },
   degreeText1: {
     marginTop: 2,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900),
+    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+  },
+  degreeText3: {
+    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
   },
   messageView: {
     paddingHorizontal: 10,

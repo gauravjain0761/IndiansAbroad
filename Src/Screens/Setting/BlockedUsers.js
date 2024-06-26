@@ -58,7 +58,7 @@ export default function BlockedUsers() {
       <View key={index}>
         <View style={[ApplicationStyles.row, styles.listView]}>
           <View style={[ApplicationStyles.row]}>
-            <RenderUserIcon url={api.IMAGE_URL + item?.avtar} height={45} isBorder={item?.subscribedMember} />
+            <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
             <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
           </View>
           <Menu

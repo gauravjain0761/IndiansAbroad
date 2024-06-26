@@ -26,6 +26,7 @@ import { getalluserposts } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
 import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import NoDataFound from '../Components/NoDataFound';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -181,7 +182,9 @@ export default function HomeScreen() {
                 </View>
               )
             }}
+            ListEmptyComponent={<NoDataFound />}
           />
+
         </View>
         <View key={'2'}>
           <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />

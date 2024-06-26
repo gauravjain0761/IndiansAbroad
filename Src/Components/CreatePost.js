@@ -10,22 +10,45 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
 import PostCard from '../Components/PostCard';
 import ModalContainer from '../Components/ModalContainer';
-import {Icons} from '../Themes/Icons';
+import { Icons } from '../Themes/Icons';
+import DocumentPicker, {
+  DirectoryPickerResponse,
+  DocumentPickerResponse,
+  isCancel,
+  isInProgress,
+  types,
+} from 'react-native-document-picker';
 
-export default function CreatePost({createPostModal, setcreatePostModal}) {
+export default function CreatePost({ createPostModal, setcreatePostModal }) {
   const [postText, setpostText] = useState('');
+  const [imageArray, setimageArray] = useState([])
+
+  const openDocPicker = async () => {
+    try {
+      const pickerResult = await DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        allowMultiSelection: true,
+        type: [DocumentPicker.types.images]
+      });
+      console.log(pickerResult)
+    } catch (e) {
+      console.log('error--', e);
+    }
+  };
+
+
   return (
     <ModalContainer
       isVisible={createPostModal}
@@ -58,7 +81,7 @@ export default function CreatePost({createPostModal, setcreatePostModal}) {
             placeholderTextColor={colors.neutral_500}
           />
           <View style={styles.rowView}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity onPress={() => openDocPicker()} style={styles.button}>
               <Image source={Icons.photoUpload} style={styles.photoUpload} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
@@ -66,7 +89,7 @@ export default function CreatePost({createPostModal, setcreatePostModal}) {
                 source={Icons.videoUpload}
                 style={[
                   styles.photoUpload,
-                  {bottom: 5.5, height: 34, width: 40},
+                  { bottom: 5.5, height: 34, width: 40 },
                 ]}
               />
             </TouchableOpacity>

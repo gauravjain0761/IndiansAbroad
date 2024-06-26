@@ -38,7 +38,7 @@ export default function RepliesComments() {
                     <View style={[styles.verticalLine, { height: isLastIndex ? '50%' : '100%' }]} />
                     <View style={styles.horizontalLine} />
                     <View style={styles.innerCommentRow}>
-                        <RenderUserIcon url={api.IMAGE_URL + item?.createdBy?.avtar} height={38} isBorder />
+                        <RenderUserIcon url={item?.createdBy?.avtar} height={38} isBorder />
                         <View style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
                                 <Text numberOfLines={1} style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
@@ -72,7 +72,7 @@ export default function RepliesComments() {
             <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
                 {activeComment && <View style={{ marginBottom: 10 }}>
                     <View style={styles.headerView}>
-                        <RenderUserIcon url={api.IMAGE_URL + activeComment?.user?.avtar} height={53} isBorder />
+                        <RenderUserIcon url={activeComment?.user?.avtar} height={53} isBorder />
                         <View style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
                                 <Text numberOfLines={1} style={styles.username}>{activeComment?.user?.first_Name} {activeComment?.user?.last_Name}</Text>
@@ -104,7 +104,7 @@ export default function RepliesComments() {
 
             </View>
             <View style={styles.commnetInput}>
-                <RenderUserIcon height={46} isBorder />
+                <RenderUserIcon url={user?.avtar} height={46} isBorder />
                 <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                 <TouchableOpacity style={styles.sendButton}>
                     <Image source={Icons.send} style={ImageStyle(24, 24)} />

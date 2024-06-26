@@ -222,12 +222,12 @@ export default NotificationScreen;
 
 const styles = StyleSheet.create({
   title: {
-    ...FontStyle(fontname.actor_regular, 17, colors.black, '400'),
+    ...FontStyle(fontname.actor_regular, 18, colors.black, '700'),
     paddingLeft: wp(14),
     lineHeight: hp(26),
   },
   categoriesTitle: {
-    ...FontStyle(fontname.abeezee, 14, colors.black, '400'),
+    ...FontStyle(fontname.abeezee, 14, colors.black, '700'),
     lineHeight: hp(22),
   },
   categoriesContainer: {

@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   text1: {
     marginLeft: 12,
-    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+    ...FontStyle(fontname.abeezee, 14, colors.neutral_900),
   },
   itemText: {
     ...FontStyle(fontname.actor_regular, 18, colors.neutral_900)

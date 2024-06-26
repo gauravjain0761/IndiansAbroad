@@ -58,7 +58,7 @@ export default function CustomDrawer() {
                         onPress={() => navigation.navigate(screenName.profileScreen)}>
                         <Image source={Icons.userImage} style={styles.userImage} />
                     </TouchableOpacity>
-                    <View style={ApplicationStyles.flex}>
+                    <View style={[ApplicationStyles.flex, { marginHorizontal: 5 }]}>
                         <Text numberOfLines={1} style={styles.username}>
                             Harshal Jadhav
                         </Text>
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
         borderRadius: 63 / 2,
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
-        paddingLeft: 5,
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+        marginRight: 5,
     },
     drawerItem: {
         flexDirection: 'row',
@@ -126,6 +126,6 @@ const styles = StyleSheet.create({
         // marginRight: hp(20),
     },
     drawerItemText: {
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
+        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
     },
 })

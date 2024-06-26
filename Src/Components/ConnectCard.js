@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
+import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
-import {screenName} from '../Navigation/ScreenConstants';
-import {useNavigation} from '@react-navigation/native';
-import {api} from '../utils/apiConstants';
+import { screenName } from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
+import { api } from '../utils/apiConstants';
 import {
   onCancelRequest,
   onConnectRequest,
@@ -23,8 +23,8 @@ import {
   onPagesConnectRequest,
   onPagesDisConnectRequest,
 } from '../Services/OtherUserServices';
-import {useDispatch, useSelector} from 'react-redux';
-import {dispatchAction} from '../utils/apiGlobal';
+import { useDispatch, useSelector } from 'react-redux';
+import { dispatchAction } from '../utils/apiGlobal';
 import {
   SET_POST_CANCEL_REQUEST,
   SET_POST_CONNECT,
@@ -48,7 +48,7 @@ export default function ConnectCard({
   followingId,
 }) {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   const dispatch = useDispatch();
 
   const onPressConnect = () => {
@@ -63,7 +63,7 @@ export default function ConnectCard({
           action: isFollowingRequested == 1 ? 0 : 1,
         });
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(onConnectRequest(obj));
   };
@@ -80,7 +80,7 @@ export default function ConnectCard({
           action: isFollowingRequested == 1 ? 0 : 1,
         });
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(onCancelRequest(obj));
   };
@@ -97,7 +97,7 @@ export default function ConnectCard({
           action: isFollowing == 1 ? 0 : 1,
         });
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(onDisConnect(obj));
   };
@@ -114,7 +114,7 @@ export default function ConnectCard({
           action: isfollowing == true ? false : true,
         });
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(onPagesDisConnectRequest(obj));
   };
@@ -131,7 +131,7 @@ export default function ConnectCard({
           action: isfollowing == true ? false : true,
         });
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(onPagesConnectRequest(obj));
   };
@@ -148,11 +148,7 @@ export default function ConnectCard({
         }}
         style={styles.imageStyle}>
         <RenderUserIcon
-          url={
-            userAvtar && !userAvtar.includes('undefined')
-              ? api.IMAGE_URL + userAvtar
-              : undefined
-          }
+          url={userAvtar}
           height={78}
           activeOpacity={1}
           isBorder={subscribedMember}

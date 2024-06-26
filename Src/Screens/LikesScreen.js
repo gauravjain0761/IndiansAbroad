@@ -11,6 +11,7 @@ import RenderUserIcon from '../Components/RenderUserIcon'
 import { useDispatch, useSelector } from 'react-redux'
 import { onGetLikedUserList } from '../Services/PostServices'
 import { api } from '../utils/apiConstants'
+import NoDataFound from '../Components/NoDataFound'
 
 export default function LikesScreen() {
     const { goBack } = useNavigation()
@@ -26,11 +27,13 @@ export default function LikesScreen() {
     }, [])
 
 
+
+
     const renderItem = ({ item, index }) => {
         return (
             <View key={index}>
                 <TouchableOpacity key={index} style={[ApplicationStyles.row, styles.listView]}>
-                    <RenderUserIcon url={api.IMAGE_URL + item?.avtar} height={45} isBorder={item?.subscribedMember} />
+                    <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
                 </TouchableOpacity>
                 <View style={styles.lineStyle} />
@@ -59,6 +62,7 @@ export default function LikesScreen() {
                     data={likedUserList}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<NoDataFound />}
                 />}
 
             </View>

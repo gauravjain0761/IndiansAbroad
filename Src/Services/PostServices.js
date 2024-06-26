@@ -38,6 +38,7 @@ export const onLikePost = (request) =>
 
 export const onGetLikedUserList = (request) =>
     async dispatch => {
+        dispatchAction(dispatch, IS_LOADING, true)
         return makeAPIRequest({
             method: POST,
             url: api.likeduserlist,

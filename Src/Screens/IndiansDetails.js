@@ -110,7 +110,7 @@ export default function IndiansDetails() {
           </View>
         </View>
         <View style={styles.detailsView}>
-          <Text style={[styles.text1, { ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '700') }]}>About</Text>
+          <Text style={[styles.text1, { ...FontStyle(fontname.actor_regular, 14, colors.neutral_900, '700') }]}>About</Text>
           <Text style={styles.text2}>From</Text>
           <Text style={styles.text1}>Mumbai,Maharshtra</Text>
           <Text style={styles.text2}>Now</Text>
