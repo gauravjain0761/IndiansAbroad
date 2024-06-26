@@ -15,7 +15,9 @@ export const api = {
     likedislike: '/postlike/likedislike',
     likeduserlist: '/postlike/userlist',
 
-
+    //Indians
+    indiansList:"/user/suggestion/filter",
+    pageList:"/cp/tab/list",
 
     // other user
     followRequest: '/follow/request',

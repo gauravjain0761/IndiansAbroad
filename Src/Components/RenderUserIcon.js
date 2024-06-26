@@ -25,7 +25,7 @@ export default function RenderUserIcon({ height, isBorder = false, url, activeOp
             borderColor: isBorder ? '#C5B80F' : 'transparent',
             backgroundColor: colors.white
         }}>
-            <Image source={url ? { uri: url } : Icons.userImage} style={styles.userImage} />
+            <Image source={url ? { uri: url } : Icons.logo} style={styles.userImage} />
         </TouchableOpacity>
     )
 }

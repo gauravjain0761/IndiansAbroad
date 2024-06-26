@@ -70,9 +70,6 @@ export default function HomeScreen() {
     if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
   }, []);
 
-  useEffect(() => {
-
-  }, [])
 
 
   useEffect(() => {

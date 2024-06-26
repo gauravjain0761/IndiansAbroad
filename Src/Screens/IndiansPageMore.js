@@ -8,53 +8,155 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
-import { FontStyle } from '../utils/commonFunction';
+import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
+import {FontStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { screenName } from '../Navigation/ScreenConstants';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
+import {screenName} from '../Navigation/ScreenConstants';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {getallIndianUser, getallPagesUser} from '../Services/PostServices';
 
 export default function IndiansPageMore() {
   const tabs = [
-    { id: 1, label: 'INDIANS' },
-    { id: 2, label: 'PAGES' },
+    {id: 1, label: 'INDIANS'},
+    {id: 2, label: 'PAGES'},
   ];
-  const { params } = useRoute()
+  const {params} = useRoute();
   const [tabType, setTabType] = useState('All');
-  const { navigate, goBack } = useNavigation();
+  const {navigate, goBack} = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [tabSelectionIndex, setTabSelectionIndex] = useState(params?.dataList == "INDIANS" ? 0 : 1);
+  const [tabSelectionIndex, setTabSelectionIndex] = useState(
+    params?.dataList == 'INDIANS' ? 0 : 1,
+  );
   const [tabSelection, setTabSelection] = useState(params?.dataList);
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
 
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
+  const {user, allIndian, allIndianCount,allPages,allPagesCount} = useSelector(e => e.common);
+  const isFocuse = useIsFocused();
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [pagesRefreshing, setPagesRefreshing] = React.useState(false);
+
+  const [page, setpage] = useState(1);
+  const [pagePages, setPagePages] = useState(1);
+
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
+    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
   }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getPostList(1);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  const onRefreshPages = React.useCallback(() => {
+    setPagesRefreshing(true);
+    getPagesList(1);
+    setTimeout(() => {
+      setPagesRefreshing(false);
+    }, 2000);
+  }, []);
+
+  const getPostList = page => {
+    let obj = {
+      data: {
+        emails: [], //"dev.abhiharshe23@gmail.com"
+        search: '',
+        userId: user?._id,
+        page: page,
+        limit: 0,
+      },
+      onSuccess: () => {
+        setpage(page);
+        setloading(false);
+      },
+    };
+    dispatch(getallIndianUser(obj));
+  };
+
+  const getPagesList = page => {
+    let obj = {
+      params: {
+        page: page,
+        userId: user?._id,
+        searchText: '',
+      },
+      onSuccess: () => {
+        setPagePages(page);
+        setloading(false);
+      },
+    };
+    dispatch(getallPagesUser(obj));
+  };
+
+  useEffect(() => {
+    if (isFocuse) getPostList(1);
+    if (isFocuse) getPagesList(1);
+  }, [isFocuse]);
+
+  const fetchMoreData = () => {
+    if (allIndian) {
+      if (allIndian.length < allIndianCount) {
+        setloading(true);
+        getPostList(page + 1);
+      }
+    }
+  };
+
+  const fetchMorePagesData = () => {
+    if (allPages) {
+      if (allPages.length < allPagesCount) {
+        setloading(true);
+        getPagesList(pagePages + 1);
+      }
+    }
+  };
+
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header title={'IndiansAbroad'} showRight={false} showLeft={true} onLeftPress={() => goBack()} />
+      <Header
+        title={'IndiansAbroad'}
+        showRight={false}
+        showLeft={true}
+        onLeftPress={() => goBack()}
+      />
       <View style={styles.tabMainView}>
         <TouchableOpacity
           onPress={() => {
             setTabSelection('INDIANS');
             setIsLeftButtonActive(true);
             ref.current?.setPage(0);
-          }} style={[{}, styles.tabItemView]}>
-          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'INDIANS'}</Text>
+          }}
+          style={[{}, styles.tabItemView]}>
+          <Text
+            style={FontStyle(
+              fontname.actor_regular,
+              14,
+              tabSelection == 'INDIANS'
+                ? colors.primary_6a7e
+                : colors.neutral_900,
+              '700',
+            )}>
+            {'INDIANS'}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -63,7 +165,17 @@ export default function IndiansPageMore() {
             setIsLeftButtonActive(false);
           }}
           style={styles.tabItemView}>
-          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'PAGES' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'PAGES'}</Text>
+          <Text
+            style={FontStyle(
+              fontname.actor_regular,
+              14,
+              tabSelection == 'PAGES'
+                ? colors.primary_6a7e
+                : colors.neutral_900,
+              '700',
+            )}>
+            {'PAGES'}
+          </Text>
         </TouchableOpacity>
         {/* <Animated.View style={[styles.animationView, { left: tabSelection == 'INDIANS' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} /> */}
       </View>
@@ -75,7 +187,7 @@ export default function IndiansPageMore() {
       <Text
         style={[
           FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          { marginHorizontal: wp(16), marginVertical: 8 },
+          {marginHorizontal: wp(16), marginVertical: 8},
         ]}>
         {tabSelection == 'INDIANS'
           ? 'People may you know'
@@ -91,40 +203,62 @@ export default function IndiansPageMore() {
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
         <View key={'1'}>
-          <ScrollView>
-            <FlatList
-              style={{
-                paddingHorizontal: wp(16),
-              }}
-              columnWrapperStyle={{
-                width: '100%',
-                columnGap: wp(10),
-                rowGap: hp(16),
-              }}
-              numColumns={2}
-              bounces={false}
-              data={[1, 2]}
-              renderItem={({ item }) => {
-                return (
-                  <ConnectCard
-                    cardPress={() => {
-                      navigate(screenName.indiansDetails);
-                    }}
-                    indians={tabSelection == 'INDIANS'}
-                  />
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-            />
-            <View style={{ height: 170 }} />
-          </ScrollView>
+          <FlatList
+            style={{
+              paddingHorizontal: wp(16),
+            }}
+            columnWrapperStyle={{
+              width: '100%',
+              columnGap: wp(10),
+              rowGap: hp(16),
+            }}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            numColumns={2}
+            onEndReached={fetchMoreData}
+            onEndReachedThreshold={0.3}
+            data={allIndian}
+            keyExtractor={index=>index.toString()}
+            renderItem={({item,index}) => {
+              return (
+                <ConnectCard
+                  cardPress={() => {
+                    navigate(screenName.indiansDetails);
+                  }}
+                  index={index}
+                  name={`${item?.first_Name} ${item?.last_Name}`}
+                  universityORcompany={item?.universityORcompany}
+                  userAvtar={item?.avtar}
+                  isFollowing={item?.isFollowing}
+                  isFollowingRequested={item?.isFollowingRequested}
+                  isFollower={item?.isFollower}
+                  subscribedMember={item?.subscribedMember}
+                  indians={tabSelection == 'INDIANS'}
+                />
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            ListFooterComponent={() => {
+              return (
+                <View>
+                  {(allIndian && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
+                  <View style={{height: 200}} />
+                </View>
+              )
+            }}
+          />
+          {/*  */}
         </View>
         <View key={'2'}>
-          <ScrollView>
+
             <FlatList
               style={{
                 paddingHorizontal: wp(16),
               }}
+              refreshControl={
+                <RefreshControl refreshing={pagesRefreshing} onRefresh={onRefreshPages} />
+              }
               columnWrapperStyle={{
                 width: '100%',
                 columnGap: wp(10),
@@ -132,21 +266,33 @@ export default function IndiansPageMore() {
               }}
               numColumns={2}
               bounces={false}
-              data={[1, 2]}
-              renderItem={({ item }) => {
+              data={allPages}
+              onEndReached={fetchMorePagesData}
+              onEndReachedThreshold={0.3}
+              renderItem={({item}) => {
                 return (
                   <ConnectCard
                     cardPress={() => {
                       navigate(screenName.pagesDetails);
                     }}
+                    name={`${item?.title}`}
+                    universityORcompany={item?.universityORcompany}
+                    userAvtar={item?.logo}
+                    isfollowing={item?.isfollowing}
                     indians={tabSelection == 'INDIANS'}
                   />
                 );
               }}
               showsVerticalScrollIndicator={false}
+              ListFooterComponent={() => {
+                return (
+                  <View>
+                    {(allPages && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
+                    <View style={{height: 200}} />
+                  </View>
+                )
+              }}
             />
-            <View style={{ height: 170 }} />
-          </ScrollView>
         </View>
       </PagerView>
     </SafeAreaView>

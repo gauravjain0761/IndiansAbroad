@@ -1,10 +1,14 @@
-import { IS_LOADING, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST } from "./ActionTypes";
+import { IS_LOADING, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST } from "./ActionTypes";
 
 const initialState = {
   user: undefined,
   preLoader: false,
   allPost: undefined,
+  allIndian: undefined,
+  allPages: undefined,
   allPostsCount: 0,
+  allIndianCount: 0,
+  allPagesCount: 0,
   likedUserList: undefined,
   blockUserList: undefined
 };
@@ -15,6 +19,12 @@ export default function (state = initialState, action) {
     }
     case SET_ALL_POST: {
       return { ...state, allPost: action.payload.current_page == 1 ? action.payload.data : [...state.allPost, ...action.payload.data], allPostsCount: action.payload.allPostsCount };
+    }
+    case SET_ALL_INDIANS: {
+      return { ...state, allIndian: action.payload.current_page == 1 ? action.payload.data : [...state.allIndian, ...action.payload.data], allIndianCount: action.payload.total };
+    }
+    case SET_ALL_PAGES: {
+      return { ...state, allPages: action.payload.current_page == 1 ? action.payload.data : [...state.allPages, ...action.payload.data], allPagesCount: action.payload.totalCount };
     }
     case SET_USER: {
       return { ...state, user: action.payload }
