@@ -276,6 +276,7 @@ export default function IndiansPageMore() {
                     cardPress={() => {
                       navigate(screenName.pagesDetails);
                     }}
+                    followingId={item?._id}
                     name={`${item?.title}`}
                     universityORcompany={item?.universityORcompany}
                     userAvtar={item?.logo}

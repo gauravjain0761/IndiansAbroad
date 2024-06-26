@@ -110,7 +110,7 @@ export const handleSuccessRes = (res, req, dispatch, fun) => {
     console.log('res?.data?.err',res?.data?.err);
     if (res?.status === 200 || res?.status === 201) {
         dispatchAction(dispatch, IS_LOADING, false)
-        if (res?.data && res?.data?.err == 200) {
+        if (res?.data && (res?.data?.err == 200 || res?.data?.error == 200)) {
             if (fun) fun()
             if (req?.onSuccess) req?.onSuccess(res?.data);
         } else {

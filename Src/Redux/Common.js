@@ -184,7 +184,7 @@ export default function (state = initialState, action) {
         if (item._id == action.payload.postId) {
           return {
             ...item,
-            isfollowing: action.payload.action,
+            isfollowing: true,
           };
         } else {
           return {...item};
@@ -197,7 +197,7 @@ export default function (state = initialState, action) {
         if (item._id == action.payload.postId) {
           return {
             ...item,
-            isfollowing: action.payload.action,
+            isfollowing: false,
           };
         } else {
           return {...item};

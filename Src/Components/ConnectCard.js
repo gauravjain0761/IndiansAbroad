@@ -111,7 +111,6 @@ export default function ConnectCard({
       onSuccess: () => {
         dispatchAction(dispatch, SET_POST_PAGES_DISCONNECT, {
           postId: followingId,
-          action: isfollowing == true ? false : true,
         });
       },
       onFailure: () => { },
@@ -128,7 +127,6 @@ export default function ConnectCard({
       onSuccess: () => {
         dispatchAction(dispatch, SET_POST_PAGES_CONNECT, {
           postId: followingId,
-          action: isfollowing == true ? false : true,
         });
       },
       onFailure: () => { },
