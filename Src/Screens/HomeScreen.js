@@ -43,7 +43,6 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getPostList(1);

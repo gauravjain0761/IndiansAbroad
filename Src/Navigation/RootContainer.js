@@ -5,6 +5,7 @@ import ApplicationStyles from '../Themes/ApplicationStyles';
 import Navigation from './Navigation';
 import store from '../Redux';
 import Loader from '../Components/Loader';
+import colors from '../Themes/Colors';
 // Styles
 
 export default function RootContainer() {
@@ -13,7 +14,7 @@ export default function RootContainer() {
 
   return (
     <View style={ApplicationStyles.applicationView}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
       <Navigation />
       {preLoader ? <Loader /> : null}
     </View>

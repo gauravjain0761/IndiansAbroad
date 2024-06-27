@@ -59,7 +59,7 @@ export default function ChatDetailsScreen() {
           return (
             <ChatCard
               cardPress={() => {
-                navigate(screenName.indiansDetails);
+                // navigate(screenName.indiansDetails);
               }}
 
             />

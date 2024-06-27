@@ -15,7 +15,9 @@ import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
+import { onConnectRequest, onGetOtherUserInfo, onUnFollowRequest } from '../Services/OtherUserServices';
+import { dispatchAction } from '../utils/apiGlobal';
+import { UPDATE_POST_LIST } from '../Redux/ActionTypes';
 
 export default function PostShareModal({
   shareView,
@@ -25,7 +27,7 @@ export default function PostShareModal({
   onPressBlock
 }) {
   const insets = useSafeAreaInsets();
-  const { user } = useSelector((state) => state.common);
+  const { user, otherUserInfo } = useSelector((state) => state.common);
   const dispatch = useDispatch()
 
   const onPressConnect = () => {
@@ -36,7 +38,18 @@ export default function PostShareModal({
           userId: user._id,
           followingId: item?.createdBy?._id
         },
-        postId: item?._id
+        postId: item?._id,
+        onSuccess: () => {
+          if (otherUserInfo) {
+            dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo?._id, } }))
+          }
+          if (item?.isFollowing) {
+            dispatchAction(dispatch, UPDATE_POST_LIST, {
+              postId: item?._id,
+              type: 'unfollow',
+            });
+          }
+        }
       }
       if (item?.isFollowing) {
         dispatch(onUnFollowRequest(obj))

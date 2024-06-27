@@ -16,19 +16,19 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
 import { onLikePost } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
+import { OTHER_USER_INFO, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
 import { api } from '../utils/apiConstants';
-import { onBlockUserApi, onConnectRequest } from '../Services/OtherUserServices';
+import { onBlockUserApi, onConnectRequest, onGetOtherUserInfo } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 
-export default function PostCard({ item, index, isUser = false, isDetailScreen = false }) {
+export default function PostCard({ item, index, isUser = false, isDetailScreen = false, }) {
   const [menuModal, setmenuModal] = useState(false);
   const navigation = useNavigation();
   const { user } = useSelector(e => e.common);
   const dispatch = useDispatch()
   const [blockModal, setblockModal] = useState(false)
   const [textShown, setTextShown] = useState(false);
-
+  const { otherUserInfo } = useSelector(e => e.common)
 
   const onPostLike = (isLiked) => {
     const liked = isLiked
@@ -55,11 +55,15 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
   }
 
   const onPressConnect = () => {
-    console.log(item?.createdBy)
     let obj = {
       data: {
         userId: user._id,
         followingId: item?.createdBy?._id
+      },
+      onSuccess: () => {
+        if (otherUserInfo) {
+          dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo?._id, } }))
+        }
       }
     }
     dispatch(onConnectRequest(obj))
@@ -71,31 +75,40 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
       data: {
         userId: item?.createdBy?._id,
         action: 'block'
+      },
+      onSuccess: () => {
+        if (otherUserInfo) navigation.goBack()
       }
     }
     dispatch(onBlockUserApi(obj))
+  }
+
+  const onOpenOtherUserDetail = (id) => {
+    if (!otherUserInfo && !isDetailScreen) {
+      navigation.navigate(screenName.indiansDetails, { userId: id })
+    }
   }
 
   if (item?.createdBy) {
     return (
       <View key={index}>
         <View style={styles.headerView}>
-          <TouchableOpacity style={styles.userImage}>
-            <RenderUserIcon url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
-          </TouchableOpacity>
-          <View style={ApplicationStyles.flex}>
-            <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)}>
+          <View style={styles.userImage}>
+            <RenderUserIcon userId={isDetailScreen ? undefined : item?.createdBy?._id} url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
+          </View>
+          <TouchableOpacity onPress={() => onOpenOtherUserDetail(item?.createdBy?._id)} style={ApplicationStyles.flex}>
+            <View>
               <Text style={styles.username1}>
                 {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
               </Text>
-            </TouchableOpacity>
+            </View>
             {!isUser && (
-              <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails)}>
+              <View >
                 <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
-              </TouchableOpacity>
+              </View>
             )}
             <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
-          </View>
+          </TouchableOpacity>
           {!isUser && (
             <View>
               {item?.isFollowing ? (
@@ -145,11 +158,10 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
                 <Text style={styles.username}>{item?.likeCount} Likes</Text>
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.innerRow}>
+            <View style={styles.innerRow}>
               <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>{item?.commentCount} Comments</Text>
-            </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.innerRow}>
               <Image source={Icons.share} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>Share</Text>

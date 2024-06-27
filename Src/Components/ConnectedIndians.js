@@ -14,24 +14,38 @@ import colors from '../Themes/Colors';
 import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { useDispatch, useSelector } from 'react-redux';
+import { onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
 
 
-export default function ConnectedIndians({ indians, cardPress }) {
+export default function ConnectedIndians({ indians, cardPress, item, onUpdate }) {
   const [visible, setVisible] = useState(false);
-
+  const { user } = useSelector(e => e.common)
+  const dispatch = useDispatch()
   const hideMenu = () => setVisible(false);
-
   const showMenu = () => setVisible(true);
+  const onConnect = () => {
+    hideMenu()
+    let obj = {
+      data: {
+        userId: user._id,
+        followingId: item?.followingId?._id
+      },
+      onSuccess: () => {
+        if (onUpdate) onUpdate()
+      }
+    }
+    dispatch(!item?.isFollowing ? onConnectRequest(obj) : onUnFollowRequest(obj))
+  }
 
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-        <RenderUserIcon height={45} isBorder />
+        <RenderUserIcon url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
         <Text numberOfLines={1} style={styles.text1}>
-          Vikas Mane
+          {item?.followingId.first_Name} {item?.followingId.last_Name}
         </Text>
       </View>
-
       <Menu
         visible={visible}
         anchor={<TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', paddingHorizontal: hp(15), flex: 1 }} onPress={showMenu}>
@@ -40,7 +54,7 @@ export default function ConnectedIndians({ indians, cardPress }) {
         onRequestClose={hideMenu}
         style={styles.menu}
       >
-        <MenuItem textStyle={styles.itemText} onPress={hideMenu}>Disconnect</MenuItem>
+        <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</MenuItem>
         <MenuDivider color={colors.primary_500} />
         <MenuItem textStyle={styles.itemText} onPress={hideMenu}>Block</MenuItem>
       </Menu>

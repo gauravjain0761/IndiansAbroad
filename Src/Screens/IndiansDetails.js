@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
@@ -20,7 +20,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { Icons } from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
 import RenderUserIcon from '../Components/RenderUserIcon';
@@ -28,48 +28,115 @@ import PostCard from '../Components/PostCard';
 import { screenName } from '../Navigation/ScreenConstants';
 import PostShareModal from '../Components/PostShareModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getOtherUserFollowList, getallpostsOfUser, onBlockUserApi, onCancelRequest, onConnectRequest, onGetOtherUserInfo, onUnFollowRequest } from '../Services/OtherUserServices';
+import { dispatchAction } from '../utils/apiGlobal';
+import { IS_LOADING, OTHER_USER_INFO, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
+import NoDataFound from '../Components/NoDataFound';
+import IndianDetailShareModal from '../Components/IndianDetailShareModal';
+import ConfirmationModal from '../Components/ConfirmationModal';
 
 export default function IndiansDetails() {
-  const tabs = [
-    { id: 1, label: 'Posts' },
-    { id: 2, label: 'Connected Indians' },
-  ];
   const navigation = useNavigation()
   const [menuModal, setmenuModal] = useState(false)
   const { navigate, goBack } = useNavigation();
-  const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
-  const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('POST');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
-  const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
-
+  // const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
+  const { params } = useRoute()
+  const [followList, setfollowList] = useState([])
+  const { otherUserInfo, user, otherUserAllPost, otherUserFollowList } = useSelector(e => e.common)
+  console.log('otherUserAllPost--', otherUserAllPost)
   const handleTabPress = (id, index) => {
-    // setTabValue(id);
     Animated.spring(buttonTranslateX, {
       toValue: index * (SCREEN_WIDTH - 20) / 2, // Assuming each tab has a width of 100
       useNativeDriver: true,
     }).start();
   };
-
   useEffect(() => {
     tabSelection == 'POST' && handleTabPress(1, 0);
     tabSelection !== 'POST' && handleTabPress(2, 1);
   }, [tabSelection]);
-
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
+  const isFocused = useIsFocused()
+  const [blockModal, setblockModal] = useState(false)
+
+  const onSearchName = (search) => {
+    let list = otherUserFollowList.data
+    const filtered = list.filter((val) =>
+      val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    const filter2 = list.filter((val) =>
+      val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    let searchTextContact = Object.values(
+      filtered.concat(filter2).reduce((r, o) => {
+        r[o._id] = o;
+        return r;
+      }, {})
+    );
+    setfollowList(searchTextContact)
+  }
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
-  }, []);
+    setfollowList(otherUserFollowList?.data)
+  }, [otherUserFollowList])
+
+
+  useEffect(() => {
+    if (!isFocused) {
+      dispatchAction(dispatch, OTHER_USER_INFO, undefined)
+    } else {
+      dispatchAction(dispatch, OTHER_USER_INFO, undefined)
+      dispatchAction(dispatch, IS_LOADING, true)
+      dispatch(onGetOtherUserInfo({ params: { userId: params?.userId, } }))
+      dispatch(getallpostsOfUser({ data: { createdBy: params?.userId, } }))
+      onGetOtherUserFollower()
+    }
+  }, [isFocused])
+
+  const onGetOtherUserFollower = () => {
+    dispatch(getOtherUserFollowList({ data: { userId: params?.userId, search: '' } }))
+  }
+  const onPressConnect = () => {
+    let obj = {
+      data: { userId: user._id, followingId: otherUserInfo._id },
+      onSuccess: () => { dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo._id, } })) }
+    }
+    if (otherUserInfo?.isFollowing == 'notfollowing') {
+      dispatch(onConnectRequest(obj))
+    } else if (otherUserInfo?.isFollowing == 'requested') {
+      dispatch(onCancelRequest(obj))
+    } else {
+      dispatch(onUnFollowRequest(obj))
+    }
+  }
 
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.PostDetail)}>
+      <TouchableOpacity key={index} activeOpacity={1} onPress={() => {
+        dispatchAction(dispatch, SET_ACTIVE_POST, item)
+        dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
+        navigation.navigate(screenName.PostDetail)
+      }}>
         <PostCard item={item} index={index} />
       </TouchableOpacity>
     )
+  }
+
+  const onBlockuser = () => {
+    setblockModal(false)
+    let obj = {
+      data: {
+        userId: otherUserInfo?._id,
+        action: 'block'
+      },
+      onSuccess: () => {
+        navigation.goBack()
+      }
+    }
+    dispatch(onBlockUserApi(obj))
   }
 
   return (
@@ -81,20 +148,16 @@ export default function IndiansDetails() {
           goBack();
         }}
       />
-      <ScrollView nestedScrollEnabled style={{ flex: 1, }} contentContainerStyle={{ flex: 1 }}>
+      {otherUserInfo && <ScrollView style={{ flex: 1 }} >
         <View style={styles.userViewStyle}>
           <View style={styles.imageView}>
-            <RenderUserIcon height={100} isBorder />
-
+            <RenderUserIcon url={otherUserInfo?.avtar} height={100} isBorder={otherUserInfo?.subscribedMember} />
           </View>
-          {/* <Image source={Icons.userImage} style={styles.userImage} /> */}
-          <Text style={styles.userText}>Dhruv Solanki</Text>
-          <Text style={styles.userText1}>
-            (Believe in yourself no matter what)
-          </Text>
+          <Text style={styles.userText}>{otherUserInfo?.first_Name} {otherUserInfo?.last_Name}</Text>
+          <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>
           <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
-            <TouchableOpacity style={styles.btnView}>
-              <Text style={styles.btnText}>Connect</Text>
+            <TouchableOpacity onPress={() => onPressConnect()} style={styles.btnView}>
+              <Text style={styles.btnText}>{otherUserInfo?.isFollowing == 'notfollowing' ? 'Connect' : otherUserInfo?.isFollowing == 'requested' ? 'Cancel Request' : 'Disconnect'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
@@ -124,56 +187,66 @@ export default function IndiansDetails() {
           <TouchableOpacity
             onPress={() => {
               setTabSelection('POST');
-              setIsLeftButtonActive(true);
               ref.current?.setPage(0);
             }} style={[{}, styles.tabItemView]}>
-            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(7)'}</Text>
+            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setTabSelection('INDIANS');
               ref.current?.setPage(1);
-              setIsLeftButtonActive(false);
+              setSearchText('')
             }}
             style={styles.tabItemView}>
-            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(79)'}</Text>
+            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
           </TouchableOpacity>
           <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
         </View>
-        <PagerView
-          style={{ flex: 1, }}
-          initialPage={tabSelectionIndex}
-          ref={ref}
-          onPageSelected={e => {
-            setTabSelection(e?.nativeEvent?.position == 0 ? 'POST' : 'INDIANS');
-            setTabSelectionIndex(e?.nativeEvent?.position);
-            setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
-          }}>
-          <View key={'1'}>
-            {/* <ScrollView style={{flex:1}}> */}
-            <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
-            {/* </ScrollView> */}
+        {tabSelection == 'POST' ?
+          <View>
+            {otherUserAllPost && <FlatList initialNumToRender={5} data={otherUserAllPost.data.slice(0, 5)} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
           </View>
-          <View key={'2'}>
+          :
+          <View >
             {/* <ScrollView> */}
             <SearchBar
               value={searchText}
-              onChangeText={text => setSearchText(text)}
+              onChangeText={text => { setSearchText(text), onSearchName(text) }}
               placeholder={'Search Indians here'}
               containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
             />
-            <FlatList
-              data={[1, 2]}
+            {followList && <FlatList
+              data={followList}
               renderItem={({ item }) => {
-                return <ConnectedIndians />;
+                return <ConnectedIndians cardPress={() => {
+                  dispatchAction(dispatch, OTHER_USER_INFO, undefined)
+                  navigation.push(screenName.indiansDetails, { userId: item?.followingId?._id })
+                }} item={item} onUpdate={() => onGetOtherUserFollower()} />;
               }}
+              ListEmptyComponent={<NoDataFound />}
               showsVerticalScrollIndicator={false}
-            />
+            />}
             {/* </ScrollView> */}
           </View>
-        </PagerView>
-      </ScrollView>
-      <PostShareModal shareView={true} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
+
+        }
+
+      </ScrollView>}
+
+      <IndianDetailShareModal
+        item={otherUserInfo}
+        onPressBlock={() => setblockModal(true)}
+        shareView={true} menuModal={menuModal} setmenuModal={() => setmenuModal(false)} />
+
+      <ConfirmationModal
+        visible={blockModal}
+        onClose={() => setblockModal(false)}
+        title={`Do you want to block ${otherUserInfo?.first_Name} ${otherUserInfo?.last_Name}?`}
+        successBtn={'Yes'}
+        canselBtn={'No'}
+        onPressCancel={() => setblockModal(false)}
+        onPressSuccess={() => onBlockuser()}
+      />
 
     </SafeAreaView>
   );
@@ -226,12 +299,13 @@ const styles = StyleSheet.create({
   },
   btnView: {
     backgroundColor: colors.primary_4574ca,
-    width: wp(78),
+    // width: wp(78),
     alignItems: 'center',
     height: hp(32),
     borderRadius: 4,
     marginVertical: hp(12),
     justifyContent: 'center',
+    paddingHorizontal: 10
   },
   btnText: {
     ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),

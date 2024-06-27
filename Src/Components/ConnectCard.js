@@ -22,6 +22,7 @@ import {
   onDisConnect,
   onPagesConnectRequest,
   onPagesDisConnectRequest,
+  onUnFollowRequest,
 } from '../Services/OtherUserServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchAction } from '../utils/apiGlobal';
@@ -99,7 +100,7 @@ export default function ConnectCard({
       },
       onFailure: () => { },
     };
-    dispatch(onDisConnect(obj));
+    dispatch(onUnFollowRequest(obj));
   };
 
   const onPressPagesDisConnect = () => {
@@ -140,10 +141,7 @@ export default function ConnectCard({
       activeOpacity={0.9}
       onPress={cardPress}
       style={[styles.header]}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate(screenName.indiansDetails);
-        }}
+      <View
         style={styles.imageStyle}>
         <RenderUserIcon
           url={userAvtar}
@@ -152,7 +150,7 @@ export default function ConnectCard({
           isBorder={subscribedMember}
         />
         {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
-      </TouchableOpacity>
+      </View>
       <Text numberOfLines={1} style={styles.text1}>
         {name}
       </Text>
@@ -180,7 +178,7 @@ export default function ConnectCard({
               onPressCancelRequest();
             }}
             style={styles.btnView}>
-            <Text style={styles.btnText}>Cancel request</Text>
+            <Text style={styles.btnText}>Cancel Request</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
@@ -191,7 +189,7 @@ export default function ConnectCard({
         )
       ) : isfollowing == true ? (
         <TouchableOpacity onPress={onPressPagesDisConnect} style={styles.btnView}>
-          <Text style={styles.btnText}>DisConnect</Text>
+          <Text style={styles.btnText}>Disconnect</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={onPressPagesConnect} style={styles.btnView}>

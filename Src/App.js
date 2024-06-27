@@ -51,7 +51,6 @@ function App() {
           await setAuthorization(token)
           let user = await getAsyncUserInfo()
           dispatchAction(dispatch, SET_USER, user)
-          console.log('user--', user)
           if (user) {
             dispatch(onGetUserInfoApi({
               params: {

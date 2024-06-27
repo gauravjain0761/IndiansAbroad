@@ -31,6 +31,7 @@ import { api } from '../../utils/apiConstants'
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import { dispatchAction } from '../../utils/apiGlobal';
 import { IS_LOADING } from '../../Redux/ActionTypes';
+import NoDataFound from '../../Components/NoDataFound';
 
 export default function BlockedUsers() {
   const { navigate, goBack } = useNavigation();
@@ -131,6 +132,7 @@ export default function BlockedUsers() {
           data={blockUserList}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<NoDataFound />}
           style={{ flex: 1 }}
         />
       </View>}

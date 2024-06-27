@@ -30,11 +30,6 @@ import {
 } from '../Services/PostServices';
 
 export default function IndiansPage() {
-  const tabs = [
-    { id: 1, label: 'INDIANS' },
-    { id: 2, label: 'PAGES' },
-  ];
-  const [tabType, setTabType] = useState('All');
   const { navigate } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
@@ -45,11 +40,6 @@ export default function IndiansPage() {
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [pagesRefreshing, setPagesRefreshing] = React.useState(false);
-  const [page, setpage] = useState(1);
-  const [pagePages, setPagePages] = useState(1);
-  const [loading, setloading] = useState(false);
-
-  console.log('allIndian', JSON.stringify(allIndian?.slice(0, 1)));
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
       toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
@@ -88,10 +78,6 @@ export default function IndiansPage() {
         page: 1,
         limit: 0,
       },
-      onSuccess: () => {
-        setpage(page);
-        setloading(false);
-      },
     };
     dispatch(getallIndianUser(obj));
   };
@@ -102,10 +88,6 @@ export default function IndiansPage() {
         userId: user?._id,
         searchText: '',
       },
-      onSuccess: () => {
-        setPagePages(page);
-        setloading(false);
-      },
     };
     dispatch(getallPagesUser(obj));
   };
@@ -115,7 +97,88 @@ export default function IndiansPage() {
     if (isFocuse) getPagesList(1);
   }, [isFocuse]);
 
-  console.log('allPages', allPages);
+  const onOpenOtherUserDetail = (id) => {
+    navigate(screenName.indiansDetails, { userId: id })
+  }
+
+  const RenderIndians = ({ data }) => {
+    return (
+      <FlatList
+        style={styles.flatList}
+        columnWrapperStyle={styles.column}
+        numColumns={2}
+        bounces={false}
+        data={data}
+        renderItem={({ item, index }) => {
+          return (
+            <ConnectCard
+              index={index}
+              cardPress={() => { onOpenOtherUserDetail(item?._id) }}
+              followingId={item?._id}
+              name={`${item?.first_Name} ${item?.last_Name}`}
+              universityORcompany={item?.universityORcompany}
+              userAvtar={item?.avtar}
+              isFollowing={item?.isFollowing}
+              isFollowingRequested={item?.isFollowingRequested}
+              isFollower={item?.isFollower}
+              subscribedMember={item?.subscribedMember}
+              indians={tabSelection == 'INDIANS'}
+            />
+          );
+        }}
+        showsVerticalScrollIndicator={false}
+      />
+    )
+  }
+
+  const RenderSeeMoreView = ({ onPressSeeMore }) => {
+    return (
+      <View
+        style={[
+          ApplicationStyles.row,
+          { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
+        ]}>
+        <View style={styles.lineView} />
+        <TouchableOpacity
+          style={styles.seeBtn}
+          onPress={() => onPressSeeMore()}>
+          <Text style={styles.seeBtnText}>See More</Text>
+        </TouchableOpacity>
+        <View style={styles.lineView} />
+      </View>
+    )
+  }
+
+  const RenderPages = ({ data }) => {
+    return (
+      <FlatList
+        style={styles.flatList}
+        columnWrapperStyle={styles.column}
+        numColumns={2}
+        bounces={false}
+        data={data}
+        renderItem={({ item, index }) => {
+          return (
+            <ConnectCard
+              index={index}
+              cardPress={() => { onOpenPageDetail(item) }}
+              followingId={item?._id}
+              name={`${item?.title}`}
+              universityORcompany={item?.universityORcompany}
+              userAvtar={item?.logo}
+              isfollowing={item?.isfollowing}
+              indians={tabSelection == 'INDIANS'}
+            />
+          );
+        }}
+        showsVerticalScrollIndicator={false}
+      />
+    )
+  }
+
+  const onOpenPageDetail = (item) => {
+    navigate(screenName.pagesDetails, { pageDetail: item });
+  }
 
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -123,310 +186,45 @@ export default function IndiansPage() {
         <Header title={'IndiansAbroad'} showRight={true} />
       </SafeAreaView>
       <View style={styles.tabMainView}>
-        <TouchableOpacity
-          onPress={() => {
-            setTabSelection('INDIANS');
-            setIsLeftButtonActive(true);
-            ref.current?.setPage(0);
-          }}
-          style={[
-            {
-              // marginRight: wp(5),
-            },
-            styles.tabItemView,
-          ]}>
-          {tabSelection == 'INDIANS' ? (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.primary_6a7e,
-                '700',
-              )}>
-              {'INDIANS'}
-            </Text>
-          ) : (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.neutral_600,
-                '700',
-              )}>
-              {'INDIANS'}
-            </Text>
-          )}
+        <TouchableOpacity onPress={() => { setTabSelection('INDIANS'), setIsLeftButtonActive(true), ref.current?.setPage(0) }} style={[styles.tabItemView,]}>
+          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_600, '700',)}>
+            {'INDIANS'}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setTabSelection('PAGES');
-            ref.current?.setPage(1);
-            setIsLeftButtonActive(false);
-          }}
-          style={[
-            {
-              // marginLeft: wp(5),
-              // flex: 1,
-            },
-            styles.tabItemView,
-          ]}>
-          {tabSelection == 'PAGES' ? (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.primary_6a7e,
-                '700',
-              )}>
-              {'PAGES'}
-            </Text>
-          ) : (
-            <Text
-              style={FontStyle(
-                fontname.actor_regular,
-                14,
-                colors.neutral_600,
-                '700',
-              )}>
-              {'PAGES'}
-            </Text>
-          )}
+        <TouchableOpacity onPress={() => { setTabSelection('PAGES'), ref.current?.setPage(1), setIsLeftButtonActive(false) }} style={styles.tabItemView}>
+          <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'PAGES' ? colors.primary_6a7e : colors.neutral_600, '700',)}>
+            {'PAGES'}
+          </Text>
         </TouchableOpacity>
       </View>
-      <SearchBar
-        value={searchText}
-        onChangeText={text => setSearchText(text)}
-        placeholder={'Search Indians here'}
-      // containerStyles={{ top: -18 }}
-      />
-      <Text
-        style={[
-          FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          { marginHorizontal: wp(16), marginVertical: 8, },
-        ]}>
-        {tabSelection == 'INDIANS'
-          ? 'People you may know'
-          : 'Pages from your area'}
-      </Text>
-      <PagerView
-        style={{ flex: 1 }}
-        initialPage={tabSelectionIndex}
-        ref={ref}
-        onPageSelected={e => {
-          setTabSelection(e?.nativeEvent?.position == 0 ? 'INDIANS' : 'PAGES');
-          setTabSelectionIndex(e?.nativeEvent?.position);
-          setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
-        }}>
+      <SearchBar value={searchText} onChangeText={text => setSearchText(text)} placeholder={'Search Indians here'} />
+      <Text style={styles.peopleText}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
+      <PagerView style={{ flex: 1 }} initialPage={tabSelectionIndex} ref={ref} onPageSelected={e => {
+        setTabSelection(e?.nativeEvent?.position == 0 ? 'INDIANS' : 'PAGES');
+        setTabSelectionIndex(e?.nativeEvent?.position);
+        setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
+      }}>
         <View key={'1'}>
-          <ScrollView
-            style={{}}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }>
+          <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             {allIndian !== undefined && (
               <>
-                <FlatList
-                  style={{
-                    paddingHorizontal: wp(16),
-                    flex: 1,
-                  }}
-                  columnWrapperStyle={{
-                    width: '100%',
-                    columnGap: wp(10),
-                  }}
-                  numColumns={2}
-                  bounces={false}
-                  data={allIndian?.slice(0, 2)}
-                  renderItem={({ item }) => {
-                    return (
-                      <ConnectCard
-                        cardPress={() => {
-                          navigate(screenName.indiansDetails);
-                        }}
-                        followingId={item?._id}
-                        name={`${item?.first_Name} ${item?.last_Name}`}
-                        universityORcompany={item?.universityORcompany}
-                        userAvtar={item?.avtar}
-                        isFollowing={item?.isFollowing}
-                        isFollowingRequested={item?.isFollowingRequested}
-                        isFollower={item?.isFollower}
-                        subscribedMember={item?.subscribedMember}
-                        indians={tabSelection == 'INDIANS'}
-                      />
-                    );
-                  }}
-                  showsVerticalScrollIndicator={false}
-                />
-                <View
-                  style={[
-                    ApplicationStyles.row,
-                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
-                  ]}>
-                  <View style={styles.lineView} />
-                  <TouchableOpacity
-                    style={styles.seeBtn}
-                    onPress={() =>
-                      navigate(screenName.IndiansPageMore, {
-                        dataList: 'INDIANS',
-                      })
-                    }>
-                    <Text style={styles.seeBtnText}>See More</Text>
-                  </TouchableOpacity>
-                  <View style={styles.lineView} />
-                </View>
-                <FlatList
-                  style={{
-                    paddingHorizontal: wp(16),
-                    flex: 1,
-                  }}
-                  columnWrapperStyle={{
-                    width: '100%',
-                    columnGap: wp(10),
-                    rowGap: hp(16),
-                  }}
-                  numColumns={2}
-                  bounces={false}
-                  data={allIndian.slice(2, 6)}
-                  renderItem={({ item }) => {
-                    return (
-                      <ConnectCard
-                        cardPress={() => {
-                          navigate(screenName.indiansDetails);
-                        }}
-                        followingId={item?._id}
-                        name={`${item?.first_Name} ${item?.last_Name}`}
-                        universityORcompany={item?.universityORcompany}
-                        userAvtar={item?.avtar}
-                        isFollowing={item?.isFollowing}
-                        isFollowingRequested={item?.isFollowingRequested}
-                        isFollower={item?.isFollower}
-                        subscribedMember={item?.subscribedMember}
-                        indians={tabSelection == 'INDIANS'}
-                      />
-                    );
-                  }}
-                  showsVerticalScrollIndicator={false}
-                />
-                <View
-                  style={[
-                    ApplicationStyles.row,
-                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
-                  ]}>
-                  <View style={styles.lineView} />
-                  <TouchableOpacity
-                    style={styles.seeBtn}
-                    onPress={() =>
-                      navigate(screenName.IndiansPageMore, {
-                        dataList: 'INDIANS',
-                      })
-                    }>
-                    <Text style={styles.seeBtnText}>See More</Text>
-                  </TouchableOpacity>
-                  <View style={styles.lineView} />
-                </View>
+                <RenderIndians data={allIndian?.slice(0, 2)} />
+                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
+                <RenderIndians data={allIndian?.slice(2, 6)} />
+                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
                 <View style={{ height: 10 }} />
               </>
             )}
           </ScrollView>
         </View>
         <View key={'2'}>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={pagesRefreshing}
-                onRefresh={onRefreshPages}
-              />
-            }>
+          <ScrollView refreshControl={<RefreshControl refreshing={pagesRefreshing} onRefresh={onRefreshPages} />}>
             {allPages !== undefined && (
               <>
-                <FlatList
-                  style={{
-                    paddingHorizontal: wp(16),
-                  }}
-                  columnWrapperStyle={{
-                    width: '100%',
-                    columnGap: wp(10),
-                    rowGap: hp(16),
-                  }}
-                  numColumns={2}
-                  bounces={false}
-                  data={allPages?.slice(0, 2)}
-                  renderItem={({ item }) => {
-                    return (
-                      <ConnectCard
-                        cardPress={() => {
-                          navigate(screenName.pagesDetails);
-                        }}
-                        followingId={item?._id}
-                        name={`${item?.title}`}
-                        universityORcompany={item?.universityORcompany}
-                        userAvtar={item?.logo}
-                        isfollowing={item?.isfollowing}
-                        indians={tabSelection == 'INDIANS'}
-                      />
-                    );
-                  }}
-                  showsVerticalScrollIndicator={false}
-                />
-                <View
-                  style={[
-                    ApplicationStyles.row,
-                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
-                  ]}>
-                  <View style={styles.lineView} />
-                  <TouchableOpacity
-                    style={styles.seeBtn}
-                    onPress={() =>
-                      navigate(screenName.IndiansPageMore, { dataList: 'PAGES' })
-                    }>
-                    <Text style={styles.seeBtnText}>See More</Text>
-                  </TouchableOpacity>
-                  <View style={styles.lineView} />
-                </View>
-                <FlatList
-                  style={{
-                    paddingHorizontal: wp(16),
-                  }}
-                  columnWrapperStyle={{
-                    width: '100%',
-                    columnGap: wp(10),
-                    rowGap: hp(16),
-                  }}
-                  numColumns={2}
-                  bounces={false}
-                  data={allPages?.slice(2, 4)}
-                  renderItem={({ item }) => {
-                    return (
-                      <ConnectCard
-                        cardPress={() => {
-                          navigate(screenName.pagesDetails);
-                        }}
-                        followingId={item?._id}
-                        name={`${item?.title}`}
-                        universityORcompany={item?.universityORcompany}
-                        userAvtar={item?.logo}
-                        isfollowing={item?.isfollowing}
-                        indians={tabSelection == 'INDIANS'}
-                      />
-                    );
-                  }}
-                  showsVerticalScrollIndicator={false}
-                />
-                <View
-                  style={[
-                    ApplicationStyles.row,
-                    { alignSelf: 'center', marginBottom: hp(15), marginTop: 3 },
-                  ]}>
-                  <View style={styles.lineView} />
-                  <TouchableOpacity
-                    style={styles.seeBtn}
-                    onPress={() =>
-                      navigate(screenName.IndiansPageMore, { dataList: 'PAGES' })
-                    }>
-                    <Text style={styles.seeBtnText}>See More</Text>
-                  </TouchableOpacity>
-                  <View style={styles.lineView} />
-                </View>
+                <RenderPages data={allPages?.slice(0, 2)} />
+                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'PAGES', })} />
+                <RenderPages data={allPages?.slice(2, 4)} />
+                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'PAGES', })} />
                 <View style={{ height: 10 }} />
               </>
             )}
@@ -440,12 +238,9 @@ export default function IndiansPage() {
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
-    // top: -14,
-    // alignSelf:'center'
     justifyContent: 'space-evenly',
   },
   tabItemView: {
-    // flex: 1,
     paddingBottom: wp(14),
     paddingHorizontal: wp(14),
     borderRadius: 50,
@@ -463,8 +258,19 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(7),
   },
   seeBtnText: {
-    // lineHeight: 18,
     paddingVertical: 2,
     ...FontStyle(fontname.actor_regular, 11, colors.neutral_900, '400'),
   },
+  peopleText: [
+    FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+    { marginHorizontal: wp(16), marginVertical: 8, },
+  ],
+  flatList: {
+    paddingHorizontal: wp(16),
+    flex: 1,
+  },
+  column: {
+    width: '100%',
+    columnGap: wp(10),
+  }
 });

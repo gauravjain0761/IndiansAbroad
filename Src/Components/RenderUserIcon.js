@@ -7,17 +7,29 @@ import colors from '../Themes/Colors'
 import { api } from '../utils/apiConstants'
 import FastImage from 'react-native-fast-image'
 
-export default function RenderUserIcon({ height, isBorder = false, url, activeOpacity }) {
+export default function RenderUserIcon({ height, isBorder = false, url, activeOpacity, userId = undefined }) {
     const navigation = useNavigation()
+    let isUrl = url !== undefined && url !== ''
     let styles = StyleSheet.create({
         userImage: {
-            height: height - (isBorder ? 6 : 0),
-            width: height - (isBorder ? 6 : 0),
-            borderRadius: height / 2,
+            height: (isUrl ? height : height / 1.8) - (isBorder ? 6 : 0),
+            width: (isUrl ? height : height / 1.8) - (isBorder ? 6 : 0),
+            borderRadius: (isUrl ? height / 2 : 0),
+
         }
     })
+
+    const onOpenUserDetail = () => {
+        if (userId !== undefined) {
+            navigation.navigate(screenName.indiansDetails, { userId: userId })
+        }
+        //  else {
+        //     navigation.navigate(screenName.indiansDetails)
+        // }
+    }
+
     return (
-        <TouchableOpacity activeOpacity={activeOpacity} onPress={() => navigation.navigate(screenName.indiansDetails)} style={{
+        <TouchableOpacity activeOpacity={activeOpacity} onPress={() => onOpenUserDetail()} style={{
             height: height,
             width: height,
             borderWidth: 2,
@@ -25,9 +37,9 @@ export default function RenderUserIcon({ height, isBorder = false, url, activeOp
             alignItems: 'center',
             justifyContent: 'center',
             borderColor: isBorder ? '#C5B80F' : 'transparent',
-            backgroundColor: colors.white
+            backgroundColor: isUrl ? colors.white : colors.inputBg,
         }}>
-            <FastImage resizeMode={FastImage.resizeMode.cover} source={(url !== undefined && url !== '') ? { uri: api.IMAGE_URL + url, priority: FastImage.priority.normal } : Icons.logo} style={styles.userImage} />
+            <FastImage resizeMode={isUrl ? FastImage.resizeMode.cover : FastImage.resizeMode.contain} source={isUrl ? { uri: api.IMAGE_URL + url, priority: FastImage.priority.normal } : Icons.logo} style={styles.userImage} />
         </TouchableOpacity>
     )
 }

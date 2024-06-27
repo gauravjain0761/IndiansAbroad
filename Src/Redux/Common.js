@@ -1,24 +1,4 @@
-import {
-  IS_LOADING,
-  SET_ACTIVE_POST,
-  SET_ALL_INDIANS,
-  SET_ALL_PAGES,
-  SET_ACTIVE_POST_COMMENTS,
-  SET_ALL_POST,
-  SET_BLOCK_USER_LIST,
-  SET_LIKED_USER_LIST,
-  SET_LIKE_COMMENTS,
-  SET_LIKE_DISLIKE,
-  SET_REPLIES_COMMENTS,
-  SET_USER,
-  UPDATE_BLOCK_LIST,
-  UPDATE_POST_LIST,
-  SET_POST_CONNECT,
-  SET_POST_DISCONNECT,
-  SET_POST_CANCEL_REQUEST,
-  SET_POST_PAGES_CONNECT,
-  SET_POST_PAGES_DISCONNECT,
-} from './ActionTypes';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, } from './ActionTypes';
 
 const initialState = {
   user: undefined,
@@ -34,11 +14,14 @@ const initialState = {
   activePost: undefined,
   activePostAllComments: undefined,
   repliesComments: undefined,
+  otherUserInfo: undefined,
+  otherUserAllPost: undefined,
+  otherUserFollowList: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
     case IS_LOADING: {
-      return {...state, preLoader: action.payload};
+      return { ...state, preLoader: action.payload };
     }
     case SET_ALL_POST: {
       return {
@@ -71,7 +54,7 @@ export default function (state = initialState, action) {
       };
     }
     case SET_USER: {
-      return {...state, user: action.payload};
+      return { ...state, user: action.payload };
     }
     case SET_LIKE_DISLIKE: {
       let allPost = Object.assign([], state.allPost);
@@ -81,14 +64,25 @@ export default function (state = initialState, action) {
         action.payload.action == 'like'
           ? allPost[index].likeCount + 1
           : allPost[index].likeCount - 1;
-      return {...state, allPost};
+      let otherUserAllPost = Object.assign([], state?.otherUserAllPost?.data);
+
+      if (state.otherUserAllPost) {
+        let index = otherUserAllPost.findIndex(item => item._id == action.payload.postId);
+        otherUserAllPost[index].isLiked = action.payload.action == 'like' ? true : false;
+        otherUserAllPost[index].likeCount =
+          action.payload.action == 'like'
+            ? otherUserAllPost[index].likeCount + 1
+            : otherUserAllPost[index].likeCount - 1;
+        otherUserAllPost
+      }
+
+      return { ...state, allPost, otherUserAllPost: state.otherUserAllPost ? { ...state.otherUserAllPost, data: otherUserAllPost } : undefined };
     }
     case SET_LIKED_USER_LIST: {
-      return {...state, likedUserList: action.payload};
+      return { ...state, likedUserList: action.payload };
     }
     case UPDATE_POST_LIST: {
       let allPost = Object.assign([], state.allPost);
-
       if (action.payload.type == 'unfollow') {
         let index = allPost.findIndex(
           item => item._id == action.payload.postId,
@@ -106,20 +100,20 @@ export default function (state = initialState, action) {
       };
     }
     case SET_BLOCK_USER_LIST: {
-      return {...state, blockUserList: action.payload};
+      return { ...state, blockUserList: action.payload };
     }
     case UPDATE_BLOCK_LIST: {
       let blockUserList = Object.assign([], state.blockUserList);
       blockUserList = blockUserList.filter(
         obj => obj.blockedUserId !== action.payload,
       );
-      return {...state, blockUserList};
+      return { ...state, blockUserList };
     }
     case SET_ACTIVE_POST: {
-      return {...state, activePost: action.payload};
+      return { ...state, activePost: action.payload };
     }
     case SET_ACTIVE_POST_COMMENTS: {
-      return {...state, activePostAllComments: action.payload};
+      return { ...state, activePostAllComments: action.payload };
     }
     case SET_LIKE_COMMENTS: {
       let activePostAllComments = Object.assign(
@@ -135,10 +129,10 @@ export default function (state = initialState, action) {
         action.payload.action == 'like'
           ? activePostAllComments[index].commentlikeCount + 1
           : activePostAllComments[index].commentlikeCount - 1;
-      return {...state, activePostAllComments};
+      return { ...state, activePostAllComments };
     }
     case SET_REPLIES_COMMENTS: {
-      return {...state, repliesComments: action.payload};
+      return { ...state, repliesComments: action.payload };
     }
     case SET_POST_CONNECT: {
       const update = state.allIndian.map(item => {
@@ -148,10 +142,10 @@ export default function (state = initialState, action) {
             isFollowingRequested: action.payload.action,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allIndian: update};
+      return { ...state, allIndian: update };
     }
     case SET_POST_CANCEL_REQUEST: {
       const updates = state.allIndian.map(item => {
@@ -161,10 +155,10 @@ export default function (state = initialState, action) {
             isFollowingRequested: action.payload.action,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allIndian: updates};
+      return { ...state, allIndian: updates };
     }
     case SET_POST_DISCONNECT: {
       const updates = state.allIndian.map(item => {
@@ -174,10 +168,10 @@ export default function (state = initialState, action) {
             isFollowing: action.payload.action,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allIndian: updates};
+      return { ...state, allIndian: updates };
     }
     case SET_POST_PAGES_CONNECT: {
       const updates = state.allPages.map(item => {
@@ -187,10 +181,10 @@ export default function (state = initialState, action) {
             isfollowing: true,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allPages: updates};
+      return { ...state, allPages: updates };
     }
     case SET_POST_PAGES_DISCONNECT: {
       const updates = state.allPages.map(item => {
@@ -200,10 +194,23 @@ export default function (state = initialState, action) {
             isfollowing: false,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allPages: updates};
+      return { ...state, allPages: updates };
+    }
+    case OTHER_USER_INFO: {
+      if (action.payload) {
+        return { ...state, otherUserInfo: action.payload };
+      } else {
+        return { ...state, otherUserInfo: action.payload, otherUserAllPost: undefined, otherUserFollowList: undefined };
+      }
+    }
+    case SET_OTHER_POST_LIST: {
+      return { ...state, otherUserAllPost: action.payload };
+    }
+    case SET_OTHER_USER_FOLLOWLIST: {
+      return { ...state, otherUserFollowList: action.payload };
     }
     default:
       return state;

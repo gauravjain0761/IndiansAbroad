@@ -33,7 +33,7 @@ export default function LikesScreen() {
         return (
             <View key={index}>
                 <TouchableOpacity key={index} style={[ApplicationStyles.row, styles.listView]}>
-                    <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
+                    <RenderUserIcon url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
                 </TouchableOpacity>
                 <View style={styles.lineStyle} />

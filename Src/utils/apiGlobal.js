@@ -20,14 +20,14 @@ export const makeAPIRequest = ({
             headers: {
                 Accept: "application/json",
                 ...headers,
-                Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzMzMWVjZGQyNzMwNGU1YzM5MzE2NyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzE4NzA1MTQ4LCJleHAiOjE3MjA3Nzg3NDh9.KcqAcnemPMYjFGjSIr-XghGto59K7RDUHPMzXP-4Hlc'
+                // Authorrization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzMzMWVjZGQyNzMwNGU1YzM5MzE2NyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzE4NzA1MTQ4LCJleHAiOjE3MjA3Nzg3NDh9.KcqAcnemPMYjFGjSIr-XghGto59K7RDUHPMzXP-4Hlc'
                 // "Content-Type": "application/json",
             },
             params: params
         };
         axios(option)
             .then((response) => {
-                console.log("res--->", api.BASE_URL + url, data, params, response?.data, response.status);
+                console.log("res--->", api.BASE_URL + url, data, params, JSON.stringify(response?.data), response.status);
                 if (response.status === 200 || response.status === 201) {
                     resolve(response);
                 } else {
@@ -107,13 +107,19 @@ export const dispatchAction = (dispatch, action, data) => {
 
 
 export const handleSuccessRes = (res, req, dispatch, fun) => {
-    console.log('res?.data?.err',res?.data?.err);
     if (res?.status === 200 || res?.status === 201) {
         dispatchAction(dispatch, IS_LOADING, false)
         if (res?.data && (res?.data?.err == 200 || res?.data?.error == 200)) {
             if (fun) fun()
             if (req?.onSuccess) req?.onSuccess(res?.data);
         } else {
+            if (res?.data && (res?.data?.err == 300)) {
+                if (Array.isArray(res?.data?.data)) {
+                    if (fun) fun()
+                    if (req?.onSuccess) req?.onSuccess(res?.data)
+                    return
+                }
+            }
             if (req?.onFailure) req.onFailure(res?.data);
             errorToast(res?.data?.msg)
         }

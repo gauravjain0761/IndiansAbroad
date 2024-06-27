@@ -13,7 +13,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
@@ -22,7 +22,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Icons } from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
 import RenderUserIcon from '../Components/RenderUserIcon';
@@ -32,6 +32,9 @@ import PostShareModal from '../Components/PostShareModal';
 import PagePostCard from '../Components/PagePostCard';
 import UpdateDeleteMenu from '../Components/UpdateDeleteMenu';
 import DeletePopModal from '../Components/DeletePopModal';
+import { onPagesConnectRequest, onPagesDisConnectRequest } from '../Services/OtherUserServices';
+import { SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT } from '../Redux/ActionTypes';
+import { dispatchAction } from '../utils/apiGlobal';
 
 export default function PagesDetails() {
   const tabs = [
@@ -49,9 +52,15 @@ export default function PagesDetails() {
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [deletePop, setDeletePop] = useState(false);
-
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
+  const { params } = useRoute()
+  const [pageDetail, setpageDetail] = useState(undefined)
+  const { user } = useSelector(e => e.common)
+
+  useEffect(() => {
+    setpageDetail(params?.pageDetail)
+  }, [params])
 
   useEffect(() => {
     dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
@@ -67,6 +76,25 @@ export default function PagesDetails() {
     );
   };
 
+  const onPressPagesConnect = () => {
+    let obj = {
+      data: {
+        cpId: pageDetail?._id,
+        followingId: user._id,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, pageDetail?.isfollowing ? SET_POST_PAGES_DISCONNECT : SET_POST_PAGES_CONNECT, {
+          postId: pageDetail?._id,
+        });
+        let pageDetailTemp = Object.assign({}, pageDetail)
+        pageDetailTemp.isfollowing = !pageDetailTemp.isfollowing
+        setpageDetail(pageDetailTemp)
+      },
+      onFailure: () => { },
+    };
+    dispatch(pageDetail?.isfollowing ? onPagesDisConnectRequest(obj) : onPagesConnectRequest(obj));
+  };
+
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView>
@@ -78,25 +106,14 @@ export default function PagesDetails() {
           }}
         />
       </SafeAreaView>
-
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.userViewStyle}>
-          <UpdateDeleteMenu
-            containerStyle={{ position: 'absolute', right: 10 }}
-            onDeletePress={() => {
-              setDeletePop(true);
-            }}
-            onUpdatePress={() => {
-              navigate(screenName.IndiansPageUpdate);
-            }}
-            icon={<Image source={Icons.more1} style={[ImageStyle(28, 28)]} />}
-          />
-
+          {/* <UpdateDeleteMenu containerStyle={{ position: 'absolute', right: 10 }} onDeletePress={() => { setDeletePop(true) }} onUpdatePress={() => { navigate(screenName.IndiansPageUpdate) }} icon={<Image source={Icons.more1} style={[ImageStyle(28, 28)]} />} /> */}
           <View style={styles.imageView}>
-            <Image source={Icons.logo} style={styles.userImage} />
+            <RenderUserIcon height={wp(100)} url={pageDetail?.logo} />
           </View>
-          <Text style={styles.userText}>IndiansAbroad</Text>
-          <Text style={styles.userText1}>(Connecting Indians Worldwide)</Text>
+          <Text style={styles.userText}>{pageDetail?.title}</Text>
+          <Text style={styles.userText1}>{pageDetail?.catchline}</Text>
         </View>
         <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
           {showCurrent ? (
@@ -105,8 +122,8 @@ export default function PagesDetails() {
             </TouchableOpacity>
           ) : (
             <>
-              <TouchableOpacity style={styles.btnView}>
-                <Text style={styles.btnText}>Connect</Text>
+              <TouchableOpacity onPress={() => onPressPagesConnect()} style={styles.btnView}>
+                <Text style={styles.btnText}>{pageDetail?.isfollowing ? 'Disconnect' : 'Connect'}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
@@ -116,145 +133,63 @@ export default function PagesDetails() {
           )}
         </View>
         <View style={styles.tabMainView}>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('ABOUT');
-              setIsLeftButtonActive(true);
-              ref.current?.setPage(0);
-            }}
-            style={[
-              {
-                marginRight: wp(5),
-              },
-              styles.tabItemView,
-            ]}>
-            {tabSelection == 'ABOUT' ? (
-              <Text style={styles.tabText}>{'ABOUT'}</Text>
-            ) : (
-              <Text style={styles.tabText1}>{'ABOUT'}</Text>
-            )}
+          <TouchableOpacity onPress={() => { setTabSelection('ABOUT'), ref.current?.setPage(0) }} style={[{ marginRight: wp(5), }, styles.tabItemView,]}>
+            <Text style={tabSelection == 'ABOUT' ? styles.tabText : styles.tabText1}>{'ABOUT'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('ACTIVITIES');
-              setIsLeftButtonActive(true);
-              ref.current?.setPage(1);
-            }}
-            style={[
-              {
-                marginRight: wp(5),
-              },
-              styles.tabItemView,
-            ]}>
-            {tabSelection == 'ACTIVITIES' ? (
-              <Text style={styles.tabText}>{'ACTIVITIES'}</Text>
-            ) : (
-              <Text style={styles.tabText1}>{'ACTIVITIES'}</Text>
-            )}
+          <TouchableOpacity onPress={() => { setTabSelection('ACTIVITIES'); ref.current?.setPage(1); }} style={[{ marginRight: wp(5), }, styles.tabItemView,]}>
+            <Text style={tabSelection == 'ACTIVITIES' ? styles.tabText : styles.tabText1}>{'ACTIVITIES'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('CONNECTED INDIANS');
-              ref.current?.setPage(2);
-              setIsLeftButtonActive(false);
-            }}
-            style={[
-              {
-                marginLeft: wp(5),
-                flex: 1,
-              },
-              styles.tabItemView,
-            ]}>
-            {tabSelection == 'CONNECTED INDIANS' ? (
-              <Text style={[styles.tabText, { bottom: 12 }]}>
-                {'CONNECTED INDIANS'}
-              </Text>
-            ) : (
-              <Text style={[styles.tabText1, { bottom: 12 }]}>
-                {'CONNECTED INDIANS'}
-              </Text>
-            )}
+          <TouchableOpacity onPress={() => { setTabSelection('CONNECTED INDIANS'); ref.current?.setPage(2); }} style={[{ marginLeft: wp(5), flex: 1, }, styles.tabItemView,]}>
+            <Text style={[tabSelection == 'CONNECTED INDIANS' ? styles.tabText : styles.tabText1, { bottom: 12 }]}>{'CONNECTED INDIANS'}</Text>
           </TouchableOpacity>
-          <Animated.View
-            style={[
-              styles.animationView,
-              {
-                left:
-                  tabSelection == 'ABOUT'
-                    ? 0
-                    : tabSelection == 'ACTIVITIES'
-                      ? SCREEN_WIDTH * 0.32
-                      : SCREEN_WIDTH * 0.65,
-                // transform: [{translateX: buttonTranslateX}],
-                width:
-                  tabSelection == 'ABOUT'
-                    ? 130
-                    : tabSelection == 'ACTIVITIES'
-                      ? 135
-                      : `${80 / tabs.length}%`,
-                borderWidth: 0.9,
-                borderColor: colors.primary_4574ca,
-              },
-            ]}
-          />
+          <Animated.View style={[styles.animationView, { left: tabSelection == 'ABOUT' ? 0 : tabSelection == 'ACTIVITIES' ? SCREEN_WIDTH * 0.32 : SCREEN_WIDTH * 0.65, width: tabSelection == 'ABOUT' ? 130 : tabSelection == 'ACTIVITIES' ? 135 : `${80 / tabs.length}%`, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
         </View>
-        <PagerView
+        {/* <PagerView
           style={{ flex: 1 }}
           initialPage={tabSelectionIndex}
           ref={ref}
           onPageSelected={e => {
-            setTabSelection(
-              e?.nativeEvent?.position == 0
-                ? 'ABOUT'
-                : e?.nativeEvent?.position == 1
-                  ? 'ACTIVITIES'
-                  : 'CONNECTED INDIANS',
-            );
+            setTabSelection(e?.nativeEvent?.position == 0 ? 'ABOUT' : e?.nativeEvent?.position == 1 ? 'ACTIVITIES' : 'CONNECTED INDIANS',);
             setTabSelectionIndex(e?.nativeEvent?.position);
-            setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
-          }}>
-          <View style={{ flex: 1 }} key={'1'}>
-            <ScrollView style={{ marginHorizontal: wp(12), flex: 1 }}>
-              <Text style={styles.textView}>
-                This is a official page of IndiansAbroad app.
-              </Text>
-              <View style={ApplicationStyles.row}>
-                <Text style={styles.text1}>Website</Text>
-                <Text style={styles.text2}>http:www.indiansabroad.online</Text>
-              </View>
-              <View style={ApplicationStyles.row}>
-                <Text style={styles.text1}>City</Text>
-                <Text style={styles.text2}>Pune</Text>
-              </View>
-              <View style={ApplicationStyles.row}>
-                <Text style={styles.text1}>Country</Text>
-                <Text style={styles.text2}>India</Text>
-              </View>
-            </ScrollView>
+          }}> */}
+        {tabSelection == 'ABOUT' && <View >
+          <View style={{ marginHorizontal: wp(12), }}>
+            <Text style={styles.textView}>{pageDetail?.about}</Text>
+            <View style={ApplicationStyles.row}>
+              <Text style={styles.text1}>Website</Text>
+              <Text style={styles.text2}>{pageDetail?.websitelink !== '' ? pageDetail?.websitelink : 'Not Provided'}</Text>
+            </View>
+            <View style={ApplicationStyles.row}>
+              <Text style={styles.text1}>City</Text>
+              <Text style={styles.text2}>{pageDetail?.city}</Text>
+            </View>
+            <View style={[ApplicationStyles.row, { alignItems: 'flex-start' }]}>
+              <Text style={styles.text1}>Country</Text>
+              <Text style={styles.text2}>{pageDetail?.countryId?.countryName}</Text>
+            </View>
           </View>
-          <View key={'2'}>
-            <ScrollView>
-              <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
-            </ScrollView>
-          </View>
-          <View key={'3'}>
-            <ScrollView>
-              <SearchBar
-                value={searchText}
-                onChangeText={text => setSearchText(text)}
-                placeholder={'Search Indians here'}
-                containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
-              />
-              <FlatList
-                data={[1, 2]}
-                renderItem={({ item }) => {
-                  return <ConnectedIndians />;
-                }}
-                showsVerticalScrollIndicator={false}
-              />
-            </ScrollView>
-          </View>
-        </PagerView>
+        </View>}
+        {tabSelection == 'ACTIVITIES' && <View >
+          <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
+        </View>}
+        {tabSelection == 'CONNECTED INDIANS' && <View >
+          <ScrollView>
+            <SearchBar
+              value={searchText}
+              onChangeText={text => setSearchText(text)}
+              placeholder={'Search Indians here'}
+              containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
+            />
+            <FlatList
+              data={[1, 2]}
+              renderItem={({ item }) => {
+                return <ConnectedIndians />;
+              }}
+              showsVerticalScrollIndicator={false}
+            />
+          </ScrollView>
+        </View>}
+        {/* </PagerView> */}
       </ScrollView>
       <DeletePopModal
         isVisible={deletePop}
@@ -292,7 +227,7 @@ const styles = StyleSheet.create({
   },
   userViewStyle: {
     backgroundColor: colors.secondary_500,
-    paddingVertical: hp(10),
+    padding: hp(10),
   },
   userImage: {
     width: wp(100),
@@ -340,6 +275,7 @@ const styles = StyleSheet.create({
   },
   text2: {
     lineHeight: 20,
+    marginVertical: 6,
     ...FontStyle(fontname.actor_regular, 15, colors.primary_8091ba, '400'),
   },
   animationView: {

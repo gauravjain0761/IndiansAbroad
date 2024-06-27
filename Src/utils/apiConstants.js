@@ -27,10 +27,16 @@ export const api = {
     unFollowRequest: '/followunfollow/unfollow',
     blockUser: '/blockuser/action',
     cancelRequest: '/follow/cancel/request',
+    otherUserFollowList: '/followunfollow/followinglist',
 
     //profile
     blockUserList: "/blockuser/list",
+    getallpostsOfUser: "/post/getallposts",
 
+
+    // page
+    getAllPagePostApi: '/cp/posts/',
+    getAllPageFollowerApi: '/cp/followerlist'
 }
 
 export const POST = "POST";
