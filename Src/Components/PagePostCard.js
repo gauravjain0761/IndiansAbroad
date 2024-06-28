@@ -9,62 +9,121 @@ import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import PostCarousal from './PostCarousal';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
+import { screenName } from '../Navigation/ScreenConstants';
+import { onLikePost } from '../Services/PostServices';
 
-export default function PagePostCard({ item, index }) {
+export default function PagePostCard({ item, index, }) {
   const [menuModal, setmenuModal] = useState(false);
+  const navigation = useNavigation();
+  const { user } = useSelector(e => e.common);
+  const dispatch = useDispatch()
+  const [blockModal, setblockModal] = useState(false)
+  const [textShown, setTextShown] = useState(false);
+  // const { otherUserInfo } = useSelector(e => e.common)
+  let isUser = item?.createdBy?._id == user._id
+
+  const openLikeScreen = () => {
+    dispatchAction(dispatch, SET_LIKED_USER_LIST, undefined)
+    navigation.navigate(screenName.LikesScreen, {
+      postId: item._id,
+    })
+  }
+
+  const onPostLike = (isLiked) => {
+    const liked = isLiked
+    dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: liked ? 'unlike' : 'like' })
+    let obj = {
+      data: {
+        postId: item._id,
+        createdBy: user._id,
+        action: liked ? 'unlike' : 'like'
+      },
+      onSuccess: () => { },
+      onFailure: () => {
+        dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: item?.isLiked ? 'unlike' : 'like' })
+      }
+    }
+    dispatch(onLikePost(obj))
+  }
+
   return (
     <View key={index}>
       <View style={styles.headerView}>
-        <TouchableOpacity style={styles.userImage}>
-          <Image source={Icons.logo} style={styles.userImage} />
-        </TouchableOpacity>
-        <View style={ApplicationStyles.flex}>
-          <Text style={styles.username1}>Nikita Khairnar</Text>
-
-          <Text style={styles.degreeText}>15 hours ago</Text>
+        <View style={styles.userImage}>
+          <RenderUserIcon url={item?.cpId?.logo} height={57} />
         </View>
-        <View>
+        <View style={ApplicationStyles.flex}>
+          <View>
+            <Text style={styles.username1}>
+              {item?.cpId?.title}
+            </Text>
+          </View>
+          <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
+        </View>
+        {/* <View>
           <TouchableOpacity style={styles.messageView}>
             <Image
               source={Icons.more}
               style={ImageStyle(14, 14, 'cover')}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
-      <View>
-        <Text style={styles.description}>
-          Delicious dessert and Pretty view
-        </Text>
-      </View>
-      <View>
-        <Image source={Icons.postViewImage} style={styles.postImage} />
-      </View>
+      {item?.message !== '' && <Text style={styles.description} >
+        {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
+      </Text>}
+      {item?.message !== '' && item?.message.length > 120 ?
+        <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
+          <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>
+        </TouchableOpacity>
+        : null}
+      {item?.mediaFiles.length > 0 && (
+        <PostCarousal images={item?.mediaFiles} />
+      )}
       <View style={styles.bottomRow}>
         <View style={styles.middlerow}>
-          <TouchableOpacity style={styles.innerRow}>
-            <Image source={Icons.heart} style={ImageStyle(22, 22)} />
-            <Text style={styles.username}>7 Likes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.innerRow}>
+          <View style={styles.innerRow}>
+            <TouchableOpacity style={styles.touchableView} onPress={() => onPostLike(item?.isLiked)} >
+              <Image
+                source={item?.isLiked ? Icons.heartFilled : Icons.heart}
+                style={ImageStyle(22, 22)}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.touchableView} onPress={() => openLikeScreen()}>
+              <Text style={styles.username}>{item?.likeCount} Likes</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.innerRow}>
             <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
-            <Text style={styles.username}>1 Comments</Text>
-          </TouchableOpacity>
+            <Text style={styles.username}>{item?.commentCount} Comments</Text>
+          </View>
           <TouchableOpacity style={styles.innerRow}>
             <Image source={Icons.share} style={ImageStyle(22, 22)} />
             <Text style={styles.username}>Share</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          onPress={() => setmenuModal(true)}
-          style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
-          <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
-        </TouchableOpacity>
+        {isUser ? (
+          <UpdateDeleteMenu
+            icon={<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />}
+          />
+        ) : (
+          <TouchableOpacity
+            onPress={() => setmenuModal(true)}
+            style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
+            <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
+          </TouchableOpacity>
+        )}
       </View>
       <PostShareModal
+        item={item}
         menuModal={menuModal}
         setmenuModal={() => setmenuModal(false)}
+        isPage={true}
       />
     </View>
   );
@@ -80,17 +139,26 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   userImage: {
-    height: 44,
-    width: 40,
-    resizeMode: 'contain',
+    height: 57,
+    width: 57,
+    borderRadius: 57 / 2,
   },
   username: {
-    ...FontStyle(fontname.abeezee, 15, colors.neutral_900,),
+    ...FontStyle(fontname.abeezee, 13, colors.neutral_900),
+    textTransform: 'capitalize',
   },
   username1: {
-    ...FontStyle(fontname.abeezee, 15, colors.neutral_900, "700"),
+    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, "700"),
+    textTransform: 'capitalize',
   },
   degreeText: {
+    ...FontStyle(fontname.abeezee, 12, colors.neutral_900),
+  },
+  degreeText1: {
+    marginTop: 2,
+    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+  },
+  degreeText3: {
     ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
   },
   messageView: {
@@ -98,13 +166,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   description: {
-    ...FontStyle(fontname.actor_regular, 13, colors.neutral_900),
+    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
     paddingBottom: 10,
     paddingHorizontal: 20,
   },
   postImage: {
     height: SCREEN_WIDTH - 5,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     width: SCREEN_WIDTH - 5,
     borderRadius: 4,
     alignSelf: 'center',
@@ -127,7 +195,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     justifyContent: 'center',
-    paddingVertical: 10,
+    height: 42,
+
+    // width: '20%'
   },
   modalView: {
     backgroundColor: colors.neutral_300,
@@ -147,4 +217,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
+  touchableView: { height: 42, justifyContent: 'center', },
+  aboutTextMore: {
+    ...FontStyle(fontname.actor_regular, 14, colors.primary_500),
+    paddingBottom: 10,
+    alignSelf: 'flex-end',
+    marginHorizontal: 20,
+    marginTop: -25,
+    paddingTop: 10
+  }
 });

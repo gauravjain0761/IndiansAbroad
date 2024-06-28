@@ -20,14 +20,12 @@ export const makeAPIRequest = ({
             headers: {
                 Accept: "application/json",
                 ...headers,
-                // Authorrization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzMzMWVjZGQyNzMwNGU1YzM5MzE2NyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzE4NzA1MTQ4LCJleHAiOjE3MjA3Nzg3NDh9.KcqAcnemPMYjFGjSIr-XghGto59K7RDUHPMzXP-4Hlc'
-                // "Content-Type": "application/json",
             },
             params: params
         };
         axios(option)
             .then((response) => {
-                console.log("res--->", api.BASE_URL + url, data, params, JSON.stringify(response?.data), response.status);
+                console.log("res--->", api.BASE_URL + url, data, params, response?.data, response.status);
                 if (response.status === 200 || response.status === 201) {
                     resolve(response);
                 } else {
@@ -118,10 +116,15 @@ export const handleSuccessRes = (res, req, dispatch, fun) => {
                     if (fun) fun()
                     if (req?.onSuccess) req?.onSuccess(res?.data)
                     return
+                } else {
+                    if (req?.onFailure) req.onFailure(res?.data);
+                    errorToast(res?.data?.msg)
                 }
+            } else {
+                if (req?.onFailure) req.onFailure(res?.data);
+                errorToast(res?.data?.msg)
             }
-            if (req?.onFailure) req.onFailure(res?.data);
-            errorToast(res?.data?.msg)
+
         }
     }
 }

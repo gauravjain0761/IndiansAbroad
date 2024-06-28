@@ -21,7 +21,7 @@ import { api } from '../utils/apiConstants';
 import { onBlockUserApi, onConnectRequest, onGetOtherUserInfo } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 
-export default function PostCard({ item, index, isUser = false, isDetailScreen = false, }) {
+export default function PostCard({ item, index, isDetailScreen = false, }) {
   const [menuModal, setmenuModal] = useState(false);
   const navigation = useNavigation();
   const { user } = useSelector(e => e.common);
@@ -29,6 +29,7 @@ export default function PostCard({ item, index, isUser = false, isDetailScreen =
   const [blockModal, setblockModal] = useState(false)
   const [textShown, setTextShown] = useState(false);
   const { otherUserInfo } = useSelector(e => e.common)
+  let isUser = item?.createdBy?._id == user._id
 
   const onPostLike = (isLiked) => {
     const liked = isLiked

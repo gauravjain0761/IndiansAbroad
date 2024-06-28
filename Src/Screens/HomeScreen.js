@@ -165,7 +165,7 @@ export default function HomeScreen() {
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
         <View key={'1'}>
-          <FlatList
+          {allPost && <FlatList
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -182,7 +182,7 @@ export default function HomeScreen() {
               )
             }}
             ListEmptyComponent={<NoDataFound />}
-          />
+          />}
 
         </View>
         <View key={'2'}>

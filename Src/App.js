@@ -20,11 +20,6 @@ function App() {
   const [loading, setloading] = useState(true)
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
-    LogBox.ignoreLogs([
-      'VirtualizedLists should never be nested',
-      'Cannot update a component from inside the function',
-      'You specified `onScroll` on a <ScrollView> but not `scrollEventThrottle`.',
-    ]);
     if (!__DEV__) {
       console.log = () => { };
     }

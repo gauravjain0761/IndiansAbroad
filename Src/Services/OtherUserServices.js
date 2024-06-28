@@ -197,13 +197,13 @@ export const getOtherUserFollowList = (request) => async dispatch => {
 
 export const getAllPagePost = (request) => async dispatch => {
   return makeAPIRequest({
-    method: POST,
-    url: api.getAllPagePostApi,
-    data: request?.data
+    method: GET,
+    url: api.getAllPagePostApi + request?.pageId,
+    params: request?.params
   })
     .then(async (response) => {
       handleSuccessRes(response, request, dispatch, () => {
-        dispatchAction(dispatch, SET_ALL_PAGE_POST, response?.data)
+        dispatchAction(dispatch, SET_ALL_PAGE_POST, { ...response?.data, current_page: request?.params?.page })
       });
     })
     .catch(error => {
@@ -213,13 +213,13 @@ export const getAllPagePost = (request) => async dispatch => {
 
 export const getAllPageFollower = (request) => async dispatch => {
   return makeAPIRequest({
-    method: POST,
+    method: GET,
     url: api.getAllPageFollowerApi,
-    data: request?.data
+    params: request?.params
   })
     .then(async (response) => {
       handleSuccessRes(response, request, dispatch, () => {
-        dispatchAction(dispatch, SET_ALL_PAGE_FOLLOWER, response?.data)
+        dispatchAction(dispatch, SET_ALL_PAGE_FOLLOWER, response?.data?.data)
       });
     })
     .catch(error => {

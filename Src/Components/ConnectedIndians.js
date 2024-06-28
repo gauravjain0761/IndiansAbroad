@@ -15,15 +15,18 @@ import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
+import { onBlockUserApi, onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
+import ConfirmationModal from './ConfirmationModal';
 
 
-export default function ConnectedIndians({ indians, cardPress, item, onUpdate }) {
+export default function ConnectedIndians({ indians, cardPress, item, onUpdate, onPressBlock }) {
   const [visible, setVisible] = useState(false);
   const { user } = useSelector(e => e.common)
   const dispatch = useDispatch()
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
+  const [blockModal, setblockModal] = useState(false)
+
   const onConnect = () => {
     hideMenu()
     let obj = {
@@ -37,6 +40,23 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate })
     }
     dispatch(!item?.isFollowing ? onConnectRequest(obj) : onUnFollowRequest(obj))
   }
+
+  const onBlockuser = () => {
+    setblockModal(false)
+    setTimeout(() => {
+      let obj = {
+        data: {
+          userId: item?.followingId?._id,
+          action: 'block'
+        },
+        onSuccess: () => {
+          if (onUpdate) onUpdate()
+        }
+      }
+      dispatch(onBlockUserApi(obj))
+    }, 500);
+  }
+
 
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
@@ -56,8 +76,19 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate })
       >
         <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</MenuItem>
         <MenuDivider color={colors.primary_500} />
-        <MenuItem textStyle={styles.itemText} onPress={hideMenu}>Block</MenuItem>
+        <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setblockModal(true) }}>Block</MenuItem>
       </Menu>
+      <ConfirmationModal
+        visible={blockModal}
+        onClose={() => setblockModal(false)}
+        title={`Do you want to block ${item?.followingId?.first_Name} ${item?.followingId?.last_Name}?`}
+        successBtn={'Yes'}
+        canselBtn={'No'}
+        onPressCancel={() => setblockModal(false)}
+        onPressSuccess={() => {
+          onBlockuser()
+        }}
+      />
     </TouchableOpacity>
   );
 }

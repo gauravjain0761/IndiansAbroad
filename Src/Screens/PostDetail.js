@@ -54,33 +54,6 @@ export default function PostDetail() {
     }
 
 
-    const RenderReply = ({ item, index, isLastIndex }) => {
-        return (
-            <View style={styles.replyCommentView}>
-                <View style={[styles.replyCommnt, { alignItems: isLastIndex ? 'flex-start' : 'center' }]}>
-                    <View style={[styles.verticalLine, { height: isLastIndex ? '50%' : '100%' }]} />
-                    <View style={styles.horizontalLine} />
-                    <View style={styles.innerCommentRow}>
-                        <RenderUserIcon height={38} isBorder />
-                        <View style={styles.commentBg}>
-                            <View style={ApplicationStyles.flex}>
-                                <Text style={[styles.username, { fontSize: 15 }]}>Nikita Khairnar</Text>
-                                <Text style={[styles.degreeText, { fontSize: 12 }]}>PhD Student, Seoul</Text>
-                                <Text style={styles.commentText}>Nice</Text>
-                            </View>
-                            <View style={styles.innerRow}>
-                                <TouchableOpacity style={styles.likesRow}>
-                                    <Image source={Icons.heart} style={ImageStyle(15, 15)} />
-                                    <Text style={styles.likesText}>1 Likes</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        )
-    }
-
     const onOpenReplies = (item) => {
         dispatchAction(dispatch, SET_REPLIES_COMMENTS, undefined)
         navigation.navigate(screenName.RepliesComments, {
@@ -130,7 +103,7 @@ export default function PostDetail() {
             </ScrollView>
             <SafeAreaView>
                 <View style={styles.commnetInput}>
-                    <RenderUserIcon url={user?.avtar} height={46} isBorder />
+                    <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
                     <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                     <TouchableOpacity style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />

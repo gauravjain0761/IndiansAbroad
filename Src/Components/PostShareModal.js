@@ -15,16 +15,17 @@ import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { onConnectRequest, onGetOtherUserInfo, onUnFollowRequest } from '../Services/OtherUserServices';
+import { onConnectRequest, onGetOtherUserInfo, onPagesConnectRequest, onPagesDisConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { UPDATE_POST_LIST } from '../Redux/ActionTypes';
+import { SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, UPDATE_POST_LIST } from '../Redux/ActionTypes';
 
 export default function PostShareModal({
   shareView,
   menuModal,
   setmenuModal,
   item,
-  onPressBlock
+  onPressBlock,
+  isPage = false, page
 }) {
   const insets = useSafeAreaInsets();
   const { user, otherUserInfo } = useSelector((state) => state.common);
@@ -67,13 +68,29 @@ export default function PostShareModal({
     }, 500);
   }
 
+  const onPressPagesConnect = () => {
+    let obj = {
+      data: {
+        cpId: item?._id,
+        followingId: user._id,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, item?.isfollowing ? SET_POST_PAGES_DISCONNECT : SET_POST_PAGES_CONNECT, {
+          postId: item?._id,
+        });
+      },
+      onFailure: () => { },
+    };
+    dispatch(item?.isfollowing ? onPagesDisConnectRequest(obj) : onPagesConnectRequest(obj));
+  };
+
   return (
     <ModalContainer
       isVisible={menuModal}
       onClose={() => setmenuModal(false)}
       transparent={true}>
       <View style={styles.modalView}>
-        <Text style={styles.modalUserName}>{item ? `${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}` : 'Nikita Khairnar'}</Text>
+        <Text style={styles.modalUserName}>{item ? isPage ? `${item?.cpId.title}` : `${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}` : 'Nikita Khairnar'}</Text>
         <View style={styles.line} />
         {shareView && (
           <>
@@ -85,13 +102,13 @@ export default function PostShareModal({
             />
           </>
         )}
-        <TouchableOpacity onPress={() => onPressConnect()}>
+        {!isPage && <TouchableOpacity onPress={() => isPage ? onPressPagesConnect() : onPressConnect()}>
           <Text style={styles.modalText}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</Text>
-        </TouchableOpacity>
-        <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-        <TouchableOpacity onPress={() => onBlock()}>
+        </TouchableOpacity>}
+        {!isPage && <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />}
+        {!isPage && <TouchableOpacity onPress={() => onBlock()}>
           <Text style={styles.modalText}>{'Block'}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
         <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
         {!item?.isReported ? <TouchableOpacity>
           <Text style={styles.modalText}>Report</Text>

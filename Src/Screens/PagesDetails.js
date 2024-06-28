@@ -11,6 +11,7 @@ import {
   Image,
   Alert,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,9 +33,11 @@ import PostShareModal from '../Components/PostShareModal';
 import PagePostCard from '../Components/PagePostCard';
 import UpdateDeleteMenu from '../Components/UpdateDeleteMenu';
 import DeletePopModal from '../Components/DeletePopModal';
-import { onPagesConnectRequest, onPagesDisConnectRequest } from '../Services/OtherUserServices';
-import { SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT } from '../Redux/ActionTypes';
+import { getAllPageFollower, getAllPagePost, onPagesConnectRequest, onPagesDisConnectRequest } from '../Services/OtherUserServices';
+import { IS_LOADING, OTHER_USER_INFO, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT } from '../Redux/ActionTypes';
 import { dispatchAction } from '../utils/apiGlobal';
+import NoDataFound from '../Components/NoDataFound';
+import PageConnectedIndians from '../Components/PageConnectedIndians';
 
 export default function PagesDetails() {
   const tabs = [
@@ -56,11 +59,69 @@ export default function PagesDetails() {
   const ref = React.createRef(PagerView);
   const { params } = useRoute()
   const [pageDetail, setpageDetail] = useState(undefined)
-  const { user } = useSelector(e => e.common)
+  const { user, allPagePostCount, allPagePost, allPageFollowerList } = useSelector(e => e.common)
+  const [loading, setloading] = useState(false)
+  const [page, setpage] = useState(1)
+  const [followList, setfollowList] = useState([])
 
+  useEffect(() => {
+    setfollowList(allPageFollowerList)
+  }, [allPageFollowerList])
+
+  const onSearchName = (search) => {
+    let list = allPageFollowerList
+    const filtered = list.filter((val) =>
+      val.first_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    const filter2 = list.filter((val) =>
+      val.last_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    let searchTextContact = Object.values(
+      filtered.concat(filter2).reduce((r, o) => {
+        r[o._id] = o;
+        return r;
+      }, {})
+    );
+    setfollowList(searchTextContact)
+  }
+
+  console.log('allPageFollowerList----', allPageFollowerList)
   useEffect(() => {
     setpageDetail(params?.pageDetail)
   }, [params])
+
+  useEffect(() => {
+    if (!allPagePost) dispatchAction(dispatch, IS_LOADING, true)
+    getPostList(1)
+    onGetConnectedIndians()
+  }, []);
+
+  const onGetConnectedIndians = () => {
+    dispatch(getAllPageFollower({
+      params: {
+        cpId: params?.pageDetail?._id,
+        userId: user._id,
+        page: 1,
+        name: ''
+      }
+    }))
+  }
+
+  const getPostList = page => {
+    let obj = {
+      params: {
+        userId: user?._id,
+        // page: page,
+        // limit: 5,
+      },
+      pageId: params?.pageDetail?._id,
+      onSuccess: () => {
+        setpage(page);
+        setloading(false);
+      },
+    };
+    dispatch(getAllPagePost(obj));
+  };
 
   useEffect(() => {
     dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
@@ -68,9 +129,11 @@ export default function PagesDetails() {
 
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => navigation.navigate(screenName.PagesPostDetail)}>
+      <TouchableOpacity key={index} activeOpacity={1} onPress={() => {
+        dispatchAction(dispatch, SET_ACTIVE_POST, item)
+        dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
+        navigation.navigate(screenName.PagesPostDetail)
+      }}>
         <PagePostCard item={item} index={index} />
       </TouchableOpacity>
     );
@@ -95,6 +158,16 @@ export default function PagesDetails() {
     dispatch(pageDetail?.isfollowing ? onPagesDisConnectRequest(obj) : onPagesConnectRequest(obj));
   };
 
+  const fetchMoreData = () => {
+    console.log('calledddd')
+    // if (allPost) {
+    //   if (allPost.length < allPostsCount) {
+    //     setloading(true);
+    //     getPostList(page + 1);
+    //   }
+    // }
+  };
+
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView>
@@ -106,9 +179,9 @@ export default function PagesDetails() {
           }}
         />
       </SafeAreaView>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
         <View style={styles.userViewStyle}>
-          {/* <UpdateDeleteMenu containerStyle={{ position: 'absolute', right: 10 }} onDeletePress={() => { setDeletePop(true) }} onUpdatePress={() => { navigate(screenName.IndiansPageUpdate) }} icon={<Image source={Icons.more1} style={[ImageStyle(28, 28)]} />} /> */}
+          {pageDetail?._id == user?._id && <UpdateDeleteMenu containerStyle={{ position: 'absolute', right: 10 }} onDeletePress={() => { setDeletePop(true) }} onUpdatePress={() => { navigate(screenName.IndiansPageUpdate) }} icon={<Image source={Icons.more1} style={[ImageStyle(28, 28)]} />} />}
           <View style={styles.imageView}>
             <RenderUserIcon height={wp(100)} url={pageDetail?.logo} />
           </View>
@@ -116,7 +189,7 @@ export default function PagesDetails() {
           <Text style={styles.userText1}>{pageDetail?.catchline}</Text>
         </View>
         <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
-          {showCurrent ? (
+          {pageDetail?._id == user?._id ? (
             <TouchableOpacity style={styles.btnView}>
               <Text style={styles.btnText}>My page Chatroom</Text>
             </TouchableOpacity>
@@ -170,24 +243,40 @@ export default function PagesDetails() {
           </View>
         </View>}
         {tabSelection == 'ACTIVITIES' && <View >
-          <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
+          {allPagePost && <FlatList data={allPagePost}
+            onEndReachedThreshold={0.5}
+            onEndReached={fetchMoreData}
+            ListFooterComponent={() => {
+              return (
+                <View>
+                  {(allPagePost && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
+                  <View style={{ height: 50 }} />
+                </View>
+              )
+            }}
+            ListEmptyComponent={<NoDataFound />}
+            renderItem={renderItem} />}
         </View>}
         {tabSelection == 'CONNECTED INDIANS' && <View >
-          <ScrollView>
+          <View>
             <SearchBar
               value={searchText}
-              onChangeText={text => setSearchText(text)}
+              onChangeText={text => { setSearchText(text), onSearchName(text) }}
               placeholder={'Search Indians here'}
               containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
             />
-            <FlatList
-              data={[1, 2]}
+            {followList && <FlatList
+              data={followList}
               renderItem={({ item }) => {
-                return <ConnectedIndians />;
+                return <PageConnectedIndians cardPress={() => {
+                  dispatchAction(dispatch, OTHER_USER_INFO, undefined)
+                  navigation.push(screenName.indiansDetails, { userId: item?._id })
+                }} item={item} onUpdate={() => onGetConnectedIndians()} />;
               }}
+              ListEmptyComponent={<NoDataFound />}
               showsVerticalScrollIndicator={false}
-            />
-          </ScrollView>
+            />}
+          </View>
         </View>}
         {/* </PagerView> */}
       </ScrollView>

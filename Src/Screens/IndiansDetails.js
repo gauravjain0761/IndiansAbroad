@@ -204,7 +204,7 @@ export default function IndiansDetails() {
         </View>
         {tabSelection == 'POST' ?
           <View>
-            {otherUserAllPost && <FlatList initialNumToRender={5} data={otherUserAllPost.data.slice(0, 5)} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
+            {otherUserAllPost && <FlatList initialNumToRender={5} data={otherUserAllPost.data} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
           </View>
           :
           <View >

@@ -1,4 +1,4 @@
-import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, } from './ActionTypes';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, SET_ALL_PAGE_POST, SET_ALL_PAGE_FOLLOWER, } from './ActionTypes';
 
 const initialState = {
   user: undefined,
@@ -16,7 +16,10 @@ const initialState = {
   repliesComments: undefined,
   otherUserInfo: undefined,
   otherUserAllPost: undefined,
-  otherUserFollowList: undefined
+  otherUserFollowList: undefined,
+  allPagePost: undefined,
+  allPagePostCount: 0,
+  allPageFollowerList: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -59,24 +62,44 @@ export default function (state = initialState, action) {
     case SET_LIKE_DISLIKE: {
       let allPost = Object.assign([], state.allPost);
       let index = allPost.findIndex(item => item._id == action.payload.postId);
-      allPost[index].isLiked = action.payload.action == 'like' ? true : false;
-      allPost[index].likeCount =
-        action.payload.action == 'like'
-          ? allPost[index].likeCount + 1
-          : allPost[index].likeCount - 1;
       let otherUserAllPost = Object.assign([], state?.otherUserAllPost?.data);
-
+      let allPagePost = Object.assign([], state.allPagePost);
+      let activePost = Object.assign({}, state.activePost);
+      if (index !== -1) {
+        allPost[index].isLiked = action.payload.action == 'like' ? true : false;
+        allPost[index].likeCount =
+          action.payload.action == 'like'
+            ? allPost[index].likeCount + 1
+            : allPost[index].likeCount - 1;
+      }
       if (state.otherUserAllPost) {
         let index = otherUserAllPost.findIndex(item => item._id == action.payload.postId);
-        otherUserAllPost[index].isLiked = action.payload.action == 'like' ? true : false;
-        otherUserAllPost[index].likeCount =
-          action.payload.action == 'like'
-            ? otherUserAllPost[index].likeCount + 1
-            : otherUserAllPost[index].likeCount - 1;
-        otherUserAllPost
+        if (index !== -1) {
+          otherUserAllPost[index].isLiked = action.payload.action == 'like' ? true : false;
+          otherUserAllPost[index].likeCount =
+            action.payload.action == 'like'
+              ? otherUserAllPost[index].likeCount + 1
+              : otherUserAllPost[index].likeCount - 1;
+        }
       }
-
-      return { ...state, allPost, otherUserAllPost: state.otherUserAllPost ? { ...state.otherUserAllPost, data: otherUserAllPost } : undefined };
+      if (state.allPagePost) {
+        let index = allPagePost.findIndex(item => item._id == action.payload.postId);
+        if (index !== -1) {
+          allPagePost[index].isLiked = action.payload.action == 'like' ? true : false;
+          allPagePost[index].likeCount =
+            action.payload.action == 'like'
+              ? allPagePost[index].likeCount + 1
+              : allPagePost[index].likeCount - 1;
+        }
+      }
+      if (state.activePost) {
+        activePost.isLiked = action.payload.action == 'like' ? true : false;
+        activePost.likeCount =
+          action.payload.action == 'like'
+            ? activePost.likeCount + 1
+            : activePost.likeCount - 1;
+      }
+      return { ...state, allPost, otherUserAllPost: state.otherUserAllPost ? { ...state.otherUserAllPost, data: otherUserAllPost } : undefined, activePost: state.activePost ? activePost : undefined, allPagePost: state.allPagePost ? allPagePost : undefined };
     }
     case SET_LIKED_USER_LIST: {
       return { ...state, likedUserList: action.payload };
@@ -87,7 +110,7 @@ export default function (state = initialState, action) {
         let index = allPost.findIndex(
           item => item._id == action.payload.postId,
         );
-        allPost[index].isFollowing = !allPost[index].isFollowing;
+        if (index !== -1) { allPost[index].isFollowing = !allPost[index].isFollowing; }
       } else if (action.payload.type == 'block') {
         let temp = allPost.filter(
           obj => obj.createdBy?._id !== action.payload.userId,
@@ -123,12 +146,14 @@ export default function (state = initialState, action) {
       let index = activePostAllComments.findIndex(
         item => item._id == action.payload.commentId,
       );
-      activePostAllComments[index].isCommentLiked =
-        action.payload.action == 'like' ? true : false;
-      activePostAllComments[index].commentlikeCount =
-        action.payload.action == 'like'
-          ? activePostAllComments[index].commentlikeCount + 1
-          : activePostAllComments[index].commentlikeCount - 1;
+      if (index !== -1) {
+        activePostAllComments[index].isCommentLiked =
+          action.payload.action == 'like' ? true : false;
+        activePostAllComments[index].commentlikeCount =
+          action.payload.action == 'like'
+            ? activePostAllComments[index].commentlikeCount + 1
+            : activePostAllComments[index].commentlikeCount - 1;
+      }
       return { ...state, activePostAllComments };
     }
     case SET_REPLIES_COMMENTS: {
@@ -184,7 +209,7 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
-      return { ...state, allPages: updates };
+      return { ...state, allPages: updates, };
     }
     case SET_POST_PAGES_DISCONNECT: {
       const updates = state.allPages.map(item => {
@@ -197,7 +222,7 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
-      return { ...state, allPages: updates };
+      return { ...state, allPages: updates, };
     }
     case OTHER_USER_INFO: {
       if (action.payload) {
@@ -211,6 +236,27 @@ export default function (state = initialState, action) {
     }
     case SET_OTHER_USER_FOLLOWLIST: {
       return { ...state, otherUserFollowList: action.payload };
+    }
+    case SET_ALL_PAGE_POST: {
+      // return {
+      //   ...state,
+      //   allPagePost:
+      //     action.payload.current_page == 1
+      //       ? action.payload.data
+      //       : [...state.allPagePost, ...action.payload.data],
+      //   allPagePostCount: action.payload.totalPosts,
+      // };
+      return {
+        ...state,
+        allPagePost: action.payload.data,
+        allPagePostCount: action.payload.totalPosts,
+      };
+    }
+    case SET_ALL_PAGE_FOLLOWER: {
+      return {
+        ...state,
+        allPageFollowerList: action.payload,
+      };
     }
     default:
       return state;

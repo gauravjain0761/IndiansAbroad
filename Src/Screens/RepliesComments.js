@@ -17,7 +17,7 @@ import { Icons } from '../Themes/Icons'
 export default function RepliesComments() {
     const { goBack } = useNavigation()
     const [searchText, setSearchText] = useState('');
-    const { repliesComments, activePostAllComments } = useSelector(e => e.common)
+    const { repliesComments, activePostAllComments, user } = useSelector(e => e.common)
     const dispatch = useDispatch()
     const { params } = useRoute()
     const [activeComment, setactiveComment] = useState(undefined)
@@ -104,7 +104,7 @@ export default function RepliesComments() {
 
             </View>
             <View style={styles.commnetInput}>
-                <RenderUserIcon url={user?.avtar} height={46} isBorder />
+                <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
                 <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                 <TouchableOpacity style={styles.sendButton}>
                     <Image source={Icons.send} style={ImageStyle(24, 24)} />

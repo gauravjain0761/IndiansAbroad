@@ -32,6 +32,7 @@ import ConfirmationModal from '../../Components/ConfirmationModal';
 import { dispatchAction } from '../../utils/apiGlobal';
 import { IS_LOADING } from '../../Redux/ActionTypes';
 import NoDataFound from '../../Components/NoDataFound';
+import RenderBlockedItem from '../../Components/RenderBlockedItem';
 
 export default function BlockedUsers() {
   const { navigate, goBack } = useNavigation();
@@ -47,65 +48,17 @@ export default function BlockedUsers() {
     dispatch(onGetBlockUserList({}))
   }, [])
 
-  const hideMenu = () => setVisible(false);
-
-  const showMenu = () => setVisible(true);
   useEffect(() => {
     dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   const renderItem = ({ item, index }) => {
     return (
-      <View key={index}>
-        <View style={[ApplicationStyles.row, styles.listView]}>
-          <View style={[ApplicationStyles.row]}>
-            <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
-            <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
-          </View>
-          <Menu
-            visible={visible}
-            anchor={
-              <TouchableOpacity
-                style={[ImageStyle(14, 14), { right: 15 }]}
-                onPress={showMenu}>
-                <Image
-                  source={Icons.more}
-                  style={[ImageStyle(14, 14), { right: 15 }]}
-                />
-              </TouchableOpacity>
-            }
-            onRequestClose={hideMenu}
-            style={styles.menu}>
-            <MenuItem
-              textStyle={styles.itemText}
-              onPress={() => {
-                setselectedItem(item)
-                hideMenu()
-                setTimeout(() => {
+      <RenderBlockedItem item={item} index={index} />
 
-                  setblockModal(true)
-                }, 500);
-              }}>
-              Unblock
-            </MenuItem>
-          </Menu>
-        </View>
-        <View style={styles.lineStyle} />
-      </View>
     );
   };
 
-  const onUnBlockuser = () => {
-    setblockModal(false)
-    dispatchAction(dispatch, IS_LOADING, true)
-    let obj = {
-      data: {
-        userId: selectedItem?.blockedUserId,
-        action: 'unblock'
-      }
-    }
-    dispatch(onBlockUserApi(obj))
-  }
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -136,15 +89,7 @@ export default function BlockedUsers() {
           style={{ flex: 1 }}
         />
       </View>}
-      <ConfirmationModal
-        visible={blockModal}
-        onClose={() => setblockModal(false)}
-        title={`Do you want to unblock ${selectedItem?.first_Name} ${selectedItem?.last_Name}?`}
-        successBtn={'Yes'}
-        canselBtn={'No'}
-        onPressCancel={() => setblockModal(false)}
-        onPressSuccess={() => onUnBlockuser()}
-      />
+
     </SafeAreaView>
   );
 }
