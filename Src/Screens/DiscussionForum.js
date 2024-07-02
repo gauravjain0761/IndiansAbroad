@@ -19,7 +19,6 @@ export default function DiscussionForum() {
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation()
 
-
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.DiscussionForumDetail)}>

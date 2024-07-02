@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import colors from '../../Themes/Colors';
-import {fontname, hp, wp} from '../../Themes/Fonts';
-import {FontStyle} from '../../utils/commonFunction';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { fontname, hp, wp } from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChangePasswordEmail() {
@@ -24,7 +24,7 @@ export default function ChangePasswordEmail() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-      <KeyboardAwareScrollView style={{marginHorizontal: wp(16), flex: 1}}>
+      <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Password</Text>
         <Text style={styles.headerText1}>
           To change your password please enter your email address.
@@ -34,6 +34,7 @@ export default function ChangePasswordEmail() {
           style={styles.inputText}
           value={email}
           onChangeText={setEmail}
+          placeholderTextColor={colors.neutral_400}
         />
         <TouchableOpacity
           style={[styles.btnView, {}]}
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     padding: hp(12),
   },
   imageArrow: {
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
     paddingHorizontal: hp(10),
   },
   headerText: {
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingVertical: 6,
     marginTop: 20,
+    height: 56
   },
   btnView: {
     backgroundColor: colors.buttonBlue,

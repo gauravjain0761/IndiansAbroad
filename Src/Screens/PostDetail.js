@@ -4,23 +4,27 @@ import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
 import PostCard from '../Components/PostCard';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
 import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import { useDispatch, useSelector } from 'react-redux';
-import { onCommentLike, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
+import { onAddComment, onCommentLike, onDeleteComment, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
 import { api } from '../utils/apiConstants';
 import { dispatchAction } from '../utils/apiGlobal';
 import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
 import { screenName } from '../Navigation/ScreenConstants';
+import ConfirmationModal from '../Components/ConfirmationModal';
 
 export default function PostDetail() {
     const navigation = useNavigation()
     const [commentText, setcommentText] = useState('')
     const { activePost, user, activePostAllComments } = useSelector(e => e.common)
     const dispatch = useDispatch()
+    const [deleteModal, setdeleteModal] = useState(false)
+    const [selectedComment, setselectedComment] = useState(undefined)
+
     useEffect(() => {
         dispatch(onGetSinglePost({
             data: {
@@ -53,13 +57,31 @@ export default function PostDetail() {
         dispatch(onCommentLike(obj))
     }
 
-
     const onOpenReplies = (item) => {
         dispatchAction(dispatch, SET_REPLIES_COMMENTS, undefined)
         navigation.navigate(screenName.RepliesComments, {
             commentId: item?._id,
             postId: item?.postId,
         })
+    }
+
+    const deleteComment = (id) => {
+        setdeleteModal(false)
+        let obj = {
+            data: {
+                postId: activePost._id,
+                commentId: id
+            },
+            onSuccess: () => {
+                dispatch(onGetAllComments({
+                    data: {
+                        postId: activePost?._id,
+                        loginId: user._id
+                    }
+                }))
+            }
+        }
+        dispatch(onDeleteComment(obj))
     }
 
     const RenderItem = ({ item, itemIndex }) => {
@@ -82,9 +104,41 @@ export default function PostDetail() {
                             <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
                         </TouchableOpacity>
                     </View>
+                    {item?.user?._id == user._id &&
+                        <TouchableOpacity onPress={() => {
+                            setselectedComment(item)
+                            setdeleteModal(true)
+                        }} style={{ position: 'absolute', bottom: 0, right: 0, padding: 10 }}>
+                            <Image source={Icons.trash} style={ImageStyle(20, 20)} />
+                        </TouchableOpacity>
+                    }
                 </View>
             </View>
-        </View>
+        </View >
+    }
+
+    const onComment = () => {
+        if (commentText.trim() !== '') {
+            let obj = {
+                data: {
+                    postId: activePost._id,
+                    createdBy: user._id,
+                    comment: commentText.trim()
+                },
+                onSuccess: () => {
+                    setcommentText('')
+                    dispatch(onGetAllComments({
+                        data: {
+                            postId: activePost?._id,
+                            loginId: user._id
+                        }
+                    }))
+                }
+            }
+            dispatch(onAddComment(obj))
+        } else {
+            errorToast('Please enter a comment')
+        }
     }
 
     return (
@@ -104,12 +158,21 @@ export default function PostDetail() {
             <SafeAreaView>
                 <View style={styles.commnetInput}>
                     <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
-                    <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
-                    <TouchableOpacity style={styles.sendButton}>
+                    <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
+                    <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
+            {deleteModal && <ConfirmationModal
+                visible={deleteModal}
+                onClose={() => setdeleteModal(false)}
+                title={`Are you sure, you want to delete this comment?`}
+                successBtn={'Yes'}
+                canselBtn={'No'}
+                onPressCancel={() => setdeleteModal(false)}
+                onPressSuccess={() => deleteComment(selectedComment?._id)}
+            />}
         </SafeAreaView>
     )
 }
@@ -147,7 +210,7 @@ const styles = StyleSheet.create({
     innerRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 10
+        gap: 10,
     },
     likesRow: {
         flexDirection: 'row',

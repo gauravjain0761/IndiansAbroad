@@ -25,6 +25,7 @@ import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getallIndianUser, getallPagesUser } from '../Services/PostServices';
+import NoDataFound from '../Components/NoDataFound';
 
 export default function IndiansPageMore() {
   const tabs = [
@@ -35,6 +36,8 @@ export default function IndiansPageMore() {
   const [tabType, setTabType] = useState('All');
   const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
+  const [searchTextPost, setSearchTextPost] = useState('');
+
   const [tabSelectionIndex, setTabSelectionIndex] = useState(
     params?.dataList == 'INDIANS' ? 0 : 1,
   );
@@ -48,12 +51,9 @@ export default function IndiansPageMore() {
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [pagesRefreshing, setPagesRefreshing] = React.useState(false);
-
   const [page, setpage] = useState(1);
   const [pagePages, setPagePages] = useState(1);
-
   const [loading, setloading] = useState(false);
-
   useEffect(() => {
     dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
@@ -107,6 +107,8 @@ export default function IndiansPageMore() {
   };
 
   useEffect(() => {
+    setSearchText('')
+    setSearchTextPost('')
     if (isFocuse) getPostList(1);
     if (isFocuse) getPagesList(1);
   }, [isFocuse]);
@@ -129,6 +131,41 @@ export default function IndiansPageMore() {
     }
   };
 
+  const onSearchIndians = (text) => {
+    setSearchText(text)
+    let obj = {
+      data: {
+        emails: [], //"dev.abhiharshe23@gmail.com"
+        search: text,
+        userId: user?._id,
+        page: 1,
+        limit: 0,
+      },
+      onSuccess: () => {
+        setpage(1);
+        setloading(false);
+      },
+    };
+    dispatch(getallIndianUser(obj));
+  }
+
+  const onSearchPost = text => {
+    setSearchTextPost(text)
+    let obj = {
+      params: {
+        page: 1,
+        userId: user?._id,
+        searchText: text,
+      },
+      onSuccess: () => {
+        setpage(1);
+        setloading(false);
+      },
+    };
+    dispatch(getallPagesUser(obj));
+  };
+
+  console.log(allIndian.length)
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -179,22 +216,8 @@ export default function IndiansPageMore() {
         </TouchableOpacity>
         {/* <Animated.View style={[styles.animationView, { left: tabSelection == 'INDIANS' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} /> */}
       </View>
-      <SearchBar
-        value={searchText}
-        onChangeText={text => setSearchText(text)}
-        placeholder={'Search Indians here'}
-      />
-      <Text
-        style={[
-          FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
-          { marginHorizontal: wp(16), marginVertical: 8 },
-        ]}>
-        {tabSelection == 'INDIANS'
-          ? 'People may you know'
-          : 'Pages from your area'}
-      </Text>
       <PagerView
-        style={{}}
+        style={{ flex: 1 }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -202,15 +225,21 @@ export default function IndiansPageMore() {
           setTabSelectionIndex(e?.nativeEvent?.position);
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
-        <View key={'1'}>
-          <FlatList
+        <View style={{ flex: 1 }} key={'1'}>
+          <SearchBar value={searchText} onChangeText={text => onSearchIndians(text)} placeholder={'Search Indians here'} />
+          <Text style={[
+            FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+            { marginHorizontal: wp(16), marginVertical: 8 },
+          ]}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
+          {allIndian.length > 0 ? <FlatList
             style={{
               paddingHorizontal: wp(16),
+              flex: 1
             }}
             columnWrapperStyle={{
               width: '100%',
               columnGap: wp(10),
-              rowGap: hp(16),
+              // rowGap: hp(16),
             }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -219,7 +248,7 @@ export default function IndiansPageMore() {
             onEndReached={fetchMoreData}
             onEndReachedThreshold={0.3}
             data={allIndian}
-            keyExtractor={index => index.toString()}
+            ListEmptyComponent={<NoDataFound />}
             renderItem={({ item, index }) => {
               return (
                 <ConnectCard
@@ -248,11 +277,15 @@ export default function IndiansPageMore() {
                 </View>
               )
             }}
-          />
+          /> : <NoDataFound />}
           {/*  */}
         </View>
-        <View key={'2'}>
-
+        <View style={{ flex: 1 }} key={'2'}>
+          <SearchBar value={searchTextPost} onChangeText={text => onSearchPost(text)} placeholder={'Search Pages here'} />
+          <Text style={[
+            FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+            { marginHorizontal: wp(16), marginVertical: 8 },
+          ]}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
           <FlatList
             style={{
               paddingHorizontal: wp(16),
@@ -263,8 +296,8 @@ export default function IndiansPageMore() {
             columnWrapperStyle={{
               width: '100%',
               columnGap: wp(10),
-              rowGap: hp(16),
             }}
+            ListEmptyComponent={<NoDataFound />}
             numColumns={2}
             bounces={false}
             data={allPages}

@@ -85,7 +85,6 @@ export default function PagesDetails() {
     setfollowList(searchTextContact)
   }
 
-  console.log('allPageFollowerList----', allPageFollowerList)
   useEffect(() => {
     setpageDetail(params?.pageDetail)
   }, [params])
@@ -129,7 +128,7 @@ export default function PagesDetails() {
 
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity key={index} activeOpacity={1} onPress={() => {
+      <TouchableOpacity key={item._id} activeOpacity={1} onPress={() => {
         dispatchAction(dispatch, SET_ACTIVE_POST, item)
         dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
         navigation.navigate(screenName.PagesPostDetail)
@@ -159,7 +158,6 @@ export default function PagesDetails() {
   };
 
   const fetchMoreData = () => {
-    console.log('calledddd')
     // if (allPost) {
     //   if (allPost.length < allPostsCount) {
     //     setloading(true);

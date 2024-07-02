@@ -137,7 +137,7 @@ export default function ConnectCard({
 
   return (
     <TouchableOpacity
-      key={index}
+      key={followingId}
       activeOpacity={0.9}
       onPress={cardPress}
       style={[styles.header]}>
@@ -170,7 +170,7 @@ export default function ConnectCard({
           <TouchableOpacity
             onPress={() => onPressDisConnect()}
             style={styles.btnView}>
-            <Text style={styles.btnText}>DisConnect</Text>
+            <Text style={styles.btnText}>Disconnect</Text>
           </TouchableOpacity>
         ) : isFollowingRequested == 1 ? (
           <TouchableOpacity

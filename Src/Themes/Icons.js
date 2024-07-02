@@ -49,4 +49,5 @@ export const Icons = {
     sent: require('../assets/Icons/sent.png'),
     close: require('../assets/Icons/close.png'),
     down_arrow: require('../assets/Icons/down_arrow.png'),
+    closeRound: require('../assets/Icons/closeRound.png'),
 }  

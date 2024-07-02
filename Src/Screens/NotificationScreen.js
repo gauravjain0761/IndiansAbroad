@@ -302,13 +302,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: colors.primary_500,
-    paddingHorizontal: wp(8),
+    paddingHorizontal: wp(15),
     borderRadius: 3,
     marginTop: hp(1),
+    height: 30,
+    justifyContent: 'center'
   },
   buttonText: {
     ...FontStyle(fontname.actor_regular, 13, colors.white, '400'),
-    lineHeight: hp(20),
+    // lineHeight: hp(20),
   },
   footerTitle: {
     ...FontStyle(fontname.actor_regular, 14, colors.black, '400'),

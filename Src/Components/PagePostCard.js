@@ -16,6 +16,8 @@ import { dispatchAction } from '../utils/apiGlobal';
 import { SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
 import { screenName } from '../Navigation/ScreenConstants';
 import { onLikePost } from '../Services/PostServices';
+import ReportModal from './ReportModal';
+import ShareModal from './ShareModal';
 
 export default function PagePostCard({ item, index, }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -25,6 +27,8 @@ export default function PagePostCard({ item, index, }) {
   const [blockModal, setblockModal] = useState(false)
   const [textShown, setTextShown] = useState(false);
   // const { otherUserInfo } = useSelector(e => e.common)
+  const [reportModal, setReportModal] = useState(false)
+  const [shareModal, setshareModal] = useState(false)
   let isUser = item?.createdBy?._id == user._id
 
   const openLikeScreen = () => {
@@ -52,7 +56,7 @@ export default function PagePostCard({ item, index, }) {
   }
 
   return (
-    <View key={index}>
+    <View key={item._id}>
       <View style={styles.headerView}>
         <View style={styles.userImage}>
           <RenderUserIcon url={item?.cpId?.logo} height={57} />
@@ -102,7 +106,7 @@ export default function PagePostCard({ item, index, }) {
             <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
             <Text style={styles.username}>{item?.commentCount} Comments</Text>
           </View>
-          <TouchableOpacity style={styles.innerRow}>
+          <TouchableOpacity onPress={() => setshareModal(true)} style={styles.innerRow}>
             <Image source={Icons.share} style={ImageStyle(22, 22)} />
             <Text style={styles.username}>Share</Text>
           </TouchableOpacity>
@@ -119,12 +123,22 @@ export default function PagePostCard({ item, index, }) {
           </TouchableOpacity>
         )}
       </View>
-      <PostShareModal
+      {menuModal && <PostShareModal
         item={item}
         menuModal={menuModal}
         setmenuModal={() => setmenuModal(false)}
         isPage={true}
-      />
+        onReportUser={() => setReportModal(true)}
+      />}
+
+      {reportModal && <ReportModal
+        visible={reportModal}
+        onClose={() => setReportModal(false)}
+        postId={item._id}
+      />}
+      {shareModal &&
+        <ShareModal visible={shareModal} postId={item._id} onClose={() => setshareModal(false)} item={item} />}
+
     </View>
   );
 }

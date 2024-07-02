@@ -17,7 +17,7 @@ export const makeAPIRequest = ({
             baseURL: api.BASE_URL,
             url,
             data: data,
-            headers: {
+            headers: headers ? headers : {
                 Accept: "application/json",
                 ...headers,
             },
@@ -25,7 +25,7 @@ export const makeAPIRequest = ({
         };
         axios(option)
             .then((response) => {
-                console.log("res--->", api.BASE_URL + url, data, params, response?.data, response.status);
+                console.log("res--->", api.BASE_URL + url, data, params, JSON.stringify(response?.data), response.status);
                 if (response.status === 200 || response.status === 201) {
                     resolve(response);
                 } else {
@@ -55,7 +55,6 @@ export const removeAuthorization = async () => {
 
 
 export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
-
     let formData = new FormData()
     const token = await getAsyncToken();
     if (data) {
@@ -65,23 +64,19 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
             }
         });
     }
-    if (data?.language == undefined) {
-        formData.append("language", i18n.language);
-    }
     return fetch(api.BASE_URL + url, {
         method: "POST",
         headers: {
             Accept: "application/json",
-            // "Content-Type": "multipart/form-data",
+            "Content-Type": "multipart/form-data",
             Authorization: token,
         },
         body: formData,
     })
         .then((response) => {
-            console.log('response--------', response)
             return response.json().then((responseJson) => {
                 console.log(responseJson)
-                if (responseJson.status == true) {
+                if (responseJson.err == 200) {
                     onSuccess(responseJson)
                 } else {
                     if (onFailure) onFailure()

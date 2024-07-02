@@ -3,15 +3,16 @@ import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction'
 import { fontname } from '../Themes/Fonts'
 import colors from '../Themes/Colors'
 import SearchBar from '../Components/SearchBar'
 import RenderUserIcon from '../Components/RenderUserIcon'
 import { useDispatch, useSelector } from 'react-redux'
-import { onGetLikedUserList, onGetRepliesComment } from '../Services/PostServices'
+import { onAddCommentReply, onDeleteCommentReply, onGetLikedUserList, onGetRepliesComment } from '../Services/PostServices'
 import { api } from '../utils/apiConstants'
 import { Icons } from '../Themes/Icons'
+import ConfirmationModal from '../Components/ConfirmationModal'
 
 
 export default function RepliesComments() {
@@ -21,6 +22,9 @@ export default function RepliesComments() {
     const dispatch = useDispatch()
     const { params } = useRoute()
     const [activeComment, setactiveComment] = useState(undefined)
+    const [commentText, setcommentText] = useState('')
+    const [deleteModal, setdeleteModal] = useState(false)
+    const [selectedComment, setselectedComment] = useState(undefined)
 
     useEffect(() => {
         setactiveComment(activePostAllComments?.filter(obj => obj._id == params?.commentId)[0])
@@ -31,6 +35,22 @@ export default function RepliesComments() {
             data: { postId: params?.postId, commentId: params?.commentId }
         }))
     }, [])
+
+    const deleteComment = (id) => {
+        setdeleteModal(false)
+        let obj = {
+            data: {
+                replyId: selectedComment._id
+            },
+            onSuccess: () => {
+                dispatch(onGetRepliesComment({
+                    data: { postId: params?.postId, commentId: params?.commentId }
+                }))
+            }
+        }
+        dispatch(onDeleteCommentReply(obj))
+    }
+
     const RenderReply = ({ item, index, isLastIndex }) => {
         return (
             <View style={styles.replyCommentView}>
@@ -45,12 +65,14 @@ export default function RepliesComments() {
                                 <Text style={styles.degreeText}>PhD Student, Seoul</Text>
                                 <Text style={styles.commentText2}>{item?.reply}</Text>
                             </View>
-                            {/* <View style={styles.innerRow}>
-                                <TouchableOpacity style={styles.likesRow}>
-                                    <Image source={Icons.heart} style={ImageStyle(15, 15)} />
-                                    <Text style={styles.likesText}>1 Likes</Text>
+                            {item?.createdBy?._id == user._id &&
+                                <TouchableOpacity onPress={() => {
+                                    setselectedComment(item)
+                                    setdeleteModal(true)
+                                }} style={{ padding: 5 }}>
+                                    <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                                 </TouchableOpacity>
-                            </View> */}
+                            }
                         </View>
                     </View>
                 </View>
@@ -58,14 +80,30 @@ export default function RepliesComments() {
         )
     }
 
+    const onComment = () => {
+        if (commentText.trim() !== '') {
+            let obj = {
+                data: {
+                    postId: params?.postId, commentId: params?.commentId,
+                    createdBy: user._id,
+                    reply: commentText.trim()
+                },
+                onSuccess: () => {
+                    setcommentText('')
+                    dispatch(onGetRepliesComment({
+                        data: { postId: params?.postId, commentId: params?.commentId }
+                    }))
+                }
+            }
+            dispatch(onAddCommentReply(obj))
+        } else {
+            errorToast('Please enter a comment')
+        }
+    }
+
     return (
-        <SafeAreaView style={ApplicationStyles.applicationView}>
-            <Header
-                title={'IndiansAbroad'}
-                showLeft={true}
-                showRight={false}
-                onLeftPress={() => goBack()}
-            />
+        <View style={ApplicationStyles.applicationView}>
+            <Header title={'IndiansAbroad'} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
             <View style={{ borderTopWidth: 1, borderTopColor: colors.secondary_500, }}>
                 <Text style={styles.chatText}>Replies</Text>
             </View>
@@ -79,16 +117,6 @@ export default function RepliesComments() {
                                 <Text style={styles.degreeText}>PhD Student, Seoul</Text>
                                 <Text style={styles.commentText2}>{activeComment?.comment}</Text>
                             </View>
-                            {/* <View style={styles.innerRow}>
-                                <TouchableOpacity onPress={() => onLikeComment(activeComment)} style={styles.likesRow}>
-                                    <Image source={activeComment?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
-                                    <Text style={styles.likesText}>{activeComment?.commentlikeCount} Likes</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => onOpenReplies(activeComment)} style={styles.likesRow}>
-                                    <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-                                    <Text style={styles.likesText}>{activeComment?.replyCount} Reply</Text>
-                                </TouchableOpacity>
-                            </View> */}
                         </View>
                     </View>
                     {repliesComments && repliesComments.length > 0 &&
@@ -99,18 +127,27 @@ export default function RepliesComments() {
                             }}
                         />
                     }
-
                 </View>}
-
             </View>
-            <View style={styles.commnetInput}>
-                <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
-                <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
-                <TouchableOpacity style={styles.sendButton}>
-                    <Image source={Icons.send} style={ImageStyle(24, 24)} />
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+            <SafeAreaView>
+                <View style={styles.commnetInput}>
+                    <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
+                    <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
+                    <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
+                        <Image source={Icons.send} style={ImageStyle(24, 24)} />
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+            {deleteModal && <ConfirmationModal
+                visible={deleteModal}
+                onClose={() => setdeleteModal(false)}
+                title={`Are you sure, you want to delete this comment?`}
+                successBtn={'Yes'}
+                canselBtn={'No'}
+                onPressCancel={() => setdeleteModal(false)}
+                onPressSuccess={() => deleteComment(selectedComment?._id)}
+            />}
+        </View>
     )
 }
 

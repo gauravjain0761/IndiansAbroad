@@ -24,9 +24,10 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { screenName } from '../Navigation/ScreenConstants';
 import { getalluserposts } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_GLOBAL_SEARCH } from '../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../Components/NoDataFound';
+import { getFollowerList } from '../Services/AuthServices';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -46,6 +47,9 @@ export default function HomeScreen() {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getPostList(1);
+    dispatch(getFollowerList({
+      data: { userId: user?._id, search: '' }
+    }))
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -151,6 +155,10 @@ export default function HomeScreen() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search users, posts, forums'}
+        onPressIn={() => {
+          dispatchAction(dispatch, SET_GLOBAL_SEARCH, undefined)
+          navigation.navigate(screenName.SearchScreen)
+        }}
       // containerStyles={{top:-14}}
       />
       <PagerView

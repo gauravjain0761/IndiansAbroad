@@ -1,4 +1,4 @@
-import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, SET_ALL_PAGE_POST, SET_ALL_PAGE_FOLLOWER, } from './ActionTypes';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, SET_ALL_PAGE_POST, SET_ALL_PAGE_FOLLOWER, SET_GLOBAL_SEARCH, SET_FOLLOWER_LIST, } from './ActionTypes';
 
 const initialState = {
   user: undefined,
@@ -19,7 +19,9 @@ const initialState = {
   otherUserFollowList: undefined,
   allPagePost: undefined,
   allPagePostCount: 0,
-  allPageFollowerList: undefined
+  allPageFollowerList: undefined,
+  globalSearchData: undefined,
+  followerList: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -257,6 +259,12 @@ export default function (state = initialState, action) {
         ...state,
         allPageFollowerList: action.payload,
       };
+    }
+    case SET_GLOBAL_SEARCH: {
+      return { ...state, globalSearchData: action.payload, };
+    }
+    case SET_FOLLOWER_LIST: {
+      return { ...state, followerList: action.payload, };
     }
     default:
       return state;

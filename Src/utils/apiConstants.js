@@ -14,6 +14,16 @@ export const api = {
     getallcomments: 'comment/allcomments',
     commentLike: '/comment/like',
     commentReplyList: "/reply/list",
+    onreport: "/report/create",
+    share: '/share/content',
+    createComment: '/comment/create',
+    addCommentReply: '/reply/create',
+    deleteComment: '/comment/delete',
+    deleteCommentReply: '/reply/delete',
+    createPost: '/post/create',
+    deletePost: '/post/deletepost',
+    updatePost: '/post/update',
+    deletepostmedia: '/post/deletepostmedia',
 
     //Indians
     indiansList: "/user/suggestion/filter",
@@ -36,7 +46,11 @@ export const api = {
 
     // page
     getAllPagePostApi: '/cp/posts/',
-    getAllPageFollowerApi: '/cp/followerlist'
+    getAllPageFollowerApi: '/cp/followerlist',
+
+
+    // global search
+    globalSearch: "/global/search",
 }
 
 export const POST = "POST";

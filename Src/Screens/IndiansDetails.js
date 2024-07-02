@@ -46,7 +46,6 @@ export default function IndiansDetails() {
   const { params } = useRoute()
   const [followList, setfollowList] = useState([])
   const { otherUserInfo, user, otherUserAllPost, otherUserFollowList } = useSelector(e => e.common)
-  console.log('otherUserAllPost--', otherUserAllPost)
   const handleTabPress = (id, index) => {
     Animated.spring(buttonTranslateX, {
       toValue: index * (SCREEN_WIDTH - 20) / 2, // Assuming each tab has a width of 100
@@ -115,7 +114,7 @@ export default function IndiansDetails() {
 
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity key={index} activeOpacity={1} onPress={() => {
+      <TouchableOpacity key={item._id} activeOpacity={1} onPress={() => {
         dispatchAction(dispatch, SET_ACTIVE_POST, item)
         dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
         navigation.navigate(screenName.PostDetail)
@@ -175,9 +174,9 @@ export default function IndiansDetails() {
         <View style={styles.detailsView}>
           <Text style={[styles.text1, { ...FontStyle(fontname.actor_regular, 14, colors.neutral_900, '700') }]}>About</Text>
           <Text style={styles.text2}>From</Text>
-          <Text style={styles.text1}>Mumbai,Maharshtra</Text>
+          <Text style={styles.text1}>{otherUserInfo?.city}, {otherUserInfo?.state}</Text>
           <Text style={styles.text2}>Now</Text>
-          <Text style={styles.text1}>Seoul University, Seoul,Korea</Text>
+          <Text style={styles.text1}>{otherUserInfo?.universityORcompany}, {otherUserInfo?.region}, {otherUserInfo?.country}</Text>
           <Text style={styles.text2}>As</Text>
           <Text style={styles.text1}>PhD Student</Text>
           <Text style={styles.text2}>Link</Text>
@@ -228,9 +227,7 @@ export default function IndiansDetails() {
             />}
             {/* </ScrollView> */}
           </View>
-
         }
-
       </ScrollView>}
 
       <IndianDetailShareModal

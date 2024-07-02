@@ -43,6 +43,8 @@ import ChangePhoneVerify from '../Screens/Setting/ChangePhoneVerify';
 import ChatDetailsScreen from '../Screens/ChatDetailsScreen';
 import LikesScreen from '../Screens/LikesScreen';
 import RepliesComments from '../Screens/RepliesComments';
+import SearchScreen from '../Screens/SearchScreen';
+import UpdatePostScreen from '../Screens/UpdatePostScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -309,6 +311,16 @@ export default function Navigation() {
           options={({ navigation }) => ({ ...headerStyleTransparent })}
           name={screenName.RepliesComments}
           component={RepliesComments}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.SearchScreen}
+          component={SearchScreen}
+        />
+        <Stack.Screen
+          options={({ navigation }) => ({ ...headerStyleTransparent })}
+          name={screenName.UpdatePostScreen}
+          component={UpdatePostScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

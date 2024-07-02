@@ -7,22 +7,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import colors from '../Themes/Colors';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
-import {SCREEN_WIDTH, fontname, wp} from '../Themes/Fonts';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
 import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import DiscussionForumCard from '../Components/DiscussionForumCard';
-import {screenName} from '../Navigation/ScreenConstants';
+import { screenName } from '../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreateDiscussion() {
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [selectTab, setSelectTab] = useState(0);
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation();
@@ -33,12 +33,12 @@ export default function CreateDiscussion() {
     <SafeAreaView
       style={[
         ApplicationStyles.applicationView,
-        {backgroundColor: colors.secondary_500},
+        { backgroundColor: colors.secondary_500 },
       ]}>
       <Header
         title={''}
         logoShow={false}
-        titleStyle={{color: colors.primary_6a7e}}
+        titleStyle={{ color: colors.primary_6a7e }}
         showLeft={true}
         onLeftPress={() => {
           goBack();
@@ -49,13 +49,12 @@ export default function CreateDiscussion() {
         Your thread will be posted in the World Wide discussion forum
       </Text>
       <TextInput
-          onChangeText={text => setpostText(text)}
-          value={postText}
-          style={styles.inputTitle}
-          placeholder="Title"
-          multiline={true}
-          placeholderTextColor={colors.neutral_500}
-        />
+        onChangeText={text => setpostText(text)}
+        value={postText}
+        style={styles.inputTitle}
+        placeholder="Title"
+        placeholderTextColor={colors.neutral_500}
+      />
       <View style={styles.inputBox}>
         <TextInput
           onChangeText={text => setpostText(text)}
@@ -71,7 +70,7 @@ export default function CreateDiscussion() {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity onPress={() => {}} style={styles.blueButton}>
+      <TouchableOpacity onPress={() => { }} style={styles.blueButton}>
         <Text style={styles.publishText}>Publish</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -108,26 +107,26 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginHorizontal: 20,
     marginBottom: 18,
-     borderRadius:5,
-     borderWidth:1
+    borderRadius: 5,
+    borderWidth: 1
   },
   input: {
-    height: 120,
+    height: 160,
     textAlignVertical: 'top',
     padding: 15,
-    paddingLeft:20,
+    paddingLeft: 20,
     ...FontStyle(fontname.actor_regular, 14, colors.neutral_500),
-    
   },
   inputTitle: {
     ...FontStyle(fontname.actor_regular, 14, colors.neutral_500),
-    backgroundColor:colors.white,
-    marginHorizontal:wp(20),
-    marginBottom:10,
-    borderWidth:1,
-    borderRadius:5,
-    marginTop:20,
-    paddingLeft:20
+    backgroundColor: colors.white,
+    marginHorizontal: wp(20),
+    marginBottom: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 20,
+    paddingLeft: 20,
+    height: 47
   },
   rowView: {
     flexDirection: 'row',

@@ -11,24 +11,24 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
 import RenderUserIcon from '../Components/RenderUserIcon';
-import {Icons} from '../Themes/Icons';
+import { Icons } from '../Themes/Icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function CreateGroup() {
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('INDIANS');
@@ -36,12 +36,12 @@ export default function CreateGroup() {
   const [checkBox, setCheckBox] = useState(false);
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
   const renderItem = () => {
     return (
-      <View style={[ApplicationStyles.row, {paddingHorizontal: wp(20)}]}>
+      <View style={[ApplicationStyles.row, { paddingHorizontal: wp(20) }]}>
         <View style={[ApplicationStyles.row, styles.listView]}>
           <RenderUserIcon height={48} />
           <Text style={styles.listText}>Pratik Katkar</Text>
@@ -49,7 +49,7 @@ export default function CreateGroup() {
         <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
           <Image
             source={checkBox ? Icons.checkbox1 : Icons.checkbox}
-            style={[ImageStyle(20, 20), {top: 1, marginRight: 6}]}
+            style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
           />
         </TouchableOpacity>
       </View>
@@ -87,14 +87,14 @@ export default function CreateGroup() {
         value={searchText}
         onChangeText={text => setSearchText(text)}
         placeholder={'Search here'}
-        containerStyles={{backgroundColor: colors.white, marginHorizontal: 8}}
+        containerStyles={{ backgroundColor: colors.white, marginHorizontal: 8 }}
       />
-      <View style={{paddingHorizontal: 0, marginTop: 8, flex: 1}}>
+      <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
         <FlatList
           data={[1, 2, 1, 2, 3, 4, 5, 6]}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
-          // style={{flex: 1}}
+        // style={{flex: 1}}
         />
       </View>
     </SafeAreaView>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     // marginTop:12,
     width: SCREEN_WIDTH * 0.65,
     marginLeft: 20,
-    height: 55,
+    height: 56,
   },
   inputText1: {
     ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 10,
     marginVertical: 20,
     marginHorizontal: wp(20),
+    height: 56
   },
   tabMainView: {
     flexDirection: 'row',

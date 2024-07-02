@@ -14,12 +14,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostCarousal from './PostCarousal';
 import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
-import { onLikePost } from '../Services/PostServices';
+import { getalluserposts, onDeletePost, onLikePost } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
 import { OTHER_USER_INFO, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
 import { api } from '../utils/apiConstants';
 import { onBlockUserApi, onConnectRequest, onGetOtherUserInfo } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
+import ReportModal from './ReportModal';
+import ShareModal from './ShareModal';
 
 export default function PostCard({ item, index, isDetailScreen = false, }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -29,6 +31,10 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
   const [blockModal, setblockModal] = useState(false)
   const [textShown, setTextShown] = useState(false);
   const { otherUserInfo } = useSelector(e => e.common)
+  const [reportModal, setReportModal] = useState(false)
+  const [shareModal, setshareModal] = useState(false)
+  const [deletePostModal, setDeletePostModal] = useState(false)
+
   let isUser = item?.createdBy?._id == user._id
 
   const onPostLike = (isLiked) => {
@@ -84,15 +90,37 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
     dispatch(onBlockUserApi(obj))
   }
 
+  const onDelete = () => {
+    setDeletePostModal(false)
+    let obj = {
+      data: {
+        postId: item._id,
+        createdBy: user._id,
+      },
+      onSuccess: () => {
+        let obj1 = {
+          data: {
+            createdBy: user?._id,
+            page: 1,
+            limit: 0,
+          },
+        };
+        dispatch(getalluserposts(obj1));
+      },
+      onFailure: () => { }
+    }
+    dispatch(onDeletePost(obj))
+  }
+
   const onOpenOtherUserDetail = (id) => {
-    if (!otherUserInfo && !isDetailScreen) {
+    if (!otherUserInfo && !isDetailScreen && !isUser) {
       navigation.navigate(screenName.indiansDetails, { userId: id })
     }
   }
 
   if (item?.createdBy) {
     return (
-      <View key={index}>
+      <View key={item?._id}>
         <View style={styles.headerView}>
           <View style={styles.userImage}>
             <RenderUserIcon userId={isDetailScreen ? undefined : item?.createdBy?._id} url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
@@ -132,19 +160,16 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
             </View>
           )}
         </View>
-
-        {item?.message !== '' && <Text style={styles.description} >
+        {item?.message && item?.message !== '' && <Text style={styles.description} >
           {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
         </Text>}
-
-        {item?.message !== '' && item?.message.length > 120 ?
+        {item?.message && item?.message !== '' && item?.message.length > 120 ?
           <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
             <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>
           </TouchableOpacity>
           : null}
-
         {item?.mediaFiles.length > 0 && (
-          <PostCarousal isDetailScreen={isDetailScreen} images={item?.mediaFiles} />
+          <PostCarousal poster={item?.thumbNail} isDetailScreen={isDetailScreen} images={item?.mediaFiles} />
         )}
         <View style={styles.bottomRow}>
           <View style={styles.middlerow}>
@@ -163,13 +188,13 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
               <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>{item?.commentCount} Comments</Text>
             </View>
-            <TouchableOpacity style={styles.innerRow}>
+            <TouchableOpacity onPress={() => setshareModal(true)} style={styles.innerRow}>
               <Image source={Icons.share} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>Share</Text>
             </TouchableOpacity>
           </View>
           {isUser ? (
-            <UpdateDeleteMenu
+            <UpdateDeleteMenu onUpdatePress={() => navigation.navigate(screenName.UpdatePostScreen, { item: item })} onDeletePress={() => setDeletePostModal(true)}
               icon={<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />}
             />
           ) : (
@@ -180,13 +205,14 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
             </TouchableOpacity>
           )}
         </View>
-        <PostShareModal
+        {menuModal && <PostShareModal
           item={item}
           menuModal={menuModal}
           setmenuModal={() => setmenuModal(false)}
           onPressBlock={() => setblockModal(true)}
-        />
-        <ConfirmationModal
+          onReportUser={() => setReportModal(true)}
+        />}
+        {blockModal && <ConfirmationModal
           visible={blockModal}
           onClose={() => setblockModal(false)}
           title={`Do you want to block ${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}?`}
@@ -194,7 +220,23 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
           canselBtn={'No'}
           onPressCancel={() => setblockModal(false)}
           onPressSuccess={() => onBlockuser()}
-        />
+        />}
+        {deletePostModal && <ConfirmationModal
+          visible={deletePostModal}
+          onClose={() => setDeletePostModal(false)}
+          title={`Are you sure you want to delete this post?`}
+          successBtn={'Delete'}
+          canselBtn={'No'}
+          onPressCancel={() => setDeletePostModal(false)}
+          onPressSuccess={() => onDelete()}
+        />}
+        {reportModal && <ReportModal
+          visible={reportModal}
+          onClose={() => setReportModal(false)}
+          postId={item._id}
+        />}
+        {shareModal &&
+          <ShareModal visible={shareModal} postId={item._id} onClose={() => setshareModal(false)} item={item} />}
       </View>
     );
   }

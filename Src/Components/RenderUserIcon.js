@@ -6,9 +6,11 @@ import { screenName } from '../Navigation/ScreenConstants'
 import colors from '../Themes/Colors'
 import { api } from '../utils/apiConstants'
 import FastImage from 'react-native-fast-image'
+import { useSelector } from 'react-redux'
 
 export default function RenderUserIcon({ height, isBorder = false, url, activeOpacity, userId = undefined }) {
     const navigation = useNavigation()
+    const { user } = useSelector(e => e.common)
     let isUrl = url !== undefined && url !== ''
     let styles = StyleSheet.create({
         userImage: {
@@ -20,7 +22,7 @@ export default function RenderUserIcon({ height, isBorder = false, url, activeOp
     })
 
     const onOpenUserDetail = () => {
-        if (userId !== undefined) {
+        if (userId !== undefined && userId !== user._id) {
             navigation.navigate(screenName.indiansDetails, { userId: userId })
         }
         //  else {

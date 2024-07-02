@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ReactNativeModal from 'react-native-modal';
 import colors from '../Themes/Colors';
-import {Icons} from '../Themes/Icons';
-import {SCREEN_WIDTH, fontname, wp} from '../Themes/Fonts';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import Input from './Input';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 
@@ -22,10 +22,9 @@ export default function DeletePopModal({
   extraStyle = {},
   children,
 }) {
-  const [checkBox, setCheckBox] = useState(false);
   return (
     <ReactNativeModal
-      style={{margin: 10}}
+      style={{ margin: 10 }}
       backdropOpacity={transparent ? 0 : 0.5}
       isVisible={isVisible}
       onBackButtonPress={() => onClose()}
@@ -36,7 +35,7 @@ export default function DeletePopModal({
           <Text
             style={[
               FontStyle(fontname.abeezee, 24, colors.neutral_900, '700'),
-              {marginLeft: 8, flex: 1},
+              { marginLeft: 8, flex: 1 },
             ]}>
             {'Delete page ?'}
           </Text>
@@ -46,7 +45,7 @@ export default function DeletePopModal({
             }}>
             <Image
               source={Icons.close}
-              style={[ImageStyle(23, 23), {tintColor: colors.neutral_500}]}
+              style={[ImageStyle(23, 23), { tintColor: colors.neutral_500 }]}
             />
           </TouchableOpacity>
         </View>
@@ -56,17 +55,17 @@ export default function DeletePopModal({
           restore it later. Do you want to delete your page permanently ?
         </Text>
 
-        <View style={[ApplicationStyles.row, {alignSelf: 'flex-end'}]}>
+        <View style={[ApplicationStyles.row, { alignSelf: 'flex-end' }]}>
           <TouchableOpacity style={[styles.btnView, {}]} onPress={onClose}>
             <Text style={styles.btnText}>Yes</Text>
           </TouchableOpacity>
-          <View style={{width: SCREEN_WIDTH * 0.02}} />
+          <View style={{ width: SCREEN_WIDTH * 0.02 }} />
           <TouchableOpacity
             onPress={() => {
               onClose();
             }}
-            style={[styles.btnView, {backgroundColor: colors.neutral_250}]}>
-            <Text style={[styles.btnText, {color: colors.neutral_600}]}>
+            style={[styles.btnView, { backgroundColor: colors.neutral_250 }]}>
+            <Text style={[styles.btnText, { color: colors.neutral_600 }]}>
               No
             </Text>
           </TouchableOpacity>

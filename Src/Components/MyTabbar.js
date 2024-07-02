@@ -79,15 +79,15 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                   }}
                   source={iconName}
                 />
-                {/* {isFocused && ( */}
-                <Text
-                  style={{
-                    ...styles.labelTextStyle,
-                    color: isFocused ? colors.primary_4574ca : colors.neutral_900,
-                  }}>
-                  {label}
-                </Text>
-                {/* )} */}
+                {isFocused && (
+                  <Text
+                    style={{
+                      ...styles.labelTextStyle,
+                      color: isFocused ? colors.primary_4574ca : colors.neutral_900,
+                    }}>
+                    {label}
+                  </Text>
+                )}
               </TouchableOpacity>
             );
           })}
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
   },
   labelTextStyle: {
-    ...FontStyle(fontname.actor_regular, 11, colors.primary_8091ba, "700"),
+    ...FontStyle(fontname.abeezee, 11, colors.primary_8091ba),
     marginTop: 1,
   },
   itemContainer: {

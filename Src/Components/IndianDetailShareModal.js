@@ -78,9 +78,9 @@ export default function IndianDetailShareModal({ shareView,
                     <Text style={styles.modalText}>{'Block'}</Text>
                 </TouchableOpacity>
                 <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-                {!item?.isReported ? <TouchableOpacity>
+                {/* {!item?.isReported ? <TouchableOpacity>
                     <Text style={styles.modalText}>Report</Text>
-                </TouchableOpacity> : null}
+                </TouchableOpacity> : null} */}
                 <View style={styles.line} />
                 <View style={{ paddingBottom: insets.bottom }} />
             </View>

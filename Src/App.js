@@ -14,6 +14,11 @@ import { FontStyle } from './utils/commonFunction';
 import { onGetUserInfoApi, onLoginApi, oncheckSession } from './Services/AuthServices';
 import Loader from './Components/Loader';
 import { SET_USER } from './Redux/ActionTypes';
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 
 function App() {
   const dispatch = useDispatch()
@@ -45,8 +50,9 @@ function App() {
         onSuccess: async (response) => {
           await setAuthorization(token)
           let user = await getAsyncUserInfo()
+          console.log('user--', user)
           dispatchAction(dispatch, SET_USER, user)
-          if (user) {
+          if (user && user._id) {
             dispatch(onGetUserInfoApi({
               params: {
                 userId: user._id
@@ -110,14 +116,12 @@ function App() {
   };
   return (
     !loading ?
-      <View style={ApplicationStyles.applicationView}>
-        <RootContainer />
-        <Toast
-          config={toastConfig}
-          position="top"
-          topOffset={0}
-        />
-      </View>
+      <BottomSheetModalProvider>
+        <View style={ApplicationStyles.applicationView}>
+          <RootContainer />
+          <Toast config={toastConfig} position="top" topOffset={0} />
+        </View>
+      </BottomSheetModalProvider>
       :
       <Loader />
   );

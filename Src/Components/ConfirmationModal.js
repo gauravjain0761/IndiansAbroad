@@ -1,22 +1,10 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 import React from 'react';
-import ApplicationStyles from '../Themes/ApplicationStyles';
-import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
+import { fontname, hp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
-import { onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
-
 
 export default function ConfirmationModal({
     title,

@@ -22,7 +22,7 @@ export default function ChatScreen() {
     return (
       <View style={styles.rowStyle}>
         <TouchableOpacity style={styles.userImage}>
-          <RenderUserIcon height={57} isBorder />
+          <RenderUserIcon height={64} isBorder />
         </TouchableOpacity>
         <View style={{ marginLeft: 12, flex: 1 }}>
           <Text style={styles.text}>Community Group</Text>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   chatText: {
     top: -8,
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 14, colors.secondary_600),
+    ...FontStyle(fontname.actor_regular, 14, colors.secondary_600, '700'),
   },
   rowStyle: {
     flexDirection: 'row',
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(8),
     borderRadius: 5,
     marginVertical: 5,
-    paddingVertical: 5,
+    paddingVertical: 10,
   },
   text: {
     lineHeight: 14,

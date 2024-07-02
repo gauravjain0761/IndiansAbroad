@@ -31,8 +31,8 @@ export default function LikesScreen() {
 
     const renderItem = ({ item, index }) => {
         return (
-            <View key={index}>
-                <TouchableOpacity key={index} style={[ApplicationStyles.row, styles.listView]}>
+            <View key={item._id}>
+                <TouchableOpacity style={[ApplicationStyles.row, styles.listView]}>
                     <RenderUserIcon url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
                 </TouchableOpacity>

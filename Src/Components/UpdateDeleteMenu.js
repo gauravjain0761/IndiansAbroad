@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
-import {Icons} from '../Themes/Icons';
-import {FontStyle} from '../utils/commonFunction';
-import {fontname} from '../Themes/Fonts';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { Icons } from '../Themes/Icons';
+import { FontStyle } from '../utils/commonFunction';
+import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 
 export default function UpdateDeleteMenu({
@@ -20,12 +20,12 @@ export default function UpdateDeleteMenu({
   const showMenu = () => setVisible(true);
 
   return (
-    <View style={[{flex: 1}, containerStyle]}>
+    <View style={[{ flex: 1 }, containerStyle]}>
       <Menu
         visible={visible}
         anchor={
           <TouchableOpacity
-            style={{alignItems: 'center', justifyContent: 'center', flex: 1}}
+            style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
             onPress={showMenu}>
             {icon}
           </TouchableOpacity>
@@ -42,7 +42,10 @@ export default function UpdateDeleteMenu({
         <MenuItem
           textStyle={styles.itemText}
           onPress={() => {
-            hideMenu(), onDeletePress();
+            hideMenu(),
+              setTimeout(() => {
+                onDeletePress();
+              }, 500);
           }}>
           Delete
         </MenuItem>

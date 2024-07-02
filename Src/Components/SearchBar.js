@@ -17,10 +17,15 @@ export default function SearchBar({
   value,
   onChangeText,
   placeholder,
-  containerStyles
+  containerStyles,
+  onPressIn = undefined
 }) {
+
+  // const onPressIn = () => {
+  //   c
+  // }
   return (
-    <View style={[styles.header,containerStyles]}>
+    <View style={[styles.header, containerStyles]}>
       <View style={[ApplicationStyles.row, styles.textInput]}>
         <Image source={Icons.search} style={ImageStyle(18, 18)} />
         <TextInput
@@ -29,6 +34,9 @@ export default function SearchBar({
           style={styles.inputStyle}
           value={value}
           onChangeText={onChangeText}
+          onPress={() => onPressIn ? onPressIn() : {}}
+        // onFocus={() => onPressIn()}
+        // editable={onPressIn ? false : true}
         />
       </View>
     </View>

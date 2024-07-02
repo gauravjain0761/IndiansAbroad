@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import colors from '../../Themes/Colors';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../../Themes/Fonts';
-import {FontStyle} from '../../utils/commonFunction';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChangePhone() {
@@ -24,7 +24,7 @@ export default function ChangePhone() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-      <KeyboardAwareScrollView style={{marginHorizontal: wp(16), flex: 1}}>
+      <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Mobile Number</Text>
         <Text style={styles.headerText1}>
           Please enter your new mobile number
@@ -35,12 +35,14 @@ export default function ChangePhone() {
             style={styles.codeText}
             value={email}
             onChangeText={setEmail}
+            placeholderTextColor={colors.neutral_400}
           />
           <TextInput
             placeholder={'Mobile number'}
             style={styles.inputText}
             value={email}
             onChangeText={setEmail}
+            placeholderTextColor={colors.neutral_400}
           />
         </View>
 
@@ -71,14 +73,15 @@ const styles = StyleSheet.create({
     padding: hp(12),
   },
   imageArrow: {
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
     paddingHorizontal: hp(10),
   },
   headerText: {
     ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
   },
   headerText1: {
-    marginTop: 50,
+    marginBottom: 50,
+    marginTop: 8,
     ...FontStyle(fontname.abeezee, 13, colors.neutral_600, '400'),
   },
   itemText: {
@@ -94,7 +97,9 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingVertical: 6,
     marginTop: 10,
-    width: SCREEN_WIDTH*0.76,
+    width: SCREEN_WIDTH * 0.76,
+    flex: 1,
+    height: 56
   },
   codeText: {
     ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
@@ -103,10 +108,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.inputBg,
     paddingVertical: 4,
     borderRadius: 5,
-    paddingLeft: 12,
+    // paddingLeft: 12,
     paddingVertical: 6,
     marginTop: 10,
-    marginRight:15
+    marginRight: 15,
+    height: 56,
+    width: 70,
+    textAlign: 'center'
   },
   btnView: {
     backgroundColor: colors.buttonBlue,

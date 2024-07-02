@@ -28,10 +28,12 @@ import {
   getallPagesUser,
   getalluserposts,
 } from '../Services/PostServices';
+import NoDataFound from '../Components/NoDataFound';
 
 export default function IndiansPage() {
   const { navigate } = useNavigation();
   const [searchText, setSearchText] = useState('');
+  const [searchTextPost, setSearchTextPost] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('INDIANS');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
@@ -55,7 +57,7 @@ export default function IndiansPage() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getPostList(1);
+    getIndianList(1);
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -69,13 +71,13 @@ export default function IndiansPage() {
     }, 2000);
   }, []);
 
-  const getPostList = page => {
+  const getIndianList = page => {
     let obj = {
       data: {
         emails: [], //"dev.abhiharshe23@gmail.com"
         search: '',
         userId: user?._id,
-        page: 1,
+        page: page,
         limit: 0,
       },
     };
@@ -84,7 +86,7 @@ export default function IndiansPage() {
   const getPagesList = page => {
     let obj = {
       params: {
-        page: 1,
+        page: page,
         userId: user?._id,
         searchText: '',
       },
@@ -93,8 +95,12 @@ export default function IndiansPage() {
   };
 
   useEffect(() => {
-    if (isFocuse) getPostList(1);
-    if (isFocuse) getPagesList(1);
+    if (isFocuse) {
+      setSearchText('')
+      setSearchTextPost('')
+      getIndianList(1);
+      getPagesList(1);
+    }
   }, [isFocuse]);
 
   const onOpenOtherUserDetail = (id) => {
@@ -180,6 +186,34 @@ export default function IndiansPage() {
     navigate(screenName.pagesDetails, { pageDetail: item });
   }
 
+  const onSearchIndians = (text) => {
+    setSearchText(text)
+    let obj = {
+      data: {
+        emails: [], //"dev.abhiharshe23@gmail.com"
+        search: text,
+        userId: user?._id,
+        page: 1,
+        limit: 0,
+      },
+    };
+    dispatch(getallIndianUser(obj));
+  }
+
+  const onSearchPost = text => {
+    setSearchTextPost(text)
+    let obj = {
+      params: {
+        page: 1,
+        userId: user?._id,
+        searchText: text,
+      },
+    };
+    dispatch(getallPagesUser(obj));
+  };
+
+  console.log(allIndian?.length)
+
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView edges={['top']}>
@@ -197,36 +231,44 @@ export default function IndiansPage() {
           </Text>
         </TouchableOpacity>
       </View>
-      <SearchBar value={searchText} onChangeText={text => setSearchText(text)} placeholder={'Search Indians here'} />
-      <Text style={styles.peopleText}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
       <PagerView style={{ flex: 1 }} initialPage={tabSelectionIndex} ref={ref} onPageSelected={e => {
         setTabSelection(e?.nativeEvent?.position == 0 ? 'INDIANS' : 'PAGES');
         setTabSelectionIndex(e?.nativeEvent?.position);
         setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
       }}>
-        <View key={'1'}>
+        <View style={{ flex: 1 }} key={'1'}>
+          <SearchBar value={searchText} onChangeText={text => onSearchIndians(text)} placeholder={'Search Indians here'} />
+          <Text style={styles.peopleText}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
           <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
             {allIndian !== undefined && (
-              <>
-                <RenderIndians data={allIndian?.slice(0, 2)} />
-                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
-                <RenderIndians data={allIndian?.slice(2, 6)} />
-                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
-                <View style={{ height: 10 }} />
-              </>
+              allIndian?.length > 0 ?
+                <>
+                  <RenderIndians data={allIndian?.slice(0, 2)} />
+                  <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
+                  <RenderIndians data={allIndian?.slice(2)} />
+                  {/* <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} /> */}
+                  <View style={{ height: 10 }} />
+                </>
+                :
+                <NoDataFound />
             )}
           </ScrollView>
         </View>
-        <View key={'2'}>
+        <View style={{ flex: 1 }} key={'2'}>
+          <SearchBar value={searchTextPost} onChangeText={text => onSearchPost(text)} placeholder={'Search Pages here'} />
+          <Text style={styles.peopleText}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
           <ScrollView refreshControl={<RefreshControl refreshing={pagesRefreshing} onRefresh={onRefreshPages} />}>
             {allPages !== undefined && (
-              <>
-                <RenderPages data={allPages?.slice(0, 2)} />
-                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'PAGES', })} />
-                <RenderPages data={allPages?.slice(2, 4)} />
-                <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'PAGES', })} />
-                <View style={{ height: 10 }} />
-              </>
+              allPages.length > 0 ?
+                <>
+                  <RenderPages data={allPages?.slice(0, 2)} />
+                  <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'PAGES', })} />
+                  <RenderPages data={allPages?.slice(2)} />
+                  {/* <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'PAGES', })} /> */}
+                  <View style={{ height: 10 }} />
+                </>
+                :
+                <NoDataFound />
             )}
           </ScrollView>
         </View>

@@ -25,7 +25,8 @@ export default function PostShareModal({
   setmenuModal,
   item,
   onPressBlock,
-  isPage = false, page
+  isPage = false, page,
+  onReportUser
 }) {
   const insets = useSafeAreaInsets();
   const { user, otherUserInfo } = useSelector((state) => state.common);
@@ -65,6 +66,13 @@ export default function PostShareModal({
     setmenuModal(false)
     setTimeout(() => {
       if (item?.createdBy) { onPressBlock() }
+    }, 500);
+  }
+
+  const onReport = () => {
+    setmenuModal(false)
+    setTimeout(() => {
+      onReportUser()
     }, 500);
   }
 
@@ -110,7 +118,7 @@ export default function PostShareModal({
           <Text style={styles.modalText}>{'Block'}</Text>
         </TouchableOpacity>}
         <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-        {!item?.isReported ? <TouchableOpacity>
+        {!item?.isReported ? <TouchableOpacity onPress={() => onReport()}>
           <Text style={styles.modalText}>Report</Text>
         </TouchableOpacity> : null}
         <View style={styles.line} />

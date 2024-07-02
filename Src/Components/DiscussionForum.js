@@ -72,15 +72,15 @@ const styles = StyleSheet.create({
     borderRadius: 57 / 2,
   },
   username: {
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_900, "700"),
+    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, "700"),
     // lineHeight:18
   },
   degreeText: {
-    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
+    ...FontStyle(fontname.abeezee, 12, colors.neutral_900),
     // lineHeight:18
   },
   degreeText1: {
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900),
+    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
     // lineHeight:18
   },
   messageView: {
