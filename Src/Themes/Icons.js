@@ -50,4 +50,22 @@ export const Icons = {
     close: require('../assets/Icons/close.png'),
     down_arrow: require('../assets/Icons/down_arrow.png'),
     closeRound: require('../assets/Icons/closeRound.png'),
+    loginBg: require('../assets/Icons/loginBg.png'),
+    hide: require('../assets/Icons/hide.png'),
+    view: require('../assets/Icons/view.png'),
+    googlePlus: require('../assets/Icons/googlePlus.png'),
+
+    maleGender: require('../assets/Icons/maleGender.png'),
+    femenine: require('../assets/Icons/femenine.png'),
+    star: require('../assets/Icons/star.png'),
+    camera: require('../assets/Icons/camera.png'),
+
+    w_1: require('../assets/Icons/w_1.png'),
+    w_2: require('../assets/Icons/w_2.png'),
+    w_3: require('../assets/Icons/w_3.png'),
+    w_4: require('../assets/Icons/w_4.png'),
+    w_5: require('../assets/Icons/w_5.png'),
+    w_6: require('../assets/Icons/w_6.png'),
+    w_7: require('../assets/Icons/w_7.png'),
+
 }  

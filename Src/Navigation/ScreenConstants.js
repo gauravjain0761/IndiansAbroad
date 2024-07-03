@@ -35,4 +35,11 @@ export const screenName = {
   RepliesComments: 'RepliesComments',
   SearchScreen: 'SearchScreen',
   UpdatePostScreen: 'UpdatePostScreen',
+  LoginScreen: 'LoginScreen',
+  SignupScreen: 'SignupScreen',
+  OTPScreen: 'OTPScreen',
+  CompleteProfile: 'CompleteProfile',
+  Walkthrough: 'Walkthrough',
+  CompleteProfile2: 'CompleteProfile2',
+  PaymentModalScreen: 'PaymentModalScreen'
 };

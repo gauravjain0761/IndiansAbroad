@@ -51,6 +51,10 @@ export const api = {
 
     // global search
     globalSearch: "/global/search",
+
+    // discussion
+    countriesList: '/countries/forums/list',
+    threadList: '/thread/list'
 }
 
 export const POST = "POST";

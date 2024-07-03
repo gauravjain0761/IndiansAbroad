@@ -38,5 +38,7 @@ const colors = {
   red_ED7C7C: '#ED7C7C',
   red_DE6161: '#DE6161',
   red_EE5858: '#EE5858',
+
+  whiteOpacity: '#FFFFFFB0',
 };
 export default colors;

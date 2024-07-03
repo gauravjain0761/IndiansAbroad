@@ -28,6 +28,7 @@ import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_GLOBAL_SEARC
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../Components/NoDataFound';
 import { getFollowerList } from '../Services/AuthServices';
+import { getDiscussionCountry } from '../Services/DiscussionServices';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -72,12 +73,15 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
+    dispatch(getDiscussionCountry({}))
   }, []);
 
 
 
   useEffect(() => {
-    if (isFocuse) getPostList(1);
+    if (isFocuse) {
+      getPostList(1)
+    }
   }, [isFocuse]);
 
   useEffect(() => {

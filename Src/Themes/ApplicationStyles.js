@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import colors from './Colors';
 import { FontStyle } from '../utils/commonFunction';
-import { fontname } from './Fonts';
+import { fontname, wp } from './Fonts';
 export default StyleSheet.create({
   applicationView: {
     flex: 1,
@@ -15,13 +15,22 @@ export default StyleSheet.create({
     flex: 1
   },
   noDataFound: {
-    ...FontStyle(
-      fontname.actor_regular,
-      20,
-      colors.neutral_500,
-      '700',
-    ),
+    ...FontStyle(fontname.actor_regular, 20, colors.neutral_500, '700',),
     textAlign: 'center',
     marginTop: 100
-  }
+  },
+  titleText: {
+    ...FontStyle(fontname.abeezee, 27, colors.neutral_900, '700',),
+  },
+  backIcon: {
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 12,
+    borderColor: colors.primary_500,
+    backgroundColor: colors.btnBg,
+    marginHorizontal: wp(16),
+    marginVertical: 12,
+    alignSelf: 'flex-start'
+  },
 });

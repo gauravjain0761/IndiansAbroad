@@ -60,7 +60,7 @@ export default function DiscussionForumDetail() {
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.likesRow}>
                             <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>Reply</Text>
+                            <Text style={styles.likesText}>Respond</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -89,7 +89,7 @@ export default function DiscussionForumDetail() {
                 <View style={{ marginBottom: 10 }}>
                     <DiscussionForum />
                 </View>
-                <Text style={styles.commentText1}>4 comments</Text>
+                <Text style={styles.commentText1}>4 Responses</Text>
                 <FlatList
                     data={[0, 1, 2, 3]}
                     renderItem={({ item, index }) => {
@@ -100,7 +100,7 @@ export default function DiscussionForumDetail() {
             <SafeAreaView>
                 <View style={styles.commnetInput}>
                     {/* <RenderUserIcon height={46} isBorder /> */}
-                    <TextInput style={styles.input} placeholder=' Add Comment' placeholderTextColor={colors.neutral_500} />
+                    <TextInput style={styles.input} placeholder='Add Your Response' placeholderTextColor={colors.neutral_500} />
                     <TouchableOpacity style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
                     </TouchableOpacity>

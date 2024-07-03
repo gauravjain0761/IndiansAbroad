@@ -12,8 +12,8 @@ export function getFontType(fontWeight) {
 
 export const fontname = {
   actor_regular: 'Actor-Regular',
-  abeezee: 'AbeeZee-Regular',
-  abeezeeItalic: 'AbeeZee-Italic',
+  abeezee: 'ABeeZee-Regular',
+  abeezeeItalic: 'ABeeZee-Italic',
 }
 
 export function defaultFontStyle(fontName, fontSize, color, fontWeight) {

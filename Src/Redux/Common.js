@@ -1,4 +1,4 @@
-import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, SET_ALL_PAGE_POST, SET_ALL_PAGE_FOLLOWER, SET_GLOBAL_SEARCH, SET_FOLLOWER_LIST, } from './ActionTypes';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_BLOCK_USER_LIST, SET_LIKED_USER_LIST, SET_LIKE_COMMENTS, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_USER, UPDATE_BLOCK_LIST, UPDATE_POST_LIST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_CANCEL_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, OTHER_USER_INFO, SET_OTHER_POST_LIST, SET_OTHER_USER_FOLLOWLIST, SET_ALL_PAGE_POST, SET_ALL_PAGE_FOLLOWER, SET_GLOBAL_SEARCH, SET_FOLLOWER_LIST, SET_COUNTRY_DISCUSSION_LIST, SET_THREAD_LIST, UPDATE_COUNTRY_DISCUSSION_LIST, } from './ActionTypes';
 
 const initialState = {
   user: undefined,
@@ -21,7 +21,9 @@ const initialState = {
   allPagePostCount: 0,
   allPageFollowerList: undefined,
   globalSearchData: undefined,
-  followerList: undefined
+  followerList: undefined,
+  discussionCountry: undefined,
+  threadList: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -265,6 +267,35 @@ export default function (state = initialState, action) {
     }
     case SET_FOLLOWER_LIST: {
       return { ...state, followerList: action.payload, };
+    }
+    case SET_COUNTRY_DISCUSSION_LIST: {
+      let temp = Object.assign([], action.payload)
+      if (temp.length > 0) {
+        temp.forEach((element, index) => {
+          if (index == 0) {
+            element.isSelected = true
+          } else {
+            element.isSelected = false
+          }
+        });
+      }
+      return { ...state, discussionCountry: temp }
+    }
+    case SET_THREAD_LIST: {
+      return { ...state, threadList: action.payload, }
+    }
+    case UPDATE_COUNTRY_DISCUSSION_LIST: {
+      let temp = Object.assign([], state.discussionCountry)
+      if (temp.length > 0) {
+        temp.forEach((element, index) => {
+          if (element._id == action.payload) {
+            element.isSelected = true
+          } else {
+            element.isSelected = false
+          }
+        });
+      }
+      return { ...state, discussionCountry: temp, }
     }
     default:
       return state;

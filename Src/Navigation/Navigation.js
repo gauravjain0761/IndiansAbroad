@@ -45,6 +45,13 @@ import LikesScreen from '../Screens/LikesScreen';
 import RepliesComments from '../Screens/RepliesComments';
 import SearchScreen from '../Screens/SearchScreen';
 import UpdatePostScreen from '../Screens/UpdatePostScreen';
+import LoginScreen from '../Screens/LoginScreen';
+import SignupScreen from '../Screens/SignupScreen';
+import OTPScreen from '../Screens/OTPScreen';
+import CompleteProfile from '../Screens/CompleteProfile';
+import Walkthrough from '../Screens/Walkthrough';
+import CompleteProfile2 from '../Screens/CompleteProfile2';
+import PaymentModalScreen from '../Screens/PaymentModalScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -187,141 +194,40 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name="Home"
-          component={MyDrawer}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.indiansPage}
-          component={IndiansPage}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.PostDetail}
-          component={PostDetail}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.indiansDetails}
-          component={IndiansDetails}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.pagesDetails}
-          component={PagesDetails}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.Setting}
-          component={Setting}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.EditProfile}
-          component={EditProfile}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.PagesPostDetail}
-          component={PagesPostDetail}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.DiscussionForumDetail}
-          component={DiscussionForumDetail}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.CreateDiscussion}
-          component={CreateDiscussion}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.MyConnections}
-          component={MyConnections}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.CreateGroup}
-          component={CreateGroup}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.NotificationScreen}
-          component={NotificationScreen}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.IndiansPageMore}
-          component={IndiansPageMore}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.IndiansPageUpdate}
-          component={IndiansPageUpdate}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.ChangePasswordEmail}
-          component={ChangePasswordEmail}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.ChangePasswordVerify}
-          component={ChangePasswordVerify}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.ChangePasswordNew}
-          component={ChangePasswordNew}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.Subscription}
-          component={Subscription}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.BlockedUsers}
-          component={BlockedUsers}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.ChangePhone}
-          component={ChangePhone}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.ChangePhoneVerify}
-          component={ChangePhoneVerify}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.ChatDetailsScreen}
-          component={ChatDetailsScreen}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.LikesScreen}
-          component={LikesScreen}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.RepliesComments}
-          component={RepliesComments}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.SearchScreen}
-          component={SearchScreen}
-        />
-        <Stack.Screen
-          options={({ navigation }) => ({ ...headerStyleTransparent })}
-          name={screenName.UpdatePostScreen}
-          component={UpdatePostScreen}
-        />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.LoginScreen} component={LoginScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SignupScreen} component={SignupScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.OTPScreen} component={OTPScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile} component={CompleteProfile} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile2} component={CompleteProfile2} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentModalScreen} component={PaymentModalScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Walkthrough} component={Walkthrough} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyDrawer} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.indiansPage} component={IndiansPage} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PostDetail} component={PostDetail} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.indiansDetails} component={IndiansDetails} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.pagesDetails} component={PagesDetails} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Setting} component={Setting} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EditProfile} component={EditProfile} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PagesPostDetail} component={PagesPostDetail} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.DiscussionForumDetail} component={DiscussionForumDetail} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateDiscussion} component={CreateDiscussion} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MyConnections} component={MyConnections} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateGroup} component={CreateGroup} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.NotificationScreen} component={NotificationScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.IndiansPageMore} component={IndiansPageMore} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.IndiansPageUpdate} component={IndiansPageUpdate} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePasswordEmail} component={ChangePasswordEmail} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePasswordVerify} component={ChangePasswordVerify} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePasswordNew} component={ChangePasswordNew} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Subscription} component={Subscription} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.BlockedUsers} component={BlockedUsers} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePhone} component={ChangePhone} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePhoneVerify} component={ChangePhoneVerify} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChatDetailsScreen} component={ChatDetailsScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.LikesScreen} component={LikesScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.RepliesComments} component={RepliesComments} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SearchScreen} component={SearchScreen} />
+        <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.UpdatePostScreen} component={UpdatePostScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
