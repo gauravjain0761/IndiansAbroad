@@ -3,12 +3,15 @@ import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { FontStyle, ImageStyle, emailCheck, errorToast, mobileNumberCheck, passwordCheck } from '../utils/commonFunction'
 import { fontname, wp } from '../Themes/Fonts'
 import Input from '../Components/Input'
 import CommonButton from '../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
+import CountryPicker from 'react-native-country-picker-modal'
+import { onGetOtp } from '../Services/AuthServices'
+import { useDispatch } from 'react-redux'
 
 export default function SignupScreen() {
     const [firstName, setfirstName] = useState('')
@@ -16,11 +19,40 @@ export default function SignupScreen() {
     const [email, setemail] = useState('')
     const [mobile, setmobile] = useState('')
     const [confirmPassword, setconfirmPassword] = useState('')
+    const [code, setcode] = useState('+1')
     const [password, setpassword] = useState('')
     const navigation = useNavigation()
-
+    const [show, setShow] = useState(false);
+    const dispatch = useDispatch()
     const onLogin = () => {
-        navigation.navigate(screenName.OTPScreen)
+        if (firstName.trim() == '') {
+            errorToast('Please enter your first name')
+        } else if (lastName.trim() == '') {
+            errorToast('Please enter your last name')
+        } else if (!emailCheck(email)) {
+            errorToast('Please enter a valid email')
+        } else if (!mobileNumberCheck(mobile)) {
+            errorToast('Please enter a valid mobile number')
+        } else if (!passwordCheck(password)) {
+            errorToast('Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+        } else if (password !== confirmPassword) {
+            errorToast('Password and Confirm Password should be same')
+        } else {
+            let obj = {
+                data: {
+                    phonenumber: code + mobile,
+                    email: email,
+                    first_Name: firstName,
+                    last_Name: lastName,
+                    passCode: password
+                },
+                onSuccess: async (response) => {
+                    navigation.navigate(screenName.OTPScreen, { phone: mobile, code: code, email: email })
+                }
+            }
+            dispatch(onGetOtp(obj))
+        }
+        // navigation.navigate(screenName.OTPScreen)
     }
     const onPressGoogle = () => {
 
@@ -52,13 +84,36 @@ export default function SignupScreen() {
                     </View>
                     <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
                     <View style={styles.hightView} />
-                    <Input keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
+                    <View style={[styles.inputrow, { marginBottom: 0 }]}>
+                        <TouchableOpacity
+                            style={styles.inputContainer}
+                            onPress={() => setShow(true)}>
+                            <Text style={styles.inputText}>{code}</Text>
+                            <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
+                        </TouchableOpacity>
+                        <Input extraStyle={{ flex: 1 }} keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
+                    </View>
                     <View style={styles.hightView} />
                     <Input value={password} placeholder={'Password'} onChangeText={(text) => setpassword(text)} isPassword />
                     <View style={styles.hightView} />
                     <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
                     <View style={styles.hightView} />
                     <CommonButton title={'Next'} onPress={() => onLogin()} />
+                    <CountryPicker
+                        // countryCode={code.replace('+', '')}
+                        visible={show}
+                        onClose={() => setShow(false)}
+                        withCallingCode
+                        onSelect={(item) => {
+                            setcode('+' + item?.callingCode[0]);
+                            setShow(false);
+                        }}
+                        withCallingCodeButton
+                        withFilter
+                        placeholder={''}
+                        withEmoji={false}
+                    // withFlag
+                    />
                 </View>
             </ImageBackground>
         </View>
@@ -138,5 +193,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 20,
         marginBottom: 20
-    }
+    },
+    inputContainer: {
+        borderWidth: 1,
+        borderColor: colors.neutral_500,
+        backgroundColor: colors.inputBg,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 4,
+        paddingHorizontal: 10,
+        height: 56
+    },
+    inputText: {
+        ...FontStyle(fontname.abeezee, 15, colors.neutral_900),
+        // flex: 1,
+        // paddingVertical: 4,
+        borderRadius: 5,
+        paddingRight: 10,
+        // paddingVertical: Platform.OS == 'ios' ? 19 : 6,
+
+        // marginTop:12
+    },
 })

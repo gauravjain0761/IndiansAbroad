@@ -5,7 +5,12 @@ export const api = {
     login: '/user/login',
     checkSession: '/user/check-session',
     getUser: '/user/getuser',
-
+    getOtp: '/user/getotp',
+    verifyotp: 'user/verifyotp',
+    retryotp: 'user/retryotp',
+    registerstepone: '/user/registerstepone',
+    registersteptwo: 'user/registersteptwo',
+    getSignupCountries: '/countries/list/0',
     // post
     getalluserposts: '/post/getalluserposts',
     likedislike: '/postlike/likedislike',

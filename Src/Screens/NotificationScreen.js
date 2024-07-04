@@ -114,7 +114,7 @@ const NotificationScreen = () => {
                 </Text>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>{'Connect'}</Text>
+                    <Text style={styles.buttonText}>{'Accept'}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>{'Ignore'}</Text>

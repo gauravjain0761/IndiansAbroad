@@ -1,9 +1,9 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Image, ImageBackground, Platform, StyleSheet, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction'
 import { fontname, hp, wp } from '../Themes/Fonts'
 import Input from '../Components/Input'
 import CommonButton from '../Components/CommonButton'
@@ -15,6 +15,8 @@ import Modal from 'react-native-modal';
 import ActionSheet from '../Components/ActionSheet'
 import ImageCropPicker from 'react-native-image-crop-picker'
 import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
+import { onGetSignupCountry, onStepTwoSignUp } from '../Services/AuthServices'
 
 const data = [
     { label: 'Country 1', value: '1' },
@@ -28,38 +30,83 @@ const data = [
 ];
 export default function CompleteProfile2() {
     const navigation = useNavigation()
+    const [city, setcity] = useState('')
     const [state, setstate] = useState('')
-    const [country, setcountry] = useState('')
+    const [district, setdistrict] = useState('')
+    const [country, setcountry] = useState(undefined)
+    const [rigion, setrigion] = useState('')
     const [unversity, setunversity] = useState('')
     const [profession, setprofession] = useState('')
     const [termsCheckbox, settermsCheckbox] = useState(false)
+    const dispatch = useDispatch()
+    const { countries, user } = useSelector(e => e.common)
+
+    useEffect(() => {
+        dispatch(onGetSignupCountry({}))
+    }, [])
+
 
     const onNext = () => {
-        navigation.navigate(screenName.Walkthrough)
-    }
 
+        if (city.trim() == '') {
+            errorToast('Please enter a city')
+        } else if (district.trim() == '') {
+            errorToast('Please enter a district')
+        } else if (state.trim() == '') {
+            errorToast('Please enter a state')
+        } else if (!country) {
+            errorToast('Please select a country')
+        } else if (rigion == '') {
+            errorToast('Please enter a region')
+        } else if (unversity == '') {
+            errorToast('Please enter an unversity/company')
+        } else if (profession == '') {
+            errorToast('Please enter profession')
+        } else if (!termsCheckbox) {
+            errorToast('Please agree terms and conditions of IndiansAbroad')
+        } else {
+            let obj = {
+                data: {
+                    phonenumber: user?.phonenumber,
+                    city: city,
+                    district: district,
+                    state: state,
+                    countryId: country?._id,
+                    region: rigion,
+                    universityORcompany: unversity,
+                    profession: profession,
+                },
+                onSuccess: () => {
+                    navigation.navigate(screenName.Walkthrough)
+                }
+            }
+            dispatch(onStepTwoSignUp(obj))
+        }
+        // navigation.navigate(screenName.Walkthrough)
+    }
+    console.log(country)
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
                 <Header showLeft logoShow={false} />
-                <View style={{ marginHorizontal: wp(20) }}>
+                <ScrollView style={{ paddingHorizontal: wp(20), flex: 1 }}>
                     <Text style={styles.title}>Complete Your Profile</Text>
                     <Text style={styles.des}>To proceed, please complete your profile</Text>
                     <Text style={styles.des}>information</Text>
                     <View style={styles.inputView}>
                         <Text style={styles.des}>Where are you from in India ?*</Text>
-                        <Input extraStyle={styles.input} value={state} onChangeText={(text) => setstate(text)} placeholder={'State'} />
+                        <Input extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City'} />
+
+                        <Input extraStyle={styles.input} value={district} onChangeText={(text) => setdistrict(text)} placeholder={'District'} />
                         <Input extraStyle={styles.input} value={state} onChangeText={(text) => setstate(text)} placeholder={'State'} />
 
                     </View>
                     <View style={styles.inputView}>
                         <Text style={styles.des}>Abroad information*</Text>
-                        <Input extraStyle={styles.input} value={country} onChangeText={(text) => setcountry(text)} placeholder={'Country'} type={'dropdown'} data={data} />
-                        <Input extraStyle={styles.input} value={country} onChangeText={(text) => setcountry(text)} placeholder={'Country'} type={'dropdown'} data={data} />
+                        {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
+                        <Input extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'Region'} />
                         <Input extraStyle={styles.input} value={unversity} onChangeText={(text) => setunversity(text)} placeholder={'University/Company'} />
-
                         <Input extraStyle={styles.input} value={profession} onChangeText={(text) => setprofession(text)} placeholder={'Profession'} />
-
                     </View>
                     <View style={styles.row}>
                         <TouchableOpacity onPress={() => settermsCheckbox(!termsCheckbox)}>
@@ -70,8 +117,8 @@ export default function CompleteProfile2() {
                         </TouchableOpacity>
                         <Text style={[styles.des, { flex: 1 }]}>I agree terms and conditions of IndiansAbroad</Text>
                     </View>
-                    <CommonButton title={'Finish'} onPress={() => onNext()} />
-                </View>
+                    <CommonButton extraStyle={{ marginBottom: hp(20) }} title={'Finish'} onPress={() => onNext()} />
+                </ScrollView>
             </ImageBackground>
         </View>
     )

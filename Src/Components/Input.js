@@ -17,7 +17,7 @@ import RenderUserIcon from './RenderUserIcon';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Dropdown } from 'react-native-element-dropdown';
 
-export default function Input({ value, onChangeText, label, placeholder, isPassword = false, keyboardType, extraStyle = {}, type, data }) {
+export default function Input({ value, onChangeText, label, placeholder, isPassword = false, keyboardType, extraStyle = {}, type, data, valueField, labelField }) {
   const [passwordHide, setpasswordHide] = useState(true)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -33,6 +33,10 @@ export default function Input({ value, onChangeText, label, placeholder, isPassw
     onChangeText(date)
     hideDatePicker();
   };
+
+
+
+
   return (
     type && type == 'dob' ?
       <View style={extraStyle}>
@@ -70,21 +74,29 @@ export default function Input({ value, onChangeText, label, placeholder, isPassw
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
               itemTextStyle={styles.selectedTextStyle}
+              // itemContainerStyle={styles.itemContainerStyle}
               // iconStyle={styles.iconStyle}
               data={data}
               search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={'Select item'}
+              maxHeight={200}
+              labelField={labelField}
+              valueField={valueField}
+              placeholder={placeholder}
               searchPlaceholder="Search..."
               value={value}
               onChange={item => {
-                onChangeText(item.value);
+                onChangeText(item);
               }}
               // renderLeftIcon={() => (
               //   <Image source={Icons.down_arrow} style={ImageStyle(10, 10)} />
               // )}
+              renderItem={(item) => {
+                return (
+                  <View style={styles.itemContainerStyle}>
+                    <Text style={styles.selectedTextStyle}>{item[labelField]}</Text>
+                  </View>
+                );
+              }}
               iconColor={colors.neutral_900}
             />
           </View>
@@ -133,11 +145,18 @@ const styles = StyleSheet.create({
   selectedTextStyle: {
     ...FontStyle(fontname.abeezee, 15, colors.neutral_900),
   },
+  itemContainerStyle: {
+    height: 30,
+    paddingHorizontal: 20
+    // backgroundColor: 'red',
+    // paddingVertical: 0
+  },
   placeholderStyle: {
     ...FontStyle(fontname.abeezee, 15, colors.neutral_500),
   },
   inputSearchStyle: {
     ...FontStyle(fontname.abeezee, 15, colors.neutral_500),
+    height: 40
   },
   dropdown: {
     height: 56,

@@ -1,9 +1,9 @@
 import { CommonActions } from '@react-navigation/native';
-import { navigationRef } from '../../navigation/Index';
 import ImagePicker from 'react-native-image-crop-picker';
 import moment from 'moment';
+import { navigationRef } from '../Navigation/RootContainer';
 
-export const dispatchNavigation = (name, params) => {
+export const resetNavigation = (name, params) => {
   navigationRef.dispatch(
     CommonActions.reset({
       index: 1,

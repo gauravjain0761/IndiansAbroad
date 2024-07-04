@@ -41,5 +41,6 @@ export const screenName = {
   CompleteProfile: 'CompleteProfile',
   Walkthrough: 'Walkthrough',
   CompleteProfile2: 'CompleteProfile2',
-  PaymentModalScreen: 'PaymentModalScreen'
+  PaymentModalScreen: 'PaymentModalScreen',
+  SplashScreen: 'SplashScreen'
 };

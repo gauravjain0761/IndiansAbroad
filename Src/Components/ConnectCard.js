@@ -255,10 +255,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary_4574ca,
     width: wp(130),
     alignItems: 'center',
-    height: hp(20),
+    height: hp(25),
     borderRadius: 4,
     marginTop: 5,
     marginBottom: hp(9),
+    justifyContent: 'center'
   },
   btnText: {
     ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),

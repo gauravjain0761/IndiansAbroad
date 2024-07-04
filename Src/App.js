@@ -22,7 +22,7 @@ import {
 
 function App() {
   const dispatch = useDispatch()
-  const [loading, setloading] = useState(true)
+  const [loading, setloading] = useState(false)
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
     if (!__DEV__) {
@@ -34,64 +34,64 @@ function App() {
     TextInput.defaultProps.allowFontScaling = false;
   }, []);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    checkSession()
-  }, [])
+  //   checkSession()
+  // }, [])
 
-  const checkSession = async () => {
-    let token = await getAsyncToken()
-    console.log(token)
-    if (token) {
-      let obj = {
-        params: {
-          token: token
-        },
-        onSuccess: async (response) => {
-          await setAuthorization(token)
-          let user = await getAsyncUserInfo()
-          console.log('user--', user)
-          dispatchAction(dispatch, SET_USER, user)
-          if (user && user._id) {
-            dispatch(onGetUserInfoApi({
-              params: {
-                userId: user._id
-              }
-            }))
-            setTimeout(() => {
-              setloading(false)
-            }, 500);
-          } else {
-            doLogin()
-          }
-        },
-        onFailure: (error) => {
-          doLogin()
-        }
-      }
-      dispatch(oncheckSession(obj))
-    } else {
-      doLogin()
-    }
-  }
+  // const checkSession = async () => {
+  //   let token = await getAsyncToken()
+  //   console.log(token)
+  //   if (token) {
+  //     let obj = {
+  //       params: {
+  //         token: token
+  //       },
+  //       onSuccess: async (response) => {
+  //         await setAuthorization(token)
+  //         let user = await getAsyncUserInfo()
+  //         console.log('user--', user)
+  //         dispatchAction(dispatch, SET_USER, user)
+  //         if (user && user._id) {
+  //           dispatch(onGetUserInfoApi({
+  //             params: {
+  //               userId: user._id
+  //             }
+  //           }))
+  //           setTimeout(() => {
+  //             setloading(false)
+  //           }, 500);
+  //         } else {
+  //           doLogin()
+  //         }
+  //       },
+  //       onFailure: (error) => {
+  //         doLogin()
+  //       }
+  //     }
+  //     dispatch(oncheckSession(obj))
+  //   } else {
+  //     doLogin()
+  //   }
+  // }
 
-  const doLogin = async () => {
-    let obj = {
-      data: {
-        email: 'jadhavharshal.510@gmail.com',
-        passCode: 'Trtr#789'
-      },
-      onSuccess: async (response) => {
-        setTimeout(() => {
-          setloading(false)
-        }, 500);
-      },
-      onFailure: (error) => {
-        setloading(false)
-      }
-    }
-    dispatch(onLoginApi(obj))
-  }
+  // const doLogin = async () => {
+  //   let obj = {
+  //     data: {
+  //       email: 'jadhavharshal.510@gmail.com',
+  //       passCode: 'Trtr#789'
+  //     },
+  //     onSuccess: async (response) => {
+  //       setTimeout(() => {
+  //         setloading(false)
+  //       }, 500);
+  //     },
+  //     onFailure: (error) => {
+  //       setloading(false)
+  //     }
+  //   }
+  //   dispatch(onLoginApi(obj))
+  // }
 
   const toastConfig = {
     success: ({ text1, text2, type, props, ...rest }) =>
@@ -115,15 +115,12 @@ function App() {
     },
   };
   return (
-    !loading ?
-      <BottomSheetModalProvider>
-        <View style={ApplicationStyles.applicationView}>
-          <RootContainer />
-          <Toast config={toastConfig} position="top" topOffset={0} />
-        </View>
-      </BottomSheetModalProvider>
-      :
-      <Loader />
+    <BottomSheetModalProvider>
+      <View style={ApplicationStyles.applicationView}>
+        <RootContainer />
+        <Toast config={toastConfig} position="top" topOffset={0} />
+      </View>
+    </BottomSheetModalProvider>
   );
 }
 export default App;

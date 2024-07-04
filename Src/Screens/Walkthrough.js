@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
 import Header from '../Components/Header'
 import PagerView from 'react-native-pager-view';
+import { resetNavigation } from '../utils/Global'
 export default function Walkthrough() {
     let data = [
         { title: 'Showcase your profile', des: 'Showcase your profile to stand out in the community and connect easily, fostering meaningful connections and networking opportunities among Indian expats.', image: Icons.w_1 },
@@ -48,8 +49,9 @@ export default function Walkthrough() {
                         <TouchableOpacity onPress={() => PagerViewRef.current.setPage(page + 1)} >
                             <Image source={Icons.Arrow_circle_right} style={styles.rightIcon} />
                         </TouchableOpacity>
+                        : <CommonButton title={'Explore'} onPress={() => resetNavigation('Home')} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
 
-                        : <CommonButton title={'Explore'} onPress={() => navigation.navigate(screenName.PaymentModalScreen)} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
+                        // : <CommonButton title={'Explore'} onPress={() => navigation.navigate(screenName.PaymentModalScreen)} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
                     }
                 </SafeAreaView>
             </ImageBackground>

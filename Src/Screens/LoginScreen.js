@@ -3,22 +3,39 @@ import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { FontStyle, ImageStyle, emailCheck, errorToast } from '../utils/commonFunction'
 import { fontname, wp } from '../Themes/Fonts'
 import Input from '../Components/Input'
 import CommonButton from '../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { screenName } from '../Navigation/ScreenConstants'
+import { onLoginApi } from '../Services/AuthServices'
+import { resetNavigation } from '../utils/Global'
 
 export default function LoginScreen() {
-    const [email, setemail] = useState('')
-    const [password, setpassword] = useState('')
+    const [email, setemail] = useState('jadhavharshal.510@gmail.com')
+    const [password, setpassword] = useState('Trtr#789')
     const navigation = useNavigation()
     const dispatch = useDispatch()
 
     const onLogin = () => {
-        navigation.navigate('Home')
+        if (!emailCheck(email)) {
+            errorToast('Please enter a valid email')
+        } else if (password == '') {
+            errorToast('Please enter password')
+        } else {
+            let obj = {
+                data: {
+                    email: email,
+                    passCode: password
+                },
+                onSuccess: async (response) => {
+                    resetNavigation('Home')
+                }
+            }
+            dispatch(onLoginApi(obj))
+        }
     }
 
     return (

@@ -6,6 +6,9 @@ import Navigation from './Navigation';
 import store from '../Redux';
 import Loader from '../Components/Loader';
 import colors from '../Themes/Colors';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
+export const navigationRef = createNavigationContainerRef();
+
 // Styles
 
 export default function RootContainer() {
@@ -13,11 +16,14 @@ export default function RootContainer() {
   const { preLoader } = useSelector(e => e.common)
 
   return (
-    <View style={ApplicationStyles.applicationView}>
-      <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
-      <Navigation />
-      {preLoader ? <Loader /> : null}
-    </View>
+    <NavigationContainer ref={navigationRef}>
+
+      <View style={ApplicationStyles.applicationView}>
+        <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
+        <Navigation />
+        {preLoader ? <Loader /> : null}
+      </View>
+    </NavigationContainer>
   )
 }
 

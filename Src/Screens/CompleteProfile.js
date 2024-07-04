@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { FontStyle, ImageStyle, errorToast, successToast } from '../utils/commonFunction'
 import { fontname, hp, wp } from '../Themes/Fonts'
 import Input from '../Components/Input'
 import CommonButton from '../Components/CommonButton'
@@ -15,6 +15,11 @@ import Modal from 'react-native-modal';
 import ActionSheet from '../Components/ActionSheet'
 import ImageCropPicker from 'react-native-image-crop-picker'
 import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
+import { dispatchAction, formDataApiCall } from '../utils/apiGlobal'
+import { IS_LOADING, SET_USER } from '../Redux/ActionTypes'
+import { api } from '../utils/apiConstants'
+import { setAsyncUserInfo } from '../utils/AsyncStorage'
 
 export default function CompleteProfile() {
     const navigation = useNavigation()
@@ -39,7 +44,8 @@ export default function CompleteProfile() {
     const [image, setimage] = useState(undefined)
     const [gender, setgender] = useState('')
     const [dob, setdob] = useState('')
-
+    const { user } = useSelector(e => e.common)
+    const dispatch = useDispatch()
     let data = [
         { title: 'Male', icon: Icons.maleGender },
         { title: 'Female', icon: Icons.femenine },
@@ -63,7 +69,39 @@ export default function CompleteProfile() {
     };
 
     const onNext = () => {
-        navigation.navigate(screenName.CompleteProfile2)
+        if (gender == '') {
+            errorToast('Please select gender')
+        } else if (dob == '') {
+            errorToast('Please select date of birth')
+        } else {
+            let data = {}
+            if (image) {
+                let time = new Date().getTime()
+                data['avtar'] = {
+                    uri: image.path,
+                    type: image.mime, // or photo.type image/jpg
+                    name: 'avtar_[' + time + '].' + image.path.split('.').pop()
+                }
+
+            }
+            data.birthDate = moment(dob).format('DD/MM/YYYY')
+            data.first_Name = user?.first_Name
+            data.last_Name = user?.last_Name
+            data.phonenumber = user?.phonenumber
+            data.email = user?.email
+            data.gender = gender.toLowerCase()
+            dispatchAction(dispatch, IS_LOADING, true)
+            formDataApiCall(api.registerstepone, data, (res) => {
+                dispatchAction(dispatch, IS_LOADING, false)
+                setAsyncUserInfo(res?.data)
+                dispatchAction(dispatch, SET_USER, res?.data)
+                navigation.navigate(screenName.CompleteProfile2)
+                successToast(res.msg)
+            }, () => {
+                dispatchAction(dispatch, IS_LOADING, false)
+            })
+        }
+        // navigation.navigate(screenName.CompleteProfile2)
     }
 
     return (
@@ -107,7 +145,7 @@ export default function CompleteProfile() {
                     </View>
                     <View>
                         <Text style={[styles.des, { marginBottom: 10 }]}>What is your Birthdate ?*</Text>
-                        <Input type={'dob'} value={dob} onChangeText={(text) => setdob(moment(text).format('MMMM,DD YYYY'))} placeholder={'Select your Birthdate'} />
+                        <Input type={'dob'} value={dob !== '' ? moment(dob).format('MMMM,DD YYYY') : ''} onChangeText={(text) => setdob(text)} placeholder={'Select your Birthdate'} />
                     </View>
                     <CommonButton title={'Next'} onPress={() => onNext()} extraStyle={styles.btn} />
 

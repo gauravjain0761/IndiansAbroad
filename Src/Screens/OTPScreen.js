@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { FontStyle, ImageStyle, errorToast, mobileNumberCheck } from '../utils/commonFunction'
 import { fontname, hp, wp } from '../Themes/Fonts'
 import Input from '../Components/Input'
 import CommonButton from '../Components/CommonButton'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
 import {
     CodeField,
@@ -16,16 +16,47 @@ import {
     useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import Header from '../Components/Header'
+import { onRetryOtp, onVerifyOtp } from '../Services/AuthServices'
+import { useDispatch } from 'react-redux'
+import { resetNavigation } from '../utils/Global'
 
 const CELL_COUNT = 6;
 export default function OTPScreen() {
     const navigation = useNavigation()
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
-    const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-        value,
-        setValue,
-    });
+    const [props, getCellOnLayoutHandler] = useClearByFocusCell({ value, setValue, });
+    const { params } = useRoute()
+    const dispatch = useDispatch()
+
+    const onPressVerify = () => {
+        if (!mobileNumberCheck(value) || value.length !== 6) {
+            errorToast('Please enter valid 6 digit otp')
+        } else {
+            let obj = {
+                data: {
+                    phonenumber: params?.code + params?.phone,
+                    otp: value,
+                },
+                onSuccess: async (response) => {
+                    resetNavigation(screenName.CompleteProfile)
+                    // navigation.navigate(screenName.OTPScreen, { phone: phone, code: code, email: email })
+                }
+            }
+            dispatch(onVerifyOtp(obj))
+        }
+    }
+
+    const onResendOtp = () => {
+        let obj = {
+            data: {
+                email: params?.email,
+                phonenumber: params?.code + params?.phone,
+            },
+        }
+        dispatch(onRetryOtp(obj))
+    }
+
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
@@ -33,7 +64,7 @@ export default function OTPScreen() {
                 <View style={{ marginHorizontal: wp(20) }}>
                     <Text style={styles.title}>OTP Verification</Text>
                     <Text style={styles.des}>We have sent a verification code to</Text>
-                    <Text style={styles.des}>+1-9876543214</Text>
+                    <Text style={styles.des}>{params?.code}-{params?.phone}</Text>
                     <CodeField
                         ref={ref}
                         {...props}
@@ -54,8 +85,8 @@ export default function OTPScreen() {
                             </Text>
                         )}
                     />
-                    <CommonButton title={'Verify'} onPress={() => navigation.navigate(screenName.CompleteProfile)} />
-                    <TouchableOpacity onPress={() => { }} style={styles.signUpView}>
+                    <CommonButton title={'Verify'} onPress={() => onPressVerify()} />
+                    <TouchableOpacity onPress={() => { onResendOtp() }} style={styles.signUpView}>
                         <Text style={styles.signUpText}>Didn't receive the code? <Text style={{ color: colors.primary_500 }}>Resend</Text></Text>
                     </TouchableOpacity>
                 </View>
