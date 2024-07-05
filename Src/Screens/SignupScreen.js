@@ -29,9 +29,9 @@ export default function SignupScreen() {
             errorToast('Please enter your first name')
         } else if (lastName.trim() == '') {
             errorToast('Please enter your last name')
-        } else if (!emailCheck(email)) {
+        } else if (!emailCheck(email.trim())) {
             errorToast('Please enter a valid email')
-        } else if (!mobileNumberCheck(mobile)) {
+        } else if (!mobileNumberCheck(mobile.trim())) {
             errorToast('Please enter a valid mobile number')
         } else if (!passwordCheck(password)) {
             errorToast('Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character')
@@ -40,14 +40,14 @@ export default function SignupScreen() {
         } else {
             let obj = {
                 data: {
-                    phonenumber: code + mobile,
-                    email: email,
-                    first_Name: firstName,
-                    last_Name: lastName,
+                    phonenumber: code + mobile.trim(),
+                    email: email.trim(),
+                    first_Name: firstName.trim(),
+                    last_Name: lastName.trim(),
                     passCode: password
                 },
                 onSuccess: async (response) => {
-                    navigation.navigate(screenName.OTPScreen, { phone: mobile, code: code, email: email })
+                    navigation.navigate(screenName.OTPScreen, { phone: mobile.trim(), code: code, email: email.trim() })
                 }
             }
             dispatch(onGetOtp(obj))

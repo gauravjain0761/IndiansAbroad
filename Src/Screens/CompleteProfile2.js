@@ -56,11 +56,11 @@ export default function CompleteProfile2() {
             errorToast('Please enter a state')
         } else if (!country) {
             errorToast('Please select a country')
-        } else if (rigion == '') {
+        } else if (rigion.trim() == '') {
             errorToast('Please enter a region')
-        } else if (unversity == '') {
+        } else if (unversity.trim() == '') {
             errorToast('Please enter an unversity/company')
-        } else if (profession == '') {
+        } else if (profession.trim() == '') {
             errorToast('Please enter profession')
         } else if (!termsCheckbox) {
             errorToast('Please agree terms and conditions of IndiansAbroad')
@@ -68,13 +68,13 @@ export default function CompleteProfile2() {
             let obj = {
                 data: {
                     phonenumber: user?.phonenumber,
-                    city: city,
-                    district: district,
-                    state: state,
+                    city: city.trim(),
+                    district: district.trim(),
+                    state: state.trim(),
                     countryId: country?._id,
-                    region: rigion,
-                    universityORcompany: unversity,
-                    profession: profession,
+                    region: rigion.trim(),
+                    universityORcompany: unversity.trim(),
+                    profession: profession.trim(),
                 },
                 onSuccess: () => {
                     navigation.navigate(screenName.Walkthrough)

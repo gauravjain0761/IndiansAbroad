@@ -20,14 +20,14 @@ export default function LoginScreen() {
     const dispatch = useDispatch()
 
     const onLogin = () => {
-        if (!emailCheck(email)) {
+        if (!emailCheck(email.trim())) {
             errorToast('Please enter a valid email')
         } else if (password == '') {
             errorToast('Please enter password')
         } else {
             let obj = {
                 data: {
-                    email: email,
+                    email: email.trim(),
                     passCode: password
                 },
                 onSuccess: async (response) => {
