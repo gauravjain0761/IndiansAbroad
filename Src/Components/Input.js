@@ -53,7 +53,7 @@ export default function Input({ value, onChangeText, label, placeholder, isPassw
             editable={false}
           />
           <View>
-            <Image source={Icons.camera} style={styles.imageView} />
+            <Image source={Icons.calender} style={styles.imageView} />
           </View>
         </TouchableOpacity>
         <DateTimePickerModal

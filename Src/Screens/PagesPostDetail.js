@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -141,7 +141,7 @@ export default function PagesPostDetail() {
           }}
         />}
       </ScrollView>
-      <SafeAreaView>
+      <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
         <View style={styles.commnetInput}>
           <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
           <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
@@ -149,7 +149,7 @@ export default function PagesPostDetail() {
             <Image source={Icons.send} style={ImageStyle(24, 24)} />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

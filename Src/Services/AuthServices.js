@@ -1,5 +1,6 @@
 import { IS_LOADING, SET_ALL_POST, SET_COUNTRIES, SET_FOLLOWER_LIST, SET_USER } from "../Redux/ActionTypes";
 import { setAsyncToken, setAsyncUserInfo } from "../utils/AsyncStorage";
+import { resetNavigation } from "../utils/Global";
 import { GET, POST, api } from "../utils/apiConstants";
 import { dispatchAction, handleErrorRes, handleSuccessRes, makeAPIRequest, setAuthorization } from "../utils/apiGlobal";
 import { successToast } from "../utils/commonFunction";
@@ -28,11 +29,12 @@ export const onLoginApi = (request) => async dispatch => {
         data: request?.data
     })
         .then(async (response) => {
-            handleSuccessRes(response, request, dispatch, () => {
-                setAsyncToken(response?.data?.token)
+            handleSuccessRes(response, request, dispatch, async () => {
+                await setAsyncToken(response?.data?.token)
                 setAuthorization(response?.data?.token)
-                setAsyncUserInfo(response?.data?.data)
+                await setAsyncUserInfo(response?.data?.data)
                 dispatchAction(dispatch, SET_USER, response?.data?.data)
+                resetNavigation('Home')
             });
         })
         .catch(error => {

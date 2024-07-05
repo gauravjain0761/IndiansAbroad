@@ -243,6 +243,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginTop: 30,
         elevation: 1,
+        borderWidth: 1,
+        borderColor: colors.placeHolderColor
     },
     input: {
         height: 170,

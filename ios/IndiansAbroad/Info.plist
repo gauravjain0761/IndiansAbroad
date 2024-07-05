@@ -31,17 +31,17 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-		<key>NSPhotoLibraryUsageDescription</key>
+	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Update your profile picture using the photo library</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Update your profile picture using the camera</string>
-	 <key>ITSAppUsesNonExemptEncryption</key>
+	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>ABeeZee-Italic.ttf</string>
 		<string>Actor-Regular.ttf</string>
-		<string>Actor-Regular.ttf</string>
+		<string>ABeeZee-Regular.ttf</string>
 		<string>MaterialIcons.ttf</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>

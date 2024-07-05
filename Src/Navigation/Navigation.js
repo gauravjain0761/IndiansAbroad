@@ -53,6 +53,7 @@ import Walkthrough from '../Screens/Walkthrough';
 import CompleteProfile2 from '../Screens/CompleteProfile2';
 import PaymentModalScreen from '../Screens/PaymentModalScreen';
 import SplashScreen from '../Screens/SplashScreen';
+import MediaScreen from '../Screens/MediaScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -229,6 +230,8 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.RepliesComments} component={RepliesComments} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SearchScreen} component={SearchScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.UpdatePostScreen} component={UpdatePostScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MediaScreen} component={MediaScreen} />
+
     </Stack.Navigator>
   );
 }

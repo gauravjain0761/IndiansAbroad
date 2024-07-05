@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import colors from './Colors';
 import { FontStyle } from '../utils/commonFunction';
 import { fontname, wp } from './Fonts';
-export default StyleSheet.create({
+export default ApplicationStyles = StyleSheet.create({
   applicationView: {
     flex: 1,
     backgroundColor: colors.white
@@ -32,5 +32,14 @@ export default StyleSheet.create({
     marginHorizontal: wp(16),
     marginVertical: 12,
     alignSelf: 'flex-start'
+  },
+  menuItemText: {
+    ...FontStyle(fontname.actor_regular, 18, colors.neutral_900),
+  },
+  menu: {
+    backgroundColor: colors.neutral_300,
+    borderWidth: 1,
+    borderColor: colors.neutral_400,
+    marginTop: 12,
   },
 });

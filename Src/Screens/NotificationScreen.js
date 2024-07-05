@@ -157,7 +157,7 @@ const NotificationScreen = () => {
                     : colors?.black,
               },
             ]}>
-            {'Requests(4)'}
+            {'Connection Invite(4)'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -225,6 +225,7 @@ const styles = StyleSheet.create({
     ...FontStyle(fontname.actor_regular, 18, colors.black, '700'),
     paddingLeft: wp(14),
     lineHeight: hp(26),
+    marginTop: -5
   },
   categoriesTitle: {
     ...FontStyle(fontname.abeezee, 14, colors.black, '700'),
@@ -302,11 +303,13 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: colors.primary_500,
-    paddingHorizontal: wp(15),
+    // paddingHorizontal: wp(15),
     borderRadius: 3,
     marginTop: hp(1),
     height: 30,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: 80,
+    alignItems: 'center'
   },
   buttonText: {
     ...FontStyle(fontname.actor_regular, 13, colors.white, '400'),

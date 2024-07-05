@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // top: -8,
     // alignSelf:'center'
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   tabItemView: {
     // flex: 1,

@@ -217,7 +217,7 @@ export default function IndiansPage() {
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView edges={['top']}>
-        <Header title={'IndiansAbroad'} showRight={true} />
+        <Header title={'IndiansAbroad'} />
       </SafeAreaView>
       <View style={styles.tabMainView}>
         <TouchableOpacity onPress={() => { setTabSelection('INDIANS'), setIsLeftButtonActive(true), ref.current?.setPage(0) }} style={[styles.tabItemView,]}>
@@ -280,7 +280,7 @@ export default function IndiansPage() {
 const styles = StyleSheet.create({
   tabMainView: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   tabItemView: {
     paddingBottom: wp(14),

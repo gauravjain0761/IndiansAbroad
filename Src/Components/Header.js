@@ -26,9 +26,11 @@ export default function Header({
   const navigation = useNavigation();
   if (isChatDetails) {
     return (
-      <View style={[ApplicationStyles.row, styles.headerMain]}>
-        <TouchableOpacity onPress={chatLeftPress()} style={styles.backIcon}>
-          <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
+      <View style={[ApplicationStyles.row, styles.header]}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.menuIcon}>
+          <View style={styles.backIcon}>
+            <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
+          </View>
         </TouchableOpacity>
         <View
           style={[
@@ -109,15 +111,18 @@ export default function Header({
           <Image source={Icons.logo} style={ImageStyle(23, 23)} />
           <Text
             style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
+              FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
               { marginLeft: 8, textAlign: 'center' },
             ]}>
             {title}
           </Text>
         </View>
         <View style={[ApplicationStyles.row, { gap: 15, position: 'absolute', right: 0, }]}>
-          <TouchableOpacity onPress={() => onClickPlus()}>
-            <Image source={Icons.plusHome} style={ImageStyle(26, 24)} />
+          <TouchableOpacity style={{
+            borderRadius: 4,
+            overflow: 'hidden'
+          }} onPress={() => onClickPlus()}>
+            <Image source={Icons.plusHome} style={ImageStyle(24, 24, 'cover')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onRightPress()}>
             <Image source={Icons.bell} style={ImageStyle(24, 24)} />
@@ -129,8 +134,11 @@ export default function Header({
   return (
     <View style={[ApplicationStyles.row, styles.header]}>
       {showLeft ? (
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backIcon}>
-          <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.menuIcon}>
+
+          <View style={styles.backIcon}>
+            <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
+          </View>
         </TouchableOpacity>
       ) : (
         <View />
@@ -197,14 +205,8 @@ export default function Header({
 const styles = StyleSheet.create({
   header: {
     justifyContent: 'space-between',
-    marginHorizontal: wp(16),
-    marginVertical: 12,
-    height: 30,
-  },
-  headerMain: {
-    marginHorizontal: wp(16),
-    marginVertical: 12,
-    height: 30,
+    marginRight: wp(16),
+    height: 50,
   },
   backIcon: {
     borderWidth: 1,
@@ -213,11 +215,21 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: colors.primary_500,
     backgroundColor: colors.btnBg,
-    position: 'absolute',
+    // position: 'absolute',
     zIndex: 111,
+    // backgroundColor: 'yellow',
+    // height: 50,
+    // marginHorizontal: wp(16),
+    // alignItems: 'center',
+    // justifyContent: 'center'
   },
   menuIcon: {
     position: 'absolute',
     zIndex: 111,
+    // backgroundColor: 'yellow',
+    height: 50,
+    paddingHorizontal: wp(16),
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });

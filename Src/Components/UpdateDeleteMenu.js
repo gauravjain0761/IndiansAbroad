@@ -24,29 +24,16 @@ export default function UpdateDeleteMenu({
       <Menu
         visible={visible}
         anchor={
-          <TouchableOpacity
-            style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
-            onPress={showMenu}>
+          <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }} onPress={showMenu}>
             {icon}
           </TouchableOpacity>
         }
         onRequestClose={hideMenu}
         style={styles.menu}>
-        <MenuItem
-          textStyle={styles.itemText}
-          onPress={() => {
-            hideMenu(), onUpdatePress();
-          }}>
+        <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { onUpdatePress() }, 500); }}>
           Update
         </MenuItem>
-        <MenuItem
-          textStyle={styles.itemText}
-          onPress={() => {
-            hideMenu(),
-              setTimeout(() => {
-                onDeletePress();
-              }, 500);
-          }}>
+        <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { onDeletePress(); }, 500); }}>
           Delete
         </MenuItem>
       </Menu>
@@ -60,7 +47,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     backgroundColor: colors.neutral_300,
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: colors.neutral_400,
     marginTop: 12,
   },

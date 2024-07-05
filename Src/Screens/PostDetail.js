@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -144,7 +144,8 @@ export default function PostDetail() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={'IndiansAbroad'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <ScrollView>
+
+            <ScrollView >
                 <View style={{ marginBottom: 10 }}>
                     <PostCard isDetailScreen={true} item={activePost} />
                 </View>
@@ -155,7 +156,7 @@ export default function PostDetail() {
                     }}
                 />}
             </ScrollView>
-            <SafeAreaView>
+            <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
                 <View style={styles.commnetInput}>
                     <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
                     <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
@@ -163,7 +164,7 @@ export default function PostDetail() {
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView>
+            </KeyboardAvoidingView>
             {deleteModal && <ConfirmationModal
                 visible={deleteModal}
                 onClose={() => setdeleteModal(false)}
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.secondary_500,
         paddingLeft: 10,
-        paddingVertical: 2
+        paddingVertical: 2,
     },
     input: {
         backgroundColor: colors.inputBg,

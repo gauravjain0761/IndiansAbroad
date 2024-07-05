@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Platform, StyleSheet, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, Platform, StyleSheet, ScrollView, Text, TouchableOpacity, View, SafeAreaView, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
@@ -88,37 +88,47 @@ export default function CompleteProfile2() {
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <Header showLeft logoShow={false} />
-                <ScrollView style={{ paddingHorizontal: wp(20), flex: 1 }}>
-                    <Text style={styles.title}>Complete Your Profile</Text>
-                    <Text style={styles.des}>To proceed, please complete your profile</Text>
-                    <Text style={styles.des}>information</Text>
-                    <View style={styles.inputView}>
-                        <Text style={styles.des}>Where are you from in India ?*</Text>
-                        <Input extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City'} />
+                <SafeAreaView style={{ flex: 1, }}>
+                    <Header showLeft logoShow={false} />
 
-                        <Input extraStyle={styles.input} value={district} onChangeText={(text) => setdistrict(text)} placeholder={'District'} />
-                        <Input extraStyle={styles.input} value={state} onChangeText={(text) => setstate(text)} placeholder={'State'} />
+                    <KeyboardAvoidingView
+                        {...(Platform.OS === 'ios'
+                            ? {
+                                behavior: 'padding',
+                            }
+                            : {})}>
+                        <ScrollView style={{ paddingHorizontal: wp(20), }}>
+                            <Text style={styles.title}>Complete Your Profile</Text>
+                            <Text style={styles.des}>To proceed, please complete your profile</Text>
+                            <Text style={styles.des}>information</Text>
+                            <View style={styles.inputView}>
+                                <Text style={styles.des}>Where are you from in India ?*</Text>
+                                <Input extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City'} />
 
-                    </View>
-                    <View style={styles.inputView}>
-                        <Text style={styles.des}>Abroad information*</Text>
-                        {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
-                        <Input extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'Region'} />
-                        <Input extraStyle={styles.input} value={unversity} onChangeText={(text) => setunversity(text)} placeholder={'University/Company'} />
-                        <Input extraStyle={styles.input} value={profession} onChangeText={(text) => setprofession(text)} placeholder={'Profession'} />
-                    </View>
-                    <View style={styles.row}>
-                        <TouchableOpacity onPress={() => settermsCheckbox(!termsCheckbox)}>
-                            <Image
-                                source={termsCheckbox ? Icons.checkbox1 : Icons.checkbox}
-                                style={[ImageStyle(20, 20)]}
-                            />
-                        </TouchableOpacity>
-                        <Text style={[styles.des, { flex: 1 }]}>I agree terms and conditions of IndiansAbroad</Text>
-                    </View>
-                    <CommonButton extraStyle={{ marginBottom: hp(20) }} title={'Finish'} onPress={() => onNext()} />
-                </ScrollView>
+                                <Input extraStyle={styles.input} value={district} onChangeText={(text) => setdistrict(text)} placeholder={'District'} />
+                                <Input extraStyle={styles.input} value={state} onChangeText={(text) => setstate(text)} placeholder={'State'} />
+
+                            </View>
+                            <View style={styles.inputView}>
+                                <Text style={styles.des}>Abroad information*</Text>
+                                {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
+                                <Input extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'Region'} />
+                                <Input extraStyle={styles.input} value={unversity} onChangeText={(text) => setunversity(text)} placeholder={'University/Company'} />
+                                <Input extraStyle={styles.input} value={profession} onChangeText={(text) => setprofession(text)} placeholder={'Profession'} />
+                            </View>
+                            <View style={styles.row}>
+                                <TouchableOpacity onPress={() => settermsCheckbox(!termsCheckbox)}>
+                                    <Image
+                                        source={termsCheckbox ? Icons.checkbox1 : Icons.checkbox}
+                                        style={[ImageStyle(20, 20)]}
+                                    />
+                                </TouchableOpacity>
+                                <Text style={[styles.des, { flex: 1 }]}>I agree terms and conditions of IndiansAbroad</Text>
+                            </View>
+                            <CommonButton extraStyle={{ marginBottom: hp(100) }} title={'Finish'} onPress={() => onNext()} />
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                </SafeAreaView>
             </ImageBackground>
         </View>
     )

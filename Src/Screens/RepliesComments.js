@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList, Image, TextInput } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, View, ScrollView, TouchableOpacity, FlatList, Image, TextInput, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../Components/Header'
 import ApplicationStyles from '../Themes/ApplicationStyles'
@@ -102,42 +102,45 @@ export default function RepliesComments() {
     }
 
     return (
-        <View style={ApplicationStyles.applicationView}>
+        <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={'IndiansAbroad'} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
             <View style={{ borderTopWidth: 1, borderTopColor: colors.secondary_500, }}>
                 <Text style={styles.chatText}>Replies</Text>
             </View>
-            <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
-                {activeComment && <View style={{ marginBottom: 10 }}>
-                    <View style={styles.headerView}>
-                        <RenderUserIcon url={activeComment?.user?.avtar} height={53} isBorder />
-                        <View style={styles.commentBg}>
-                            <View style={ApplicationStyles.flex}>
-                                <Text numberOfLines={1} style={styles.username}>{activeComment?.user?.first_Name} {activeComment?.user?.last_Name}</Text>
-                                <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-                                <Text style={styles.commentText2}>{activeComment?.comment}</Text>
+            <ScrollView >
+                <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
+                    {activeComment && <View style={{ marginBottom: 10 }}>
+                        <View style={styles.headerView}>
+                            <RenderUserIcon url={activeComment?.user?.avtar} height={53} isBorder />
+                            <View style={styles.commentBg}>
+                                <View style={ApplicationStyles.flex}>
+                                    <Text numberOfLines={1} style={styles.username}>{activeComment?.user?.first_Name} {activeComment?.user?.last_Name}</Text>
+                                    <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+                                    <Text style={styles.commentText2}>{activeComment?.comment}</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    {repliesComments && repliesComments.length > 0 &&
-                        <FlatList
-                            data={repliesComments}
-                            renderItem={({ item, index }) => {
-                                return <RenderReply item={item} index={index} isLastIndex={repliesComments.length - 1 == index} />
-                            }}
-                        />
-                    }
-                </View>}
-            </View>
-            <SafeAreaView>
+                        {repliesComments && repliesComments.length > 0 &&
+                            <FlatList
+                                data={repliesComments}
+                                renderItem={({ item, index }) => {
+                                    return <RenderReply item={item} index={index} isLastIndex={repliesComments.length - 1 == index} />
+                                }}
+                            />
+                        }
+                    </View>}
+                </View>
+            </ScrollView>
+            <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
                 <View style={styles.commnetInput}>
                     <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
                     <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                     <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
                     </TouchableOpacity>
+
                 </View>
-            </SafeAreaView>
+            </KeyboardAvoidingView>
             {deleteModal && <ConfirmationModal
                 visible={deleteModal}
                 onClose={() => setdeleteModal(false)}
@@ -147,7 +150,7 @@ export default function RepliesComments() {
                 onPressCancel={() => setdeleteModal(false)}
                 onPressSuccess={() => deleteComment(selectedComment?._id)}
             />}
-        </View>
+        </SafeAreaView>
     )
 }
 

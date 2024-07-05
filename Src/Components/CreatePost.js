@@ -9,6 +9,9 @@ import {
   FlatList,
   Image,
   TextInput,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,6 +40,10 @@ import { getalluserposts, onCreatePost } from '../Services/PostServices';
 import { api } from '../utils/apiConstants';
 import { dispatchAction, formDataApiCall } from '../utils/apiGlobal';
 import { IS_LOADING } from '../Redux/ActionTypes';
+import ReactNativeModal from 'react-native-modal';
+import { navigationRef } from '../Navigation/RootContainer';
+import { screenName } from '../Navigation/ScreenConstants';
+
 
 export default function CreatePost({ createPostModal, setcreatePostModal }) {
   const [postText, setpostText] = useState('');
@@ -139,53 +146,80 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
       errorToast('Please enter post text or select image')
     }
   }
+
+  const onCloseModal = () => {
+    Alert.alert('Do you really want to discard the post ?', '', [
+      {
+        text: 'NO',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'YES', onPress: () => setcreatePostModal(false) },
+    ]);
+  }
+
   return (
-    <ModalContainer isVisible={createPostModal} onClose={() => setcreatePostModal(false)} transparent>
-      <View style={styles.modalView}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 28, }}>
-          <TouchableOpacity onPress={() => setcreatePostModal(false)} style={styles.backView}>
-            <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
-          </TouchableOpacity>
-          <View style={styles.headerRow}>
-            <Text style={styles.title}>Create Post</Text>
-          </View>
-        </View>
-        <View style={styles.inputBox}>
-          <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
-          <View style={styles.rowView}>
-            <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
-              <Image source={Icons.photoUpload} style={styles.photoUpload} />
+    <ReactNativeModal onBackButtonPress={() => Keyboard.dismiss()} onBackdropPress={() => Keyboard.dismiss()} avoidKeyboard isVisible={createPostModal} backdropOpacity={0}
+      style={{ justifyContent: 'flex-end', margin: 0 }} >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+        <View style={styles.modalView}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 28, }}>
+            <TouchableOpacity onPress={() => onCloseModal()} style={styles.backView}>
+              <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
-              <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View>
-          {imageArray.length > 0 &&
-            <View style={styles.imageView}>
-              {imageArray.map((item, index) => {
-                return (
-                  <View >
-                    {item?.mime.includes('image') ?
-                      <Image source={{ uri: item.path }} style={styles.imageStyles} />
-                      :
-                      <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
-                    }
-                    <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
-                      <Image source={Icons.closeRound} style={styles.closeIcon} />
-                    </TouchableOpacity>
-                  </View>
-                )
-              })}
+            <View style={styles.headerRow}>
+              <Text style={styles.title}>Create Post</Text>
             </View>
-          }
+          </View>
+          <View style={styles.inputBox}>
+            <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
+            <View style={styles.rowView}>
+              <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
+                <Image source={Icons.photoUpload} style={styles.photoUpload} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
+                <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            {imageArray.length > 0 &&
+              <View style={styles.imageView}>
+                {imageArray.map((item, index) => {
+                  return (
+                    // <TouchableOpacity onPress={() => navigationRef.navigate(screenName.MediaScreen, { images: imageArray })} >
+                    //   {item?.mime.includes('image') ?
+                    //     <Image source={{ uri: item.path }} style={styles.imageStyles} />
+                    //     :
+                    //     <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
+                    //   }
+                    //   <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
+                    //     <Image source={Icons.closeRound} style={styles.closeIcon} />
+                    //   </TouchableOpacity>
+                    // </TouchableOpacity>
+                    <View>
+                      {item?.mime.includes('image') ?
+                        <Image source={{ uri: item.path }} style={styles.imageStyles} />
+                        :
+                        <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
+                      }
+                      <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
+                        <Image source={Icons.closeRound} style={styles.closeIcon} />
+                      </TouchableOpacity>
+                    </View>
+                  )
+                })}
+              </View>
+            }
+          </View>
+          <TouchableOpacity onPress={() => onPressPublish()} style={styles.blueButton}>
+            <Text style={styles.publishText}>Publish</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => onPressPublish()} style={styles.blueButton}>
-          <Text style={styles.publishText}>Publish</Text>
-        </TouchableOpacity>
-      </View>
-    </ModalContainer>
+
+      </TouchableWithoutFeedback>
+    </ReactNativeModal>
+
   );
 }
 
@@ -220,7 +254,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   input: {
-    height: 170,
+    height: hp(170),
     textAlignVertical: 'top',
     padding: 15,
     ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),

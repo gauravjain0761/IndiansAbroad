@@ -12,13 +12,17 @@ import { Icons } from '../Themes/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { onShareApi } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { IS_LOADING } from '../Redux/ActionTypes';
+import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../Redux/ActionTypes';
+import SearchBar from './SearchBar';
 
 export default function ShareModal({ visible, onClose, postId }) {
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch()
-    const { followerList, user } = useSelector(e => e.common)
+    const { followerList, user, mainFollowerList } = useSelector(e => e.common)
     const [list, setlist] = useState(undefined)
+    const [searchText, setSearchText] = useState('')
+    const [mainList, setmainList] = useState(undefined)
+
     useEffect(() => {
         dispatch(getFollowerList({
             data: { userId: user._id, search: '' }
@@ -31,24 +35,39 @@ export default function ShareModal({ visible, onClose, postId }) {
                 element.isSelected = false
             });
             setlist(followerList)
+            dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, followerList)
         }
     }, [followerList])
 
-    const setSelect = (index) => {
+    const setSelect = (id) => {
         let temp = Object.assign([], list)
-        temp[index].isSelected = !temp[index].isSelected
+        temp.forEach(element => {
+            if (element._id == id) {
+                element.isSelected = !element.isSelected
+            }
+
+        });
         setlist(temp)
     }
-
+    const onUpdateMain = (id) => {
+        let temp2 = Object.assign([], mainFollowerList)
+        temp2.forEach(element => {
+            if (element._id == id) {
+                element.isSelected = !element.isSelected
+            }
+        });
+        dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, temp2)
+    }
     const onPressShare = () => {
         onClose()
         dispatchAction(dispatch, IS_LOADING, true)
-        let temp = list.filter(element => element.isSelected == true)
+        let temp = mainFollowerList.filter(element => element.isSelected == true)
         if (temp.length > 0) {
             let idArray = []
             temp.forEach(element => {
                 idArray.push(element._id)
             });
+            console.log(idArray)
             let obj = {
                 data: {
                     userIds: idArray.toString(),
@@ -70,7 +89,7 @@ export default function ShareModal({ visible, onClose, postId }) {
                     <RenderUserIcon url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
                     <Text style={styles.listText}>{item?.followingId?.first_Name} {item?.followingId?.last_Name}</Text>
                 </View>
-                <TouchableOpacity onPress={() => setSelect(index)}>
+                <TouchableOpacity onPress={() => setSelect(item._id)}>
                     <Image
                         source={item?.isSelected ? Icons.checkbox1 : Icons.checkbox}
                         style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
@@ -79,6 +98,24 @@ export default function ShareModal({ visible, onClose, postId }) {
             </View>
         );
     };
+
+    const onSearchName = (search) => {
+        let tempList = Object.assign([], mainFollowerList)
+        const filtered = tempList.filter((val) =>
+            val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
+        );
+        const filter2 = tempList.filter((val) =>
+            val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
+        );
+        let searchTextContact = Object.values(
+            filtered.concat(filter2).reduce((r, o) => {
+                r[o._id] = o;
+                return r;
+            }, {})
+        );
+        setlist(searchTextContact)
+    }
+
 
     return (
         <ModalContainer isVisible={visible} onClose={() => onClose()} transparent={true} >
@@ -89,6 +126,12 @@ export default function ShareModal({ visible, onClose, postId }) {
                         style={[ImageStyle(36, 36)]}
                     />
                 </TouchableOpacity>
+                <SearchBar
+                    value={searchText}
+                    onChangeText={text => { setSearchText(text), onSearchName(text) }}
+                    placeholder={'Search'}
+                    containerStyles={{ marginVertical: 5 }}
+                />
                 {list && <FlatList
                     data={list}
                     renderItem={renderItem}
@@ -107,7 +150,8 @@ export default function ShareModal({ visible, onClose, postId }) {
 const styles = StyleSheet.create({
     modalView: {
         backgroundColor: colors.white,
-        paddingTop: 20
+        paddingTop: 20,
+        height: SCREEN_HEIGHT - 150
     },
     listText: {
         ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),

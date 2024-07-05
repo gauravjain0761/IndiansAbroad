@@ -76,7 +76,11 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
       >
         <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</MenuItem>
         <MenuDivider color={colors.primary_500} />
-        <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setblockModal(true) }}>Block</MenuItem>
+        <MenuItem textStyle={styles.itemText} onPress={() => {
+          hideMenu(), setTimeout(() => {
+            setblockModal(true)
+          }, 500);
+        }}>Block</MenuItem>
       </Menu>
       <ConfirmationModal
         visible={blockModal}

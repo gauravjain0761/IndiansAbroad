@@ -47,9 +47,6 @@ export default function DiscussionForum() {
     dispatch(onGetThreadList(obj))
   }
 
-  console.log('threadList---', threadList)
-
-
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.DiscussionForumDetail)}>

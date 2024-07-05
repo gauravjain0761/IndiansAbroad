@@ -20,8 +20,9 @@ export default function SplashScreen() {
     useEffect(() => {
         setTimeout(() => {
             setloading(true)
+            checkSession()
         }, 3000);
-        checkSession()
+
     }, [])
 
     const checkSession = async () => {

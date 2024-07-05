@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -9,7 +9,7 @@ import { Icons } from '../Themes/Icons';
 import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
-import DiscussionForum from '../Components/DiscussionForum';
+import DiscussionForumDetailCard from '../Components/DiscussionForumDetailCard';
 
 export default function DiscussionForumDetail() {
     const navigation = useNavigation()
@@ -85,9 +85,9 @@ export default function DiscussionForumDetail() {
                     navigation.goBack();
                 }}
             />
-            <ScrollView>
+            <ScrollView >
                 <View style={{ marginBottom: 10 }}>
-                    <DiscussionForum />
+                    <DiscussionForumDetailCard />
                 </View>
                 <Text style={styles.commentText1}>4 Responses</Text>
                 <FlatList
@@ -97,21 +97,20 @@ export default function DiscussionForumDetail() {
                     }}
                 />
             </ScrollView>
-            <SafeAreaView>
-                <View style={styles.commnetInput}>
-                    {/* <RenderUserIcon height={46} isBorder /> */}
-                    <TextInput style={styles.input} placeholder='Add Your Response' placeholderTextColor={colors.neutral_500} />
-                    <TouchableOpacity style={styles.sendButton}>
-                        <Image source={Icons.send} style={ImageStyle(24, 24)} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.sendButton}>
-                        <Image source={Icons.share} style={ImageStyle(24, 24, 'cover')} />
-                        <Text style={[styles.shareText, { lineHeight: 16 }]}>Share</Text>
-                    </TouchableOpacity>
-                </View>
 
-            </SafeAreaView>
-        </SafeAreaView>
+            <View style={styles.commnetInput}>
+                {/* <RenderUserIcon height={46} isBorder /> */}
+                <TextInput style={styles.input} placeholder='Add Response' placeholderTextColor={colors.neutral_500} />
+                <TouchableOpacity style={styles.sendButton}>
+                    <Image source={Icons.send} style={ImageStyle(24, 24)} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.sendButton}>
+                    <Image source={Icons.share} style={ImageStyle(24, 24, 'cover')} />
+                    <Text style={[styles.shareText, { lineHeight: 16 }]}>Share</Text>
+                </TouchableOpacity>
+            </View>
+
+        </SafeAreaView >
     )
 }
 

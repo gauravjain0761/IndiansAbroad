@@ -7,7 +7,11 @@ export default function ModalContainer({ isVisible, onClose, transparent = false
     const insets = useSafeAreaInsets();
 
     return (
-        <ReactNativeModal backdropOpacity={transparent ? 0 : 0.5} style={{ justifyContent: 'flex-end', margin: 0, ...extraStyle }} isVisible={isVisible} onBackButtonPress={() => onClose()} onBackdropPress={() => onClose()}>
+        <ReactNativeModal avoidKeyboard backdropOpacity={transparent ? 0 : 0.5}
+            style={{ justifyContent: 'flex-end', margin: 0, ...extraStyle }}
+            isVisible={isVisible}
+            onBackButtonPress={() => onClose()}
+            onBackdropPress={() => onClose()}>
             {children}
         </ReactNativeModal>
     )

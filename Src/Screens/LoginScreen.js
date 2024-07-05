@@ -31,7 +31,7 @@ export default function LoginScreen() {
                     passCode: password
                 },
                 onSuccess: async (response) => {
-                    resetNavigation('Home')
+
                 }
             }
             dispatch(onLoginApi(obj))

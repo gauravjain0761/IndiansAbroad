@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, SafeAreaView, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
@@ -61,60 +61,72 @@ export default function SignupScreen() {
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <View style={styles.transparent}>
-                    <Image source={Icons.logo} style={ImageStyle(75, 75)} />
-                    <Text style={styles.titleText2}>IndiansAbroad</Text>
-                </View>
-                <View style={{ marginHorizontal: wp(20) }}>
-                    <Text style={styles.loginText}>Sign Up</Text>
-                    <TouchableOpacity onPress={() => onPressGoogle()} style={[styles.blueButton]}>
-                        <Image source={Icons.googlePlus} style={styles.googleLogo} />
-                        <Text style={styles.publishText}>{'Sign up with google'}</Text>
-                    </TouchableOpacity>
-                    <View style={styles.orView}>
-                        <View style={styles.line} />
-                        <Text style={styles.des}>Or</Text>
-                        <View style={styles.line} />
-                    </View>
-                    <Text style={styles.des}>Please fill the details to create an account.</Text>
-                    <View style={styles.hightView} />
-                    <View style={styles.inputrow}>
-                        <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={firstName} placeholder={'First Name'} onChangeText={(text) => setfirstName(text)} />
-                        <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={lastName} placeholder={'Last Name'} onChangeText={(text) => setlastName(text)} />
-                    </View>
-                    <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
-                    <View style={styles.hightView} />
-                    <View style={[styles.inputrow, { marginBottom: 0 }]}>
-                        <TouchableOpacity
-                            style={styles.inputContainer}
-                            onPress={() => setShow(true)}>
-                            <Text style={styles.inputText}>{code}</Text>
-                            <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
-                        </TouchableOpacity>
-                        <Input extraStyle={{ flex: 1 }} keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
-                    </View>
-                    <View style={styles.hightView} />
-                    <Input value={password} placeholder={'Password'} onChangeText={(text) => setpassword(text)} isPassword />
-                    <View style={styles.hightView} />
-                    <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
-                    <View style={styles.hightView} />
-                    <CommonButton title={'Next'} onPress={() => onLogin()} />
-                    <CountryPicker
-                        // countryCode={code.replace('+', '')}
-                        visible={show}
-                        onClose={() => setShow(false)}
-                        withCallingCode
-                        onSelect={(item) => {
-                            setcode('+' + item?.callingCode[0]);
-                            setShow(false);
-                        }}
-                        withCallingCodeButton
-                        withFilter
-                        placeholder={''}
-                        withEmoji={false}
-                    // withFlag
-                    />
-                </View>
+                <SafeAreaView>
+                    <KeyboardAvoidingView
+                        {...(Platform.OS === 'ios'
+                            ? {
+                                behavior: 'padding',
+                            }
+                            : {})}>
+                        <ScrollView>
+                            <View style={styles.transparent}>
+                                <Image source={Icons.logo} style={ImageStyle(75, 75)} />
+                                <Text style={styles.titleText2}>IndiansAbroad</Text>
+                            </View>
+                            <View style={{ marginHorizontal: wp(20) }}>
+                                <Text style={styles.loginText}>Sign Up</Text>
+                                <TouchableOpacity onPress={() => onPressGoogle()} style={[styles.blueButton]}>
+                                    <Image source={Icons.googlePlus} style={styles.googleLogo} />
+                                    <Text style={styles.publishText}>{'Sign up with google'}</Text>
+                                </TouchableOpacity>
+                                <View style={styles.orView}>
+                                    <View style={styles.line} />
+                                    <Text style={styles.des}>Or</Text>
+                                    <View style={styles.line} />
+                                </View>
+                                <Text style={styles.des}>Please fill the details to create an account.</Text>
+                                <View style={styles.hightView} />
+                                <View style={styles.inputrow}>
+                                    <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={firstName} placeholder={'First Name'} onChangeText={(text) => setfirstName(text)} />
+                                    <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={lastName} placeholder={'Last Name'} onChangeText={(text) => setlastName(text)} />
+                                </View>
+                                <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
+                                <View style={styles.hightView} />
+                                <View style={[styles.inputrow, { marginBottom: 0 }]}>
+                                    <TouchableOpacity
+                                        style={styles.inputContainer}
+                                        onPress={() => setShow(true)}>
+                                        <Text style={styles.inputText}>{code}</Text>
+                                        <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
+                                    </TouchableOpacity>
+                                    <Input extraStyle={{ flex: 1 }} keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
+                                </View>
+                                <View style={styles.hightView} />
+                                <Input value={password} placeholder={'Password'} onChangeText={(text) => setpassword(text)} isPassword />
+                                <View style={styles.hightView} />
+                                <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
+                                <View style={styles.hightView} />
+                                <CommonButton title={'Next'} onPress={() => onLogin()} />
+                                <CountryPicker
+                                    // countryCode={code.replace('+', '')}
+                                    visible={show}
+                                    onClose={() => setShow(false)}
+                                    withCallingCode
+                                    onSelect={(item) => {
+                                        setcode('+' + item?.callingCode[0]);
+                                        setShow(false);
+                                    }}
+                                    withCallingCodeButton
+                                    withFilter
+                                    placeholder={''}
+                                    withEmoji={false}
+                                // withFlag
+                                />
+                            </View>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                </SafeAreaView>
+
             </ImageBackground>
         </View>
     )
