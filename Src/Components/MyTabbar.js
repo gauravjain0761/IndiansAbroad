@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
   },
   labelTextStyle: {
-    ...FontStyle(fontname.abeezee, 11, colors.primary_8091ba),
+    ...FontStyle(11, colors.primary_8091ba),
     marginTop: 1,
   },
   itemContainer: {

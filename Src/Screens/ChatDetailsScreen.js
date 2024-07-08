@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   chatText: {
     top: -8,
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 14, colors.secondary_600),
+    ...FontStyle(14, colors.secondary_600),
   },
   rowStyle: {
     flexDirection: 'row',
@@ -89,18 +89,18 @@ const styles = StyleSheet.create({
   },
   text: {
     lineHeight: 14,
-    ...FontStyle(fontname.actor_regular, 9, colors.neutral_900),
+    ...FontStyle(9, colors.neutral_900),
   },
   text1: {
     marginTop: 1,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '700'),
+    ...FontStyle(12, colors.neutral_900, '700'),
   },
   text2: {
     lineHeight: 18,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+    ...FontStyle(12, colors.neutral_900),
   },
   text3: {
     top: -8,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_600),
+    ...FontStyle(12, colors.neutral_600),
   },
 });

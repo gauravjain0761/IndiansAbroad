@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
         marginBottom: hp(20)
     },
     btnText: {
-        ...FontStyle(fontname.actor_regular, 15, colors.white, '500')
+        ...FontStyle(15, colors.white, '500')
     },
     title: {
-        ...FontStyle(fontname.actor_regular, 20, colors.neutral_900, '500'),
+        ...FontStyle(20, colors.neutral_900, '500'),
         textAlign: 'center',
         marginVertical: hp(25),
         marginHorizontal: hp(20)

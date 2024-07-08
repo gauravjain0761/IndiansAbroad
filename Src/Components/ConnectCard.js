@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: wp(10),
     width: screen_width * 0.85,
-    ...FontStyle(fontname.actor_regular, 14, colors.black, '500'),
+    ...FontStyle(14, colors.black, '500'),
   },
   imageStyle: {
     width: wp(92),
@@ -236,12 +236,12 @@ const styles = StyleSheet.create({
   },
   text1: {
     marginTop: 5,
-    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+    ...FontStyle(14, colors.neutral_900, '700'),
   },
   text2: {
     marginTop: 2,
     // lineHeight: 16,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
   },
   text3: {
     // marginTop:2,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     // top: -2,
     textAlign: 'center',
     height: 32,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
   },
   btnView: {
     backgroundColor: colors.primary_4574ca,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   btnText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),
-    lineHeight: 18,
+    ...FontStyle(12, colors.white),
+    // lineHeight: 18,
   },
 });

@@ -11,6 +11,7 @@ import { screenName } from '../Navigation/ScreenConstants'
 import Header from '../Components/Header'
 import PagerView from 'react-native-pager-view';
 import { resetNavigation } from '../utils/Global'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function Walkthrough() {
     let data = [
         { title: 'Showcase your profile', des: 'Showcase your profile to stand out in the community and connect easily, fostering meaningful connections and networking opportunities among Indian expats.', image: Icons.w_1 },
@@ -24,12 +25,12 @@ export default function Walkthrough() {
     const [page, setpage] = useState(0)
     const PagerViewRef = useRef(null)
     const navigation = useNavigation()
-
+    const insets = useSafeAreaInsets();
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
                 <SafeAreaView style={ApplicationStyles.flex}>
-                    <View style={styles.headerPosition}>
+                    <View style={[styles.headerPosition, { top: insets.top }]}>
                         <Header showLeft logoShow={false} />
                     </View>
                     <PagerView ref={PagerViewRef} onPageSelected={e => { console.log("Current page index", e.nativeEvent.position), setpage(e.nativeEvent.position) }} style={[ApplicationStyles.flex, { marginTop: wp(40) }]} initialPage={0}>
@@ -39,8 +40,8 @@ export default function Walkthrough() {
                                     {/* <View style={{ marginBottom: 20 }}> */}
                                     <Image source={item.image} style={{ width: SCREEN_WIDTH, height: '70%', resizeMode: 'contain', marginBottom: 10 }} />
                                     {/* </View> */}
-                                    <Text style={{ ...FontStyle(fontname.abeezee, 18, colors.white, '700'), marginBottom: 10 }}>{item.title}</Text>
-                                    <Text style={{ ...FontStyle(fontname.abeezee, 14, colors.white), lineHeight: 22 }}>{item.des}</Text>
+                                    <Text style={{ ...FontStyle(18, colors.white, '700'), marginBottom: 10 }}>{item.title}</Text>
+                                    <Text style={{ ...FontStyle(14, colors.white), lineHeight: 22 }}>{item.des}</Text>
                                 </View>
                             )
                         })}

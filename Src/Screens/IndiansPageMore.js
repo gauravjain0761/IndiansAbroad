@@ -185,7 +185,6 @@ export default function IndiansPageMore() {
           style={[{}, styles.tabItemView]}>
           <Text
             style={FontStyle(
-              fontname.actor_regular,
               14,
               tabSelection == 'INDIANS'
                 ? colors.primary_6a7e
@@ -204,7 +203,6 @@ export default function IndiansPageMore() {
           style={styles.tabItemView}>
           <Text
             style={FontStyle(
-              fontname.actor_regular,
               14,
               tabSelection == 'PAGES'
                 ? colors.primary_6a7e
@@ -228,7 +226,7 @@ export default function IndiansPageMore() {
         <View style={{ flex: 1 }} key={'1'}>
           <SearchBar value={searchText} onChangeText={text => onSearchIndians(text)} placeholder={'Search Indians here'} />
           <Text style={[
-            FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+            FontStyle(14, colors.neutral_900, '700'),
             { marginHorizontal: wp(16), marginVertical: 8 },
           ]}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
           {allIndian.length > 0 ? <FlatList
@@ -283,7 +281,7 @@ export default function IndiansPageMore() {
         <View style={{ flex: 1 }} key={'2'}>
           <SearchBar value={searchTextPost} onChangeText={text => onSearchPost(text)} placeholder={'Search Pages here'} />
           <Text style={[
-            FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+            FontStyle(14, colors.neutral_900, '700'),
             { marginHorizontal: wp(16), marginVertical: 8 },
           ]}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
           <FlatList
@@ -358,6 +356,6 @@ const styles = StyleSheet.create({
   seeBtnText: {
     // lineHeight: 18,
     paddingVertical: 2,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900, '400'),
+    ...FontStyle(11, colors.neutral_900, '400'),
   },
 });

@@ -135,8 +135,8 @@ export default function CompleteProfile2() {
 }
 
 const styles = StyleSheet.create({
-    title: { ...FontStyle(fontname.abeezee, 24, colors.white, '700'), },
-    des: { ...FontStyle(fontname.abeezee, 14, colors.white) },
+    title: { ...FontStyle(24, colors.white, '700'), },
+    des: { ...FontStyle(14, colors.white) },
     uploadPhotoView: {
         height: 126,
         width: 126,
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     uploadText: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     uploadImage: {
         height: 110,

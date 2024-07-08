@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         borderRadius: 63 / 2,
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+        ...FontStyle(15, colors.neutral_900),
         marginRight: 5,
     },
     drawerItem: {
@@ -150,6 +150,6 @@ const styles = StyleSheet.create({
         // marginRight: hp(20),
     },
     drawerItemText: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+        ...FontStyle(15, colors.neutral_900),
     },
 })

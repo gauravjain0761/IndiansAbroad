@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput, KeyboardAvoidingView } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Platform, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -97,18 +97,19 @@ export default function DiscussionForumDetail() {
                     }}
                 />
             </ScrollView>
-
-            <View style={styles.commnetInput}>
-                {/* <RenderUserIcon height={46} isBorder /> */}
-                <TextInput style={styles.input} placeholder='Add Response' placeholderTextColor={colors.neutral_500} />
-                <TouchableOpacity style={styles.sendButton}>
-                    <Image source={Icons.send} style={ImageStyle(24, 24)} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.sendButton}>
-                    <Image source={Icons.share} style={ImageStyle(24, 24, 'cover')} />
-                    <Text style={[styles.shareText, { lineHeight: 16 }]}>Share</Text>
-                </TouchableOpacity>
-            </View>
+            <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+                <View style={styles.commnetInput}>
+                    {/* <RenderUserIcon height={46} isBorder /> */}
+                    <TextInput multiline={true} style={styles.input} placeholder='Add Response' placeholderTextColor={colors.neutral_500} />
+                    <TouchableOpacity style={styles.sendButton}>
+                        <Image source={Icons.send} style={ImageStyle(24, 24)} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.sendButton}>
+                        <Image source={Icons.share} style={ImageStyle(24, 24, 'cover')} />
+                        <Text style={[styles.shareText, { lineHeight: 16 }]}>Share</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
 
         </SafeAreaView >
     )
@@ -126,13 +127,13 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700')
+        ...FontStyle(15, colors.neutral_900, '700')
     },
     degreeText: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     shareText: {
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     commentBg: {
         flexDirection: 'row',
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     likesText: {
-        ...FontStyle(fontname.abeezee, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     innerRow: {
         flexDirection: 'row',
@@ -160,15 +161,15 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     commentText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900)
+        ...FontStyle(14, colors.neutral_900)
     },
     commentText1: {
         textAlign: 'center',
         marginBottom: 8,
-        ...FontStyle(fontname.abeezee, 13, colors.neutral_100)
+        ...FontStyle(13, colors.neutral_100)
     },
     commentText2: {
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900)
+        ...FontStyle(16, colors.neutral_900)
     },
     verticalLine: {
         width: 1,
@@ -201,11 +202,14 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: colors.inputBg,
         flex: 1,
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         borderRadius: 4,
-        height: 47,
+        minHeight: 47,
         paddingHorizontal: 10,
-        marginLeft: 10
+        marginLeft: 10,
+        textAlignVertical: 'center',
+        maxHeight: 150,
+        paddingVertical: 12
     },
     sendButton: {
         paddingHorizontal: 10,

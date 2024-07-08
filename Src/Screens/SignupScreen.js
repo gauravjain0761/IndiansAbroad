@@ -101,6 +101,8 @@ export default function SignupScreen() {
                                     </TouchableOpacity>
                                     <Input extraStyle={{ flex: 1 }} keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
                                 </View>
+                                {/* <Input type={'dob'} value={dob !== '' ? moment(dob).format('MMMM,DD YYYY') : ''} onChangeText={(text) => setdob(text)} placeholder={'Select your Birthdate'} /> */}
+
                                 <View style={styles.hightView} />
                                 <Input value={password} placeholder={'Password'} onChangeText={(text) => setpassword(text)} isPassword />
                                 <View style={styles.hightView} />
@@ -135,21 +137,21 @@ export default function SignupScreen() {
 const styles = StyleSheet.create({
     transparent: {
         paddingVertical: 10,
-        backgroundColor: colors.whiteOpacity,
+        // backgroundColor: colors.whiteOpacity,
         marginTop: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
     loginText: {
-        ...FontStyle(fontname.abeezee, 18, colors.white, '700'),
+        ...FontStyle(18, colors.white, '700'),
         alignSelf: 'center',
         marginVertical: 10
     },
     titleText2: {
-        ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700',),
+        ...FontStyle(20, colors.white, '700',),
     },
     des: {
-        ...FontStyle(fontname.abeezee, 12, colors.white),
+        ...FontStyle(12, colors.white),
         alignSelf: 'center',
     },
     hightView: {
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     forgotText: {
-        ...FontStyle(fontname.abeezee, 14, colors.white),
+        ...FontStyle(14, colors.white),
         paddingVertical: 15
     },
     signUpView: {
@@ -167,11 +169,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     signUpText: {
-        ...FontStyle(fontname.abeezee, 14, colors.white),
+        ...FontStyle(14, colors.white),
         marginVertical: 10
     },
     publishText: {
-        ...FontStyle(fontname.abeezee, 14, colors.white),
+        ...FontStyle(14, colors.white),
     },
     blueButton: {
         backgroundColor: colors.buttonBlue,
@@ -217,7 +219,7 @@ const styles = StyleSheet.create({
         height: 56
     },
     inputText: {
-        ...FontStyle(fontname.abeezee, 15, colors.neutral_900),
+        ...FontStyle(15, colors.neutral_900),
         // flex: 1,
         // paddingVertical: 4,
         borderRadius: 5,

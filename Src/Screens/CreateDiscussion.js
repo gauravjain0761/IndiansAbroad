@@ -96,11 +96,11 @@ const styles = StyleSheet.create({
   startText: {
     top: -12,
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
+    ...FontStyle(15, colors.neutral_900, '700'),
   },
   startText1: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.primary_4574ca, '400'),
+    ...FontStyle(15, colors.primary_4574ca, '400'),
   },
   inputBox: {
     backgroundColor: colors.white,
@@ -115,10 +115,10 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     padding: 15,
     paddingLeft: 20,
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_500),
+    ...FontStyle(14, colors.neutral_500),
   },
   inputTitle: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_500),
+    ...FontStyle(14, colors.neutral_500),
     backgroundColor: colors.white,
     marginHorizontal: wp(20),
     marginBottom: 10,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   publishText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.white),
+    ...FontStyle(14, colors.white),
   },
   blueButton: {
     backgroundColor: colors.buttonBlue,

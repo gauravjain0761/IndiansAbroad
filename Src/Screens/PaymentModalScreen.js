@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
     },
     des: {
-        ...FontStyle(fontname.abeezee, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         textAlign: 'center',
         lineHeight: 22
     },
@@ -80,6 +80,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     rsText: {
-        ...FontStyle(fontname.abeezee, 32, colors.neutral_900, '700'),
+        ...FontStyle(32, colors.neutral_900, '700'),
     }
 })

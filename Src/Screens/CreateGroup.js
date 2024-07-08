@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
   chatText: {
     top: -19,
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 16, colors.neutral_900, '400'),
+    ...FontStyle(16, colors.neutral_900, '400'),
   },
   searchText: {
     marginHorizontal: wp(22),
-    ...FontStyle(fontname.actor_regular, 13, colors.neutral_900, '400'),
+    ...FontStyle(13, colors.neutral_900, '400'),
   },
   addImage1: {
     width: 24,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral_500,
   },
   inputText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     height: 56,
   },
   inputText1: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     marginLeft: 15,
   },
   listView: {

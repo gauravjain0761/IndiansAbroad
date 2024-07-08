@@ -32,30 +32,13 @@ export default function Header({
             <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
           </View>
         </TouchableOpacity>
-        <View
-          style={[
-            ApplicationStyles.row,
-            {
-              position: 'absolute',
-              justifyContent: 'center',
-              width: SCREEN_WIDTH - wp(32),
-              flex: 1
-            },
-          ]}>
-          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-          <Text
-            style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
-              { marginLeft: 8, textAlign: 'center' },
-            ]}>
-            {title}
-          </Text>
+        <View style={styles.middleView}>
+          {logoShow && <Image source={Icons.logo} style={ImageStyle(23, 23)} />}
+          <Text style={[styles.titleText, titleStyle,]}>{title}</Text>
         </View>
-        <View style={[ApplicationStyles.row, { gap: 10, position: 'absolute', right: 0, }]}>
-          <TouchableOpacity onPress={() => chatRightPress()}>
-            <Image source={Icons.more} style={ImageStyle(12, 12)} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.rigthIconView} onPress={() => chatRightPress()}>
+          <Image source={Icons.more} style={ImageStyle(12, 12)} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -65,57 +48,25 @@ export default function Header({
         <TouchableOpacity style={styles.menuIcon} onPress={chatLeftPress}>
           <Image source={Icons.contact} style={ImageStyle(24, 24)} />
         </TouchableOpacity>
-        <View
-          style={[
-            ApplicationStyles.row,
-            {
-              position: 'absolute',
-              justifyContent: 'center',
-              width: SCREEN_WIDTH - wp(32),
-            },
-          ]}>
-          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-          <Text
-            style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
-              { marginLeft: 8, textAlign: 'center' },
-            ]}>
-            {title}
-          </Text>
+        <View style={styles.middleView}>
+          {logoShow && <Image source={Icons.logo} style={ImageStyle(23, 23)} />}
+          <Text style={[styles.titleText, titleStyle,]}>{title}</Text>
         </View>
-        <View style={[ApplicationStyles.row, { gap: 10, position: 'absolute', right: 0 }]}>
-          <TouchableOpacity onPress={() => chatRightPress()}>
-            <Image source={Icons.postAdd} style={ImageStyle(26, 24)} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.rigthIconView} onPress={() => chatRightPress()}>
+          <Image source={Icons.postAdd} style={ImageStyle(26, 24)} />
+        </TouchableOpacity>
       </View>
     );
   }
   if (isHome) {
     return (
       <View style={[ApplicationStyles.row, styles.header]}>
-        <TouchableOpacity style={styles.menuIcon} onPress={() => navigation.toggleDrawer()}>
+        <TouchableOpacity onPress={() => navigation.toggleDrawer()} style={styles.menuIcon}>
           <Image source={Icons.menus} style={ImageStyle(24, 24)} />
         </TouchableOpacity>
-        <View
-          style={[
-            ApplicationStyles.row,
-            {
-              position: 'absolute',
-              justifyContent: 'center',
-              width: SCREEN_WIDTH - wp(32),
-              alignSelf: 'center',
-              left: 0, right: 0
-            },
-          ]}>
-          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-          <Text
-            style={[
-              FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
-              { marginLeft: 8, textAlign: 'center' },
-            ]}>
-            {title}
-          </Text>
+        <View style={styles.middleView}>
+          {logoShow && <Image source={Icons.logo} style={ImageStyle(23, 23)} />}
+          <Text style={[styles.titleText, titleStyle,]}>{title}</Text>
         </View>
         <View style={[ApplicationStyles.row, { gap: 15, position: 'absolute', right: 0, }]}>
           <TouchableOpacity style={{
@@ -124,7 +75,7 @@ export default function Header({
           }} onPress={() => onClickPlus()}>
             <Image source={Icons.plusHome} style={ImageStyle(24, 24, 'cover')} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => onRightPress()}>
+          <TouchableOpacity style={{ paddingRight: wp(16) }} onPress={() => onRightPress()}>
             <Image source={Icons.bell} style={ImageStyle(24, 24)} />
           </TouchableOpacity>
         </View>
@@ -133,71 +84,22 @@ export default function Header({
   }
   return (
     <View style={[ApplicationStyles.row, styles.header]}>
-      {showLeft ? (
+      {showLeft &&
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.menuIcon}>
-
           <View style={styles.backIcon}>
             <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
           </View>
         </TouchableOpacity>
-      ) : (
-        <View />
-      )}
-      {!logoShow ? (
-        <View
-          style={[
-            ApplicationStyles.row,
-            {
-              position: 'absolute',
-              justifyContent: 'center',
-              width: SCREEN_WIDTH - wp(32),
-            },
-          ]}>
-          <Text
-            style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900, "700"),
-              { textAlign: 'center' },
-              titleStyle,
-            ]}>
-            {title}
-          </Text>
-        </View>
-      ) : (
-        title !== '' && (
-          <View
-            style={[
-              ApplicationStyles.row,
-              {
-                position: 'absolute',
-                justifyContent: 'center',
-                width: SCREEN_WIDTH - wp(32),
-              },
-            ]}>
-            <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-            <Text
-              style={[
-                FontStyle(
-                  fontname.actor_regular,
-                  16,
-                  colors.neutral_900,
-                  '700',
-                ),
-                { marginLeft: 8, textAlign: 'center' },
-                titleStyle,
-              ]}>
-              {title}
-            </Text>
-          </View>
-        )
-      )}
-
-      {showRight ? (
-        <TouchableOpacity onPress={() => onRightPress ? onRightPress() : {}}>
+      }
+      <View style={styles.middleView}>
+        {logoShow && title !== '' && <Image source={Icons.logo} style={ImageStyle(23, 23)} />}
+        <Text style={[styles.titleText, titleStyle,]}>{title}</Text>
+      </View>
+      {showRight &&
+        <TouchableOpacity style={styles.rigthIconView} onPress={() => onRightPress ? onRightPress() : {}}>
           <Image source={icon ? icon : Icons.bell} style={ImageStyle(24, 24)} />
         </TouchableOpacity>
-      ) : (
-        <View />
-      )}
+      }
     </View>
   );
 }
@@ -205,9 +107,28 @@ export default function Header({
 const styles = StyleSheet.create({
   header: {
     justifyContent: 'space-between',
-    marginRight: wp(16),
     height: 50,
+    width: SCREEN_WIDTH,
   },
+  middleView: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    left: 0, right: 0,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  titleText: { marginLeft: 8, textAlign: 'center', ...FontStyle(16, colors.neutral_900, '700',) },
+  rigthIconView: {
+    position: 'absolute',
+    zIndex: 111,
+    height: 50,
+    paddingHorizontal: wp(16),
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 0,
+  },
+
   backIcon: {
     borderWidth: 1,
     paddingHorizontal: 10,
@@ -215,21 +136,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: colors.primary_500,
     backgroundColor: colors.btnBg,
-    // position: 'absolute',
     zIndex: 111,
-    // backgroundColor: 'yellow',
-    // height: 50,
-    // marginHorizontal: wp(16),
-    // alignItems: 'center',
-    // justifyContent: 'center'
   },
   menuIcon: {
     position: 'absolute',
     zIndex: 111,
-    // backgroundColor: 'yellow',
     height: 50,
     paddingHorizontal: wp(16),
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+
 });

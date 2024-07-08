@@ -3,11 +3,11 @@ import React from 'react'
 import ReactNativeModal from 'react-native-modal'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function ModalContainer({ isVisible, onClose, transparent = false, extraStyle = {}, children }) {
+export default function ModalContainer({ isVisible, avoidKeyboard = true, onClose, transparent = false, extraStyle = {}, children }) {
     const insets = useSafeAreaInsets();
 
     return (
-        <ReactNativeModal avoidKeyboard backdropOpacity={transparent ? 0 : 0.5}
+        <ReactNativeModal avoidKeyboard={avoidKeyboard} backdropOpacity={transparent ? 0 : 0.5}
             style={{ justifyContent: 'flex-end', margin: 0, ...extraStyle }}
             isVisible={isVisible}
             onBackButtonPress={() => onClose()}

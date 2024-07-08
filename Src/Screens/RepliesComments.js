@@ -13,6 +13,7 @@ import { onAddCommentReply, onDeleteCommentReply, onGetLikedUserList, onGetRepli
 import { api } from '../utils/apiConstants'
 import { Icons } from '../Themes/Icons'
 import ConfirmationModal from '../Components/ConfirmationModal'
+import CommentInput from '../Components/CommentInput'
 
 
 export default function RepliesComments() {
@@ -131,7 +132,14 @@ export default function RepliesComments() {
                     </View>}
                 </View>
             </ScrollView>
-            <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+            <CommentInput
+                onComment={() => onComment()}
+                onChangeText={(text) => setcommentText(text)}
+                commentText={commentText}
+                placeholder={'Add Comment'}
+            />
+
+            {/* <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
                 <View style={styles.commnetInput}>
                     <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
                     <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
@@ -140,7 +148,7 @@ export default function RepliesComments() {
                     </TouchableOpacity>
 
                 </View>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView> */}
             {deleteModal && <ConfirmationModal
                 visible={deleteModal}
                 onClose={() => setdeleteModal(false)}
@@ -158,7 +166,7 @@ const styles = StyleSheet.create({
     chatText: {
         // top: -19,
         textAlign: 'center',
-        ...FontStyle(fontname.actor_regular, 18, colors.secondary_600, '700'),
+        ...FontStyle(18, colors.secondary_600, '700'),
         marginVertical: 5
     },
     headerView: {
@@ -172,11 +180,11 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
+        ...FontStyle(15, colors.neutral_900, '700'),
     },
     degreeText: {
         marginTop: 2,
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     commentBg: {
         flexDirection: 'row',
@@ -188,7 +196,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     likesText: {
-        ...FontStyle(fontname.abeezee, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     innerRow: {
         flexDirection: 'row',
@@ -204,10 +212,10 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     commentText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900)
+        ...FontStyle(14, colors.neutral_900)
     },
     commentText2: {
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900)
+        ...FontStyle(16, colors.neutral_900)
     },
     verticalLine: {
         width: 1,
@@ -240,7 +248,7 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: colors.inputBg,
         flex: 1,
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         borderRadius: 4,
         height: 47,
         paddingHorizontal: 10,

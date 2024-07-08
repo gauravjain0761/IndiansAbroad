@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
+import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 
-export default function ChatCard({indians, cardPress}) {
+export default function ChatCard({ indians, cardPress }) {
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={styles.imageStyle}>
@@ -58,12 +58,12 @@ const styles = StyleSheet.create({
   },
   text1: {
     marginTop: 5,
-    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, '700'),
+    ...FontStyle(14, colors.neutral_900, '700'),
   },
   text3: {
     lineHeight: 18,
-    textAlign:'center',
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    textAlign: 'center',
+    ...FontStyle(12, colors.neutral_900, '400'),
   },
   btnView: {
     flexDirection: 'row',
@@ -72,13 +72,13 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   btnText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
     lineHeight: 18,
   },
   chatIcon: {
     width: 18,
     height: 18,
-    marginRight:0,
-    resizeMode:'contain'
+    marginRight: 0,
+    resizeMode: 'contain'
   },
 });

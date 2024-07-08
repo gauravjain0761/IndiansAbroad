@@ -113,11 +113,11 @@ const styles = StyleSheet.create({
     chatText: {
         // top: -19,
         textAlign: 'center',
-        ...FontStyle(fontname.actor_regular, 18, colors.secondary_600, '700'),
+        ...FontStyle(18, colors.secondary_600, '700'),
         marginVertical: 5
     },
     listText: {
-        ...FontStyle(fontname.abeezee, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         marginLeft: 15,
         flex: 1
     },
@@ -138,10 +138,10 @@ const styles = StyleSheet.create({
     },
     title: {
         marginTop: 10,
-        ...FontStyle(fontname.actor_regular, 15, colors.primary_8091ba, '700')
+        ...FontStyle(15, colors.primary_8091ba, '700')
     },
     name: {
-        ...FontStyle(fontname.actor_regular, 13, colors.neutral_900)
+        ...FontStyle(13, colors.neutral_900)
     },
     imageAvtar: {
         width: 70,

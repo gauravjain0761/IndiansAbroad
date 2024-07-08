@@ -34,7 +34,7 @@ export default function DeletePopModal({
           <Image source={Icons.check} style={ImageStyle(24, 24)} />
           <Text
             style={[
-              FontStyle(fontname.abeezee, 24, colors.neutral_900, '700'),
+              FontStyle(24, colors.neutral_900, '700'),
               { marginLeft: 8, flex: 1 },
             ]}>
             {'Delete page ?'}
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     marginVertical: 20,
   },
   inputText: {
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   inputText1: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -111,12 +111,12 @@ const styles = StyleSheet.create({
     // marginTop:12
   },
   labelText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.black),
+    ...FontStyle(15, colors.black),
     marginBottom: 4,
     marginTop: 20,
   },
   checkText: {
-    ...FontStyle(fontname.actor_regular, 13, colors.neutral_900),
+    ...FontStyle(13, colors.neutral_900),
     flex: 1,
   },
   btnView: {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 12,
   },
 });

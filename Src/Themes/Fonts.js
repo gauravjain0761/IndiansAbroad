@@ -16,12 +16,13 @@ export const fontname = {
   abeezeeItalic: 'ABeeZee-Italic',
 }
 
-export function defaultFontStyle(fontName, fontSize, color, fontWeight) {
+export function defaultFontStyle(fontSize, color, fontWeight) {
   return {
-    fontFamily: fontName,
+    fontFamily: 'OpenSans-Regular',
     fontSize: fontSize + 1,
     color: color,
-    fontWeight: fontWeight,
+    fontWeight: fontWeight ? fontWeight : '400',
+    includeFontPadding: false
   };
 }
 

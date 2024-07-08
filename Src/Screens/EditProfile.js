@@ -38,7 +38,7 @@ export default function EditProfile() {
         onLeftPress={() => navigation.goBack()}
         logoShow={false}
       />
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: wp(20) }}>
         <View style={styles.userIcon}>
           <RenderUserIcon height={100} />
         </View>
@@ -115,24 +115,23 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
     paddingVertical: 10,
-    marginHorizontal: wp(20),
     borderRadius: 5,
     marginTop: 12,
     marginBottom: 14,
   },
   cardText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_500),
+    ...FontStyle(11, colors.neutral_500),
   },
   btnView: {
     backgroundColor: colors.buttonBlue,
-    marginHorizontal: wp(20),
+    // marginHorizontal: wp(20),
     marginBottom: 10,
     borderRadius: 5,
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 16,
   },
 });

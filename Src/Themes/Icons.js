@@ -60,6 +60,7 @@ export const Icons = {
     star: require('../assets/Icons/star.png'),
     camera: require('../assets/Icons/camera.png'),
     calender: require('../assets/Icons/calender.png'),
+    Verified_user: require('../assets/Icons/Verified_user.png'),
 
     w_1: require('../assets/Icons/w_1.png'),
     w_2: require('../assets/Icons/w_2.png'),

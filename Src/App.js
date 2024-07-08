@@ -14,11 +14,6 @@ import { FontStyle } from './utils/commonFunction';
 import { onGetUserInfoApi, onLoginApi, oncheckSession } from './Services/AuthServices';
 import Loader from './Components/Loader';
 import { SET_USER } from './Redux/ActionTypes';
-import {
-  BottomSheetModal,
-  BottomSheetView,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
 
 function App() {
   const dispatch = useDispatch()
@@ -115,12 +110,10 @@ function App() {
     },
   };
   return (
-    <BottomSheetModalProvider>
-      <View style={ApplicationStyles.applicationView}>
-        <RootContainer />
-        <Toast config={toastConfig} position="top" topOffset={0} />
-      </View>
-    </BottomSheetModalProvider>
+    <View style={ApplicationStyles.applicationView}>
+      <RootContainer />
+      <Toast config={toastConfig} position="top" topOffset={0} />
+    </View>
   );
 }
 export default App;
@@ -152,7 +145,7 @@ const styles = StyleSheet.create({
   },
   textStyleToast: {
     // marginLeft: hp(2)
-    ...FontStyle(fontname.actor_regular, 16, colors.white),
+    ...FontStyle(16, colors.white),
     textAlign: 'center'
   },
 });

@@ -34,7 +34,7 @@ export default function DeleteModal({
           <Image source={Icons.logo} style={ImageStyle(23, 23)} />
           <Text
             style={[
-              FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
+              FontStyle(16, colors.neutral_900, '700'),
               { marginLeft: 8, textAlign: 'center' },
             ]}>
             {'IndiansAbroad'}
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   headerText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     marginVertical: 20,
   },
   inputText: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   inputText1: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -127,12 +127,12 @@ const styles = StyleSheet.create({
     // marginTop:12
   },
   labelText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.black),
+    ...FontStyle(15, colors.black),
     marginBottom: 4,
     marginTop: 20,
   },
   checkText: {
-    ...FontStyle(fontname.actor_regular, 13, colors.neutral_900),
+    ...FontStyle(13, colors.neutral_900),
     flex: 1,
     textAlign: 'justify'
   },
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 12,
   },
 });

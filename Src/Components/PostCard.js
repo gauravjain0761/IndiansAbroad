@@ -321,29 +321,29 @@ const styles = StyleSheet.create({
     borderRadius: 57 / 2,
   },
   username: {
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_900),
+    ...FontStyle(13, colors.neutral_900),
     textTransform: 'capitalize',
   },
   username1: {
-    ...FontStyle(fontname.abeezee, 14, colors.neutral_900, "700"),
+    ...FontStyle(14, colors.neutral_900, "700"),
     textTransform: 'capitalize',
   },
   degreeText: {
-    ...FontStyle(fontname.abeezee, 12, colors.neutral_900),
+    ...FontStyle(12, colors.neutral_900),
   },
   degreeText1: {
     marginTop: 2,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+    ...FontStyle(12, colors.neutral_900),
   },
   degreeText3: {
-    ...FontStyle(fontname.abeezee, 11, colors.neutral_900),
+    ...FontStyle(11, colors.neutral_900),
   },
   messageView: {
     paddingHorizontal: 10,
     alignItems: 'center',
   },
   description: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     paddingBottom: 10,
     paddingHorizontal: 20,
   },
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   modalUserName: {
-    ...FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
+    ...FontStyle(16, colors.neutral_900, '700'),
     paddingVertical: 15,
     textAlign: 'center',
   },
@@ -390,13 +390,13 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.neutral_800,
   },
   modalText: {
-    ...FontStyle(fontname.actor_regular, 18, colors.neutral_900),
+    ...FontStyle(18, colors.neutral_900),
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
   touchableView: { height: 42, justifyContent: 'center', },
   aboutTextMore: {
-    ...FontStyle(fontname.actor_regular, 14, colors.primary_500),
+    ...FontStyle(14, colors.primary_500),
     paddingBottom: 10,
     alignSelf: 'flex-end',
     marginHorizontal: 20,

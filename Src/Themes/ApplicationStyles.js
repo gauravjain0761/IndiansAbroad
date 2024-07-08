@@ -15,12 +15,12 @@ export default ApplicationStyles = StyleSheet.create({
     flex: 1
   },
   noDataFound: {
-    ...FontStyle(fontname.actor_regular, 20, colors.neutral_500, '700',),
+    ...FontStyle(20, colors.neutral_500, '700',),
     textAlign: 'center',
     marginTop: 100
   },
   titleText: {
-    ...FontStyle(fontname.abeezee, 27, colors.neutral_900, '700',),
+    ...FontStyle(27, colors.white, '700',),
   },
   backIcon: {
     borderWidth: 1,
@@ -34,7 +34,7 @@ export default ApplicationStyles = StyleSheet.create({
     alignSelf: 'flex-start'
   },
   menuItemText: {
-    ...FontStyle(fontname.actor_regular, 18, colors.neutral_900),
+    ...FontStyle(18, colors.neutral_900),
   },
   menu: {
     backgroundColor: colors.neutral_300,

@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import colors from '../../Themes/Colors';
-import {fontname, hp, wp} from '../../Themes/Fonts';
-import {FontStyle} from '../../utils/commonFunction';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { fontname, hp, wp } from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Login_Input from '../../Components/Login_Input';
 import {
   CodeField,
@@ -22,7 +22,7 @@ import {
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChangePhoneVerify() {
@@ -30,7 +30,7 @@ export default function ChangePhoneVerify() {
   const navigation = useNavigation();
   const CELL_COUNT = 6;
   const [value, setValue] = useState('');
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
@@ -39,7 +39,7 @@ export default function ChangePhoneVerify() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-      <KeyboardAwareScrollView style={{marginHorizontal: wp(16), flex: 1}}>
+      <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Mobile Number</Text>
         <Text style={styles.headerText1}>
           We've sent the code to your new mobile number. Please enter the code
@@ -57,8 +57,8 @@ export default function ChangePhoneVerify() {
               cellCount={CELL_COUNT}
               keyboardType="number-pad"
               textContentType="oneTimeCode"
-              rootStyle={{justifyContent: 'space-between'}}
-              renderCell={({index, symbol, isFocused}) => (
+              rootStyle={{ justifyContent: 'space-between' }}
+              renderCell={({ index, symbol, isFocused }) => (
                 <View
                   style={{
                     width: 42,
@@ -86,17 +86,17 @@ export default function ChangePhoneVerify() {
           }
         />
         <TouchableOpacity
-          style={[styles.btnView, {marginTop: 25}]}
-          onPress={() => {}}>
+          style={[styles.btnView, { marginTop: 25 }]}
+          onPress={() => { }}>
           <Text style={styles.btnText}>Verify</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.btnView,
-            {backgroundColor: colors.secondary_500, marginTop: 8},
+            { backgroundColor: colors.secondary_500, marginTop: 8 },
           ]}
-          onPress={() => {}}>
-          <Text style={[styles.btnText, {color: colors.secondary_750}]}>
+          onPress={() => { }}>
+          <Text style={[styles.btnText, { color: colors.secondary_750 }]}>
             Send again
           </Text>
         </TouchableOpacity>
@@ -120,22 +120,22 @@ const styles = StyleSheet.create({
     padding: hp(12),
   },
   imageArrow: {
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
     paddingHorizontal: hp(10),
   },
   headerText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
   },
   headerText1: {
     marginTop: 15,
     marginBottom: 50,
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_600, '400'),
+    ...FontStyle(13, colors.neutral_600, '400'),
   },
   itemText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
   },
   inputText: {
-    ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
+    ...FontStyle(16, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -153,14 +153,14 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 12,
   },
   input_con_style: {
     marginLeft: 10,
   },
   cell: {
-    ...FontStyle(fontname.actor_regular, 24, colors.white, '400'),
+    ...FontStyle(24, colors.white, '400'),
     borderColor: colors.black,
     color: colors?.black,
     left: 10,

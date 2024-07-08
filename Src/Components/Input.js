@@ -129,8 +129,8 @@ export default function Input({ value, onChangeText, label, placeholder, isPassw
 
 const styles = StyleSheet.create({
   labelText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
-    marginHorizontal: wp(20),
+    ...FontStyle(15, colors.neutral_900),
+    // marginHorizontal: wp(20),
     marginBottom: 4,
     marginTop: 8,
   },
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   selectedTextStyle: {
-    ...FontStyle(fontname.abeezee, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
   },
   itemContainerStyle: {
     height: 30,
@@ -152,10 +152,10 @@ const styles = StyleSheet.create({
     // paddingVertical: 0
   },
   placeholderStyle: {
-    ...FontStyle(fontname.abeezee, 15, colors.neutral_500),
+    ...FontStyle(15, colors.neutral_500),
   },
   inputSearchStyle: {
-    ...FontStyle(fontname.abeezee, 15, colors.neutral_500),
+    ...FontStyle(15, colors.neutral_500),
     height: 40
   },
   dropdown: {
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   inputText: {
-    ...FontStyle(fontname.abeezee, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     flex: 1,
     // paddingVertical: 4,
 

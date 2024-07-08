@@ -67,17 +67,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: hp(10),
   },
   headerText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
   },
   headerText1: {
     marginTop: 3,
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_600, '400'),
+    ...FontStyle(13, colors.neutral_600, '400'),
   },
   itemText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
   },
   inputText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 12,
   },
 });

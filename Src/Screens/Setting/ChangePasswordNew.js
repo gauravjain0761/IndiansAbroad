@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import colors from '../../Themes/Colors';
-import {fontname, hp, wp} from '../../Themes/Fonts';
-import {FontStyle} from '../../utils/commonFunction';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { fontname, hp, wp } from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChangePasswordNew() {
@@ -24,7 +24,7 @@ export default function ChangePasswordNew() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-      <KeyboardAwareScrollView style={{marginHorizontal: wp(16), flex: 1}}>
+      <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Password</Text>
         <Text style={styles.headerText1}>Please enter your new password</Text>
         <TextInput
@@ -66,22 +66,22 @@ const styles = StyleSheet.create({
     padding: hp(12),
   },
   imageArrow: {
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
     paddingHorizontal: hp(10),
   },
   headerText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
   },
   headerText1: {
     marginTop: 3,
-    marginBottom:10,
-    ...FontStyle(fontname.abeezee, 13, colors.neutral_600, '400'),
+    marginBottom: 10,
+    ...FontStyle(13, colors.neutral_600, '400'),
   },
   itemText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
   },
   inputText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     borderWidth: 1,
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 12,
   },
 });

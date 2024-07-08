@@ -54,6 +54,7 @@ import CompleteProfile2 from '../Screens/CompleteProfile2';
 import PaymentModalScreen from '../Screens/PaymentModalScreen';
 import SplashScreen from '../Screens/SplashScreen';
 import MediaScreen from '../Screens/MediaScreen';
+import SecurityScreen from '../Screens/SecurityScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -194,11 +195,13 @@ const headerStyleTransparent = {
 const Stack = createStackNavigator();
 export default function Navigation() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SplashScreen} component={SplashScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.LoginScreen} component={LoginScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SignupScreen} component={SignupScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.OTPScreen} component={OTPScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SecurityScreen} component={SecurityScreen} />
+
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile} component={CompleteProfile} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile2} component={CompleteProfile2} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentModalScreen} component={PaymentModalScreen} />

@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     chatText: {
         // top: -19,
         textAlign: 'center',
-        ...FontStyle(fontname.actor_regular, 18, colors.secondary_600, '700'),
+        ...FontStyle(18, colors.secondary_600, '700'),
         marginVertical: 5
     },
     tabMainView: {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     listText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         marginLeft: 15,
         flex: 1,
     },
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     },
     itemText: {
         top: -4,
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
+        ...FontStyle(16, colors.neutral_900),
     },
     menu: {
         backgroundColor: colors.neutral_300,

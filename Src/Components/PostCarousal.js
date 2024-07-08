@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     indexText: {
-        ...FontStyle(fontname.abeezee, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     indexView: {
         backgroundColor: colors.neutral_200,

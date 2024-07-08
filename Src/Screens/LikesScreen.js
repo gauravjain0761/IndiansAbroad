@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
     chatText: {
         // top: -19,
         textAlign: 'center',
-        ...FontStyle(fontname.actor_regular, 18, colors.secondary_600, '700'),
+        ...FontStyle(18, colors.secondary_600, '700'),
         marginVertical: 5
     },
     listText: {
-        ...FontStyle(fontname.abeezee, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         marginLeft: 15,
         flex: 1
     },

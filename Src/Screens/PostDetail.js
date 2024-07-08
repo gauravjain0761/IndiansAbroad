@@ -16,6 +16,8 @@ import { dispatchAction } from '../utils/apiGlobal';
 import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
 import { screenName } from '../Navigation/ScreenConstants';
 import ConfirmationModal from '../Components/ConfirmationModal';
+import CommentInput from '../Components/CommentInput';
+import RenderComment from '../Components/RenderComment';
 
 export default function PostDetail() {
     const navigation = useNavigation()
@@ -85,36 +87,41 @@ export default function PostDetail() {
     }
 
     const RenderItem = ({ item, itemIndex }) => {
-        return <View style={{ marginBottom: 10 }}>
-            <View style={styles.headerView}>
-                <RenderUserIcon url={item?.user?.avtar} height={53} isBorder />
-                <View style={styles.commentBg}>
-                    <View style={ApplicationStyles.flex}>
-                        <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
-                        <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-                        <Text style={styles.commentText2}>{item?.comment}</Text>
-                    </View>
-                    <View style={styles.innerRow}>
-                        <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
-                            <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
-                            <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {item?.user?._id == user._id &&
-                        <TouchableOpacity onPress={() => {
-                            setselectedComment(item)
-                            setdeleteModal(true)
-                        }} style={{ position: 'absolute', bottom: 0, right: 0, padding: 10 }}>
-                            <Image source={Icons.trash} style={ImageStyle(20, 20)} />
-                        </TouchableOpacity>
-                    }
-                </View>
-            </View>
-        </View >
+        return <RenderComment item={item} onLikeComment={() => onLikeComment(item)} onOpenReplies={() => onOpenReplies(item)} onDelete={() => {
+            setselectedComment(item)
+            setdeleteModal(true)
+        }} />
+
+        // return <View style={{ marginBottom: 10 }}>
+        //     <View style={styles.headerView}>
+        //         <RenderUserIcon url={item?.user?.avtar} height={53} isBorder />
+        //         <View style={styles.commentBg}>
+        //             <View style={ApplicationStyles.flex}>
+        //                 <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
+        //                 <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+        //                 <Text style={styles.commentText2}>{item?.comment}</Text>
+        //             </View>
+        //             <View style={styles.innerRow}>
+        //                 <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
+        //                     <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
+        //                     <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
+        //                 </TouchableOpacity>
+        //                 <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
+        //                     <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
+        //                     <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
+        //                 </TouchableOpacity>
+        //             </View>
+        //             {item?.user?._id == user._id &&
+        //                 <TouchableOpacity onPress={() => {
+        //                     setselectedComment(item)
+        //                     setdeleteModal(true)
+        //                 }} style={{ position: 'absolute', bottom: 0, right: 0, padding: 10 }}>
+        //                     <Image source={Icons.trash} style={ImageStyle(20, 20)} />
+        //                 </TouchableOpacity>
+        //             }
+        //         </View>
+        //     </View>
+        // </View >
     }
 
     const onComment = () => {
@@ -156,15 +163,21 @@ export default function PostDetail() {
                     }}
                 />}
             </ScrollView>
-            <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+            <CommentInput
+                onComment={() => onComment()}
+                onChangeText={(text) => setcommentText(text)}
+                commentText={commentText}
+                placeholder={'Add Comment'}
+            />
+            {/* <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
                 <View style={styles.commnetInput}>
                     <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
-                    <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
+                    <TextInput multiline={true} value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
                     <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                         <Image source={Icons.send} style={ImageStyle(24, 24)} />
                     </TouchableOpacity>
                 </View>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView> */}
             {deleteModal && <ConfirmationModal
                 visible={deleteModal}
                 onClose={() => setdeleteModal(false)}
@@ -190,11 +203,11 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900, '700'),
+        ...FontStyle(14, colors.neutral_900, '700'),
     },
     degreeText: {
         marginTop: 2,
-        ...FontStyle(fontname.actor_regular, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     commentBg: {
         flexDirection: 'row',
@@ -206,7 +219,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start'
     },
     likesText: {
-        ...FontStyle(fontname.abeezee, 12, colors.neutral_900)
+        ...FontStyle(12, colors.neutral_900)
     },
     innerRow: {
         flexDirection: 'row',
@@ -222,10 +235,10 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     commentText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900)
+        ...FontStyle(14, colors.neutral_900)
     },
     commentText2: {
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900)
+        ...FontStyle(16, colors.neutral_900)
     },
     verticalLine: {
         width: 1,
@@ -250,7 +263,7 @@ const styles = StyleSheet.create({
     },
     commnetInput: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         backgroundColor: colors.secondary_500,
         paddingLeft: 10,
         paddingVertical: 2,
@@ -258,13 +271,17 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: colors.inputBg,
         flex: 1,
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         borderRadius: 4,
-        height: 47,
+        minHeight: 47,
         paddingHorizontal: 10,
-        marginLeft: 10
+        marginLeft: 10,
+        textAlignVertical: 'center',
+        maxHeight: 150
     },
     sendButton: {
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        height: 47,
+        justifyContent: 'center'
     }
 })

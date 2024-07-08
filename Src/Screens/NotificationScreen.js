@@ -222,13 +222,13 @@ export default NotificationScreen;
 
 const styles = StyleSheet.create({
   title: {
-    ...FontStyle(fontname.actor_regular, 18, colors.black, '700'),
+    ...FontStyle(18, colors.black, '700'),
     paddingLeft: wp(14),
     lineHeight: hp(26),
     marginTop: -5
   },
   categoriesTitle: {
-    ...FontStyle(fontname.abeezee, 14, colors.black, '700'),
+    ...FontStyle(14, colors.black, '700'),
     lineHeight: hp(22),
   },
   categoriesContainer: {
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     marginTop: hp(3),
   },
   HeaderTitle: {
-    ...FontStyle(fontname.actor_regular, 14, colors.black, '400'),
+    ...FontStyle(14, colors.black, '400'),
     lineHeight: hp(22),
     paddingVertical: hp(4),
     paddingLeft: wp(15),
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp(4),
   },
   name: {
-    ...FontStyle(fontname.actor_regular, 14, colors.black, '400'),
+    ...FontStyle(14, colors.black, '400'),
   },
   nameContainer: {
     paddingLeft: wp(15),
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   time: {
-    ...FontStyle(fontname.abeezee, 11, colors.neutral_500, '400'),
+    ...FontStyle(11, colors.neutral_500, '400'),
   },
   separator: {
     borderBottomWidth: 1,
@@ -312,11 +312,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    ...FontStyle(fontname.actor_regular, 13, colors.white, '400'),
+    ...FontStyle(13, colors.white, '400'),
     // lineHeight: hp(20),
   },
   footerTitle: {
-    ...FontStyle(fontname.actor_regular, 14, colors.black, '400'),
+    ...FontStyle(14, colors.black, '400'),
     alignSelf: 'center',
   },
 });

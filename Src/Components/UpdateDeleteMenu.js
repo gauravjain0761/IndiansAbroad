@@ -43,7 +43,7 @@ export default function UpdateDeleteMenu({
 
 const styles = StyleSheet.create({
   itemText: {
-    ...FontStyle(fontname.actor_regular, 18, colors.neutral_900),
+    ...FontStyle(18, colors.neutral_900),
   },
   menu: {
     backgroundColor: colors.neutral_300,

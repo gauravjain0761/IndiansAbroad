@@ -172,7 +172,7 @@ export default function IndiansDetails() {
           </View>
         </View>
         <View style={styles.detailsView}>
-          <Text style={[styles.text1, { ...FontStyle(fontname.actor_regular, 14, colors.neutral_900, '700') }]}>About</Text>
+          <Text style={[styles.text1, { ...FontStyle(14, colors.neutral_900, '700') }]}>About</Text>
           <Text style={styles.text2}>From</Text>
           <Text style={styles.text1}>{otherUserInfo?.city}, {otherUserInfo?.state}</Text>
           <Text style={styles.text2}>Now</Text>
@@ -188,7 +188,7 @@ export default function IndiansDetails() {
               setTabSelection('POST');
               ref.current?.setPage(0);
             }} style={[{}, styles.tabItemView]}>
-            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
+            <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -197,7 +197,7 @@ export default function IndiansDetails() {
               setSearchText('')
             }}
             style={styles.tabItemView}>
-            <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
+            <Text style={FontStyle(14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
           </TouchableOpacity>
           <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
         </View>
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   seeBtnText: {
     // lineHeight: 18,
     paddingVertical: 2,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900, '400'),
+    ...FontStyle(11, colors.neutral_900, '400'),
   },
   userViewStyle: {
     backgroundColor: colors.secondary_500,
@@ -287,11 +287,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   userText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
     textAlign: 'center',
   },
   userText1: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
     textAlign: 'center',
   },
   btnView: {
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   btnText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),
+    ...FontStyle(12, colors.white, '400'),
     lineHeight: 20,
   },
   detailsView: {
@@ -314,11 +314,11 @@ const styles = StyleSheet.create({
   },
   text1: {
     lineHeight: 20,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
   },
   text2: {
     lineHeight: 20,
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_500, '400'),
+    ...FontStyle(12, colors.neutral_500, '400'),
   },
   animationView: {
     borderColor: colors.primary_500,

@@ -67,16 +67,16 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   username: {
-    ...FontStyle(fontname.abeezee, 16, colors.neutral_900, '700'),
+    ...FontStyle(16, colors.neutral_900, '700'),
   },
   degreeText: {
     marginVertical: 3,
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_600, "400"),
+    ...FontStyle(14, colors.neutral_600, "400"),
   },
   degreeText1: {
     // lineHeight:18,
     marginBottom: 2,
-    ...FontStyle(fontname.abeezee, 14, colors.neutral_600),
+    ...FontStyle(14, colors.neutral_600),
   },
   lineStyle: {
     height: 8,
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral_600,
   },
   valueText: {
-    ...FontStyle(fontname.abeezee, 14, colors.danger_500, "600"),
+    ...FontStyle(14, colors.danger_500, "600"),
   }
 });

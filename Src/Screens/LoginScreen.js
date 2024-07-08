@@ -1,4 +1,4 @@
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux'
 import { screenName } from '../Navigation/ScreenConstants'
 import { onLoginApi } from '../Services/AuthServices'
 import { resetNavigation } from '../utils/Global'
+import Header from '../Components/Header'
 
 export default function LoginScreen() {
     const [email, setemail] = useState('jadhavharshal.510@gmail.com')
@@ -41,7 +42,8 @@ export default function LoginScreen() {
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <ScrollView>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <Header title={''} />
                     <View style={styles.transparent}>
                         <Image source={Icons.logo} style={ImageStyle(90, 90)} />
                         <Text style={ApplicationStyles.titleText}>IndiansAbroad</Text>
@@ -56,11 +58,11 @@ export default function LoginScreen() {
                             <Text style={styles.forgotText}>Forgot password?</Text>
                         </TouchableOpacity>
                         <CommonButton title={'Login'} onPress={() => onLogin()} />
-                        <TouchableOpacity onPress={() => navigation.navigate(screenName.SignupScreen)} style={styles.signUpView}>
+                        <TouchableOpacity onPress={() => navigation.navigate(screenName.SecurityScreen)} style={styles.signUpView}>
                             <Text style={styles.signUpText}>Not a member yet? <Text style={{ color: colors.primary_500 }}>Sign Up</Text></Text>
                         </TouchableOpacity>
                     </View>
-                </ScrollView>
+                </SafeAreaView>
 
             </ImageBackground>
         </View>
@@ -69,20 +71,20 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
     transparent: {
-        paddingTop: 15,
-        backgroundColor: colors.whiteOpacity,
-        marginTop: 50,
+        // paddingTop: 15,
+        // backgroundColor: colors.whiteOpacity,
+        marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
         paddingBottom: 30
     },
     loginText: {
-        ...FontStyle(fontname.abeezee, 24, colors.white, '700'),
+        ...FontStyle(24, colors.white, '700'),
         alignSelf: 'center',
         marginVertical: 10
     },
     des: {
-        ...FontStyle(fontname.abeezee, 16, colors.white),
+        ...FontStyle(16, colors.white),
         alignSelf: 'center',
         marginBottom: 20
     },
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     forgotText: {
-        ...FontStyle(fontname.abeezee, 14, colors.white),
+        ...FontStyle(14, colors.white),
         paddingVertical: 15
     },
     signUpView: {
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     signUpText: {
-        ...FontStyle(fontname.abeezee, 14, colors.white),
+        ...FontStyle(14, colors.white),
         marginVertical: 10
     }
 })

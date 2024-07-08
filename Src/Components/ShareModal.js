@@ -118,7 +118,7 @@ export default function ShareModal({ visible, onClose, postId }) {
 
 
     return (
-        <ModalContainer isVisible={visible} onClose={() => onClose()} transparent={true} >
+        <ModalContainer avoidKeyboard={false} isVisible={visible} onClose={() => onClose()} transparent={true} >
             <View style={styles.modalView}>
                 <TouchableOpacity onPress={() => onClose()} style={styles.closeIcon}>
                     <Image
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
         height: SCREEN_HEIGHT - 150
     },
     listText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         marginLeft: 15,
         flex: 1
     },
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     publishText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.white),
+        ...FontStyle(14, colors.white),
     },
     blueButton: {
         backgroundColor: colors.buttonBlue,

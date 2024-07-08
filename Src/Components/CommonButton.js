@@ -14,7 +14,7 @@ export default function CommonButton({ title, extraStyle, onPress }) {
 
 export const styles = StyleSheet.create({
     publishText: {
-        ...FontStyle(fontname.abeezee, 16, colors.white),
+        ...FontStyle(16, colors.white),
     },
     blueButton: {
         backgroundColor: colors.buttonBlue,

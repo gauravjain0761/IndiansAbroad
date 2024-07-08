@@ -39,9 +39,11 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>ABeeZee-Italic.ttf</string>
-		<string>Actor-Regular.ttf</string>
-		<string>ABeeZee-Regular.ttf</string>
+		<string>OpenSans-Light.ttf</string>
+		<string>OpenSans-Medium.ttf</string>
+		<string>OpenSans-Bold.ttf</string>
+		<string>OpenSans-Regular.ttf</string>
+		<string>OpenSans-SemiBold.ttf</string>
 		<string>MaterialIcons.ttf</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>

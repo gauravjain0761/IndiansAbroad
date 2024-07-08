@@ -214,11 +214,11 @@ const styles = StyleSheet.create({
     chatText: {
         // top: -19,
         textAlign: 'center',
-        ...FontStyle(fontname.actor_regular, 18, colors.secondary_600, '700'),
+        ...FontStyle(18, colors.secondary_600, '700'),
         marginVertical: 5
     },
     listText: {
-        ...FontStyle(fontname.abeezee, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         marginLeft: 15,
         flex: 1
     },
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
         height: 170,
         textAlignVertical: 'top',
         padding: 15,
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
     },
     rowView: {
         flexDirection: 'row',
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     publishText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.white),
+        ...FontStyle(14, colors.white),
     },
     imageView: {
         flexDirection: 'row',

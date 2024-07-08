@@ -96,17 +96,17 @@ export default function OTPScreen() {
 }
 
 const styles = StyleSheet.create({
-    title: { ...FontStyle(fontname.abeezee, 24, colors.white, '700'), marginBottom: hp(20) },
-    des: { ...FontStyle(fontname.abeezee, 14, colors.white), },
+    title: { ...FontStyle(24, colors.white, '700'), marginBottom: hp(20) },
+    des: { ...FontStyle(14, colors.white), },
     codeFieldRoot: { marginVertical: 30, },
-    cell: { width: 45, height: 45, borderWidth: 5, borderColor: colors.white, textAlign: 'center', ...FontStyle(fontname.abeezee, 20, colors.white, '700'), textAlignVertical: 'center' },
+    cell: { width: 45, height: 45, borderWidth: 5, borderColor: colors.white, textAlign: 'center', ...FontStyle(20, colors.white, '700'), textAlignVertical: 'center' },
     focusCell: { borderColor: '#fff', },
     signUpView: {
         marginTop: 10,
         alignSelf: 'center'
     },
     signUpText: {
-        ...FontStyle(fontname.abeezee, 14, colors.white),
+        ...FontStyle(14, colors.white),
         marginVertical: 10
     }
 })

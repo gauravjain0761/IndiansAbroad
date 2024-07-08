@@ -1,6 +1,5 @@
 import { FlatListComponent, Image, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import LottieView from 'lottie-react-native';
 import colors from '../Themes/Colors';
 import { SCREEN_WIDTH } from '../Themes/Fonts';
 import { resetNavigation } from '../utils/Global';

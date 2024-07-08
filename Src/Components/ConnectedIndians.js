@@ -117,14 +117,14 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: wp(10),
     width: screen_width * 0.85,
-    ...FontStyle(fontname.actor_regular, 14, colors.black, '500'),
+    ...FontStyle(14, colors.black, '500'),
   },
   text1: {
     marginLeft: 12,
-    ...FontStyle(fontname.abeezee, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
   },
   itemText: {
-    ...FontStyle(fontname.actor_regular, 18, colors.neutral_900)
+    ...FontStyle(18, colors.neutral_900)
   },
   menu: {
     backgroundColor: colors.secondary_500,

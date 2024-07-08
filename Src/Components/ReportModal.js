@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 3,
     },
     title: {
-        ...FontStyle(fontname.actor_regular, 16, colors.neutral_900, '700'),
+        ...FontStyle(16, colors.neutral_900, '700'),
         textAlign: 'center',
         marginVertical: hp(25),
         marginHorizontal: hp(20)
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
         height: 150,
         textAlignVertical: 'top',
         padding: 15,
-        ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
     },
     publishText: {
-        ...FontStyle(fontname.actor_regular, 14, colors.white),
+        ...FontStyle(14, colors.white),
     },
     blueButton: {
         backgroundColor: colors.buttonBlue,

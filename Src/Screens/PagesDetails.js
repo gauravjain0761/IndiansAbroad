@@ -129,8 +129,8 @@ export default function PagesDetails() {
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity key={item._id} activeOpacity={1} onPress={() => {
-        dispatchAction(dispatch, SET_ACTIVE_POST, item)
         dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
+        dispatchAction(dispatch, SET_ACTIVE_POST, item)
         navigation.navigate(screenName.PagesPostDetail)
       }}>
         <PagePostCard item={item} index={index} />
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   seeBtnText: {
     // lineHeight: 18,
     paddingVertical: 2,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900, '400'),
+    ...FontStyle(11, colors.neutral_900, '400'),
   },
   userViewStyle: {
     backgroundColor: colors.secondary_500,
@@ -323,11 +323,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   userText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
     textAlign: 'center',
   },
   userText1: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
     textAlign: 'center',
     marginBottom: 10,
   },
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(15),
   },
   btnText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),
+    ...FontStyle(12, colors.white, '400'),
     lineHeight: 20,
   },
   detailsView: {
@@ -353,17 +353,17 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     width: 80,
     marginVertical: 6,
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '400'),
+    ...FontStyle(15, colors.neutral_900, '400'),
   },
   textView: {
     lineHeight: 20,
     marginBottom: 12,
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
+    ...FontStyle(15, colors.neutral_900, '700'),
   },
   text2: {
     lineHeight: 20,
     marginVertical: 6,
-    ...FontStyle(fontname.actor_regular, 15, colors.primary_8091ba, '400'),
+    ...FontStyle(15, colors.primary_8091ba, '400'),
   },
   animationView: {
     borderColor: colors.primary_500,
@@ -378,10 +378,10 @@ const styles = StyleSheet.create({
   },
   tabText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 12, colors.primary_6a7e, '400'),
+    ...FontStyle(12, colors.primary_6a7e, '400'),
   },
   tabText1: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
   },
 });

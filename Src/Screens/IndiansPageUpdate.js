@@ -11,24 +11,24 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../Themes/Fonts';
-import {FontStyle} from '../utils/commonFunction';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
 import RenderUserIcon from '../Components/RenderUserIcon';
-import {Icons} from '../Themes/Icons';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Icons } from '../Themes/Icons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const TextInputView = ({value, onChangeText, placeholder, label}) => {
+const TextInputView = ({ value, onChangeText, placeholder, label }) => {
   return (
     <View style={styles.inputStyle}>
       <Text style={styles.labelText}>{label}</Text>
@@ -42,10 +42,10 @@ const TextInputView = ({value, onChangeText, placeholder, label}) => {
   );
 };
 
-const DropView = ({value, onChangeText, placeholder, label}) => {
+const DropView = ({ value, onChangeText, placeholder, label }) => {
   return (
     <View style={styles.rowStyle}>
-      <Text style={[styles.labelText, {flex: 1}]}>{label}</Text>
+      <Text style={[styles.labelText, { flex: 1 }]}>{label}</Text>
       <TouchableOpacity>
         <Image source={Icons.down_arrow} style={styles.downArrowStyle} />
       </TouchableOpacity>
@@ -54,7 +54,7 @@ const DropView = ({value, onChangeText, placeholder, label}) => {
 };
 
 export default function IndiansPageUpdate() {
-  const {params} = useRoute();
+  const { params } = useRoute();
   const [tabType, setTabType] = useState('All');
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
@@ -67,8 +67,8 @@ export default function IndiansPageUpdate() {
         showLeft={true}
         onLeftPress={() => navigation.goBack()}
       />
-      <KeyboardAwareScrollView style={{flex: 1}}>
-        <View style={{alignItems: 'center', marginBottom: 30}}>
+      <KeyboardAwareScrollView style={{ flex: 1 }}>
+        <View style={{ alignItems: 'center', marginBottom: 30 }}>
           <RenderUserIcon height={100} />
         </View>
         <TextInputView value={'IndiansAbroad'} label="Title" />
@@ -85,7 +85,7 @@ export default function IndiansPageUpdate() {
         <DropView value={'India'} label="India" />
         <TextInputView value={'Pune'} label="City" />
 
-        <TouchableOpacity style={[styles.btnView, {}]} onPress={() => {}}>
+        <TouchableOpacity style={[styles.btnView, {}]} onPress={() => { }}>
           <Text style={styles.btnText}>Update Page</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   seeBtnText: {
     // lineHeight: 18,
     paddingVertical: 2,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900, '400'),
+    ...FontStyle(11, colors.neutral_900, '400'),
   },
   inputStyle: {
     borderWidth: 1,
@@ -131,17 +131,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   inputText: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900),
+    ...FontStyle(15, colors.neutral_900),
     // height:35,
     padding: 0,
   },
   labelText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+    ...FontStyle(12, colors.neutral_900),
   },
   locationText: {
     marginHorizontal: wp(20),
     marginVertical: 22,
-    ...FontStyle(fontname.actor_regular, 16, colors.secondary_800),
+    ...FontStyle(16, colors.secondary_800),
   },
   downArrowStyle: {
     width: 24,
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 15, colors.white),
+    ...FontStyle(15, colors.white),
     paddingVertical: 15,
   },
 });

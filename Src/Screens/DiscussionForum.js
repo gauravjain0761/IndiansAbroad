@@ -111,6 +111,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   btnText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.primary_6a7e),
+    ...FontStyle(14, colors.primary_6a7e),
   },
 });

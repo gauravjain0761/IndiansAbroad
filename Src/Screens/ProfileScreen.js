@@ -114,12 +114,7 @@ export default function ProfileScreen() {
   return (
 
     <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header
-        title={'IndiansAbroad'}
-        showRight={true}
-        icon={Icons.setting}
-        onRightPress={() => navigate(screenName.Setting)}
-      />
+      <Header title={'IndiansAbroad'} showRight={true} showLeft icon={Icons.setting} onRightPress={() => navigate(screenName.Setting)} />
       {user &&
         <ScrollView style={{ flex: 1 }} >
 
@@ -136,7 +131,7 @@ export default function ProfileScreen() {
                 setTabSelection('POST');
                 ref.current?.setPage(0);
               }} style={[{}, styles.tabItemView]}>
-              <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
+              <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -145,7 +140,7 @@ export default function ProfileScreen() {
                 setSearchText('')
               }}
               style={styles.tabItemView}>
-              <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(' + (followerList ? followerList?.length : 0) + ')'}</Text>
+              <Text style={FontStyle(14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(' + (followerList ? followerList?.length : 0) + ')'}</Text>
             </TouchableOpacity>
             <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
           </View>
@@ -203,7 +198,7 @@ export default function ProfileScreen() {
     //         setIsLeftButtonActive(true);
     //         ref.current?.setPage(0);
     //       }} style={[{}, styles.tabItemView]}>
-    //       <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'My Posts (10)'}</Text>
+    //       <Text style={FontStyle( 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'My Posts (10)'}</Text>
     //     </TouchableOpacity>
     //     <TouchableOpacity
     //       onPress={() => {
@@ -212,7 +207,7 @@ export default function ProfileScreen() {
     //         setIsLeftButtonActive(false);
     //       }}
     //       style={styles.tabItemView}>
-    //       <Text style={FontStyle(fontname.actor_regular, 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians (79)'}</Text>
+    //       <Text style={FontStyle( 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians (79)'}</Text>
     //     </TouchableOpacity>
     //     <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
     //   </View>
@@ -278,7 +273,7 @@ const styles = StyleSheet.create({
   seeBtnText: {
     // lineHeight: 18,
     paddingVertical: 2,
-    ...FontStyle(fontname.actor_regular, 11, colors.neutral_900, '400'),
+    ...FontStyle(11, colors.neutral_900, '400'),
   },
   userViewStyle: {
     backgroundColor: colors.secondary_500,
@@ -291,11 +286,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   userText: {
-    ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700'),
+    ...FontStyle(20, colors.neutral_900, '700'),
     textAlign: 'center',
   },
   userText1: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900, '400'),
+    ...FontStyle(12, colors.neutral_900, '400'),
     textAlign: 'center',
   },
   btnView: {
@@ -308,7 +303,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.white, '400'),
+    ...FontStyle(12, colors.white, '400'),
     lineHeight: 20,
   },
   animationView: {

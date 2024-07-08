@@ -224,13 +224,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedText: FontStyle(
-    fontname.actor_regular,
     14,
     colors.tertiary1_500,
     '700',
   ),
   unSewlectedText: FontStyle(
-    fontname.actor_regular,
     14,
     colors.neutral_900,
     '700',

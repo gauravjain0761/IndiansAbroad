@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    ...FontStyle(fontname.abeezee, 18, colors.neutral_900, '400'),
+    ...FontStyle(18, colors.neutral_900, '400'),
     right: 18,
     textAlign: 'center',
   },
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
     height: hp(170),
     textAlignVertical: 'top',
     padding: 15,
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
   },
   rowView: {
     flexDirection: 'row',
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   publishText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.white),
+    ...FontStyle(14, colors.white),
   },
   imageView: {
     flexDirection: 'row',

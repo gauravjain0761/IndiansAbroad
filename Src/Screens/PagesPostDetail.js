@@ -4,18 +4,20 @@ import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
 import PostCard from '../Components/PostCard';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
 import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import { useDispatch, useSelector } from 'react-redux';
-import { onCommentLike, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
+import { onAddComment, onCommentLike, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
 import { api } from '../utils/apiConstants';
 import { dispatchAction } from '../utils/apiGlobal';
 import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
 import { screenName } from '../Navigation/ScreenConstants';
 import PagePostCard from '../Components/PagePostCard';
+import CommentInput from '../Components/CommentInput';
+import RenderComment from '../Components/RenderComment';
 
 export default function PagesPostDetail() {
   const navigation = useNavigation()
@@ -103,28 +105,34 @@ export default function PagesPostDetail() {
   }
 
   const RenderItem = ({ item, itemIndex }) => {
-    return <View style={{ marginBottom: 10 }}>
-      <View style={styles.headerView}>
-        <RenderUserIcon url={item?.user?.avtar} height={53} isBorder />
-        <View style={styles.commentBg}>
-          <View style={ApplicationStyles.flex}>
-            <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
-            <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-            <Text style={styles.commentText2}>{item?.comment}</Text>
-          </View>
-          <View style={styles.innerRow}>
-            <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
-              <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
-              <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
-              <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-              <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </View>
+    return <RenderComment item={item} onLikeComment={() => onLikeComment(item)} onOpenReplies={() => onOpenReplies(item)} onDelete={() => {
+      setselectedComment(item)
+      setdeleteModal(true)
+    }} />
+  }
+
+  const onComment = () => {
+    if (commentText.trim() !== '') {
+      let obj = {
+        data: {
+          postId: activePost._id,
+          createdBy: user._id,
+          comment: commentText.trim()
+        },
+        onSuccess: () => {
+          setcommentText('')
+          dispatch(onGetAllComments({
+            data: {
+              postId: activePost?._id,
+              loginId: user._id
+            }
+          }))
+        }
+      }
+      dispatch(onAddComment(obj))
+    } else {
+      errorToast('Please enter a comment')
+    }
   }
 
   return (
@@ -141,15 +149,12 @@ export default function PagesPostDetail() {
           }}
         />}
       </ScrollView>
-      <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
-        <View style={styles.commnetInput}>
-          <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
-          <TextInput style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
-          <TouchableOpacity style={styles.sendButton}>
-            <Image source={Icons.send} style={ImageStyle(24, 24)} />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+      <CommentInput
+        onComment={() => onComment()}
+        onChangeText={(text) => setcommentText(text)}
+        commentText={commentText}
+        placeholder={'Add Comment'}
+      />
     </SafeAreaView>
   );
 }
@@ -168,10 +173,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain'
   },
   username: {
-    ...FontStyle(fontname.actor_regular, 15, colors.neutral_900, '700'),
+    ...FontStyle(15, colors.neutral_900, '700'),
   },
   degreeText: {
-    ...FontStyle(fontname.actor_regular, 12, colors.neutral_900),
+    ...FontStyle(12, colors.neutral_900),
   },
   commentBg: {
     flexDirection: 'row',
@@ -183,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   likesText: {
-    ...FontStyle(fontname.abeezee, 12, colors.neutral_900),
+    ...FontStyle(12, colors.neutral_900),
   },
   innerRow: {
     flexDirection: 'row',
@@ -199,10 +204,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   commentText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
   },
   commentText2: {
-    ...FontStyle(fontname.actor_regular, 16, colors.neutral_900),
+    ...FontStyle(16, colors.neutral_900),
   },
   verticalLine: {
     width: 1,
@@ -238,7 +243,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.inputBg,
     flex: 1,
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     borderRadius: 4,
     height: 47,
     paddingHorizontal: 10,

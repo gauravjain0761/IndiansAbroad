@@ -14,10 +14,10 @@ export default function Setting() {
     const navigation = useNavigation()
     let data = [
         { title: 'Edit Profile', onPress: () => { navigation.navigate('EditProfile') } },
-        { title: 'Change Phone Number', onPress: () => {navigation.navigate(screenName.ChangePhone) } },
-        { title: 'Change Password', onPress: () => {navigation.navigate(screenName.ChangePasswordEmail) } },
-        { title: 'Subscription', onPress: () => {navigation.navigate(screenName.Subscription) } },
-        { title: 'Blocked Users', onPress: () => { navigation.navigate(screenName.BlockedUsers)} },
+        { title: 'Change Phone Number', onPress: () => { navigation.navigate(screenName.ChangePhone) } },
+        { title: 'Change Password', onPress: () => { navigation.navigate(screenName.ChangePasswordEmail) } },
+        { title: 'Subscription', onPress: () => { navigation.navigate(screenName.Subscription) } },
+        { title: 'Blocked Users', onPress: () => { navigation.navigate(screenName.BlockedUsers) } },
 
     ]
     return (
@@ -64,6 +64,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: hp(10)
     },
     itemText: {
-        ...FontStyle(fontname.abeezee, 20, colors.neutral_900, '700')
+        ...FontStyle(20, colors.neutral_900, '700')
     }
 })

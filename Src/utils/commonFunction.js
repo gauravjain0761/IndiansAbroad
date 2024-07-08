@@ -21,8 +21,8 @@ export const ImageStyle = (width, height, resizemode) => {
   return { width: width, height: height, resizeMode: resizemode ? resizemode : 'contain' };
 };
 
-export const FontStyle = (fontFamily, size, color, fontWeight) => {
-  return { ...defaultFontStyle(fontFamily, size, color, fontWeight) };
+export const FontStyle = (size, color, fontWeight) => {
+  return { ...defaultFontStyle(size, color, fontWeight) };
 };
 
 

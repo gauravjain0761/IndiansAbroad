@@ -77,7 +77,7 @@ export default function MyConnections() {
 const styles = StyleSheet.create({
   chatText: {
     textAlign: 'center',
-    ...FontStyle(fontname.actor_regular, 18, colors.secondary_600, '700'),
+    ...FontStyle(18, colors.secondary_600, '700'),
     marginVertical: 5
   },
   tabMainView: {
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listText: {
-    ...FontStyle(fontname.actor_regular, 14, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     marginLeft: 15,
   },
   listView: {
