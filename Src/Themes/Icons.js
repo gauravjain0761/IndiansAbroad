@@ -61,6 +61,7 @@ export const Icons = {
     camera: require('../assets/Icons/camera.png'),
     calender: require('../assets/Icons/calender.png'),
     Verified_user: require('../assets/Icons/Verified_user.png'),
+    checkCircle: require('../assets/Icons/checkCircle.png'),
 
     w_1: require('../assets/Icons/w_1.png'),
     w_2: require('../assets/Icons/w_2.png'),

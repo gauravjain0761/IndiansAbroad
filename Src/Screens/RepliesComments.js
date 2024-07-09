@@ -14,7 +14,8 @@ import { api } from '../utils/apiConstants'
 import { Icons } from '../Themes/Icons'
 import ConfirmationModal from '../Components/ConfirmationModal'
 import CommentInput from '../Components/CommentInput'
-
+import RenderText from '../Components/RenderText'
+import { screenName } from '../Navigation/ScreenConstants'
 
 export default function RepliesComments() {
     const { goBack } = useNavigation()
@@ -26,7 +27,7 @@ export default function RepliesComments() {
     const [commentText, setcommentText] = useState('')
     const [deleteModal, setdeleteModal] = useState(false)
     const [selectedComment, setselectedComment] = useState(undefined)
-
+    const navigation = useNavigation()
     useEffect(() => {
         setactiveComment(activePostAllComments?.filter(obj => obj._id == params?.commentId)[0])
     }, [activePostAllComments])
@@ -53,18 +54,27 @@ export default function RepliesComments() {
     }
 
     const RenderReply = ({ item, index, isLastIndex }) => {
+        let isUser = item?.createdBy?._id == user?._id
+
+        const onOpenOtherUserDetails = () => {
+            if (!isUser) {
+                navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id })
+            }
+        }
+
         return (
             <View style={styles.replyCommentView}>
                 <View style={[styles.replyCommnt, { alignItems: isLastIndex ? 'flex-start' : 'center' }]}>
                     <View style={[styles.verticalLine, { height: isLastIndex ? '50%' : '100%' }]} />
                     <View style={styles.horizontalLine} />
                     <View style={styles.innerCommentRow}>
-                        <RenderUserIcon url={item?.createdBy?.avtar} height={38} isBorder />
-                        <View style={styles.commentBg}>
+                        <RenderUserIcon userId={item?.createdBy?._id} url={item?.createdBy?.avtar} height={38} isBorder />
+                        <TouchableOpacity activeOpacity={0.8} onPress={() => onOpenOtherUserDetails()} style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
                                 <Text numberOfLines={1} style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
                                 <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-                                <Text style={styles.commentText2}>{item?.reply}</Text>
+                                <RenderText style={styles.commentText2} text={item?.reply}></RenderText>
+                                {/* <Text style={styles.commentText2}>{item?.reply}</Text> */}
                             </View>
                             {item?.createdBy?._id == user._id &&
                                 <TouchableOpacity onPress={() => {
@@ -74,7 +84,7 @@ export default function RepliesComments() {
                                     <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                                 </TouchableOpacity>
                             }
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

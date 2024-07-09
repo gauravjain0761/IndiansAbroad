@@ -61,6 +61,8 @@ export default function IndiansDetails() {
   const isFocused = useIsFocused()
   const [blockModal, setblockModal] = useState(false)
 
+  console.log('otherUserInfo--', otherUserInfo)
+
   const onSearchName = (search) => {
     let list = otherUserFollowList.data
     const filtered = list.filter((val) =>
@@ -153,11 +155,11 @@ export default function IndiansDetails() {
             <RenderUserIcon url={otherUserInfo?.avtar} height={100} isBorder={otherUserInfo?.subscribedMember} />
           </View>
           <Text style={styles.userText}>{otherUserInfo?.first_Name} {otherUserInfo?.last_Name}</Text>
-          <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>
+          {otherUserInfo?.catchLine !== '' && <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>}
           <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
-            <TouchableOpacity onPress={() => onPressConnect()} style={styles.btnView}>
+            {otherUserInfo?.isFollowing == 'notfollowing' && <TouchableOpacity onPress={() => onPressConnect()} style={styles.btnView}>
               <Text style={styles.btnText}>{otherUserInfo?.isFollowing == 'notfollowing' ? 'Connect' : otherUserInfo?.isFollowing == 'requested' ? 'Cancel Request' : 'Disconnect'}</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <TouchableOpacity
               style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
               <Text style={styles.btnText}>Message</Text>
@@ -177,10 +179,10 @@ export default function IndiansDetails() {
           <Text style={styles.text1}>{otherUserInfo?.city}, {otherUserInfo?.state}</Text>
           <Text style={styles.text2}>Now</Text>
           <Text style={styles.text1}>{otherUserInfo?.universityORcompany}, {otherUserInfo?.region}, {otherUserInfo?.country}</Text>
-          <Text style={styles.text2}>As</Text>
+          {/* <Text style={styles.text2}>As</Text>
           <Text style={styles.text1}>PhD Student</Text>
           <Text style={styles.text2}>Link</Text>
-          <Text style={styles.text1}>app.visily.ai</Text>
+          <Text style={styles.text1}>app.visily.ai</Text> */}
         </View>
         <View style={styles.tabMainView}>
           <TouchableOpacity

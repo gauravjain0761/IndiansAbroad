@@ -98,26 +98,38 @@ export default function UpdatePostScreen() {
                 if (imageArray.length > 9) {
                     errorToast('You can select maximum 9 files')
                 } else {
+
                     imageArray.forEach((element, index) => {
-                        let time = new Date().getTime()
+                        console.log('element---', element)
+                        let time = new Date().getTime() + index
                         if (imageArray[index].mime) {
-                            tempArray.push('mediaFiles' + "[" + time + "]");
-                            tempArray.push({
+                            data['mediaFiles' + "[" + time + "]"] = {
                                 uri: imageArray[index].path,
                                 type: imageArray[index].mime, // or photo.type image/jpg
                                 name: imageArray[index]?.mime.includes('image') ? 'image_[' + time + '].' + imageArray[index].path.split('.').pop() : 'video_[' + time + '].' + imageArray[index].path.split('.').pop(),
-                            });
+                            }
                         }
                     });
-                    var ob2 = {};
-                    for (var i = 0; i < tempArray.length; i += 2) {
-                        ob2[tempArray[i]] = tempArray[i + 1];
-                    }
-                    data = { ...data, ...ob2 }
+                    // imageArray.forEach((element, index) => {
+                    //     let time = new Date().getTime() + index
+                    //     if (imageArray[index].mime) {
+                    //         tempArray.push('mediaFiles' + "[" + time + "]");
+                    //         tempArray.push({
+                    //             uri: imageArray[index].path,
+                    //             type: imageArray[index].mime, // or photo.type image/jpg
+                    //             name: imageArray[index]?.mime.includes('image') ? 'image_[' + time + '].' + imageArray[index].path.split('.').pop() : 'video_[' + time + '].' + imageArray[index].path.split('.').pop(),
+                    //         });
+                    //     }
+                    // });
+                    // var ob2 = {};
+                    // for (var i = 0; i < tempArray.length; i += 2) {
+                    //     ob2[tempArray[i]] = tempArray[i + 1];
+                    // }
+                    // data = { ...data, ...ob2 }
                 }
             }
-            data.postId = params?.item?._id,
-                data.message = postText.trim()
+            data.postId = params?.item?._id
+            data.message = postText.trim()
             data.createdBy = user._id
             data.shareType = 'public'
             data.type = 'post'

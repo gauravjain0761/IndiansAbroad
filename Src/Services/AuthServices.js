@@ -180,3 +180,40 @@ export const onGetSignupCountry = (request) => async dispatch => {
             handleErrorRes(error, request, dispatch);
         });
 };
+
+export const onForgotPass = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+
+    return makeAPIRequest({
+        method: POST,
+        url: api.forgotPassword,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                successToast(response?.data?.msg);
+                // dispatchAction(dispatch, SET_COUNTRIES, response?.data?.data)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+export const onResetPass = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+
+    return makeAPIRequest({
+        method: POST,
+        url: api.resetPass,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                // dispatchAction(dispatch, SET_COUNTRIES, response?.data?.data)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};

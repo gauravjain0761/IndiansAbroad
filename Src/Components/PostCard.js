@@ -22,6 +22,7 @@ import { onBlockUserApi, onConnectRequest, onGetOtherUserInfo } from '../Service
 import ConfirmationModal from './ConfirmationModal';
 import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
+import RenderText from './RenderText';
 
 export default function PostCard({ item, index, isDetailScreen = false, }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -118,6 +119,10 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
     }
   }
 
+  if (index == 0) {
+    console.log('-----', item)
+  }
+
   if (item?.createdBy) {
     return (
       <View key={item?._id}>
@@ -160,9 +165,12 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
             </View>
           )}
         </View>
-        {item?.message && item?.message !== '' && <Text style={styles.description} >
-          {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
-        </Text>}
+        {item?.message && item?.message !== '' &&
+          <RenderText style={styles.description} text={item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message} />}
+        {/* {item?.message && item?.message !== '' &&
+          <Text style={styles.description} >
+            {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
+          </Text>} */}
         {item?.message && item?.message !== '' && item?.message.length > 120 ?
           <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
             <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>

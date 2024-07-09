@@ -79,7 +79,7 @@ export default function PostCarousal({ images, isDetailScreen, poster }) {
                                         style={styles.backgroundVideo}
                                     />
                                     :
-                                    <FastImage resizeMode={isDetailScreen ? FastImage.resizeMode.contain : FastImage.resizeMode.cover} source={{ uri: images[0].location }} style={styles.postImage} />
+                                    <FastImage resizeMode={isDetailScreen ? FastImage.resizeMode.contain : FastImage.resizeMode.cover} source={{ uri: item.location }} style={styles.postImage} />
                                 }
 
                                 {/* <FastImage resizeMode={isDetailScreen ? FastImage.resizeMode.contain : FastImage.resizeMode.cover} source={{ uri: item.location }} style={styles.postImage} /> */}

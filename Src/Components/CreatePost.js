@@ -51,6 +51,12 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
   const { user } = useSelector(e => e.common)
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    setpostText('')
+    setimageArray([])
+  }, [])
+
+
   const openDocPicker = async (type) => {
     if (imageArray.length < 9) {
       ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
@@ -95,21 +101,15 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
         if (imageArray.length > 9) {
           errorToast('You can select maximum 9 files')
         } else {
-
           imageArray.forEach((element, index) => {
-            let time = new Date().getTime()
-            tempArray.push('mediaFiles' + "[" + time + "]");
-            tempArray.push({
+            console.log('element---', element)
+            let time = new Date().getTime() + index
+            data['mediaFiles' + "[" + time + "]"] = {
               uri: imageArray[index].path,
               type: imageArray[index].mime, // or photo.type image/jpg
               name: imageArray[index]?.mime.includes('image') ? 'image_[' + time + '].' + imageArray[index].path.split('.').pop() : 'video_[' + time + '].' + imageArray[index].path.split('.').pop(),
-            });
+            }
           });
-          var ob2 = {};
-          for (var i = 0; i < tempArray.length; i += 2) {
-            ob2[tempArray[i]] = tempArray[i + 1];
-          }
-          data = { ...data, ...ob2 }
         }
       }
       data.message = postText.trim()
@@ -124,6 +124,9 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
           }
         });
       }
+
+      console.log(data, imageArray.length)
+      // setTimeout(() => {
       setcreatePostModal(false)
       dispatchAction(dispatch, IS_LOADING, true)
       formDataApiCall(api.createPost, data, (res) => {
@@ -142,6 +145,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
       }, () => {
         dispatchAction(dispatch, IS_LOADING, false)
       })
+      // }, 5000);
     } else {
       errorToast('Please enter post text or select image')
     }

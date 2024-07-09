@@ -39,6 +39,7 @@ export default function IndiansPage() {
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const { user, allIndian, allPages } = useSelector(e => e.common);
+  const [allIndianList, setallIndianList] = useState(undefined)
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [pagesRefreshing, setPagesRefreshing] = React.useState(false);
@@ -50,6 +51,16 @@ export default function IndiansPage() {
   }, [isLeftButtonActive]);
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
+
+  useEffect(() => {
+    if (searchText == '') {
+      let temp = allIndian.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0)
+      setallIndianList(temp)
+    } else {
+      setallIndianList(allIndian)
+    }
+  }, [allIndian])
+
 
   useEffect(() => {
     dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
@@ -240,12 +251,12 @@ export default function IndiansPage() {
           <SearchBar value={searchText} onChangeText={text => onSearchIndians(text)} placeholder={'Search Indians here'} />
           <Text style={styles.peopleText}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
           <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-            {allIndian !== undefined && (
-              allIndian?.length > 0 ?
+            {allIndianList !== undefined && (
+              allIndianList?.length > 0 ?
                 <>
-                  <RenderIndians data={allIndian?.slice(0, 2)} />
+                  <RenderIndians data={allIndianList?.slice(0, 2)} />
                   <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
-                  <RenderIndians data={allIndian?.slice(2)} />
+                  <RenderIndians data={allIndianList?.slice(2)} />
                   {/* <RenderSeeMoreView onPressSeeMore={() => navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} /> */}
                   <View style={{ height: 10 }} />
                 </>

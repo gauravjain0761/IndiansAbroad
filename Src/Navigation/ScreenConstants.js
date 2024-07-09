@@ -46,4 +46,7 @@ export const screenName = {
   MediaScreen: 'MediaScreen',
   SecurityScreen: 'SecurityScreen',
   Messaging: 'Messaging',
+  ForgotPassword: 'ForgotPassword',
+  NewPassword: 'NewPassword',
+  PasswordChangeSuccess: "PasswordChangeSuccess"
 };

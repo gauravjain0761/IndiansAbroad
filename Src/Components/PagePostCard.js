@@ -18,6 +18,7 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { onLikePost } from '../Services/PostServices';
 import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
+import RenderText from './RenderText';
 
 export default function PagePostCard({ item, index, }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -78,9 +79,8 @@ export default function PagePostCard({ item, index, }) {
           </TouchableOpacity>
         </View> */}
       </View>
-      {item?.message !== '' && <Text style={styles.description} >
-        {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
-      </Text>}
+      {item?.message !== '' && <RenderText text={item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message} style={styles.description} >
+      </RenderText>}
       {item?.message !== '' && item?.message.length > 120 ?
         <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
           <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>

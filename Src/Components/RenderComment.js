@@ -1,21 +1,14 @@
-import { FlatList, ScrollView, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Header from '../Components/Header';
+import { StyleSheet, TouchableOpacity, Text, View, Image } from 'react-native'
+import React, { } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { useNavigation } from '@react-navigation/native';
-import PostCard from '../Components/PostCard';
-import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
-import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
-import { useDispatch, useSelector } from 'react-redux';
-import { api } from '../utils/apiConstants';
-import { dispatchAction } from '../utils/apiGlobal';
-import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
+import { useSelector } from 'react-redux';
+import RenderText from './RenderText';
 import { screenName } from '../Navigation/ScreenConstants';
-import ConfirmationModal from '../Components/ConfirmationModal';
-import CommentInput from '../Components/CommentInput';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function RenderComment({
@@ -25,15 +18,24 @@ export default function RenderComment({
     onDelete
 }) {
     const { user } = useSelector(e => e.common)
+    const navigation = useNavigation()
+    let isUser = item?.user?._id == user?._id
+
+    const onOpenOtherUserDetails = () => {
+        if (!isUser) {
+            navigation.navigate(screenName.indiansDetails, { userId: item?.user?._id })
+        }
+    }
 
     return (
         <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
                 <View style={{ paddingTop: 8, }}>
-                    <RenderUserIcon url={item?.user?.avtar} height={53} isBorder />
+                    <RenderUserIcon userId={item?.user?._id} url={item?.user?.avtar} height={53} isBorder />
                 </View>
-
-                <View style={styles.commentView}>
+                <TouchableOpacity onPress={() => {
+                    onOpenOtherUserDetails()
+                }} activeOpacity={0.8} style={styles.commentView}>
                     <View style={styles.commentBg}>
                         <View style={ApplicationStyles.flex}>
                             <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
@@ -52,14 +54,14 @@ export default function RenderComment({
                         </View>
                     </View>
                     <View style={styles.commentBg}>
-                        <Text style={styles.commentText2}>{item?.comment}</Text>
+                        <RenderText style={styles.commentText2} text={item?.comment}></RenderText>
                         {item?.user?._id == user._id &&
                             <TouchableOpacity onPress={() => onDelete()} style={{ paddingHorizontal: 10 }}>
                                 <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                             </TouchableOpacity>
                         }
                     </View>
-                </View>
+                </TouchableOpacity>
 
                 {/* <View style={styles.commentBg}>
 

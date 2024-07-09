@@ -11,6 +11,10 @@ export const api = {
     registerstepone: '/user/registerstepone',
     registersteptwo: 'user/registersteptwo',
     getSignupCountries: '/countries/list/0',
+    forgotPassword: '/user/forgotpass',
+    resetPass: '/user/resetpass?key=1',
+
+
     // post
     getalluserposts: '/post/getalluserposts',
     likedislike: '/postlike/likedislike',
