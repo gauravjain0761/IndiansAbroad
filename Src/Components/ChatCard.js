@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {Icons} from '../Themes/Icons';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
+import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 
-export default function ChatCard({ indians, cardPress }) {
+export default function ChatCard({indians, cardPress}) {
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={styles.imageStyle}>
@@ -79,6 +79,6 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     marginRight: 0,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
 });

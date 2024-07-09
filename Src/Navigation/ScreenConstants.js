@@ -1,4 +1,3 @@
-
 export const screenName = {
   homeScreen: 'HomeScreen',
   indiansPage: 'IndiansPage',
@@ -45,5 +44,6 @@ export const screenName = {
   PaymentModalScreen: 'PaymentModalScreen',
   SplashScreen: 'SplashScreen',
   MediaScreen: 'MediaScreen',
-  SecurityScreen: 'SecurityScreen'
+  SecurityScreen: 'SecurityScreen',
+  Messaging: 'Messaging',
 };

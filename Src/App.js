@@ -1,27 +1,43 @@
 import './Config';
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import RootContainer from './Navigation/RootContainer';
-import { View, Text, TextInput, SafeAreaView, StyleSheet, LogBox } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  SafeAreaView,
+  StyleSheet,
+  LogBox,
+} from 'react-native';
 import ApplicationStyles from './Themes/ApplicationStyles';
-import { dispatchAction, setAuthorization } from './utils/apiGlobal';
-import { getAsyncToken, getAsyncUserInfo, setAsyncToken, setAsyncUserInfo } from './utils/AsyncStorage';
-import { Provider, useDispatch } from 'react-redux';
+import {dispatchAction, setAuthorization} from './utils/apiGlobal';
+import {
+  getAsyncToken,
+  getAsyncUserInfo,
+  setAsyncToken,
+  setAsyncUserInfo,
+} from './utils/AsyncStorage';
+import {Provider, useDispatch} from 'react-redux';
 import store from './Redux';
 import Toast from 'react-native-toast-message';
-import { SCREEN_WIDTH, fontname } from './Themes/Fonts';
+import {SCREEN_WIDTH, fontname} from './Themes/Fonts';
 import colors from './Themes/Colors';
-import { FontStyle } from './utils/commonFunction';
-import { onGetUserInfoApi, onLoginApi, oncheckSession } from './Services/AuthServices';
+import {FontStyle} from './utils/commonFunction';
+import {
+  onGetUserInfoApi,
+  onLoginApi,
+  oncheckSession,
+} from './Services/AuthServices';
 import Loader from './Components/Loader';
-import { SET_USER } from './Redux/ActionTypes';
+import {SET_USER} from './Redux/ActionTypes';
 
 function App() {
-  const dispatch = useDispatch()
-  const [loading, setloading] = useState(false)
+  const dispatch = useDispatch();
+  const [loading, setloading] = useState(false);
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
     if (!__DEV__) {
-      console.log = () => { };
+      console.log = () => {};
     }
     Text.defaultProps = Text.defaultProps || {};
     Text.defaultProps.allowFontScaling = false;
@@ -89,7 +105,7 @@ function App() {
   // }
 
   const toastConfig = {
-    success: ({ text1, text2, type, props, ...rest }) =>
+    success: ({text1, text2, type, props, ...rest}) =>
       type === 'success' && (
         <SafeAreaView>
           <View style={styles.textStyleToastSuccess}>
@@ -97,7 +113,7 @@ function App() {
           </View>
         </SafeAreaView>
       ),
-    error: ({ text1, text2, type, props, ...rest }) => {
+    error: ({text1, text2, type, props, ...rest}) => {
       if (type === 'error') {
         return (
           <SafeAreaView>
@@ -146,6 +162,6 @@ const styles = StyleSheet.create({
   textStyleToast: {
     // marginLeft: hp(2)
     ...FontStyle(16, colors.white),
-    textAlign: 'center'
+    textAlign: 'center',
   },
 });
