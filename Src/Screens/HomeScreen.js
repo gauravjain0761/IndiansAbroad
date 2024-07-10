@@ -9,26 +9,32 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { fontname, wp } from '../Themes/Fonts';
-import { FontStyle } from '../utils/commonFunction';
+import {fontname, wp} from '../Themes/Fonts';
+import {FontStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import CreatePost from '../Components/CreatePost';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { screenName } from '../Navigation/ScreenConstants';
-import { getalluserposts } from '../Services/PostServices';
-import { dispatchAction } from '../utils/apiGlobal';
-import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_GLOBAL_SEARCH } from '../Redux/ActionTypes';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {screenName} from '../Navigation/ScreenConstants';
+import {getalluserposts} from '../Services/PostServices';
+import {dispatchAction} from '../utils/apiGlobal';
+import {
+  IS_LOADING,
+  SET_ACTIVE_POST,
+  SET_ACTIVE_POST_COMMENTS,
+  SET_GLOBAL_SEARCH,
+} from '../Redux/ActionTypes';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import NoDataFound from '../Components/NoDataFound';
-import { getFollowerList } from '../Services/AuthServices';
-import { getDiscussionCountry } from '../Services/DiscussionServices';
+import {getFollowerList} from '../Services/AuthServices';
+import {getDiscussionCountry} from '../Services/DiscussionServices';
+import {io} from 'socket.io-client';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -40,17 +46,37 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const { allPost, allPostsCount, user } = useSelector(e => e.common);
+  const {allPost, allPostsCount, user} = useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
+
+  useEffect(() => {
+    const socket = io('https://express.indiansabroad.online/');
+    // Listen for the 'connect' event
+    socket.on('connect', () => {
+      console.log('Connected to the server:::');
+    });
+
+    // Listen for the 'disconnect' event
+    socket.on('disconnect', () => {
+      console.log('Disconnected from the server');
+    });
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
+  }, []);
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getPostList(1);
-    dispatch(getFollowerList({
-      data: { userId: user?._id, search: '' }
-    }))
+    dispatch(
+      getFollowerList({
+        data: {userId: user?._id, search: ''},
+      }),
+    );
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -72,15 +98,13 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
-    if (!allPost) dispatchAction(dispatch, IS_LOADING, true)
-    dispatch(getDiscussionCountry({}))
+    if (!allPost) dispatchAction(dispatch, IS_LOADING, true);
+    dispatch(getDiscussionCountry({}));
   }, []);
-
-
 
   useEffect(() => {
     if (isFocuse) {
-      getPostList(1)
+      getPostList(1);
     }
   }, [isFocuse]);
 
@@ -92,14 +116,14 @@ export default function HomeScreen() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
         onPress={() => {
-          dispatchAction(dispatch, SET_ACTIVE_POST, item)
-          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
-          navigation.navigate(screenName.PostDetail)
+          dispatchAction(dispatch, SET_ACTIVE_POST, item);
+          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+          navigation.navigate(screenName.PostDetail);
         }}>
         <PostCard item={item} index={index} />
       </TouchableOpacity>
@@ -121,7 +145,7 @@ export default function HomeScreen() {
 
   return (
     <View style={ApplicationStyles.applicationView}>
-      <SafeAreaView edges={['top']}  >
+      <SafeAreaView edges={['top']}>
         <Header
           title={'IndiansAbroad'}
           showRight={true}
@@ -139,7 +163,12 @@ export default function HomeScreen() {
             ref.current?.setPage(0);
           }}
           style={styles.tabItemView}>
-          <Text style={tabSelection == 'Activity' ? styles.selectedText : styles.unSewlectedText}>
+          <Text
+            style={
+              tabSelection == 'Activity'
+                ? styles.selectedText
+                : styles.unSewlectedText
+            }>
             {'ACTIVITY'}
           </Text>
         </TouchableOpacity>
@@ -150,7 +179,12 @@ export default function HomeScreen() {
             setIsLeftButtonActive(false);
           }}
           style={styles.tabItemView}>
-          <Text style={tabSelection == 'Events' ? styles.selectedText : styles.unSewlectedText}>
+          <Text
+            style={
+              tabSelection == 'Events'
+                ? styles.selectedText
+                : styles.unSewlectedText
+            }>
             {'EVENTS'}
           </Text>
         </TouchableOpacity>
@@ -160,13 +194,13 @@ export default function HomeScreen() {
         onChangeText={text => setSearchText(text)}
         placeholder={'Search users, posts, forums'}
         onPressIn={() => {
-          dispatchAction(dispatch, SET_GLOBAL_SEARCH, undefined)
-          navigation.navigate(screenName.SearchScreen)
+          dispatchAction(dispatch, SET_GLOBAL_SEARCH, undefined);
+          navigation.navigate(screenName.SearchScreen);
         }}
-      // containerStyles={{top:-14}}
+        // containerStyles={{top:-14}}
       />
       <PagerView
-        style={{ flex: 1, }}
+        style={{flex: 1}}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -177,25 +211,28 @@ export default function HomeScreen() {
           setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
         }}>
         <View key={'1'}>
-          {allPost && <FlatList
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            data={allPost}
-            renderItem={renderItem}
-            onEndReached={fetchMoreData}
-            onEndReachedThreshold={0.3}
-            ListFooterComponent={() => {
-              return (
-                <View>
-                  {(allPost && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
-                  <View style={{ height: 50 }} />
-                </View>
-              )
-            }}
-            ListEmptyComponent={<NoDataFound />}
-          />}
-
+          {allPost && (
+            <FlatList
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              data={allPost}
+              renderItem={renderItem}
+              onEndReached={fetchMoreData}
+              onEndReachedThreshold={0.3}
+              ListFooterComponent={() => {
+                return (
+                  <View>
+                    {allPost && loading && (
+                      <ActivityIndicator size={'large'} color={colors.black} />
+                    )}
+                    <View style={{height: 50}} />
+                  </View>
+                );
+              }}
+              ListEmptyComponent={<NoDataFound />}
+            />
+          )}
         </View>
         <View key={'2'}>
           <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
@@ -223,14 +260,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: 'center',
   },
-  selectedText: FontStyle(
-    14,
-    colors.tertiary1_500,
-    '700',
-  ),
-  unSewlectedText: FontStyle(
-    14,
-    colors.neutral_900,
-    '700',
-  ),
+  selectedText: FontStyle(14, colors.tertiary1_500, '700'),
+  unSewlectedText: FontStyle(14, colors.neutral_900, '700'),
 });

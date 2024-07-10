@@ -1,98 +1,116 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {Icons} from '../Themes/Icons';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
+import {SCREEN_WIDTH, fontname} from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
 import UpdateDeleteMenu from './UpdateDeleteMenu';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import PostCarousal from './PostCarousal';
-import { screenName } from '../Navigation/ScreenConstants';
-import { useNavigation } from '@react-navigation/native';
-import { getalluserposts, onDeletePost, onLikePost } from '../Services/PostServices';
-import { dispatchAction } from '../utils/apiGlobal';
-import { OTHER_USER_INFO, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
-import { api } from '../utils/apiConstants';
-import { onBlockUserApi, onConnectRequest, onGetOtherUserInfo } from '../Services/OtherUserServices';
+import {screenName} from '../Navigation/ScreenConstants';
+import {useNavigation} from '@react-navigation/native';
+import {
+  getalluserposts,
+  onDeletePost,
+  onLikePost,
+} from '../Services/PostServices';
+import {dispatchAction} from '../utils/apiGlobal';
+import {
+  OTHER_USER_INFO,
+  SET_LIKED_USER_LIST,
+  SET_LIKE_DISLIKE,
+} from '../Redux/ActionTypes';
+import {api} from '../utils/apiConstants';
+import {
+  onBlockUserApi,
+  onConnectRequest,
+  onGetOtherUserInfo,
+} from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
 import RenderText from './RenderText';
 
-export default function PostCard({ item, index, isDetailScreen = false, }) {
+export default function PostCard({item, index, isDetailScreen = false}) {
   const [menuModal, setmenuModal] = useState(false);
   const navigation = useNavigation();
-  const { user } = useSelector(e => e.common);
-  const dispatch = useDispatch()
-  const [blockModal, setblockModal] = useState(false)
+  const {user} = useSelector(e => e.common);
+  const dispatch = useDispatch();
+  const [blockModal, setblockModal] = useState(false);
   const [textShown, setTextShown] = useState(false);
-  const { otherUserInfo } = useSelector(e => e.common)
-  const [reportModal, setReportModal] = useState(false)
-  const [shareModal, setshareModal] = useState(false)
-  const [deletePostModal, setDeletePostModal] = useState(false)
+  const {otherUserInfo} = useSelector(e => e.common);
+  const [reportModal, setReportModal] = useState(false);
+  const [shareModal, setshareModal] = useState(false);
+  const [deletePostModal, setDeletePostModal] = useState(false);
 
-  let isUser = item?.createdBy?._id == user._id
+  let isUser = item?.createdBy?._id == user._id;
 
-  const onPostLike = (isLiked) => {
-    const liked = isLiked
-    dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: liked ? 'unlike' : 'like' })
+  const onPostLike = isLiked => {
+    const liked = isLiked;
+    dispatchAction(dispatch, SET_LIKE_DISLIKE, {
+      postId: item._id,
+      action: liked ? 'unlike' : 'like',
+    });
     let obj = {
       data: {
         postId: item._id,
         createdBy: user._id,
-        action: liked ? 'unlike' : 'like'
+        action: liked ? 'unlike' : 'like',
       },
-      onSuccess: () => { },
+      onSuccess: () => {},
       onFailure: () => {
-        dispatchAction(dispatch, SET_LIKE_DISLIKE, { postId: item._id, action: item?.isLiked ? 'unlike' : 'like' })
-      }
-    }
-    dispatch(onLikePost(obj))
-  }
+        dispatchAction(dispatch, SET_LIKE_DISLIKE, {
+          postId: item._id,
+          action: item?.isLiked ? 'unlike' : 'like',
+        });
+      },
+    };
+    dispatch(onLikePost(obj));
+  };
 
   const openLikeScreen = () => {
-    dispatchAction(dispatch, SET_LIKED_USER_LIST, undefined)
+    dispatchAction(dispatch, SET_LIKED_USER_LIST, undefined);
     navigation.navigate(screenName.LikesScreen, {
       postId: item._id,
-    })
-  }
+    });
+  };
 
   const onPressConnect = () => {
     let obj = {
       data: {
         userId: user._id,
-        followingId: item?.createdBy?._id
+        followingId: item?.createdBy?._id,
       },
       onSuccess: () => {
         if (otherUserInfo) {
-          dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo?._id, } }))
+          dispatch(onGetOtherUserInfo({params: {userId: otherUserInfo?._id}}));
         }
-      }
-    }
-    dispatch(onConnectRequest(obj))
-  }
+      },
+    };
+    dispatch(onConnectRequest(obj));
+  };
 
   const onBlockuser = () => {
-    setblockModal(false)
+    setblockModal(false);
     let obj = {
       data: {
         userId: item?.createdBy?._id,
-        action: 'block'
+        action: 'block',
       },
       onSuccess: () => {
-        if (otherUserInfo) navigation.goBack()
-      }
-    }
-    dispatch(onBlockUserApi(obj))
-  }
+        if (otherUserInfo) navigation.goBack();
+      },
+    };
+    dispatch(onBlockUserApi(obj));
+  };
 
   const onDelete = () => {
-    setDeletePostModal(false)
+    setDeletePostModal(false);
     let obj = {
       data: {
         postId: item._id,
@@ -108,19 +126,18 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
         };
         dispatch(getalluserposts(obj1));
       },
-      onFailure: () => { }
-    }
-    dispatch(onDeletePost(obj))
-  }
+      onFailure: () => {},
+    };
+    dispatch(onDeletePost(obj));
+  };
 
-  const onOpenOtherUserDetail = (id) => {
+  const onOpenOtherUserDetail = id => {
     if (!otherUserInfo && !isDetailScreen && !isUser) {
-      navigation.navigate(screenName.indiansDetails, { userId: id })
+      navigation.navigate(screenName.indiansDetails, {userId: id});
     }
-  }
+  };
 
   if (index == 0) {
-    console.log('-----', item)
   }
 
   if (item?.createdBy) {
@@ -128,16 +145,23 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
       <View key={item?._id}>
         <View style={styles.headerView}>
           <View style={styles.userImage}>
-            <RenderUserIcon userId={isDetailScreen ? undefined : item?.createdBy?._id} url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
+            <RenderUserIcon
+              userId={isDetailScreen ? undefined : item?.createdBy?._id}
+              url={item?.createdBy?.avtar}
+              height={57}
+              isBorder={item?.createdBy?.subscribedMember}
+            />
           </View>
-          <TouchableOpacity onPress={() => onOpenOtherUserDetail(item?.createdBy?._id)} style={ApplicationStyles.flex}>
+          <TouchableOpacity
+            onPress={() => onOpenOtherUserDetail(item?.createdBy?._id)}
+            style={ApplicationStyles.flex}>
             <View>
               <Text style={styles.username1}>
                 {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
               </Text>
             </View>
             {!isUser && (
-              <View >
+              <View>
                 <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
               </View>
             )}
@@ -154,7 +178,9 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
                   <Text style={styles.degreeText3}>Message</Text>
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity onPress={() => onPressConnect()} style={styles.messageView}>
+                <TouchableOpacity
+                  onPress={() => onPressConnect()}
+                  style={styles.messageView}>
                   <Image
                     source={Icons.personAdd}
                     style={ImageStyle(30, 30, 'cover')}
@@ -165,30 +191,51 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
             </View>
           )}
         </View>
-        {item?.message && item?.message !== '' &&
-          <RenderText style={styles.description} text={item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message} />}
+        {item?.message && item?.message !== '' && (
+          <RenderText
+            style={styles.description}
+            text={
+              item?.message.length > 120 && !textShown
+                ? `${item?.message.substring(0, 120)}...`
+                : item?.message
+            }
+          />
+        )}
         {/* {item?.message && item?.message !== '' &&
           <Text style={styles.description} >
             {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
           </Text>} */}
-        {item?.message && item?.message !== '' && item?.message.length > 120 ?
-          <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
-            <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>
+        {item?.message && item?.message !== '' && item?.message.length > 120 ? (
+          <TouchableOpacity
+            onPress={() => {
+              setTextShown(!textShown);
+            }}>
+            <Text style={styles.aboutTextMore}>{`${
+              !textShown ? 'Read more' : 'Read less'
+            }`}</Text>
           </TouchableOpacity>
-          : null}
+        ) : null}
         {item?.mediaFiles.length > 0 && (
-          <PostCarousal poster={item?.thumbNail} isDetailScreen={isDetailScreen} images={item?.mediaFiles} />
+          <PostCarousal
+            poster={item?.thumbNail}
+            isDetailScreen={isDetailScreen}
+            images={item?.mediaFiles}
+          />
         )}
         <View style={styles.bottomRow}>
           <View style={styles.middlerow}>
             <View style={styles.innerRow}>
-              <TouchableOpacity style={styles.touchableView} onPress={() => onPostLike(item?.isLiked)} >
+              <TouchableOpacity
+                style={styles.touchableView}
+                onPress={() => onPostLike(item?.isLiked)}>
                 <Image
                   source={item?.isLiked ? Icons.heartFilled : Icons.heart}
                   style={ImageStyle(22, 22)}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.touchableView} onPress={() => openLikeScreen()}>
+              <TouchableOpacity
+                style={styles.touchableView}
+                onPress={() => openLikeScreen()}>
                 <Text style={styles.username}>{item?.likeCount} Likes</Text>
               </TouchableOpacity>
             </View>
@@ -196,55 +243,75 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
               <Image source={Icons.chatCircle} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>{item?.commentCount} Comments</Text>
             </View>
-            <TouchableOpacity onPress={() => setshareModal(true)} style={styles.innerRow}>
+            <TouchableOpacity
+              onPress={() => setshareModal(true)}
+              style={styles.innerRow}>
               <Image source={Icons.share} style={ImageStyle(22, 22)} />
               <Text style={styles.username}>Share</Text>
             </TouchableOpacity>
           </View>
           {isUser ? (
-            <UpdateDeleteMenu onUpdatePress={() => navigation.navigate(screenName.UpdatePostScreen, { item: item })} onDeletePress={() => setDeletePostModal(true)}
+            <UpdateDeleteMenu
+              onUpdatePress={() =>
+                navigation.navigate(screenName.UpdatePostScreen, {item: item})
+              }
+              onDeletePress={() => setDeletePostModal(true)}
               icon={<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />}
             />
           ) : (
             <TouchableOpacity
               onPress={() => setmenuModal(true)}
-              style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
+              style={[styles.innerRow, {...ApplicationStyles.flex}]}>
               <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
             </TouchableOpacity>
           )}
         </View>
-        {menuModal && <PostShareModal
-          item={item}
-          menuModal={menuModal}
-          setmenuModal={() => setmenuModal(false)}
-          onPressBlock={() => setblockModal(true)}
-          onReportUser={() => setReportModal(true)}
-        />}
-        {blockModal && <ConfirmationModal
-          visible={blockModal}
-          onClose={() => setblockModal(false)}
-          title={`Do you want to block ${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}?`}
-          successBtn={'Yes'}
-          canselBtn={'No'}
-          onPressCancel={() => setblockModal(false)}
-          onPressSuccess={() => onBlockuser()}
-        />}
-        {deletePostModal && <ConfirmationModal
-          visible={deletePostModal}
-          onClose={() => setDeletePostModal(false)}
-          title={`Are you sure you want to delete this post?`}
-          successBtn={'Delete'}
-          canselBtn={'No'}
-          onPressCancel={() => setDeletePostModal(false)}
-          onPressSuccess={() => onDelete()}
-        />}
-        {reportModal && <ReportModal
-          visible={reportModal}
-          onClose={() => setReportModal(false)}
-          postId={item._id}
-        />}
-        {shareModal &&
-          <ShareModal visible={shareModal} postId={item._id} onClose={() => setshareModal(false)} item={item} />}
+        {menuModal && (
+          <PostShareModal
+            item={item}
+            menuModal={menuModal}
+            setmenuModal={() => setmenuModal(false)}
+            onPressBlock={() => setblockModal(true)}
+            onReportUser={() => setReportModal(true)}
+          />
+        )}
+        {blockModal && (
+          <ConfirmationModal
+            visible={blockModal}
+            onClose={() => setblockModal(false)}
+            title={`Do you want to block ${item?.createdBy?.first_Name} ${item?.createdBy?.last_Name}?`}
+            successBtn={'Yes'}
+            canselBtn={'No'}
+            onPressCancel={() => setblockModal(false)}
+            onPressSuccess={() => onBlockuser()}
+          />
+        )}
+        {deletePostModal && (
+          <ConfirmationModal
+            visible={deletePostModal}
+            onClose={() => setDeletePostModal(false)}
+            title={`Are you sure you want to delete this post?`}
+            successBtn={'Delete'}
+            canselBtn={'No'}
+            onPressCancel={() => setDeletePostModal(false)}
+            onPressSuccess={() => onDelete()}
+          />
+        )}
+        {reportModal && (
+          <ReportModal
+            visible={reportModal}
+            onClose={() => setReportModal(false)}
+            postId={item._id}
+          />
+        )}
+        {shareModal && (
+          <ShareModal
+            visible={shareModal}
+            postId={item._id}
+            onClose={() => setshareModal(false)}
+            item={item}
+          />
+        )}
       </View>
     );
   }
@@ -256,7 +323,9 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
         </TouchableOpacity>
         <View style={ApplicationStyles.flex}>
           <Text style={styles.username1}>Nikita Khairnar</Text>
-          {!isUser && <Text style={styles.degreeText1}>PhD Student, Seoul</Text>}
+          {!isUser && (
+            <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
+          )}
           <Text style={styles.degreeText}>15 hours ago</Text>
         </View>
         {!isUser && (
@@ -301,7 +370,7 @@ export default function PostCard({ item, index, isDetailScreen = false, }) {
         ) : (
           <TouchableOpacity
             onPress={() => setmenuModal(true)}
-            style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
+            style={[styles.innerRow, {...ApplicationStyles.flex}]}>
             <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
           </TouchableOpacity>
         )}
@@ -333,7 +402,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   username1: {
-    ...FontStyle(14, colors.neutral_900, "700"),
+    ...FontStyle(14, colors.neutral_900, '700'),
     textTransform: 'capitalize',
   },
   degreeText: {
@@ -402,13 +471,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
-  touchableView: { height: 42, justifyContent: 'center', },
+  touchableView: {height: 42, justifyContent: 'center'},
   aboutTextMore: {
     ...FontStyle(14, colors.primary_500),
     paddingBottom: 10,
     alignSelf: 'flex-end',
     marginHorizontal: 20,
     marginTop: -25,
-    paddingTop: 10
-  }
+    paddingTop: 10,
+  },
 });

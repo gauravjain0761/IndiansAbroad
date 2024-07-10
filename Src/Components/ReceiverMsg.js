@@ -3,7 +3,9 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {SCREEN_WIDTH, hp, wp} from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import {FontStyle} from '../utils/commonFunction';
-import {Menu, MenuItem} from 'react-native-material-menu';
+import {Menu} from 'react-native-material-menu';
+import {api} from '../utils/apiConstants';
+import moment from 'moment';
 
 const ReciverMsg = ({data}) => {
   const [visible, setVisible] = useState(false);
@@ -18,7 +20,7 @@ const ReciverMsg = ({data}) => {
         <Image
           resizeMode="cover"
           style={styles.imgStyle}
-          source={{uri: 'https://picsum.photos/200'}}
+          source={{uri: api.IMAGE_URL + data?.createdBy?.avtar}}
         />
         <View style={styles.columnContainer}>
           <Menu
@@ -28,8 +30,12 @@ const ReciverMsg = ({data}) => {
               <TouchableOpacity
                 onLongPress={showMenu}
                 style={styles.boxContainer}>
-                <Text style={styles.nameTextStyle}>{data?.name}</Text>
-                <Text style={styles.msgTextStyle}>{data?.message}</Text>
+                <Text style={styles.nameTextStyle}>
+                  {data?.createdBy?.first_Name +
+                    ' ' +
+                    data?.createdBy?.last_Name}
+                </Text>
+                <Text style={styles.msgTextStyle}>{data?.content}</Text>
               </TouchableOpacity>
             }
             onRequestClose={hideMenu}>
@@ -45,7 +51,9 @@ const ReciverMsg = ({data}) => {
               </TouchableOpacity>
             </View>
           </Menu>
-          <Text style={styles.timeTextStyle}>{data.time}</Text>
+          <Text style={styles.timeTextStyle}>
+            {moment(data?.createdAt).format('HH:mm')}
+          </Text>
         </View>
       </View>
     </View>
@@ -57,7 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     maxWidth: SCREEN_WIDTH - wp(50),
     marginHorizontal: wp(10),
-    marginTop: hp(10),
+    marginBottom: hp(10),
   },
   imgStyle: {
     height: wp(35),

@@ -1,10 +1,21 @@
-import React from 'react';
-import {View, Text, SafeAreaView, FlatList, StyleSheet} from 'react-native';
-import RenderUserIcon from '../../Components/RenderUserIcon';
+import React, {useEffect} from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import ChatHeader from '../../Components/ChatHeader';
 import ReciverMsg from '../../Components/ReceiverMsg';
 import colors from '../../Themes/Colors';
 import SenderMsg from '../../Components/SenderMsg';
+import ChatInput from '../../Components/ChatInput';
+import {useSelector} from 'react-redux';
+import {useRoute} from '@react-navigation/native';
+import {io} from 'socket.io-client';
 
 let data = [
   {
@@ -66,20 +77,44 @@ let data = [
 ];
 
 const Messaging = () => {
+  const {chatMessageList, user} = useSelector(e => e.common);
+  const {params} = useRoute();
+
+  useEffect(() => {
+    const mSocket = io('https://express.indiansabroad.online/');
+    mSocket.emit('joinRoom', params?.chatId);
+
+    mSocket.on('msgReceive', data => {
+      console.log('msgReceive', data);
+    });
+    mSocket.on('msgReceiveSelf', data => {
+      console.log('damsgReceiveSelfta', data);
+    });
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <ChatHeader />
+      <ChatHeader
+        url={params?.currentUser?.avtar}
+        name={
+          params?.currentUser?.first_Name + ' ' + params?.currentUser?.last_Name
+        }
+      />
       <FlatList
-        data={data}
+        inverted
+        data={chatMessageList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item, index}) => {
-          if (item.type === 'receiver') {
+          if (item?.createdBy?._id !== user._id) {
             return <ReciverMsg data={item} />;
           } else {
             return <SenderMsg data={item} />;
           }
         }}
       />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
+        <ChatInput />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

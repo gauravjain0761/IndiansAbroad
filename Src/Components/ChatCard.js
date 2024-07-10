@@ -13,23 +13,37 @@ import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
 
-export default function ChatCard({indians, cardPress}) {
+export default function ChatCard({data, cardPress}) {
+  const {user} = useSelector(e => e.common);
+
+  let currentUser = data?.users?.filter(item => item._id !== user?._id)?.[0];
+
   return (
-    <TouchableOpacity onPress={cardPress} style={[styles.header]}>
+    <TouchableOpacity
+      onPress={() => cardPress(currentUser)}
+      style={[styles.header]}>
       <View style={styles.imageStyle}>
-        <RenderUserIcon height={78} />
+        <RenderUserIcon
+          url={currentUser?.avtar}
+          height={78}
+          isBorder={currentUser?.subscribedMember}
+        />
         {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
       </View>
       <Text numberOfLines={1} style={styles.text1}>
-        Vikas Mane
+        {currentUser?.first_Name + ' ' + currentUser?.last_Name}
       </Text>
       <Text numberOfLines={1} style={styles.text3}>
-        HI Anay, How are you . .
+        {data?.latestMessage?.content}
       </Text>
       <View style={styles.btnView}>
         <Image source={Icons.sent} style={styles.chatIcon} />
-        <Text style={styles.btnText}>13.06</Text>
+        <Text style={styles.btnText}>
+          {moment(data?.latestMessage?.createdAt).format('HH:mm')}
+        </Text>
       </View>
     </TouchableOpacity>
   );

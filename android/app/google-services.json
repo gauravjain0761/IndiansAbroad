@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "773513820699",
+    "project_id": "indiansabroad-b6eb5",
+    "storage_bucket": "indiansabroad-b6eb5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773513820699:android:e863cbb72c4f4333b116be",
+        "android_client_info": {
+          "package_name": "com.indianabroad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2I-MFf1LPoSg8MJCBH9bIWC9I8JJ-gkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773513820699:android:726e1c34ad0af9f9b116be",
+        "android_client_info": {
+          "package_name": "com.indiansabroad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2I-MFf1LPoSg8MJCBH9bIWC9I8JJ-gkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

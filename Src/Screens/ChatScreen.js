@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../Components/Header';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import {FontStyle} from '../utils/commonFunction';
@@ -20,10 +20,26 @@ import {screenName} from '../Navigation/ScreenConstants';
 import {useNavigation} from '@react-navigation/native';
 import ChatCard from '../Components/ChatCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {getChatMessage, getChatRooms} from '../Services/ChatServices';
 
 export default function ChatScreen() {
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const {navigate} = useNavigation();
+  const {user, chatRoomList} = useSelector(e => e.common);
+
+  useEffect(() => {
+    let obj = {
+      data: {
+        curruntUser: user._id,
+        searchText: '',
+        page: 1,
+      },
+      onSuccess: () => {},
+    };
+    dispatch(getChatRooms(obj));
+  }, []);
 
   const ChatList = () => {
     return (
@@ -39,6 +55,22 @@ export default function ChatScreen() {
         <Text style={styles.text3}>2024-05-13</Text>
       </View>
     );
+  };
+
+  const onPressItem = (item, currentUser) => {
+    let obj = {
+      data: {
+        search: '',
+        chatId: item._id,
+        currUser: user._id,
+        page: 1,
+        userId: user._id,
+      },
+      onSuccess: () => {
+        navigate(screenName.Messaging, {currentUser, chatId: item._id});
+      },
+    };
+    dispatch(getChatMessage(obj));
   };
 
   return (
@@ -58,10 +90,11 @@ export default function ChatScreen() {
         onChangeText={text => setSearchText(text)}
         placeholder={'Search Chats here'}
       />
-      <ChatList />
+      {/* <ChatList /> */}
       <FlatList
         style={{
           paddingHorizontal: wp(8),
+          paddingTop: hp(10),
         }}
         columnWrapperStyle={{
           width: '100%',
@@ -70,13 +103,12 @@ export default function ChatScreen() {
         }}
         numColumns={2}
         bounces={false}
-        data={[1, 2, 3, 2]}
+        data={chatRoomList}
         renderItem={({item}) => {
           return (
             <ChatCard
-              cardPress={() => {
-                navigate(screenName.Messaging);
-              }}
+              data={item}
+              cardPress={currentUser => onPressItem(item, currentUser)}
             />
           );
         }}

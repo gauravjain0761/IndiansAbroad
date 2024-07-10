@@ -34,6 +34,7 @@ import {SET_USER} from './Redux/ActionTypes';
 function App() {
   const dispatch = useDispatch();
   const [loading, setloading] = useState(false);
+
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
     if (!__DEV__) {

@@ -7,7 +7,7 @@ import colors from '../Themes/Colors';
 import RenderUserIcon from './RenderUserIcon';
 import {useNavigation} from '@react-navigation/native';
 
-const ChatHeader = () => {
+const ChatHeader = ({url, name}) => {
   const {goBack} = useNavigation();
   return (
     <View style={styles.conatiner}>
@@ -16,10 +16,14 @@ const ChatHeader = () => {
         style={styles.backBoxContainer}>
         <Image source={Icons.left_arrow} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
-      <View style={styles.logoContainer}>
-        <RenderUserIcon height={50} />
+      <View
+        style={{
+          ...styles.logoContainer,
+          backgroundColor: url?.length > 0 ? 'transparent' : colors.white,
+        }}>
+        <RenderUserIcon url={url} height={50} />
       </View>
-      <Text style={styles.headerTextStyle}>{'Nanotech Alumni Group'}</Text>
+      <Text style={styles.headerTextStyle}>{name}</Text>
       <TouchableOpacity>
         <Image source={Icons.more} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
