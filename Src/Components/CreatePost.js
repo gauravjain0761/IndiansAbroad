@@ -11,14 +11,15 @@ import {
   TextInput,
   Alert,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Platform
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
 import { FontStyle, ImageStyle, errorToast, successToast } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
@@ -43,6 +44,8 @@ import { IS_LOADING } from '../Redux/ActionTypes';
 import ReactNativeModal from 'react-native-modal';
 import { navigationRef } from '../Navigation/RootContainer';
 import { screenName } from '../Navigation/ScreenConstants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import CommonButton from './CommonButton';
 
 
 export default function CreatePost({ createPostModal, setcreatePostModal }) {
@@ -50,13 +53,18 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
   const [imageArray, setimageArray] = useState([])
   const { user } = useSelector(e => e.common)
   const dispatch = useDispatch()
+  const [previewModal, setpreviewModal] = useState(false)
+  const insets = useSafeAreaInsets();
+  const [selectedImage, setselectedImage] = useState(undefined)
+  const [selectedImageIndex, setselectedImageIndex] = useState(undefined)
 
   useEffect(() => {
+    setpreviewModal(false)
+    setselectedImageIndex(undefined)
+    setselectedImage(undefined)
     setpostText('')
     setimageArray([])
   }, [])
-
-
   const openDocPicker = async (type) => {
     if (imageArray.length < 9) {
       ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
@@ -92,7 +100,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
     temp.splice(index, 1)
     setimageArray(temp)
   }
-
   const onPressPublish = () => {
     if (postText.trim().length > 0 || imageArray.length > 0) {
       let data = {}
@@ -150,7 +157,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
       errorToast('Please enter post text or select image')
     }
   }
-
   const onCloseModal = () => {
     Alert.alert('Do you really want to discard the post ?', '', [
       {
@@ -160,6 +166,24 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
       },
       { text: 'YES', onPress: () => setcreatePostModal(false) },
     ]);
+  }
+
+  const onPressRotate = () => {
+    ImageCropPicker.openCropper({
+      path: selectedImage.path,
+      freeStyleCropEnabled: true,
+      compressImageQuality: 1,
+    }).then(image => {
+      setselectedImage(image)
+      console.log(image);
+    });
+  }
+  const onPressSet = () => {
+    console.log(selectedImageIndex)
+    let temp = Object.assign([], imageArray)
+    temp.splice(selectedImageIndex, 1, selectedImage)
+    setpreviewModal(false)
+    setimageArray(temp)
   }
 
   return (
@@ -191,17 +215,9 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
               <View style={styles.imageView}>
                 {imageArray.map((item, index) => {
                   return (
-                    // <TouchableOpacity onPress={() => navigationRef.navigate(screenName.MediaScreen, { images: imageArray })} >
-                    //   {item?.mime.includes('image') ?
-                    //     <Image source={{ uri: item.path }} style={styles.imageStyles} />
-                    //     :
-                    //     <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
-                    //   }
-                    //   <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
-                    //     <Image source={Icons.closeRound} style={styles.closeIcon} />
-                    //   </TouchableOpacity>
-                    // </TouchableOpacity>
-                    <View>
+                    <TouchableOpacity onPress={() => {
+                      if (item?.mime.includes('image')) { setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index) }
+                    }}>
                       {item?.mime.includes('image') ?
                         <Image source={{ uri: item.path }} style={styles.imageStyles} />
                         :
@@ -210,7 +226,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
                       <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
                         <Image source={Icons.closeRound} style={styles.closeIcon} />
                       </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
                   )
                 })}
               </View>
@@ -220,8 +236,34 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
             <Text style={styles.publishText}>Publish</Text>
           </TouchableOpacity>
         </View>
-
       </TouchableWithoutFeedback>
+      {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
+        style={{ justifyContent: 'flex-end', margin: 0, }} >
+        <View style={[styles.modalView, { height: SCREEN_HEIGHT - insets.top - 50, backgroundColor: colors.white, borderTopEndRadius: 15, borderTopStartRadius: 15, borderWidth: 1, borderColor: colors.neutral_900 }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 20, justifyContent: 'space-between' }}>
+            <TouchableOpacity onPress={() => setpreviewModal(false)} style={styles.backView}>
+              <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: wp(20) }}>
+              <TouchableOpacity onPress={() => onPressRotate()} >
+                <Text style={{ ...FontStyle(18, colors.neutral_900, '400'), }}>Rotate</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => onPressRotate()} >
+                <Text style={{ ...FontStyle(18, colors.neutral_900, '400'), }}>Crop</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ flex: 1, marginVertical: 20 }}>
+            {selectedImage?.mime.includes('image') ?
+              <Image source={{ uri: selectedImage.path }} style={styles.imageStyles2} />
+              :
+              <Image source={{ uri: selectedImage.thumbnail.path }} style={styles.imageStyles2} />
+            }
+          </View>
+          <CommonButton onPress={() => onPressSet()} title={'Set'} extraStyle={{ marginHorizontal: wp(20) }} />
+          <View style={{ marginBottom: Platform.OS == 'android' ? 20 : insets.bottom }} />
+        </View>
+      </ReactNativeModal>}
     </ReactNativeModal>
 
   );
@@ -296,6 +338,9 @@ const styles = StyleSheet.create({
     gap: 10
   },
   imageStyles: { height: 60, width: (SCREEN_WIDTH - wp(28) - 50) / 5 },
+  imageStyles2: {
+    flex: 1, width: SCREEN_WIDTH - 10, resizeMode: 'contain', marginHorizontal: 5
+  },
   closeIconStyle: {
     position: 'absolute',
     backgroundColor: colors.white,

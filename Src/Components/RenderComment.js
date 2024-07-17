@@ -15,15 +15,16 @@ export default function RenderComment({
     item,
     onLikeComment,
     onOpenReplies,
-    onDelete
+    onDelete,
+    isThread = false
 }) {
     const { user } = useSelector(e => e.common)
     const navigation = useNavigation()
-    let isUser = item?.user?._id == user?._id
+    let isUser = item?.user ? item?.user?._id : item?.createdBy?._id == user?._id
 
     const onOpenOtherUserDetails = () => {
         if (!isUser) {
-            navigation.navigate(screenName.indiansDetails, { userId: item?.user?._id })
+            navigation.navigate(screenName.indiansDetails, { userId: item?.user ? item?.user?._id : item?.createdBy?._id })
         }
     }
 
@@ -31,14 +32,14 @@ export default function RenderComment({
         <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
                 <View style={{ paddingTop: 8, }}>
-                    <RenderUserIcon userId={item?.user?._id} url={item?.user?.avtar} height={53} isBorder />
+                    <RenderUserIcon userId={item?.user ? item?.user?._id : item?.createdBy?._id} url={item?.user ? item?.user?.avtar : item?.createdBy?.avtar} height={53} isBorder />
                 </View>
                 <TouchableOpacity onPress={() => {
                     onOpenOtherUserDetails()
                 }} activeOpacity={0.8} style={styles.commentView}>
                     <View style={styles.commentBg}>
                         <View style={ApplicationStyles.flex}>
-                            <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
+                            <Text numberOfLines={1} style={styles.username}>{item?.user ? item?.user?.first_Name : item?.createdBy?.first_Name} {item?.user ? item?.user?.last_Name : item?.createdBy?.last_Name}</Text>
                             <Text style={styles.degreeText}>PhD Student, Seoul</Text>
                             {/* <Text style={styles.commentText2}>{item?.comment}</Text> */}
                         </View>
@@ -49,13 +50,13 @@ export default function RenderComment({
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
                                 <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-                                <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
+                                <Text style={styles.likesText}>{item?.replyCount} {isThread ? 'Respond' : 'Reply'}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.commentBg}>
-                        <RenderText style={styles.commentText2} text={item?.comment}></RenderText>
-                        {item?.user?._id == user._id &&
+                        <RenderText style={[styles.commentText2]} text={item?.comment}></RenderText>
+                        {item?.user?._id == user._id || item?.createdBy?._id == user._id &&
                             <TouchableOpacity onPress={() => onDelete()} style={{ paddingHorizontal: 10 }}>
                                 <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                             </TouchableOpacity>
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
         ...FontStyle(14, colors.neutral_900)
     },
     commentText2: {
-        ...FontStyle(16, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900),
         // backgroundColor: 'red',
         flex: 1
     },

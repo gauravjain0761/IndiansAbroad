@@ -12,6 +12,7 @@ import { screenName } from '../Navigation/ScreenConstants'
 import CountryPicker from 'react-native-country-picker-modal'
 import { onGetOtp } from '../Services/AuthServices'
 import { useDispatch } from 'react-redux'
+import Header from '../Components/Header'
 
 export default function SignupScreen() {
     const [firstName, setfirstName] = useState('')
@@ -62,6 +63,7 @@ export default function SignupScreen() {
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
                 <SafeAreaView>
+                    <Header showLeft title={''} />
                     <KeyboardAvoidingView
                         {...(Platform.OS === 'ios'
                             ? {
@@ -125,6 +127,7 @@ export default function SignupScreen() {
                                 // withFlag
                                 />
                             </View>
+                            <View style={{ height: 100 }}></View>
                         </ScrollView>
                     </KeyboardAvoidingView>
                 </SafeAreaView>

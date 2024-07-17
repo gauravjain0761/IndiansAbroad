@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {api} from './apiConstants';
-import {IS_LOADING, actions} from '../Redux/ActionTypes';
-import {errorToast} from './commonFunction';
-import {getAsyncToken} from './AsyncStorage';
+import { api } from './apiConstants';
+import { IS_LOADING, actions } from '../Redux/ActionTypes';
+import { errorToast } from './commonFunction';
+import { getAsyncToken } from './AsyncStorage';
 
-export const makeAPIRequest = ({method, url, data, params, headers}) =>
+export const makeAPIRequest = ({ method, url, data, params, headers }) =>
   new Promise((resolve, reject) => {
     const option = {
       method,
@@ -14,14 +14,14 @@ export const makeAPIRequest = ({method, url, data, params, headers}) =>
       headers: headers
         ? headers
         : {
-            Accept: 'application/json',
-            ...headers,
-          },
+          Accept: 'application/json',
+          ...headers,
+        },
       params: params,
     };
     axios(option)
       .then(response => {
-        // console.log("res--->", api.BASE_URL + url, data, params, JSON.stringify(response?.data), response.status);
+        console.log("res--->", api.BASE_URL + url, data, params, JSON.stringify(response?.data), response.status);
         if (response.status === 200 || response.status === 201) {
           resolve(response);
         } else {
@@ -95,7 +95,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
 };
 
 export const dispatchAction = (dispatch, action, data) => {
-  dispatch({type: action, payload: data});
+  dispatch({ type: action, payload: data });
 };
 
 export const handleSuccessRes = (res, req, dispatch, fun) => {

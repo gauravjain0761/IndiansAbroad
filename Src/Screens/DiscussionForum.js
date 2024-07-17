@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
@@ -15,7 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDiscussionCountry, getThreadList, onGetThreadList } from '../Services/DiscussionServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { UPDATE_COUNTRY_DISCUSSION_LIST } from '../Redux/ActionTypes';
+import { SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, UPDATE_COUNTRY_DISCUSSION_LIST } from '../Redux/ActionTypes';
+import NoDataFound from '../Components/NoDataFound';
 
 export default function DiscussionForum() {
   const { navigate, goBack } = useNavigation();
@@ -24,6 +25,7 @@ export default function DiscussionForum() {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const isFocused = useIsFocused()
+  const [refreshing, setRefreshing] = React.useState(false);
   const { discussionCountry, threadList, user } = useSelector(e => e.common)
   useEffect(() => {
     if (isFocused) dispatch(getDiscussionCountry({}))
@@ -31,25 +33,39 @@ export default function DiscussionForum() {
   useEffect(() => {
     if (discussionCountry) {
       let temp = discussionCountry.filter(obj => obj.isSelected)
-      getThreadsList(temp[0]?._id)
+      getThreadsList(temp[0]?._id, searchText)
     }
-  }, [discussionCountry])
+  }, [discussionCountry, searchText])
 
-  const getThreadsList = (id) => {
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    let temp = discussionCountry.filter(obj => obj.isSelected)
+    getThreadsList(temp[0]?._id)
+  }, []);
+
+  const getThreadsList = (id, search) => {
     let obj = {
       data: {
         page: 0,
-        searchText: '',
+        searchText: search ? search : '',
         countryId: id,
         userId: user?._id
+      },
+      onSuccess: () => {
+        setRefreshing(false);
       }
     }
     dispatch(onGetThreadList(obj))
   }
 
+
   const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate(screenName.DiscussionForumDetail)}>
+      <TouchableOpacity activeOpacity={1} onPress={() => {
+        dispatchAction(dispatch, SET_ACTIVE_POST, item);
+        dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+        navigation.navigate(screenName.DiscussionForumDetail)
+      }}>
         <DiscussionForumCard item={item} index={index} />
       </TouchableOpacity>
     )
@@ -86,10 +102,21 @@ export default function DiscussionForum() {
         placeholder={'Search Threads'}
         containerStyles={{ marginTop: 5, }}
       />
-      <FlatList
-        data={[0, 1, 2, 3, 4]}
+      {threadList && <FlatList
+        data={threadList}
         renderItem={renderItem}
-      />
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListFooterComponent={() => {
+          return (
+            <View>
+              <View style={{ height: 50 }} />
+            </View>
+          );
+        }}
+        ListEmptyComponent={<NoDataFound />}
+      />}
     </View>
   );
 }

@@ -1,31 +1,31 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {SCREEN_WIDTH, fontname} from '../Themes/Fonts';
+import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
 import UpdateDeleteMenu from './UpdateDeleteMenu';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PostCarousal from './PostCarousal';
-import {screenName} from '../Navigation/ScreenConstants';
-import {useNavigation} from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
 import {
   getalluserposts,
   onDeletePost,
   onLikePost,
 } from '../Services/PostServices';
-import {dispatchAction} from '../utils/apiGlobal';
+import { dispatchAction } from '../utils/apiGlobal';
 import {
   OTHER_USER_INFO,
   SET_LIKED_USER_LIST,
   SET_LIKE_DISLIKE,
 } from '../Redux/ActionTypes';
-import {api} from '../utils/apiConstants';
+import { api } from '../utils/apiConstants';
 import {
   onBlockUserApi,
   onConnectRequest,
@@ -36,14 +36,14 @@ import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
 import RenderText from './RenderText';
 
-export default function PostCard({item, index, isDetailScreen = false}) {
+export default function PostCard({ item, index, isDetailScreen = false }) {
   const [menuModal, setmenuModal] = useState(false);
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [blockModal, setblockModal] = useState(false);
   const [textShown, setTextShown] = useState(false);
-  const {otherUserInfo} = useSelector(e => e.common);
+  const { otherUserInfo } = useSelector(e => e.common);
   const [reportModal, setReportModal] = useState(false);
   const [shareModal, setshareModal] = useState(false);
   const [deletePostModal, setDeletePostModal] = useState(false);
@@ -62,7 +62,7 @@ export default function PostCard({item, index, isDetailScreen = false}) {
         createdBy: user._id,
         action: liked ? 'unlike' : 'like',
       },
-      onSuccess: () => {},
+      onSuccess: () => { },
       onFailure: () => {
         dispatchAction(dispatch, SET_LIKE_DISLIKE, {
           postId: item._id,
@@ -88,7 +88,7 @@ export default function PostCard({item, index, isDetailScreen = false}) {
       },
       onSuccess: () => {
         if (otherUserInfo) {
-          dispatch(onGetOtherUserInfo({params: {userId: otherUserInfo?._id}}));
+          dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo?._id } }));
         }
       },
     };
@@ -126,14 +126,14 @@ export default function PostCard({item, index, isDetailScreen = false}) {
         };
         dispatch(getalluserposts(obj1));
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(onDeletePost(obj));
   };
 
   const onOpenOtherUserDetail = id => {
     if (!otherUserInfo && !isDetailScreen && !isUser) {
-      navigation.navigate(screenName.indiansDetails, {userId: id});
+      navigation.navigate(screenName.indiansDetails, { userId: id });
     }
   };
 
@@ -210,9 +210,8 @@ export default function PostCard({item, index, isDetailScreen = false}) {
             onPress={() => {
               setTextShown(!textShown);
             }}>
-            <Text style={styles.aboutTextMore}>{`${
-              !textShown ? 'Read more' : 'Read less'
-            }`}</Text>
+            <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'
+              }`}</Text>
           </TouchableOpacity>
         ) : null}
         {item?.mediaFiles.length > 0 && (
@@ -253,7 +252,7 @@ export default function PostCard({item, index, isDetailScreen = false}) {
           {isUser ? (
             <UpdateDeleteMenu
               onUpdatePress={() =>
-                navigation.navigate(screenName.UpdatePostScreen, {item: item})
+                navigation.navigate(screenName.UpdatePostScreen, { item: item })
               }
               onDeletePress={() => setDeletePostModal(true)}
               icon={<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />}
@@ -261,7 +260,7 @@ export default function PostCard({item, index, isDetailScreen = false}) {
           ) : (
             <TouchableOpacity
               onPress={() => setmenuModal(true)}
-              style={[styles.innerRow, {...ApplicationStyles.flex}]}>
+              style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
               <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
             </TouchableOpacity>
           )}
@@ -370,7 +369,7 @@ export default function PostCard({item, index, isDetailScreen = false}) {
         ) : (
           <TouchableOpacity
             onPress={() => setmenuModal(true)}
-            style={[styles.innerRow, {...ApplicationStyles.flex}]}>
+            style={[styles.innerRow, { ...ApplicationStyles.flex }]}>
             <Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />
           </TouchableOpacity>
         )}
@@ -471,7 +470,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
   },
-  touchableView: {height: 42, justifyContent: 'center'},
+  touchableView: { height: 42, justifyContent: 'center' },
   aboutTextMore: {
     ...FontStyle(14, colors.primary_500),
     paddingBottom: 10,

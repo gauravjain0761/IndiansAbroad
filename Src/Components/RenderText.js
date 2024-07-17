@@ -4,7 +4,7 @@ import Autolink from 'react-native-autolink';
 
 export default function RenderText({ text, style }) {
     return (
-        <View>
+        <View style={style}>
             {/* <Text style={style}>{text}</Text> */}
             <Autolink style={style}
                 // Required: the text to parse for links

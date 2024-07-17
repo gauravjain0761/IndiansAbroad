@@ -60,7 +60,17 @@ export const api = {
   // discussion
   countriesList: '/countries/forums/list',
   threadList: '/thread/list',
-
+  getThreadDetail: '/thread/detail',
+  getThreadCommentList: '/thread/comment/list/',
+  getThreadReplyList: '/thread/comment/reply/list/',
+  createThreadComment: '/thread/comment/create',
+  addThreadCommentReply: '/thread/comment/reply/create',
+  deleteThreadComment: '/thread/comment/delete',
+  deleteThreadCommentReply: '/thread/comment/reply/delete',
+  deleteThread: '/thread/delete',
+  updateThread: '/thread/update',
+  deleteThreadmedia: '/thread/delete/media',
+  createThread: '/thread/create',
   //chat
   chatRoom: '/chat/list/personal',
   message: '/message/listall',

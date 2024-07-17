@@ -53,8 +53,8 @@ export default function IndiansPage() {
   const ref = React.createRef(PagerView);
 
   useEffect(() => {
-    if (searchText == '') {
-      let temp = allIndian.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0)
+    if (allIndian && searchText == '') {
+      let temp = allIndian?.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0)
       setallIndianList(temp)
     } else {
       setallIndianList(allIndian)

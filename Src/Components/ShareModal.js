@@ -15,7 +15,7 @@ import { dispatchAction } from '../utils/apiGlobal';
 import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../Redux/ActionTypes';
 import SearchBar from './SearchBar';
 
-export default function ShareModal({ visible, onClose, postId }) {
+export default function ShareModal({ visible, onClose, postId, isThread }) {
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch()
     const { followerList, user, mainFollowerList } = useSelector(e => e.common)
@@ -67,12 +67,11 @@ export default function ShareModal({ visible, onClose, postId }) {
             temp.forEach(element => {
                 idArray.push(element._id)
             });
-            console.log(idArray)
             let obj = {
                 data: {
                     userIds: idArray.toString(),
                     loginUserId: user._id,
-                    type: 'post',
+                    type: isThread ? 'thread' : 'post',
                     contentId: postId
                 }
             }

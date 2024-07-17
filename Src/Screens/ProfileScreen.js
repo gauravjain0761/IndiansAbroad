@@ -145,8 +145,16 @@ export default function ProfileScreen() {
             <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
           </View>
           {tabSelection == 'POST' ?
-            <View>
-              {otherUserAllPost && <FlatList initialNumToRender={5} data={otherUserAllPost.data} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
+            <View style={{ flex: 1 }}>
+              {otherUserAllPost && <FlatList
+                ListFooterComponent={() => {
+                  return (
+                    <View>
+                      <View style={{ height: 50 }} />
+                    </View>
+                  );
+                }}
+                initialNumToRender={5} data={otherUserAllPost.data} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
             </View>
             :
             <View >
@@ -159,6 +167,13 @@ export default function ProfileScreen() {
               />
               {followList && <FlatList
                 data={followList}
+                ListFooterComponent={() => {
+                  return (
+                    <View>
+                      <View style={{ height: 50 }} />
+                    </View>
+                  );
+                }}
                 renderItem={({ item }) => {
                   return <ConnectedIndians cardPress={() => {
                     dispatchAction(dispatch, OTHER_USER_INFO, undefined)

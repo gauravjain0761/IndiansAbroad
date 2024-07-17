@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { onGetLikedUserList } from '../Services/PostServices'
 import { api } from '../utils/apiConstants'
 import NoDataFound from '../Components/NoDataFound'
+import { screenName } from '../Navigation/ScreenConstants'
 
 export default function LikesScreen() {
     const { goBack } = useNavigation()
@@ -19,6 +20,7 @@ export default function LikesScreen() {
     const { likedUserList } = useSelector(e => e.common)
     const dispatch = useDispatch()
     const { params } = useRoute()
+    const navigation = useNavigation()
 
     useEffect(() => {
         dispatch(onGetLikedUserList({
@@ -32,7 +34,7 @@ export default function LikesScreen() {
     const renderItem = ({ item, index }) => {
         return (
             <View key={item._id}>
-                <TouchableOpacity style={[ApplicationStyles.row, styles.listView]}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate(screenName.indiansDetails, { userId: item?._id })} style={[ApplicationStyles.row, styles.listView]}>
                     <RenderUserIcon url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
                 </TouchableOpacity>

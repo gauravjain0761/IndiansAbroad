@@ -16,6 +16,7 @@ import ConfirmationModal from '../Components/ConfirmationModal'
 import CommentInput from '../Components/CommentInput'
 import RenderText from '../Components/RenderText'
 import { screenName } from '../Navigation/ScreenConstants'
+import { onAddCommentReplyThread, onDeleteCommentReplyThread, onGetThreadRepliesComment } from '../Services/DiscussionServices'
 
 export default function RepliesComments() {
     const { goBack } = useNavigation()
@@ -33,9 +34,16 @@ export default function RepliesComments() {
     }, [activePostAllComments])
 
     useEffect(() => {
-        dispatch(onGetRepliesComment({
-            data: { postId: params?.postId, commentId: params?.commentId }
-        }))
+        if (params?.isThread) {
+            dispatch(onGetThreadRepliesComment({
+                id: params?.commentId
+            }))
+        } else {
+            dispatch(onGetRepliesComment({
+                data: { postId: params?.postId, commentId: params?.commentId }
+            }))
+        }
+
     }, [])
 
     const deleteComment = (id) => {
@@ -45,12 +53,19 @@ export default function RepliesComments() {
                 replyId: selectedComment._id
             },
             onSuccess: () => {
-                dispatch(onGetRepliesComment({
-                    data: { postId: params?.postId, commentId: params?.commentId }
-                }))
+                if (params?.isThread) {
+                    dispatch(onGetThreadRepliesComment({
+                        id: params?.commentId
+                    }))
+                } else {
+                    dispatch(onGetRepliesComment({
+                        data: { postId: params?.postId, commentId: params?.commentId }
+                    }))
+                }
+
             }
         }
-        dispatch(onDeleteCommentReply(obj))
+        dispatch(params?.isThread ? onDeleteCommentReplyThread(obj) : onDeleteCommentReply(obj))
     }
 
     const RenderReply = ({ item, index, isLastIndex }) => {
@@ -77,10 +92,7 @@ export default function RepliesComments() {
                                 {/* <Text style={styles.commentText2}>{item?.reply}</Text> */}
                             </View>
                             {item?.createdBy?._id == user._id &&
-                                <TouchableOpacity onPress={() => {
-                                    setselectedComment(item)
-                                    setdeleteModal(true)
-                                }} style={{ padding: 5 }}>
+                                <TouchableOpacity onPress={() => { setselectedComment(item), setdeleteModal(true) }} style={{ padding: 5 }}>
                                     <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                                 </TouchableOpacity>
                             }
@@ -93,20 +105,40 @@ export default function RepliesComments() {
 
     const onComment = () => {
         if (commentText.trim() !== '') {
-            let obj = {
-                data: {
-                    postId: params?.postId, commentId: params?.commentId,
-                    createdBy: user._id,
-                    reply: commentText.trim()
-                },
-                onSuccess: () => {
-                    setcommentText('')
-                    dispatch(onGetRepliesComment({
-                        data: { postId: params?.postId, commentId: params?.commentId }
-                    }))
+            if (params?.isThread) {
+                let obj = {
+                    data: {
+                        threadId: params?.threadId,
+                        commentId: params?.commentId,
+                        createdBy: user._id,
+                        reply: commentText.trim()
+                    },
+                    onSuccess: () => {
+                        setcommentText('')
+                        dispatch(onGetThreadRepliesComment({
+                            id: params?.commentId
+                        }))
+                    }
                 }
+                dispatch(onAddCommentReplyThread(obj))
+            } else {
+                let obj = {
+                    data: {
+                        postId: params?.postId,
+                        commentId: params?.commentId,
+                        createdBy: user._id,
+                        reply: commentText.trim()
+                    },
+                    onSuccess: () => {
+                        setcommentText('')
+                        dispatch(onGetRepliesComment({
+                            data: { postId: params?.postId, commentId: params?.commentId }
+                        }))
+                    }
+                }
+                dispatch(onAddCommentReply(obj))
             }
-            dispatch(onAddCommentReply(obj))
+
         } else {
             errorToast('Please enter a comment')
         }
@@ -122,10 +154,12 @@ export default function RepliesComments() {
                 <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
                     {activeComment && <View style={{ marginBottom: 10 }}>
                         <View style={styles.headerView}>
-                            <RenderUserIcon url={activeComment?.user?.avtar} height={53} isBorder />
+                            <View style={{ paddingTop: 8, }}>
+                                <RenderUserIcon url={activeComment?.user ? activeComment?.user?.avtar : activeComment?.createdBy?.avtar} height={53} isBorder />
+                            </View>
                             <View style={styles.commentBg}>
                                 <View style={ApplicationStyles.flex}>
-                                    <Text numberOfLines={1} style={styles.username}>{activeComment?.user?.first_Name} {activeComment?.user?.last_Name}</Text>
+                                    <Text numberOfLines={1} style={styles.username}>{activeComment?.user ? activeComment?.user?.first_Name : activeComment?.createdBy?.first_Name} {activeComment?.user ? activeComment?.user?.last_Name : activeComment?.createdBy?.last_Name}</Text>
                                     <Text style={styles.degreeText}>PhD Student, Seoul</Text>
                                     <Text style={styles.commentText2}>{activeComment?.comment}</Text>
                                 </View>
@@ -181,7 +215,7 @@ const styles = StyleSheet.create({
     },
     headerView: {
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
         gap: 5,
         paddingHorizontal: 10,
         // paddingTop: 10
@@ -190,7 +224,7 @@ const styles = StyleSheet.create({
         height: 57, width: 57, borderRadius: 57 / 2
     },
     username: {
-        ...FontStyle(15, colors.neutral_900, '700'),
+        ...FontStyle(14, colors.neutral_900, '700'),
     },
     degreeText: {
         marginTop: 2,
@@ -225,7 +259,7 @@ const styles = StyleSheet.create({
         ...FontStyle(14, colors.neutral_900)
     },
     commentText2: {
-        ...FontStyle(16, colors.neutral_900)
+        ...FontStyle(14, colors.neutral_900)
     },
     verticalLine: {
         width: 1,

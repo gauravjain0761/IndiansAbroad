@@ -178,10 +178,12 @@ export default function IndiansDetails() {
           <Text style={styles.text2}>From</Text>
           <Text style={styles.text1}>{otherUserInfo?.city}, {otherUserInfo?.state}</Text>
           <Text style={styles.text2}>Now</Text>
-          <Text style={styles.text1}>{otherUserInfo?.universityORcompany}, {otherUserInfo?.region}, {otherUserInfo?.country}</Text>
-          {/* <Text style={styles.text2}>As</Text>
-          <Text style={styles.text1}>PhD Student</Text>
-          <Text style={styles.text2}>Link</Text>
+          <Text style={styles.text1}>{otherUserInfo?.region}, {otherUserInfo?.country}</Text>
+          <Text style={styles.text2}>At</Text>
+          <Text style={styles.text1}>{otherUserInfo?.universityORcompany}</Text>
+          {/* <Text style={styles.text2}>At</Text>
+          <Text style={styles.text1}>{otherUserInfo?.universityORcompany}</Text> */}
+          {/* <Text style={styles.text2}>Link</Text>
           <Text style={styles.text1}>app.visily.ai</Text> */}
         </View>
         <View style={styles.tabMainView}>

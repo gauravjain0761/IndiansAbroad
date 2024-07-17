@@ -9,43 +9,59 @@ import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
+import { api } from '../utils/apiConstants';
+import FastImage from 'react-native-fast-image';
+import ShareModal from './ShareModal';
 
 export default function DiscussionForumCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
+  const [shareModal, setshareModal] = useState(false);
+
+  console.log(shareModal)
+
   return (
     <View key={index} style={[ApplicationStyles.row, styles.cardView]}>
       <View style={[{ width: SCREEN_WIDTH * 0.65 }]}>
         <Text style={styles.username}>
-          Cultural Clashes: Do Indian Expats Struggle to Adapt Abroad?
+          {item?.title}
         </Text>
         <Text numberOfLines={2} style={styles.degreeText}>
-          {'So I will share my view. I am in Tokyo right .....'}
+          {item?.message}
         </Text>
         <View style={[ApplicationStyles.row]}>
           <Text style={[styles.degreeText1, { color: colors.neutral_700 }]}>
-            Aditya Patil
+            {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
           </Text>
           <View style={[ApplicationStyles.row]}>
             <View style={styles.lineStyle} />
-            <Text style={[styles.degreeText1, { color: colors.neutral_700 }]}>3 months ago</Text>
+            <Text style={[styles.degreeText1, { color: colors.neutral_700 }]}>{item?.createdDate}</Text>
           </View>
         </View>
         <View style={[ApplicationStyles.row, { marginTop: 3, alignItems: 'flex-end', }]}>
-          <Text style={styles.valueText}>13</Text>
-          <TouchableOpacity>
+          <Text style={styles.valueText}>{item?.commentCount}</Text>
+          <TouchableOpacity >
             <Image
               source={Icons.userChat}
               style={[styles.share, { marginRight: wp(12), marginLeft: 3 }]}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setshareModal(true)}>
             <Image source={Icons.share} style={styles.share} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={{ marginLeft: 30 }}>
-        <Image source={Icons.userImage} style={styles.userImage} />
+        <FastImage source={{ uri: api.IMAGE_URL + item?.createdBy?.avtar }} resizeMode={FastImage.resizeMode.cover} style={styles.userImage} />
       </View>
+      {shareModal && (
+        <ShareModal
+          visible={shareModal}
+          postId={item._id}
+          onClose={() => setshareModal(false)}
+          item={item}
+          isThread={true}
+        />
+      )}
     </View>
   );
 }
@@ -60,6 +76,7 @@ const styles = StyleSheet.create({
   userImage: {
     height: 77,
     width: 77,
+    borderRadius: 4
   },
   share: {
     height: 22,

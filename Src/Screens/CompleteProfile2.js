@@ -57,7 +57,7 @@ export default function CompleteProfile2() {
         } else if (!country) {
             errorToast('Please select a country')
         } else if (rigion.trim() == '') {
-            errorToast('Please enter a region')
+            errorToast('Please enter a city')
         } else if (unversity.trim() == '') {
             errorToast('Please enter an unversity/company')
         } else if (profession.trim() == '') {
@@ -84,7 +84,6 @@ export default function CompleteProfile2() {
         }
         // navigation.navigate(screenName.Walkthrough)
     }
-    console.log(country)
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
@@ -112,7 +111,7 @@ export default function CompleteProfile2() {
                             <View style={styles.inputView}>
                                 <Text style={styles.des}>Abroad information*</Text>
                                 {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
-                                <Input extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'Region'} />
+                                <Input extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'City'} />
                                 <Input extraStyle={styles.input} value={unversity} onChangeText={(text) => setunversity(text)} placeholder={'University/Company'} />
                                 <Input extraStyle={styles.input} value={profession} onChangeText={(text) => setprofession(text)} placeholder={'Profession'} />
                             </View>

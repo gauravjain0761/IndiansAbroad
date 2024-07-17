@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import { Icons } from '../Themes/Icons'
@@ -44,6 +44,7 @@ export default function OTPScreen() {
                 }
             }
             dispatch(onVerifyOtp(obj))
+            // resetNavigation(screenName.CompleteProfile)
         }
     }
 
@@ -60,36 +61,38 @@ export default function OTPScreen() {
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <Header showLeft logoShow={false} />
-                <View style={{ marginHorizontal: wp(20) }}>
-                    <Text style={styles.title}>OTP Verification</Text>
-                    <Text style={styles.des}>We have sent a verification code to</Text>
-                    <Text style={styles.des}>{params?.code}-{params?.phone}</Text>
-                    <CodeField
-                        ref={ref}
-                        {...props}
-                        value={value}
-                        onChangeText={setValue}
-                        cellCount={CELL_COUNT}
-                        rootStyle={styles.codeFieldRoot}
-                        keyboardType="number-pad"
-                        textContentType="oneTimeCode"
-                        autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
-                        testID="my-code-input"
-                        renderCell={({ index, symbol, isFocused }) => (
-                            <Text
-                                key={index}
-                                style={[styles.cell, isFocused && styles.focusCell]}
-                                onLayout={getCellOnLayoutHandler(index)}>
-                                {symbol || (isFocused ? <Cursor /> : null)}
-                            </Text>
-                        )}
-                    />
-                    <CommonButton title={'Verify'} onPress={() => onPressVerify()} />
-                    <TouchableOpacity onPress={() => { onResendOtp() }} style={styles.signUpView}>
-                        <Text style={styles.signUpText}>Didn't receive the code? <Text style={{ color: colors.primary_500 }}>Resend</Text></Text>
-                    </TouchableOpacity>
-                </View>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <Header showLeft logoShow={false} />
+                    <View style={{ marginHorizontal: wp(20) }}>
+                        <Text style={styles.title}>OTP Verification</Text>
+                        <Text style={styles.des}>We have sent a verification code to</Text>
+                        <Text style={styles.des}>{params?.code}-{params?.phone}</Text>
+                        <CodeField
+                            ref={ref}
+                            {...props}
+                            value={value}
+                            onChangeText={setValue}
+                            cellCount={CELL_COUNT}
+                            rootStyle={styles.codeFieldRoot}
+                            keyboardType="number-pad"
+                            textContentType="oneTimeCode"
+                            autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
+                            testID="my-code-input"
+                            renderCell={({ index, symbol, isFocused }) => (
+                                <Text
+                                    key={index}
+                                    style={[styles.cell, isFocused && styles.focusCell]}
+                                    onLayout={getCellOnLayoutHandler(index)}>
+                                    {symbol || (isFocused ? <Cursor /> : null)}
+                                </Text>
+                            )}
+                        />
+                        <CommonButton title={'Verify'} onPress={() => onPressVerify()} />
+                        <TouchableOpacity onPress={() => { onResendOtp() }} style={styles.signUpView}>
+                            <Text style={styles.signUpText}>Didn't receive the code? <Text style={{ color: colors.primary_500 }}>Resend</Text></Text>
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
             </ImageBackground>
         </View>
     )

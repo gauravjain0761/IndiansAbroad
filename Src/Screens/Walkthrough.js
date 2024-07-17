@@ -36,12 +36,12 @@ export default function Walkthrough() {
                     <PagerView ref={PagerViewRef} onPageSelected={e => { console.log("Current page index", e.nativeEvent.position), setpage(e.nativeEvent.position) }} style={[ApplicationStyles.flex, { marginTop: wp(40) }]} initialPage={0}>
                         {data.map((item, index) => {
                             return (
-                                <View key={index} style={[ApplicationStyles.flex, { marginHorizontal: wp(10) }]}>
+                                <View key={index} style={[ApplicationStyles.flex]}>
                                     {/* <View style={{ marginBottom: 20 }}> */}
                                     <Image source={item.image} style={{ width: SCREEN_WIDTH, height: '70%', resizeMode: 'contain', marginBottom: 10 }} />
                                     {/* </View> */}
-                                    <Text style={{ ...FontStyle(18, colors.white, '700'), marginBottom: 10 }}>{item.title}</Text>
-                                    <Text style={{ ...FontStyle(14, colors.white), lineHeight: 22 }}>{item.des}</Text>
+                                    <Text style={{ ...FontStyle(18, colors.white, '700'), marginHorizontal: wp(10), marginBottom: 10 }}>{item.title}</Text>
+                                    <Text style={{ ...FontStyle(14, colors.white), marginHorizontal: wp(10), lineHeight: 22 }}>{item.des}</Text>
                                 </View>
                             )
                         })}

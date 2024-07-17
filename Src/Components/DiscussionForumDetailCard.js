@@ -7,21 +7,57 @@ import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from './RenderUserIcon';
 import PostShareModal from './PostShareModal';
+import { useDispatch, useSelector } from 'react-redux';
+import RenderText from './RenderText';
+import PostCarousal from './PostCarousal';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { onDeleteThread, onGetThreadList } from '../Services/DiscussionServices';
+import ConfirmationModal from './ConfirmationModal';
 
-export default function DiscussionForumDetailCard({ item, index, isUser = false }) {
+export default function DiscussionForumDetailCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
+  const { user, discussionCountry } = useSelector(e => e.common)
+  let isUser = item?.createdBy?._id == user._id;
+  const [textShown, setTextShown] = useState(false);
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const [deletePostModal, setDeletePostModal] = useState(false);
+
+  const onPressDeleteThread = () => {
+    setDeletePostModal(false);
+    let obj = {
+      data: {
+        threadId: item._id,
+      },
+      onSuccess: () => {
+        navigation.goBack()
+        let temp = discussionCountry.filter(obj => obj.isSelected)
+        let obj1 = {
+          data: {
+            page: 0,
+            searchText: '',
+            countryId: temp[0]._id,
+            userId: user?._id
+          }
+        }
+        dispatch(onGetThreadList(obj1))
+      },
+      onFailure: () => { },
+    };
+    dispatch(onDeleteThread(obj));
+  }
+
   return (
     <View key={index}>
       <View style={styles.headerView}>
-        <TouchableOpacity style={styles.userImage}>
-          <RenderUserIcon height={57} isBorder />
-        </TouchableOpacity>
-        <View style={ApplicationStyles.flex}>
-          <Text style={styles.username}>Ranjani raman</Text>
+        <RenderUserIcon height={57} userId={item?.createdBy?._id} url={item?.createdBy?.avtar} isBorder={item?.createdBy?.subscribedMember} />
+        <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id })} style={ApplicationStyles.flex}>
+          <Text style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
           {!isUser && <Text style={styles.degreeText1}>Founder</Text>}
-          <Text style={styles.degreeText}>15 hours ago</Text>
-        </View>
-        {isUser ? (
+          <Text style={styles.degreeText}>{item?.createdDate ? item?.createdDate : item?.createdAt}</Text>
+        </TouchableOpacity>
+        {!isUser ? (
           <View>
             <TouchableOpacity style={styles.messageView}>
               <Image
@@ -32,27 +68,57 @@ export default function DiscussionForumDetailCard({ item, index, isUser = false 
             </TouchableOpacity>
           </View>
         ) : (
-          <TouchableOpacity style={styles.messageView}>
+          <TouchableOpacity onPress={() => setDeletePostModal(true)} style={styles.messageView}>
             <Image source={Icons.trash} style={ImageStyle(30, 30, 'cover')} />
           </TouchableOpacity>
         )}
       </View>
       <View>
         <Text style={styles.description}>
-          Shop from Indian websites with international shipping
+          {item?.title}
         </Text>
-        <Text style={styles.description1}>
-          Hey everyone, join here to discuss your shopping needs from India and
-          we will deliver them to your home worldwide
-        </Text>
+        {item?.message && item?.message !== '' && (
+          <RenderText
+            style={styles.description1}
+            text={
+              item?.message.length > 120 && !textShown
+                ? `${item?.message.substring(0, 120)}...`
+                : item?.message
+            }
+          />
+        )}
+        {/* {item?.message && item?.message !== '' &&
+          <Text style={styles.description} >
+            {item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message}
+          </Text>} */}
+        {item?.message && item?.message !== '' && item?.message.length > 120 ? (
+          <TouchableOpacity
+            onPress={() => {
+              setTextShown(!textShown);
+            }}>
+            <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'
+              }`}</Text>
+          </TouchableOpacity>
+        ) : null}
       </View>
-      <View>
-        <Image source={Icons.postViewImage} style={styles.postImage} />
-      </View>
-      <PostShareModal
-        menuModal={menuModal}
-        setmenuModal={() => setmenuModal(false)}
-      />
+      {item?.mediaFiles.length > 0 && (
+        <PostCarousal
+          // poster={item?.thumbNail}
+          // isDetailScreen={isDetailScreen}
+          images={item?.mediaFiles}
+        />
+      )}
+      {deletePostModal && (
+        <ConfirmationModal
+          visible={deletePostModal}
+          onClose={() => setDeletePostModal(false)}
+          title={`Are you sure you want to delete this thread?`}
+          successBtn={'Delete'}
+          canselBtn={'No'}
+          onPressCancel={() => setDeletePostModal(false)}
+          onPressSuccess={() => onPressDeleteThread()}
+        />
+      )}
     </View>
   );
 }
@@ -142,5 +208,13 @@ const styles = StyleSheet.create({
     ...FontStyle(18, colors.neutral_900),
     paddingVertical: 15,
     paddingHorizontal: 20,
+  },
+  aboutTextMore: {
+    ...FontStyle(14, colors.primary_500),
+    paddingBottom: 10,
+    alignSelf: 'flex-end',
+    marginHorizontal: 20,
+    marginTop: -25,
+    paddingTop: 10,
   },
 });
