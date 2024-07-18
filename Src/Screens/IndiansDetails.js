@@ -61,7 +61,6 @@ export default function IndiansDetails() {
   const isFocused = useIsFocused()
   const [blockModal, setblockModal] = useState(false)
 
-  console.log('otherUserInfo--', otherUserInfo)
 
   const onSearchName = (search) => {
     let list = otherUserFollowList.data

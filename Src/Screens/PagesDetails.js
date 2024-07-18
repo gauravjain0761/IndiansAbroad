@@ -184,7 +184,7 @@ export default function PagesDetails() {
             <RenderUserIcon height={wp(100)} url={pageDetail?.logo} />
           </View>
           <Text style={styles.userText}>{pageDetail?.title}</Text>
-          <Text style={styles.userText1}>{pageDetail?.catchline}</Text>
+          {pageDetail?.catchline && <Text style={styles.userText1}>{pageDetail?.catchline}</Text>}
         </View>
         <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
           {pageDetail?._id == user?._id ? (

@@ -165,8 +165,6 @@ export default function IndiansPageMore() {
     dispatch(getallPagesUser(obj));
   };
 
-  console.log(allIndian.length)
-
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header

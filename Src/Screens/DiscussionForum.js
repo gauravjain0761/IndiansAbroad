@@ -28,8 +28,8 @@ export default function DiscussionForum() {
   const [refreshing, setRefreshing] = React.useState(false);
   const { discussionCountry, threadList, user } = useSelector(e => e.common)
   useEffect(() => {
-    if (isFocused) dispatch(getDiscussionCountry({}))
-  }, [isFocused])
+    dispatch(getDiscussionCountry({}))
+  }, [])
   useEffect(() => {
     if (discussionCountry) {
       let temp = discussionCountry.filter(obj => obj.isSelected)
@@ -86,7 +86,7 @@ export default function DiscussionForum() {
             return (
               <TouchableOpacity onPress={() => { dispatchAction(dispatch, UPDATE_COUNTRY_DISCUSSION_LIST, item._id) }} style={[styles.btnStyle, { backgroundColor: item?.isSelected ? colors.white : colors.primary_6a7e, },]}>
                 <Text style={[styles.btnText, { color: item?.isSelected ? colors.primary_4574ca : colors.white, },]}>
-                  {item.countryName}
+                  {item.countryName !== 'World Wide' ? 'Local' : item.countryName}
                 </Text>
               </TouchableOpacity>
             )

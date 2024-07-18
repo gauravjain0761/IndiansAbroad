@@ -223,8 +223,6 @@ export default function IndiansPage() {
     dispatch(getallPagesUser(obj));
   };
 
-  console.log(allIndian?.length)
-
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView edges={['top']}>

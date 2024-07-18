@@ -1,4 +1,4 @@
-import { IS_LOADING, SET_ALL_POST, SET_COUNTRIES, SET_FOLLOWER_LIST, SET_USER } from "../Redux/ActionTypes";
+import { IS_LOADING, MY_PAGES, SET_ALL_POST, SET_COUNTRIES, SET_FOLLOWER_LIST, SET_USER } from "../Redux/ActionTypes";
 import { setAsyncToken, setAsyncUserInfo } from "../utils/AsyncStorage";
 import { resetNavigation } from "../utils/Global";
 import { GET, POST, api } from "../utils/apiConstants";
@@ -211,6 +211,22 @@ export const onResetPass = (request) => async dispatch => {
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
                 // dispatchAction(dispatch, SET_COUNTRIES, response?.data?.data)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+export const onGetMyPage = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: GET,
+        url: api.getMyPage + request?.id,
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                dispatchAction(dispatch, MY_PAGES, response?.data?.data)
             });
         })
         .catch(error => {

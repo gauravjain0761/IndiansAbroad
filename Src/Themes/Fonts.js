@@ -1,27 +1,25 @@
 export function getFontType(fontWeight) {
-  if (fontWeight == fontname.abeezeeItalic) {
-    return 'ABeeZee-Italic';
-  } else if (fontWeight == fontname.abeezee) {
-    return 'ABeeZee-Regular';
-  } else if (fontWeight == fontname.actor_regular) {
-    return 'Actor-Regular';
+  if (fontWeight == '400') {
+    return 'OpenSans-Regular';
+  } else if (fontWeight == '300') {
+    return 'OpenSans-Light';
+  } else if (fontWeight == '500') {
+    return 'OpenSans-Medium';
+  } else if (fontWeight == '600') {
+    return 'OpenSans-SemiBold';
+  } else if (fontWeight == '700') {
+    return 'OpenSans-Bold';
   } else {
-    return 'Actor-Regular';
+    return 'OpenSans-Regular';
   }
-}
-
-export const fontname = {
-  actor_regular: 'Actor-Regular',
-  abeezee: 'ABeeZee-Regular',
-  abeezeeItalic: 'ABeeZee-Italic',
 }
 
 export function defaultFontStyle(fontSize, color, fontWeight) {
   return {
-    fontFamily: 'OpenSans-Regular',
+    fontFamily: getFontType(fontWeight),
     fontSize: fontSize + 1,
     color: color,
-    fontWeight: fontWeight ? fontWeight : '400',
+    // fontWeight: fontWeight ? fontWeight : '400',
     includeFontPadding: false
   };
 }

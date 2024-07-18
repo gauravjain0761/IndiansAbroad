@@ -32,6 +32,7 @@ import {
   SET_MAIN_FOLLOWER_LIST,
   GET_CHAT_ROOMS,
   GET_CHAT_MESSAGES,
+  MY_PAGES,
 } from './ActionTypes';
 
 const initialState = {
@@ -62,11 +63,12 @@ const initialState = {
   mainFollowerList: undefined,
   chatRoomList: [],
   chatMessageList: [],
+  myPage: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
     case IS_LOADING: {
-      return {...state, preLoader: action.payload};
+      return { ...state, preLoader: action.payload };
     }
     case SET_ALL_POST: {
       return {
@@ -99,7 +101,7 @@ export default function (state = initialState, action) {
       };
     }
     case SET_USER: {
-      return {...state, user: action.payload};
+      return { ...state, user: action.payload };
     }
     case SET_LIKE_DISLIKE: {
       let allPost = Object.assign([], state.allPost);
@@ -151,14 +153,14 @@ export default function (state = initialState, action) {
         ...state,
         allPost,
         otherUserAllPost: state.otherUserAllPost
-          ? {...state.otherUserAllPost, data: otherUserAllPost}
+          ? { ...state.otherUserAllPost, data: otherUserAllPost }
           : undefined,
         activePost: state.activePost ? activePost : undefined,
         allPagePost: state.allPagePost ? allPagePost : undefined,
       };
     }
     case SET_LIKED_USER_LIST: {
-      return {...state, likedUserList: action.payload};
+      return { ...state, likedUserList: action.payload };
     }
     case UPDATE_POST_LIST: {
       let allPost = Object.assign([], state.allPost);
@@ -181,20 +183,20 @@ export default function (state = initialState, action) {
       };
     }
     case SET_BLOCK_USER_LIST: {
-      return {...state, blockUserList: action.payload};
+      return { ...state, blockUserList: action.payload };
     }
     case UPDATE_BLOCK_LIST: {
       let blockUserList = Object.assign([], state.blockUserList);
       blockUserList = blockUserList.filter(
         obj => obj.blockedUserId !== action.payload,
       );
-      return {...state, blockUserList};
+      return { ...state, blockUserList };
     }
     case SET_ACTIVE_POST: {
-      return {...state, activePost: action.payload};
+      return { ...state, activePost: action.payload };
     }
     case SET_ACTIVE_POST_COMMENTS: {
-      return {...state, activePostAllComments: action.payload};
+      return { ...state, activePostAllComments: action.payload };
     }
     case SET_LIKE_COMMENTS: {
       let activePostAllComments = Object.assign(
@@ -212,10 +214,10 @@ export default function (state = initialState, action) {
             ? activePostAllComments[index].commentlikeCount + 1
             : activePostAllComments[index].commentlikeCount - 1;
       }
-      return {...state, activePostAllComments};
+      return { ...state, activePostAllComments };
     }
     case SET_REPLIES_COMMENTS: {
-      return {...state, repliesComments: action.payload};
+      return { ...state, repliesComments: action.payload };
     }
     case SET_POST_CONNECT: {
       const update = state.allIndian.map(item => {
@@ -225,10 +227,10 @@ export default function (state = initialState, action) {
             isFollowingRequested: action.payload.action,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allIndian: update};
+      return { ...state, allIndian: update };
     }
     case SET_POST_CANCEL_REQUEST: {
       const updates = state.allIndian.map(item => {
@@ -238,10 +240,10 @@ export default function (state = initialState, action) {
             isFollowingRequested: action.payload.action,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allIndian: updates};
+      return { ...state, allIndian: updates };
     }
     case SET_POST_DISCONNECT: {
       const updates = state.allIndian.map(item => {
@@ -251,10 +253,10 @@ export default function (state = initialState, action) {
             isFollowing: action.payload.action,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allIndian: updates};
+      return { ...state, allIndian: updates };
     }
     case SET_POST_PAGES_CONNECT: {
       const updates = state.allPages.map(item => {
@@ -264,10 +266,10 @@ export default function (state = initialState, action) {
             isfollowing: true,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allPages: updates};
+      return { ...state, allPages: updates };
     }
     case SET_POST_PAGES_DISCONNECT: {
       const updates = state.allPages.map(item => {
@@ -277,14 +279,14 @@ export default function (state = initialState, action) {
             isfollowing: false,
           };
         } else {
-          return {...item};
+          return { ...item };
         }
       });
-      return {...state, allPages: updates};
+      return { ...state, allPages: updates };
     }
     case OTHER_USER_INFO: {
       if (action.payload) {
-        return {...state, otherUserInfo: action.payload};
+        return { ...state, otherUserInfo: action.payload };
       } else {
         return {
           ...state,
@@ -295,10 +297,10 @@ export default function (state = initialState, action) {
       }
     }
     case SET_OTHER_POST_LIST: {
-      return {...state, otherUserAllPost: action.payload};
+      return { ...state, otherUserAllPost: action.payload };
     }
     case SET_OTHER_USER_FOLLOWLIST: {
-      return {...state, otherUserFollowList: action.payload};
+      return { ...state, otherUserFollowList: action.payload };
     }
     case SET_ALL_PAGE_POST: {
       // return {
@@ -322,10 +324,10 @@ export default function (state = initialState, action) {
       };
     }
     case SET_GLOBAL_SEARCH: {
-      return {...state, globalSearchData: action.payload};
+      return { ...state, globalSearchData: action.payload };
     }
     case SET_FOLLOWER_LIST: {
-      return {...state, followerList: action.payload};
+      return { ...state, followerList: action.payload };
     }
     case SET_COUNTRY_DISCUSSION_LIST: {
       let temp = Object.assign([], action.payload);
@@ -338,10 +340,10 @@ export default function (state = initialState, action) {
           }
         });
       }
-      return {...state, discussionCountry: temp};
+      return { ...state, discussionCountry: temp };
     }
     case SET_THREAD_LIST: {
-      return {...state, threadList: action.payload};
+      return { ...state, threadList: action.payload };
     }
     case UPDATE_COUNTRY_DISCUSSION_LIST: {
       let temp = Object.assign([], state.discussionCountry);
@@ -354,19 +356,22 @@ export default function (state = initialState, action) {
           }
         });
       }
-      return {...state, discussionCountry: temp};
+      return { ...state, discussionCountry: temp };
     }
     case SET_COUNTRIES: {
-      return {...state, countries: action.payload};
+      return { ...state, countries: action.payload };
     }
     case SET_MAIN_FOLLOWER_LIST: {
-      return {...state, mainFollowerList: action.payload};
+      return { ...state, mainFollowerList: action.payload };
     }
     case GET_CHAT_ROOMS: {
-      return {...state, chatRoomList: action.payload};
+      return { ...state, chatRoomList: action.payload };
     }
     case GET_CHAT_MESSAGES: {
-      return {...state, chatMessageList: action.payload};
+      return { ...state, chatMessageList: action.payload };
+    }
+    case MY_PAGES: {
+      return { ...state, myPage: action.payload }
     }
     default:
       return state;

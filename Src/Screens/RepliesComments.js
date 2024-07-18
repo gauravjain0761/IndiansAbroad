@@ -79,11 +79,14 @@ export default function RepliesComments() {
 
         return (
             <View style={styles.replyCommentView}>
-                <View style={[styles.replyCommnt, { alignItems: isLastIndex ? 'flex-start' : 'center' }]}>
-                    <View style={[styles.verticalLine, { height: isLastIndex ? '50%' : '100%' }]} />
-                    <View style={styles.horizontalLine} />
+                <View style={[styles.replyCommnt, { alignItems: 'flex-start' }]}>
+                    <View style={[styles.verticalLine, { height: isLastIndex ? '15%' : '100%' }]} />
+                    <View style={[styles.horizontalLine, { marginTop: '8%' }]} />
                     <View style={styles.innerCommentRow}>
-                        <RenderUserIcon userId={item?.createdBy?._id} url={item?.createdBy?.avtar} height={38} isBorder />
+                        <View style={{ marginTop: 5 }}>
+                            <RenderUserIcon userId={item?.createdBy?._id} url={item?.createdBy?.avtar} height={38} isBorder />
+
+                        </View>
                         <TouchableOpacity activeOpacity={0.8} onPress={() => onOpenOtherUserDetails()} style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
                                 <Text numberOfLines={1} style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
@@ -274,13 +277,13 @@ const styles = StyleSheet.create({
     },
     innerCommentRow: {
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
         flex: 1,
-        paddingVertical: 5,
+        paddingTop: 5,
         gap: 5,
     },
     horizontalLine: {
-        width: 5, backgroundColor: colors.neutral_400, height: 1, alignSelf: 'center'
+        width: 5, backgroundColor: colors.neutral_400, height: 1,
     },
     commnetInput: {
         flexDirection: 'row',

@@ -176,7 +176,7 @@ export default function CreateDiscussion() {
         />
         <Text style={styles.startText}>Start writing</Text>
         <Text style={styles.startText1}>
-          Your thread will be posted in the {selectedType?.countryName} discussion forum
+          Your thread will be posted in the {selectedType.countryName !== 'World Wide' ? 'Local' : selectedType.countryName} discussion forum
         </Text>
         <TextInput
           onChangeText={text => setpostText(text)}

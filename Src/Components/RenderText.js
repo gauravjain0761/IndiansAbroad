@@ -6,7 +6,7 @@ export default function RenderText({ text, style }) {
     return (
         <View style={style}>
             {/* <Text style={style}>{text}</Text> */}
-            <Autolink style={style}
+            <Autolink style={[style, { marginHorizontal: 0, paddingHorizontal: 0 }]}
                 // Required: the text to parse for links
                 text={text}
                 // Optional: enable email linking

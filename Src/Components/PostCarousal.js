@@ -122,5 +122,6 @@ const styles = StyleSheet.create({
         // resizeMode: 'cover',
         width: SCREEN_WIDTH - 5,
         backgroundColor: 'black',
+        alignSelf: 'center'
     },
 })

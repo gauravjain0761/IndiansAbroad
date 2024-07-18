@@ -36,8 +36,6 @@ export const api = {
   //Indians
   indiansList: '/user/suggestion/filter',
   pageList: '/cp/tab/list',
-  pageFollow: '/cp/follow',
-  pageUnFollow: '/cp/unfollow',
 
   // other user
   followRequest: '/follow/request',
@@ -53,6 +51,10 @@ export const api = {
   // page
   getAllPagePostApi: '/cp/posts/',
   getAllPageFollowerApi: '/cp/followerlist',
+  pageFollow: '/cp/follow',
+  pageUnFollow: '/cp/unfollow',
+  createPage: '/cp/create',
+  getMyPage: '/cp/list/',
 
   // global search
   globalSearch: '/global/search',
