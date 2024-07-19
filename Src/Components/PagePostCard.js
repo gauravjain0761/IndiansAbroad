@@ -15,10 +15,13 @@ import PostCarousal from './PostCarousal';
 import { dispatchAction } from '../utils/apiGlobal';
 import { SET_LIKED_USER_LIST, SET_LIKE_DISLIKE } from '../Redux/ActionTypes';
 import { screenName } from '../Navigation/ScreenConstants';
-import { onLikePost } from '../Services/PostServices';
+import { onDeletePost, onLikePost } from '../Services/PostServices';
 import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
 import RenderText from './RenderText';
+import UpdateDeleteMenu from './UpdateDeleteMenu';
+import ConfirmationModal from './ConfirmationModal';
+import { getAllPagePost } from '../Services/OtherUserServices';
 
 export default function PagePostCard({ item, index, }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -30,6 +33,8 @@ export default function PagePostCard({ item, index, }) {
   // const { otherUserInfo } = useSelector(e => e.common)
   const [reportModal, setReportModal] = useState(false)
   const [shareModal, setshareModal] = useState(false)
+  const [deletePostModal, setDeletePostModal] = useState(false);
+
   let isUser = item?.createdBy?._id == user._id
 
   const openLikeScreen = () => {
@@ -55,6 +60,26 @@ export default function PagePostCard({ item, index, }) {
     }
     dispatch(onLikePost(obj))
   }
+  const onDelete = () => {
+    setDeletePostModal(false);
+    let obj = {
+      data: {
+        postId: item._id,
+        createdBy: user._id,
+      },
+      onSuccess: () => {
+        let obj1 = {
+          params: {
+            userId: user?._id,
+          },
+          pageId: item?.cpId?._id,
+        };
+        dispatch(getAllPagePost(obj1));
+      },
+      onFailure: () => { },
+    };
+    dispatch(onDeletePost(obj));
+  };
 
   return (
     <View key={item._id}>
@@ -113,6 +138,10 @@ export default function PagePostCard({ item, index, }) {
         </View>
         {isUser ? (
           <UpdateDeleteMenu
+            onUpdatePress={() =>
+              navigation.navigate(screenName.UpdatePostScreen, { item: item })
+            }
+            onDeletePress={() => setDeletePostModal(true)}
             icon={<Image source={Icons.dotMenu} style={ImageStyle(22, 22)} />}
           />
         ) : (
@@ -138,7 +167,17 @@ export default function PagePostCard({ item, index, }) {
       />}
       {shareModal &&
         <ShareModal visible={shareModal} postId={item._id} onClose={() => setshareModal(false)} item={item} />}
-
+      {deletePostModal && (
+        <ConfirmationModal
+          visible={deletePostModal}
+          onClose={() => setDeletePostModal(false)}
+          title={`Are you sure you want to delete this post?`}
+          successBtn={'Delete'}
+          canselBtn={'No'}
+          onPressCancel={() => setDeletePostModal(false)}
+          onPressSuccess={() => onDelete()}
+        />
+      )}
     </View>
   );
 }

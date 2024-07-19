@@ -55,6 +55,8 @@ export const api = {
   pageUnFollow: '/cp/unfollow',
   createPage: '/cp/create',
   getMyPage: '/cp/list/',
+  updatePage: '/cp/update',
+  deletePage: '/cp/delete',
 
   // global search
   globalSearch: '/global/search',

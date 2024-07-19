@@ -29,6 +29,7 @@ export default function UpdatePostScreen() {
     const [imageArray, setimageArray] = useState([])
     const [deletedArray, setdeletedArray] = useState([])
     const { user } = useSelector(e => e.common)
+
     useEffect(() => {
         // setimageArray(params?.item?.mediaFiles)
         let temp = Object.assign([], params?.item?.mediaFiles)
@@ -48,6 +49,8 @@ export default function UpdatePostScreen() {
         }
         setimageArray(temp)
     }, [])
+
+    console.log(' params?.item---', params?.item)
 
     const openDocPicker = async (type) => {
         if (imageArray.length < 9) {
@@ -131,8 +134,8 @@ export default function UpdatePostScreen() {
             data.postId = params?.item?._id
             data.message = postText.trim()
             data.createdBy = user._id
-            data.shareType = 'public'
-            data.type = 'post'
+            data.shareType = params?.item?.shareType
+            data.type = params?.item?.type
             let formData = new FormData()
             if (data) {
                 Object.keys(data).map((element) => {

@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import ApplicationStyles from '../Themes/ApplicationStyles'
 import Header from '../Components/Header'
@@ -11,7 +11,7 @@ import { SCREEN_WIDTH, wp, hp } from '../Themes/Fonts'
 import CommonButton from '../Components/CommonButton'
 import CreatePage from '../Components/CreatePage'
 import CreatePageDescription from '../Components/CreatePageDescription'
-import { onGetMyPage } from '../Services/AuthServices'
+import { onDeletePageApi, onGetMyPage } from '../Services/AuthServices'
 import PagesDetails from './PagesDetails'
 import RenderUserIcon from '../Components/RenderUserIcon'
 import UpdateDeleteMenu from '../Components/UpdateDeleteMenu'
@@ -26,6 +26,7 @@ import { OTHER_USER_INFO, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../R
 import PagePostCard from '../Components/PagePostCard'
 import SearchBar from '../Components/SearchBar'
 import PageConnectedIndians from '../Components/PageConnectedIndians'
+import CreatePost from '../Components/CreatePost'
 
 export default function MyPageScreen() {
     const navigation = useNavigation()
@@ -37,19 +38,17 @@ export default function MyPageScreen() {
     const [tabSelection, setTabSelection] = useState('ABOUT');
     const [loading, setloading] = useState(false)
     const [searchText, setSearchText] = useState('');
-
+    const isFocused = useIsFocused()
+    const [createPostModal, setcreatePostModal] = useState(false);
     useEffect(() => {
         dispatch(onGetMyPage({ id: user?._id }))
     }, [])
-
     useEffect(() => {
-        if (myPage) {
+        if (myPage && myPage.length !== 0 && isFocused) {
             getPostList(1)
             onGetConnectedIndians()
         }
-    }, [myPage])
-
-
+    }, [myPage, isFocused])
     const onGetConnectedIndians = () => {
         dispatch(getAllPageFollower({
             params: {
@@ -60,13 +59,10 @@ export default function MyPageScreen() {
             }
         }))
     }
-
     const getPostList = page => {
         let obj = {
             params: {
                 userId: user?._id,
-                // page: page,
-                // limit: 5,
             },
             pageId: myPage[0]._id,
             onSuccess: () => {
@@ -75,15 +71,9 @@ export default function MyPageScreen() {
         };
         dispatch(getAllPagePost(obj));
     };
-
     useEffect(() => {
         setfollowList(allPageFollowerList)
     }, [allPageFollowerList])
-
-    useEffect(() => {
-
-    }, []);
-
     const onSearchName = (search) => {
         let list = allPageFollowerList
         const filtered = list.filter((val) =>
@@ -119,10 +109,27 @@ export default function MyPageScreen() {
         //   }
         // }
     };
+    const onDeletePage = () => {
+        setDeletePop(false)
+        let obj = {
+            data: {
+                cpId: myPage[0]._id,
+                userId: user?._id
+            },
+            onSuccess: () => {
+                setshowDetail(true)
+            }
+        }
+        dispatch(onDeletePageApi(obj))
+    }
+    const onOpenPostModal = () => {
+        setcreatePostModal(true)
+    }
+
     return (
         <View style={ApplicationStyles.applicationView}>
             {!preLoader ?
-                myPage ?
+                myPage && myPage.length ?
                     <SafeAreaView style={ApplicationStyles.applicationView}>
                         <Header title={''} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
                         <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
@@ -205,6 +212,9 @@ export default function MyPageScreen() {
                                 </View>
                             </View>}
                         </ScrollView>
+                        <TouchableOpacity onPress={() => onOpenPostModal()} style={{ position: 'absolute', bottom: wp(20), right: wp(20) }}>
+                            <Image source={Icons.plusPost} style={[ImageStyle(46, 46), { tintColor: '#5278D9FF' }]} />
+                        </TouchableOpacity>
                     </SafeAreaView>
                     :
                     !showDetail ?
@@ -223,6 +233,13 @@ export default function MyPageScreen() {
             {deletePop && <DeletePopModal
                 isVisible={deletePop}
                 onClose={() => setDeletePop(false)}
+                onPressYes={() => onDeletePage()}
+            />}
+            {createPostModal && <CreatePost
+                createPostModal={createPostModal}
+                setcreatePostModal={setcreatePostModal}
+                isMyPage={true}
+                page={myPage[0]}
             />}
         </View>
     )

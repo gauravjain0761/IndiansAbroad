@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, Linking } from 'react-native';
 import Autolink from 'react-native-autolink';
 
-
 export default function RenderText({ text, style }) {
     return (
         <View style={style}>

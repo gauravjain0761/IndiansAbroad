@@ -22,7 +22,7 @@ import { api } from '../utils/apiConstants'
 import { setAsyncUserInfo } from '../utils/AsyncStorage'
 import { onGetMyPage, onGetSignupCountry } from '../Services/AuthServices'
 
-export default function CreatePage() {
+export default function CreatePage({ onSuccessCreate }) {
     const navigation = useNavigation()
     const actionItems = [
         {
@@ -106,10 +106,8 @@ export default function CreatePage() {
                 data.catchline = catchLine.trim()
             }
             dispatchAction(dispatch, IS_LOADING, true)
-            console.log()
             formDataApiCall(api.createPage, data, (res) => {
-                dispatchAction(dispatch, IS_LOADING, false)
-
+                dispatch(onGetMyPage({ id: user?._id }))
                 successToast(res.msg)
             }, () => {
                 dispatchAction(dispatch, IS_LOADING, false)
@@ -137,6 +135,7 @@ export default function CreatePage() {
                                         <Text style={styles.uploadText}>{'Upload Photo'}</Text>
                                     </View>
                                 }
+                                <Image source={Icons.plusHome} style={[ImageStyle(24, 24), { position: 'absolute', bottom: 5, right: 5, resizeMode: 'cover', borderRadius: 24 / 2 }]} />
                             </TouchableOpacity>
                             <Modal
                                 onBackdropPress={() => closeActionSheet()}

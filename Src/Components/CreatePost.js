@@ -46,9 +46,10 @@ import { navigationRef } from '../Navigation/RootContainer';
 import { screenName } from '../Navigation/ScreenConstants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CommonButton from './CommonButton';
+import { getAllPagePost } from '../Services/OtherUserServices';
 
 
-export default function CreatePost({ createPostModal, setcreatePostModal }) {
+export default function CreatePost({ createPostModal, setcreatePostModal, isMyPage = false, page }) {
   const [postText, setpostText] = useState('');
   const [imageArray, setimageArray] = useState([])
   const { user } = useSelector(e => e.common)
@@ -122,7 +123,10 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
       data.message = postText.trim()
       data.createdBy = user._id
       data.shareType = 'public'
-      data.type = 'post'
+      data.type = isMyPage ? 'cppost' : 'post'
+      if (page) {
+        data.cpId = page._id
+      }
       let formData = new FormData()
       if (data) {
         Object.keys(data).map((element) => {
@@ -147,7 +151,17 @@ export default function CreatePost({ createPostModal, setcreatePostModal }) {
         };
         setimageArray([])
         setpostText('')
-        dispatch(getalluserposts(obj1));
+        if (isMyPage) {
+          let obj = {
+            params: {
+              userId: user?._id,
+            },
+            pageId: page._id,
+          };
+          dispatch(getAllPagePost(obj));
+        } else {
+          dispatch(getalluserposts(obj1));
+        }
         successToast(res.msg)
       }, () => {
         dispatchAction(dispatch, IS_LOADING, false)

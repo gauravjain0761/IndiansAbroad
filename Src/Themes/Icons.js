@@ -63,6 +63,8 @@ export const Icons = {
   Verified_user: require('../assets/Icons/Verified_user.png'),
   checkCircle: require('../assets/Icons/checkCircle.png'),
   plus: require('../assets/Icons/plus.png'),
+  addphoto: require('../assets/Icons/addphoto.png'),
+  plusPost: require('../assets/Icons/plusPost.png'),
 
   w_1: require('../assets/Icons/w_1.png'),
   w_2: require('../assets/Icons/w_2.png'),

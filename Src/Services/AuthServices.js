@@ -233,3 +233,20 @@ export const onGetMyPage = (request) => async dispatch => {
             handleErrorRes(error, request, dispatch);
         });
 };
+
+export const onDeletePageApi = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.deletePage,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                dispatchAction(dispatch, MY_PAGES, undefined)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};

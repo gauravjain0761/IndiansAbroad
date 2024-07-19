@@ -202,9 +202,23 @@ export const getAllPagePost = (request) => async dispatch => {
     params: request?.params
   })
     .then(async (response) => {
-      handleSuccessRes(response, request, dispatch, () => {
-        dispatchAction(dispatch, SET_ALL_PAGE_POST, { ...response?.data, current_page: request?.params?.page })
-      });
+      // handleSuccessRes(response, request, dispatch, () => {
+
+
+      if (response?.status === 200 || response?.status === 201) {
+        dispatchAction(dispatch, IS_LOADING, false)
+        if (response?.data && response?.data?.err == 200) {
+          dispatchAction(dispatch, SET_ALL_PAGE_POST, { ...response?.data, current_page: request?.params?.page })
+        } else {
+          if (response?.data && response?.data?.err == 300) {
+            dispatchAction(dispatch, SET_ALL_PAGE_POST, { data: [], current_page: 1 })
+          }
+          if (request?.onFailure) request.onFailure(response?.data);
+        }
+      }
+
+
+      // });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);

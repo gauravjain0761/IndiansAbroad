@@ -21,6 +21,7 @@ export default function DeletePopModal({
   transparent = false,
   extraStyle = {},
   children,
+  onPressYes
 }) {
   return (
     <ReactNativeModal
@@ -56,7 +57,7 @@ export default function DeletePopModal({
         </Text>
 
         <View style={[ApplicationStyles.row, { alignSelf: 'flex-end' }]}>
-          <TouchableOpacity style={[styles.btnView, {}]} onPress={onClose}>
+          <TouchableOpacity style={[styles.btnView, {}]} onPress={() => onPressYes()}>
             <Text style={styles.btnText}>Yes</Text>
           </TouchableOpacity>
           <View style={{ width: SCREEN_WIDTH * 0.02 }} />
