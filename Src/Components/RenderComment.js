@@ -34,15 +34,15 @@ export default function RenderComment({
                 <View style={{ paddingTop: 8, }}>
                     <RenderUserIcon userId={item?.user ? item?.user?._id : item?.createdBy?._id} url={item?.user ? item?.user?.avtar : item?.createdBy?.avtar} height={53} isBorder />
                 </View>
-                <TouchableOpacity onPress={() => {
-                    onOpenOtherUserDetails()
-                }} activeOpacity={0.8} style={styles.commentView}>
+                <View style={styles.commentView}>
                     <View style={styles.commentBg}>
-                        <View style={ApplicationStyles.flex}>
+                        <TouchableOpacity onPress={() => {
+                            onOpenOtherUserDetails()
+                        }} activeOpacity={0.8} style={ApplicationStyles.flex}>
                             <Text numberOfLines={1} style={styles.username}>{item?.user ? item?.user?.first_Name : item?.createdBy?.first_Name} {item?.user ? item?.user?.last_Name : item?.createdBy?.last_Name}</Text>
                             <Text style={styles.degreeText}>PhD Student, Seoul</Text>
                             {/* <Text style={styles.commentText2}>{item?.comment}</Text> */}
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.innerRow}>
                             <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
                                 <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
@@ -62,7 +62,7 @@ export default function RenderComment({
                             </TouchableOpacity>
                         }
                     </View>
-                </TouchableOpacity>
+                </View>
 
                 {/* <View style={styles.commentBg}>
 

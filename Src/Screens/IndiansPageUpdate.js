@@ -205,7 +205,6 @@ export default function IndiansPageUpdate() {
                   </View>
                 }
                 <Image source={Icons.plusHome} style={[ImageStyle(24, 24), { position: 'absolute', bottom: 5, right: 5, resizeMode: 'cover', borderRadius: 24 / 2 }]} />
-
               </TouchableOpacity>
               <Modal
                 onBackdropPress={() => closeActionSheet()}

@@ -104,13 +104,18 @@ export default function PagePostCard({ item, index, }) {
           </TouchableOpacity>
         </View> */}
       </View>
-      {item?.message !== '' && <RenderText text={item?.message.length > 120 && !textShown ? `${item?.message.substring(0, 120)}...` : item?.message} style={styles.description} >
-      </RenderText>}
-      {item?.message !== '' && item?.message.length > 120 ?
+      {item?.message && item?.message !== '' && (
+        <RenderText
+          style={styles.description}
+          text={item?.message}
+          showReadMore
+        />
+      )}
+      {/* {item?.message !== '' && item?.message.length > 120 ?
         <TouchableOpacity onPress={() => { setTextShown(!textShown); }}>
           <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>
         </TouchableOpacity>
-        : null}
+        : null} */}
       {item?.mediaFiles.length > 0 && (
         <PostCarousal images={item?.mediaFiles} />
       )}

@@ -15,6 +15,8 @@ export const api = {
   resetPass: '/user/resetpass?key=1',
   feedbackform: '/feedbackform/create',
   enquiry: '/enquiryform/create',
+  updateProfile: '/user/updateprofile',
+  deleteUserAccount: '/user/delete/account',
 
   // post
   getalluserposts: '/post/getalluserposts',

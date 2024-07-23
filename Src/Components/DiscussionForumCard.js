@@ -16,10 +16,10 @@ import ShareModal from './ShareModal';
 export default function DiscussionForumCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
   const [shareModal, setshareModal] = useState(false);
-
+  console.log(item)
   return (
     <View key={index} style={[ApplicationStyles.row, styles.cardView]}>
-      <View style={[{ width: SCREEN_WIDTH * 0.65 }]}>
+      <View style={{ flex: 1 }}>
         <Text style={styles.username}>
           {item?.title}
         </Text>
@@ -48,9 +48,9 @@ export default function DiscussionForumCard({ item, index }) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ marginLeft: 30 }}>
-        <FastImage source={{ uri: api.IMAGE_URL + item?.createdBy?.avtar }} resizeMode={FastImage.resizeMode.cover} style={styles.userImage} />
-      </View>
+      {item?.mediaFiles?.length > 0 && <View style={{ marginRight: 10, marginLeft: 20 }}>
+        <FastImage source={{ uri: item?.thumbNail?.location }} resizeMode={FastImage.resizeMode.cover} style={styles.userImage} />
+      </View>}
       {shareModal && (
         <ShareModal
           visible={shareModal}

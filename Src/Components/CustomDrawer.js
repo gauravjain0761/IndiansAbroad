@@ -17,6 +17,7 @@ import { clearAsync } from '../utils/AsyncStorage';
 import { resetNavigation } from '../utils/Global';
 import ConfirmationModal from './ConfirmationModal';
 import RenderUserIcon from './RenderUserIcon';
+import { removeAuthorization } from '../utils/apiGlobal';
 
 export default function CustomDrawer() {
     const navigation = useNavigation();
@@ -84,6 +85,7 @@ ${user?.first_Name} ${user?.last_Name}`
 
     const onPressLogout = async () => {
         setlogoutModal(false)
+        removeAuthorization()
         await clearAsync()
         resetNavigation(screenName.LoginScreen)
     }

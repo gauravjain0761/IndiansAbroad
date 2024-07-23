@@ -1,5 +1,5 @@
 import './Config';
-import React, {useEffect, useState, useCallback, useRef} from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RootContainer from './Navigation/RootContainer';
 import {
   View,
@@ -10,26 +10,47 @@ import {
   LogBox,
 } from 'react-native';
 import ApplicationStyles from './Themes/ApplicationStyles';
-import {dispatchAction, setAuthorization} from './utils/apiGlobal';
+import { dispatchAction, setAuthorization } from './utils/apiGlobal';
 import {
   getAsyncToken,
   getAsyncUserInfo,
   setAsyncToken,
   setAsyncUserInfo,
 } from './utils/AsyncStorage';
-import {Provider, useDispatch} from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import store from './Redux';
 import Toast from 'react-native-toast-message';
-import {SCREEN_WIDTH, fontname} from './Themes/Fonts';
+import { SCREEN_WIDTH, fontname } from './Themes/Fonts';
 import colors from './Themes/Colors';
-import {FontStyle} from './utils/commonFunction';
+import { FontStyle } from './utils/commonFunction';
 import {
   onGetUserInfoApi,
   onLoginApi,
   oncheckSession,
 } from './Services/AuthServices';
 import Loader from './Components/Loader';
-import {SET_USER} from './Redux/ActionTypes';
+import { SET_USER } from './Redux/ActionTypes';
+export const toastConfig = {
+  success: ({ text1, text2, type, props, ...rest }) =>
+    type === 'success' && (
+      <SafeAreaView>
+        <View style={styles.textStyleToastSuccess}>
+          <Text style={styles.textStyleToast}>{text1}</Text>
+        </View>
+      </SafeAreaView>
+    ),
+  error: ({ text1, text2, type, props, ...rest }) => {
+    if (type === 'error') {
+      return (
+        <SafeAreaView>
+          <View style={styles.toastStyle}>
+            <Text style={styles.textStyleToast}>{text1}</Text>
+          </View>
+        </SafeAreaView>
+      );
+    }
+  },
+};
 
 function App() {
   const dispatch = useDispatch();
@@ -38,7 +59,7 @@ function App() {
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
     if (!__DEV__) {
-      console.log = () => {};
+      console.log = () => { };
     }
     Text.defaultProps = Text.defaultProps || {};
     Text.defaultProps.allowFontScaling = false;
@@ -105,27 +126,7 @@ function App() {
   //   dispatch(onLoginApi(obj))
   // }
 
-  const toastConfig = {
-    success: ({text1, text2, type, props, ...rest}) =>
-      type === 'success' && (
-        <SafeAreaView>
-          <View style={styles.textStyleToastSuccess}>
-            <Text style={styles.textStyleToast}>{text1}</Text>
-          </View>
-        </SafeAreaView>
-      ),
-    error: ({text1, text2, type, props, ...rest}) => {
-      if (type === 'error') {
-        return (
-          <SafeAreaView>
-            <View style={styles.toastStyle}>
-              <Text style={styles.textStyleToast}>{text1}</Text>
-            </View>
-          </SafeAreaView>
-        );
-      }
-    },
-  };
+
   return (
     <View style={ApplicationStyles.applicationView}>
       <RootContainer />

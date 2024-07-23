@@ -6,14 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactNativeModal from 'react-native-modal';
 import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
 import { SCREEN_WIDTH, fontname, wp } from '../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { errorToast, FontStyle, ImageStyle, passwordCheck } from '../utils/commonFunction';
 import Input from './Input';
 import ApplicationStyles from '../Themes/ApplicationStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { toastConfig } from '../App';
+import Toast from 'react-native-toast-message';
+import { onDeleteAccount } from '../Services/AuthServices';
 
 export default function DeleteModal({
   isVisible,
@@ -23,87 +27,125 @@ export default function DeleteModal({
   children,
 }) {
   const [checkBox, setCheckBox] = useState(false);
+  const { user } = useSelector(e => e.common)
+  const dispatch = useDispatch()
+  const [message, setmessage] = useState('')
+  const [password, setpassword] = useState('')
+
+  useEffect(() => {
+    setmessage('')
+    setpassword('')
+    setCheckBox(false)
+  }, [])
+
+  const onDelete = () => {
+    if (message.trim() == '') {
+      errorToast('Please enter reason for deletion')
+    } else if (!passwordCheck(password)) {
+      errorToast('Password should be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+    } else if (!checkBox) {
+      errorToast('Please check acknowledge')
+    } else {
+      onClose()
+      let obj = {
+        data: {
+          userId: user?._id,
+          deletedBy: 'self',
+          reason: message.trim(),
+          password: password,
+        }
+      }
+      setTimeout(() => {
+        dispatch(onDeleteAccount(obj))
+      }, 500);
+    }
+  }
+
   return (
     <ReactNativeModal
-      backdropOpacity={transparent ? 0 : 0.5}
+      backdropOpacity={0.5}
       isVisible={isVisible}
+      style={{ margin: 0 }}
       onBackButtonPress={() => onClose()}
       onBackdropPress={() => onClose()}>
-      <View style={styles.modalView}>
-        <View style={styles.headerView}>
-          <Image source={Icons.logo} style={ImageStyle(23, 23)} />
-          <Text
-            style={[
-              FontStyle(16, colors.neutral_900, '700'),
-              { marginLeft: 8, textAlign: 'center' },
-            ]}>
-            {'IndiansAbroad'}
+      <View style={styles.container}>
+        <Toast config={toastConfig} position="top" topOffset={0} />
+        <View style={styles.modalView}>
+          <View style={styles.headerView}>
+            <Image source={Icons.logo} style={ImageStyle(23, 23)} />
+            <Text
+              style={[
+                FontStyle(16, colors.neutral_900, '700'),
+                { marginLeft: 8, textAlign: 'center' },
+              ]}>
+              {'IndiansAbroad'}
+            </Text>
+          </View>
+          <Text style={styles.headerText}>
+            You will be missed by IndiansAbroad community. Please specify the
+            reason you want to leave us.
           </Text>
-        </View>
-        <Text style={styles.headerText}>
-          You will be missed by IndiansAbroad community. Please specify the
-          reason you want to leave us.
-        </Text>
-        <TextInput
-          placeholder={
-            'Write your reason here. This will help us to\nimprove the platform.'
-          }
-          style={styles.inputText}
-          multiline={false}
-          placeholderTextColor={colors.neutral_400}
-
-        />
-        <Text style={styles.labelText}>
-          {'Please confirm your password to continue:'}
-        </Text>
-        <TextInput
-          placeholder={'Type your password'}
-          style={styles.inputText1}
-          placeholderTextColor={colors.neutral_400}
-        // value={}
-        // onChangeText={onChangeText}
-        />
-        <View style={[{ marginTop: 40, flexDirection: 'row' }]}>
-          <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
-            <Image
-              source={checkBox ? Icons.checkbox1 : Icons.checkbox}
-              style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
-            />
-          </TouchableOpacity>
-          <Text style={styles.checkText}>
-            {
-              'I acknowledge that my personal data linked to my account will be permanently erased and cannot be retrieved. I accept that i will not receive a refund for any remaining duration of my IndiansAbroad premium membership that I have already paid for.'
+          <TextInput
+            placeholder={
+              'Write your reason here. This will help us to\nimprove the platform.'
             }
+            style={styles.inputText1}
+            multiline={true}
+            placeholderTextColor={colors.neutral_500}
+            onChangeText={(text) => setmessage(text)}
+          />
+          <Text style={styles.labelText}>
+            {'Please confirm your password to continue:'}
           </Text>
-        </View>
-        <View style={[ApplicationStyles.row, { alignSelf: 'center', marginTop: 40 }]}>
-          <TouchableOpacity style={[styles.btnView, {}]} onPress={onClose}>
-            <Text style={styles.btnText}>Cancel</Text>
-          </TouchableOpacity>
-          <View style={{ width: SCREEN_WIDTH * 0.02, }} />
-          <TouchableOpacity
-            style={[styles.btnView, { backgroundColor: colors.danger_500, }]}>
-            <Text style={styles.btnText}>Confirm Deletion</Text>
-          </TouchableOpacity>
+          <Input value={password} placeholder={'Type your passcode'} onChangeText={(text) => setpassword(text)} isPassword />
+          <View style={[{ marginTop: 40, flexDirection: 'row' }]}>
+            <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
+              <Image
+                source={checkBox ? Icons.checkbox1 : Icons.checkbox}
+                style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
+              />
+            </TouchableOpacity>
+            <Text style={styles.checkText}>
+              {
+                'I acknowledge that my personal data linked to my account will be permanently erased and cannot be retrieved. I accept that i will not receive a refund for any remaining duration of my IndiansAbroad premium membership that I have already paid for.'
+              }
+            </Text>
+          </View>
+          <View style={[ApplicationStyles.row, { alignSelf: 'center', marginTop: 40 }]}>
+            <TouchableOpacity style={[styles.btnView, {}]} onPress={onClose}>
+              <Text style={styles.btnText}>Cancel</Text>
+            </TouchableOpacity>
+            <View style={{ width: SCREEN_WIDTH * 0.02, }} />
+            <TouchableOpacity onPress={() => onDelete()}
+              style={[styles.btnView, { backgroundColor: colors.danger_500, }]}>
+              <Text style={styles.btnText}>Delete Account</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
+
     </ReactNativeModal>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center'
+  },
   modalView: {
     backgroundColor: colors.white,
     paddingTop: 20,
     borderRadius: 8,
     paddingHorizontal: 12,
+    marginHorizontal: wp(20),
   },
   headerView: {
     flexDirection: 'row',
     alignSelf: 'center',
   },
   headerText: {
-    ...FontStyle(15, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     marginVertical: 20,
   },
   inputText: {
@@ -115,24 +157,23 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   inputText1: {
-    ...FontStyle(15, colors.neutral_900),
-    borderWidth: 1,
-    borderColor: colors.neutral_500,
-    backgroundColor: colors.inputBg,
+    backgroundColor: colors.secondary_700,
     paddingVertical: 4,
     borderRadius: 5,
     paddingLeft: 12,
     paddingVertical: 6,
-    height: 56
+    height: 120,
+    textAlignVertical: 'top',
+    ...FontStyle(13, colors.neutral_900),
     // marginTop:12
   },
   labelText: {
-    ...FontStyle(15, colors.black),
+    ...FontStyle(13, colors.black, '700'),
     marginBottom: 4,
     marginTop: 20,
   },
   checkText: {
-    ...FontStyle(13, colors.neutral_900),
+    ...FontStyle(14, colors.neutral_900),
     flex: 1,
     textAlign: 'justify'
   },

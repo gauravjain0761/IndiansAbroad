@@ -1,8 +1,9 @@
+import { screenName } from "../Navigation/ScreenConstants";
 import { IS_LOADING, MY_PAGES, SET_ALL_POST, SET_COUNTRIES, SET_FOLLOWER_LIST, SET_USER } from "../Redux/ActionTypes";
-import { setAsyncToken, setAsyncUserInfo } from "../utils/AsyncStorage";
+import { clearAsync, setAsyncToken, setAsyncUserInfo } from "../utils/AsyncStorage";
 import { resetNavigation } from "../utils/Global";
 import { GET, POST, api } from "../utils/apiConstants";
-import { dispatchAction, handleErrorRes, handleSuccessRes, makeAPIRequest, setAuthorization } from "../utils/apiGlobal";
+import { dispatchAction, handleErrorRes, handleSuccessRes, makeAPIRequest, removeAuthorization, setAuthorization } from "../utils/apiGlobal";
 import { successToast } from "../utils/commonFunction";
 
 export const oncheckSession = (request) => async dispatch => {
@@ -280,6 +281,26 @@ export const onEnquiry = (request) => async dispatch => {
             handleSuccessRes(response, request, dispatch, () => {
                 successToast(response?.data?.msg);
                 // dispatchAction(dispatch, MY_PAGES, undefined)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+export const onDeleteAccount = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.deleteUserAccount,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, async () => {
+                successToast(response?.data?.msg);
+                removeAuthorization()
+                await clearAsync()
+                resetNavigation(screenName.LoginScreen)
             });
         })
         .catch(error => {
