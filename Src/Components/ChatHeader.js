@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {hp, wp} from '../Themes/Fonts';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { hp, wp } from '../Themes/Fonts';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import RenderUserIcon from './RenderUserIcon';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const ChatHeader = ({url, name}) => {
-  const {goBack} = useNavigation();
+const ChatHeader = ({ url, name, subscribedMember }) => {
+  const { goBack } = useNavigation();
   return (
     <View style={styles.conatiner}>
       <TouchableOpacity
@@ -21,7 +21,7 @@ const ChatHeader = ({url, name}) => {
           ...styles.logoContainer,
           backgroundColor: url?.length > 0 ? 'transparent' : colors.white,
         }}>
-        <RenderUserIcon url={url} height={50} />
+        <RenderUserIcon isBorder={subscribedMember} url={url} height={50} />
       </View>
       <Text style={styles.headerTextStyle}>{name}</Text>
       <TouchableOpacity>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     paddingVertical: hp(10),
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.primary_8091ba,
+    backgroundColor: colors.secondary_500,
   },
   backBoxContainer: {
     borderWidth: 1,

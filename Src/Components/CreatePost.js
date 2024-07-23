@@ -81,7 +81,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
                 image.thumbnail = response
                 temp.push(image)
                 setimageArray([...imageArray, ...temp])
-              }).catch(err => console.log({ err }));
+              }).catch(err => console.log('err---', err));
             } else {
               errorToast('Video should be less than 90 seconds')
             }

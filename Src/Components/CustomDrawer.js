@@ -1,5 +1,8 @@
 import {
     StyleSheet, Text, View, ViewStyle, TouchableOpacity, SafeAreaView, Image, Switch,
+    Share,
+    Alert,
+    Linking,
 } from 'react-native';
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
@@ -24,30 +27,60 @@ export default function CustomDrawer() {
         {
             name: 'My Page',
             screen: screenName.MyPageScreen,
+            onPress: () => navigation.navigate(screenName.MyPageScreen)
         },
         {
             name: 'Invite Friends',
             screen: screenName.InviteFriendScreen,
+            onPress: () => onShare()
         },
         {
             name: 'Feedback Form',
             screen: screenName.FeedBackForum,
+            onPress: () => navigation.navigate(screenName.FeedBackForum)
         },
         {
             name: 'Enquiry',
             screen: screenName.Enquiry,
+            onPress: () => navigation.navigate(screenName.Enquiry)
         },
         {
             name: 'Terms & Conditions',
             screen: screenName.Terms,
+            onPress: () => Linking.openURL('https://www.indiansabroad.online/terms')
         },
         {
             name: 'Privacy Policy',
             screen: screenName.Privacy,
+            onPress: () => Linking.openURL('https://www.indiansabroad.online/privacy')
         }
 
         // { name: 'Support', screen: screenName.SupportScreen, image: Icons.support },
     ];
+
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+                message: `Helloooooo,
+I would like to encourage you to get united on Indiansabroad, a delightful, enjoyable and informative platform for international folks. On this platform, you can connect with Indians who are seeking to go abroad and the ones already moved. Get in touch with them and find information regarding moving and living abroad.
+Android - https://play.google.com/store/apps/details?id=com.indianabroad
+IOS - https://apps.apple.com/us/app/indiansabroad/id6473077164
+Best regards,
+${user?.first_Name} ${user?.last_Name}`
+            });
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    // shared with activity type of result.activityType
+                } else {
+                    // shared
+                }
+            } else if (result.action === Share.dismissedAction) {
+                // dismissed
+            }
+        } catch (error) {
+            Alert.alert(error.message);
+        }
+    };
 
     const onPressLogout = async () => {
         setlogoutModal(false)
@@ -80,7 +113,7 @@ export default function CustomDrawer() {
                     return (
                         <TouchableOpacity
                             key={index}
-                            onPress={() => navigation.navigate(item.screen)}>
+                            onPress={() => item.onPress()}>
                             <View style={styles.drawerItem}>
                                 <Text style={styles.drawerItemText}>{item.name}</Text>
                                 <Image source={Icons.Arrow_circle_right} style={styles.drawerItemImage} />

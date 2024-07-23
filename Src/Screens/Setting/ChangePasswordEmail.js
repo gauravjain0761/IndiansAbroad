@@ -17,6 +17,7 @@ import { FontStyle } from '../../utils/commonFunction';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CommonButton from '../../Components/CommonButton';
 
 export default function ChangePasswordEmail() {
   const [email, setEmail] = useState('');
@@ -36,13 +37,9 @@ export default function ChangePasswordEmail() {
           onChangeText={setEmail}
           placeholderTextColor={colors.neutral_400}
         />
-        <TouchableOpacity
-          style={[styles.btnView, {}]}
-          onPress={() => {
-            navigation.navigate(screenName.ChangePasswordVerify);
-          }}>
-          <Text style={styles.btnText}>Submit</Text>
-        </TouchableOpacity>
+        <CommonButton title={'Submit'} onPress={() => {
+          navigation.navigate(screenName.ChangePasswordVerify);
+        }} extraStyle={[styles.btnView]} />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );

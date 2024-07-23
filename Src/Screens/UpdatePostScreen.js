@@ -50,8 +50,6 @@ export default function UpdatePostScreen() {
         setimageArray(temp)
     }, [])
 
-    console.log(' params?.item---', params?.item)
-
     const openDocPicker = async (type) => {
         if (imageArray.length < 9) {
             ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
@@ -66,7 +64,7 @@ export default function UpdatePostScreen() {
                                 image.thumbnail = response
                                 temp.push(image)
                                 setimageArray([...imageArray, ...temp])
-                            }).catch(err => console.log({ err }));
+                            }).catch(err => console.log('err---', err));
                         } else {
                             errorToast('Video should be less than 90 seconds')
                         }

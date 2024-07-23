@@ -74,7 +74,6 @@ export default function IndiansPageUpdate() {
     dispatch(onGetMyPage({ id: user?._id }))
     dispatch(onGetSignupCountry({}))
   }, [])
-  console.log(myPage[0])
   useEffect(() => {
     if (myPage) {
       setAbout(myPage[0]?.about)

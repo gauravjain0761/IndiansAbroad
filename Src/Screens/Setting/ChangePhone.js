@@ -17,6 +17,7 @@ import { FontStyle } from '../../utils/commonFunction';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CommonButton from '../../Components/CommonButton';
 
 export default function ChangePhone() {
   const [email, setEmail] = useState('');
@@ -45,14 +46,10 @@ export default function ChangePhone() {
             placeholderTextColor={colors.neutral_400}
           />
         </View>
+        <CommonButton title={'Submit'} onPress={() => {
+          navigation.navigate(screenName.ChangePhoneVerify);
+        }} extraStyle={[styles.btnView]} />
 
-        <TouchableOpacity
-          style={[styles.btnView, {}]}
-          onPress={() => {
-            navigation.navigate(screenName.ChangePhoneVerify);
-          }}>
-          <Text style={styles.btnText}>Submit</Text>
-        </TouchableOpacity>
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );

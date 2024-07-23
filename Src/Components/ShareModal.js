@@ -14,6 +14,7 @@ import { onShareApi } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
 import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../Redux/ActionTypes';
 import SearchBar from './SearchBar';
+import NoDataFound from './NoDataFound';
 
 export default function ShareModal({ visible, onClose, postId, isThread }) {
     const insets = useSafeAreaInsets();
@@ -38,7 +39,6 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
             dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, followerList)
         }
     }, [followerList])
-
     const setSelect = (id) => {
         let temp = Object.assign([], list)
         temp.forEach(element => {
@@ -80,7 +80,6 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
             errorToast('Please select atleast one of the following')
         }
     }
-
     const renderItem = ({ item, index }) => {
         return (
             <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
@@ -97,7 +96,6 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
             </View>
         );
     };
-
     const onSearchName = (search) => {
         let tempList = Object.assign([], mainFollowerList)
         const filtered = tempList.filter((val) =>
@@ -114,10 +112,8 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         );
         setlist(searchTextContact)
     }
-
-
     return (
-        <ModalContainer avoidKeyboard={false} isVisible={visible} onClose={() => onClose()} transparent={true} >
+        <ModalContainer statusBarTranslucent={true} avoidKeyboard={false} isVisible={visible} onClose={() => onClose()} transparent={true} >
             <View style={styles.modalView}>
                 <TouchableOpacity onPress={() => onClose()} style={styles.closeIcon}>
                     <Image
@@ -136,6 +132,7 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
                     renderItem={renderItem}
                     style={{ maxHeight: SCREEN_HEIGHT / 1.5 }}
                     showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<NoDataFound />}
                 />}
                 <TouchableOpacity onPress={() => onPressShare()} style={styles.blueButton}>
                     <Text style={styles.publishText}>Share</Text>

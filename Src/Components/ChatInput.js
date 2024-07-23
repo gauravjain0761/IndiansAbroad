@@ -7,10 +7,10 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import {hp, wp} from '../Themes/Fonts';
+import { hp, wp } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
-import {Icons} from '../Themes/Icons';
-import {FontStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle } from '../utils/commonFunction';
 
 const ChatInput = () => {
   return (
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: hp(5),
     paddingHorizontal: wp(10),
-    backgroundColor: colors.primary_8091ba,
+    backgroundColor: colors.secondary_500,
   },
   plusIconStyle: {
     height: wp(15),

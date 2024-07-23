@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {SCREEN_WIDTH, hp, wp} from '../Themes/Fonts';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { SCREEN_WIDTH, hp, wp } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
-import {FontStyle} from '../utils/commonFunction';
-import {Menu} from 'react-native-material-menu';
-import {api} from '../utils/apiConstants';
+import { FontStyle } from '../utils/commonFunction';
+import { Menu } from 'react-native-material-menu';
+import { api } from '../utils/apiConstants';
 import moment from 'moment';
+import RenderUserIcon from './RenderUserIcon';
 
-const ReciverMsg = ({data}) => {
+const ReciverMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
 
   const hideMenu = () => setVisible(false);
@@ -17,11 +18,14 @@ const ReciverMsg = ({data}) => {
   return (
     <View>
       <View style={styles.conatiner}>
-        <Image
+        <View style={{ marginTop: 3 }}>
+          <RenderUserIcon url={data?.createdBy?.avtar} height={31} isBorder={data?.createdBy?.subscribedMember} />
+        </View>
+        {/* <Image
           resizeMode="cover"
           style={styles.imgStyle}
-          source={{uri: api.IMAGE_URL + data?.createdBy?.avtar}}
-        />
+          source={{ uri: api.IMAGE_URL + data?.createdBy?.avtar }}
+        /> */}
         <View style={styles.columnContainer}>
           <Menu
             style={styles.menuStyle}
@@ -30,12 +34,15 @@ const ReciverMsg = ({data}) => {
               <TouchableOpacity
                 onLongPress={showMenu}
                 style={styles.boxContainer}>
-                <Text style={styles.nameTextStyle}>
+                {/* <Text style={styles.nameTextStyle}>
                   {data?.createdBy?.first_Name +
                     ' ' +
                     data?.createdBy?.last_Name}
-                </Text>
+                </Text> */}
                 <Text style={styles.msgTextStyle}>{data?.content}</Text>
+                <Text style={styles.timeTextStyle}>
+                  {moment(data?.createdAt).format('HH:mm')}
+                </Text>
               </TouchableOpacity>
             }
             onRequestClose={hideMenu}>
@@ -51,9 +58,6 @@ const ReciverMsg = ({data}) => {
               </TouchableOpacity>
             </View>
           </Menu>
-          <Text style={styles.timeTextStyle}>
-            {moment(data?.createdAt).format('HH:mm')}
-          </Text>
         </View>
       </View>
     </View>
@@ -66,6 +70,7 @@ const styles = StyleSheet.create({
     maxWidth: SCREEN_WIDTH - wp(50),
     marginHorizontal: wp(10),
     marginBottom: hp(10),
+    // alignItems: 'center'
   },
   imgStyle: {
     height: wp(35),
@@ -73,23 +78,32 @@ const styles = StyleSheet.create({
     borderRadius: wp(35 / 2),
   },
   boxContainer: {
-    backgroundColor: colors.neutral_250,
-    padding: wp(10),
     borderRadius: wp(5),
+    backgroundColor: colors.neutral_300,
+    flexDirection: 'row'
   },
   nameTextStyle: {
     ...FontStyle(14, colors.neutral_900, '900'),
   },
   msgTextStyle: {
     ...FontStyle(14, colors.neutral_900, '400'),
-    marginTop: hp(5),
+    paddingHorizontal: wp(15),
+    paddingVertical: wp(8)
   },
   columnContainer: {
     marginLeft: wp(10),
   },
   timeTextStyle: {
-    ...FontStyle(10, colors.neutral_500, '400'),
-    marginTop: hp(5),
+    // ...FontStyle(10, colors.neutral_500, '400'),
+    // marginTop: hp(5),
+
+    ...FontStyle(10, colors.neutral_900, '400'),
+    // marginTop: hp(5),
+    textAlign: 'right',
+    alignSelf: 'flex-end',
+    paddingHorizontal: 4,
+    paddingVertical: 3
+
   },
   menuStyle: {
     backgroundColor: colors.neutral_400,

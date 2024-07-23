@@ -13,6 +13,8 @@ export const api = {
   getSignupCountries: '/countries/list/0',
   forgotPassword: '/user/forgotpass',
   resetPass: '/user/resetpass?key=1',
+  feedbackform: '/feedbackform/create',
+  enquiry: '/enquiryform/create',
 
   // post
   getalluserposts: '/post/getalluserposts',
@@ -75,6 +77,7 @@ export const api = {
   updateThread: '/thread/update',
   deleteThreadmedia: '/thread/delete/media',
   createThread: '/thread/create',
+
   //chat
   chatRoom: '/chat/list/personal',
   message: '/message/listall',

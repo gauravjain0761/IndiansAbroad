@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,9 +13,9 @@ import ReciverMsg from '../../Components/ReceiverMsg';
 import colors from '../../Themes/Colors';
 import SenderMsg from '../../Components/SenderMsg';
 import ChatInput from '../../Components/ChatInput';
-import {useSelector} from 'react-redux';
-import {useRoute} from '@react-navigation/native';
-import {io} from 'socket.io-client';
+import { useSelector } from 'react-redux';
+import { useRoute } from '@react-navigation/native';
+import { io } from 'socket.io-client';
 
 let data = [
   {
@@ -77,8 +77,8 @@ let data = [
 ];
 
 const Messaging = () => {
-  const {chatMessageList, user} = useSelector(e => e.common);
-  const {params} = useRoute();
+  const { chatMessageList, user } = useSelector(e => e.common);
+  const { params } = useRoute();
 
   useEffect(() => {
     const mSocket = io('https://express.indiansabroad.online/');
@@ -99,12 +99,13 @@ const Messaging = () => {
         name={
           params?.currentUser?.first_Name + ' ' + params?.currentUser?.last_Name
         }
+        subscribedMember={params?.currentUser?.subscribedMember}
       />
       <FlatList
         inverted
         data={chatMessageList}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           if (item?.createdBy?._id !== user._id) {
             return <ReciverMsg data={item} />;
           } else {

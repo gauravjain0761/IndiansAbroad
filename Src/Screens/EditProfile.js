@@ -12,9 +12,11 @@ import Input from '../Components/Input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DeleteModal from '../Components/DeleteModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 
 export default function EditProfile() {
   const navigation = useNavigation();
+  const { user } = useSelector(e => e.common)
 
   const [inputData, setInputData] = useState({
     firstName: 'Harshal',

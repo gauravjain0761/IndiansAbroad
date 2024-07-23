@@ -45,8 +45,11 @@ export default function MyPageScreen() {
     }, [])
     useEffect(() => {
         if (myPage && myPage.length !== 0 && isFocused) {
+
             getPostList(1)
             onGetConnectedIndians()
+        } else {
+            setshowDetail(true)
         }
     }, [myPage, isFocused])
     const onGetConnectedIndians = () => {

@@ -15,12 +15,13 @@ export default function PostCarousal({ images, isDetailScreen, poster }) {
     useEffect(() => {
         images.forEach(element => {
             if (element.contentType.includes('video')) {
+                console.log(element)
                 createThumbnail({
                     url: element?.location,
                     timeStamp: 1000,
                 }).then(response => {
                     element.thumbnail = response.path
-                }).catch(err => console.log({ err }));
+                }).catch(err => console.log('err==', err));
             }
         });
 

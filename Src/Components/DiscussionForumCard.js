@@ -17,8 +17,6 @@ export default function DiscussionForumCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
   const [shareModal, setshareModal] = useState(false);
 
-  console.log(shareModal)
-
   return (
     <View key={index} style={[ApplicationStyles.row, styles.cardView]}>
       <View style={[{ width: SCREEN_WIDTH * 0.65 }]}>

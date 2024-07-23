@@ -64,7 +64,7 @@ export default function CreateDiscussion() {
                 image.thumbnail = response
                 temp.push(image)
                 setimageArray([...imageArray, ...temp])
-              }).catch(err => console.log({ err }));
+              }).catch(err => console.log('err---', err));
             } else {
               errorToast('Video should be less than 90 seconds')
             }

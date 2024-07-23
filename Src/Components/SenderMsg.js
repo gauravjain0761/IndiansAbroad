@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {SCREEN_WIDTH, hp, wp} from '../Themes/Fonts';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { SCREEN_WIDTH, hp, wp } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
-import {FontStyle} from '../utils/commonFunction';
-import {Menu, MenuItem} from 'react-native-material-menu';
+import { FontStyle } from '../utils/commonFunction';
+import { Menu, MenuItem } from 'react-native-material-menu';
 import moment from 'moment';
 
-const SenderMsg = ({data}) => {
+const SenderMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
 
   const hideMenu = () => setVisible(false);
@@ -23,8 +23,11 @@ const SenderMsg = ({data}) => {
             <TouchableOpacity
               onLongPress={showMenu}
               style={styles.boxContainer}>
-              <Text style={styles.nameTextStyle}>{'You'}</Text>
+              {/* <Text style={styles.nameTextStyle}>{'You'}</Text> */}
               <Text style={styles.msgTextStyle}>{data?.content}</Text>
+              <Text style={styles.timeTextStyle}>
+                {moment(data?.createdAt).format('HH:mm')}
+              </Text>
             </TouchableOpacity>
           }
           onRequestClose={hideMenu}>
@@ -48,9 +51,7 @@ const SenderMsg = ({data}) => {
             </TouchableOpacity>
           </View>
         </Menu>
-        <Text style={styles.timeTextStyle}>
-          {moment(data?.createdAt).format('HH:mm')}
-        </Text>
+
       </View>
     </View>
   );
@@ -70,24 +71,29 @@ const styles = StyleSheet.create({
     borderRadius: wp(35 / 2),
   },
   boxContainer: {
-    padding: wp(10),
     borderRadius: wp(5),
-    backgroundColor: colors.primary_4574ca,
+    backgroundColor: colors.primary_500,
+    flexDirection: 'row'
   },
   nameTextStyle: {
     ...FontStyle(14, colors.white, '900'),
   },
   msgTextStyle: {
     ...FontStyle(14, colors.white, '400'),
-    marginTop: hp(5),
+    paddingHorizontal: wp(15),
+    paddingVertical: wp(8)
+    // marginTop: hp(5),
   },
   columnContainer: {
     marginLeft: wp(10),
   },
   timeTextStyle: {
-    ...FontStyle(10, colors.neutral_500, '400'),
-    marginTop: hp(5),
+    ...FontStyle(10, colors.white, '400'),
+    // marginTop: hp(5),
     textAlign: 'right',
+    alignSelf: 'flex-end',
+    paddingHorizontal: 4,
+    paddingVertical: 3
   },
   menuStyle: {
     backgroundColor: colors.neutral_400,

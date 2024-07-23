@@ -88,7 +88,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
       });
     })
     .catch(err => {
-      console.log(err);
+      console.log('err---', err)
       if (onFailure) onFailure();
       errorToast('Please try again');
     });

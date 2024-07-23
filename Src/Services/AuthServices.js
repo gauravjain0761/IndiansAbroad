@@ -250,3 +250,39 @@ export const onDeletePageApi = (request) => async dispatch => {
             handleErrorRes(error, request, dispatch);
         });
 };
+
+export const onFeedback = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.feedbackform,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                successToast(response?.data?.msg);
+                // dispatchAction(dispatch, MY_PAGES, undefined)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+export const onEnquiry = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.enquiry,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                successToast(response?.data?.msg);
+                // dispatchAction(dispatch, MY_PAGES, undefined)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};

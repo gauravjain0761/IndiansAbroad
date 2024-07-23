@@ -24,6 +24,7 @@ import {
 } from 'react-native-confirmation-code-field';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CommonButton from '../../Components/CommonButton';
 
 export default function ChangePasswordVerify() {
   const [email, setEmail] = useState('');
@@ -87,13 +88,11 @@ export default function ChangePasswordVerify() {
             />
           }
         />
+        <CommonButton title={'Verify'} onPress={() => {
+          navigation.navigate(screenName.ChangePasswordNew);
+        }} extraStyle={[styles.btnView, { marginTop: 30 }]} />
         <TouchableOpacity
-          style={[styles.btnView, { marginTop: 30 }]}
-          onPress={() => { navigation.navigate(screenName.ChangePasswordNew) }}>
-          <Text style={styles.btnText}>Verify</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.btnView, { backgroundColor: colors.secondary_500 }]}
+          style={[styles.btnView, { backgroundColor: colors.secondary_500, marginTop: 8 }]}
           onPress={() => { }}>
           <Text style={[styles.btnText, { color: colors.secondary_750 }]}>
             Send again
@@ -147,6 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.buttonBlue,
     marginBottom: 10,
     borderRadius: 5,
+    height: 55,
+    justifyContent: 'center'
     // width: '48%',
   },
   btnText: {

@@ -1,5 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
-import {PermissionsAndroid} from 'react-native';
+import { PermissionsAndroid } from 'react-native';
 
 export async function requestNotificationUserPermission() {
   if (Platform.OS === 'android') {
@@ -46,6 +46,6 @@ const getFirebaseToken = async () => {
     })
     .catch(error => {
       let err = `FCm token get error${error}`;
-      console.log(err);
+      console.log('err---', err)
     });
 };

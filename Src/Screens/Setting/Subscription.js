@@ -17,6 +17,7 @@ import { FontStyle } from '../../utils/commonFunction';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CommonButton from '../../Components/CommonButton';
 
 export default function Subscription() {
   const [email, setEmail] = useState('');
@@ -28,14 +29,10 @@ export default function Subscription() {
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
       <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Subscription</Text>
+        <CommonButton title={'Change payment method'} onPress={() => {
+          navigation.navigate(screenName.ChangePhoneVerify);
+        }} extraStyle={styles.btnView} />
 
-        <TouchableOpacity
-          style={[styles.btnView, {}]}
-          onPress={() => {
-            navigation.navigate(screenName.ChangePhoneVerify);
-          }}>
-          <Text style={styles.btnText}>Change payment method</Text>
-        </TouchableOpacity>
 
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <TouchableOpacity
