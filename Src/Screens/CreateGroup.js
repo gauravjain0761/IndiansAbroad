@@ -1,31 +1,17 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-  Image,
-  TextInput,
-} from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, TextInput, } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
-import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
+import { SCREEN_WIDTH, wp } from '../Themes/Fonts';
 import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
-import ConnectCard from '../Components/ConnectCard';
 import { useNavigation } from '@react-navigation/native';
-import { screenName } from '../Navigation/ScreenConstants';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import { Icons } from '../Themes/Icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Input from '../Components/Input';
 
 export default function CreateGroup() {
   const { navigate, goBack } = useNavigation();
@@ -68,19 +54,23 @@ export default function CreateGroup() {
       <Text style={styles.chatText}>Create Group</Text>
       <View
         style={{
-          marginHorizontal: wp(16),
+          marginHorizontal: wp(20),
           flexDirection: 'row',
           alignItems: 'center',
         }}>
         <TouchableOpacity style={styles.addImage}>
           <Image source={Icons.addImage1} style={styles.addImage1} />
         </TouchableOpacity>
-        <TextInput placeholder={'Group Name'} style={styles.inputText} />
+        {/* <Input placeholder={'Group Name'} style={styles.inputText} /> */}
+        <Input placeholder={'Group Name'} extraStyle={styles.inputText} />
+        {/* <TextInput placeholder={'Group Name'} style={styles.inputText} /> */}
       </View>
       <TextInput
         placeholder={'Description of group'}
         style={styles.inputText1}
+        placeholderTextColor={colors.neutral_500}
       />
+      {/* <Input placeholder={'Description of group'} extraStyle={styles.inputText1} /> */}
 
       <Text style={styles.searchText}>Add Group Member</Text>
       <SearchBar
@@ -127,17 +117,19 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral_500,
   },
   inputText: {
-    ...FontStyle(15, colors.neutral_900),
-    borderWidth: 1,
-    borderColor: colors.neutral_500,
-    backgroundColor: colors.inputBg,
-    borderRadius: 5,
-    paddingLeft: 12,
-    // paddingVertical: 10,
-    // marginTop:12,
-    width: SCREEN_WIDTH * 0.65,
+    flex: 1,
     marginLeft: 20,
-    height: 56,
+    // ...FontStyle(15, colors.neutral_900),
+    // borderWidth: 1,
+    // borderColor: colors.neutral_500,
+    // backgroundColor: colors.inputBg,
+    // borderRadius: 5,
+    // paddingLeft: 12,
+    // // paddingVertical: 10,
+    // // marginTop:12,
+    // width: SCREEN_WIDTH * 0.65,
+    // marginLeft: 20,
+    // height: 56,
   },
   inputText1: {
     ...FontStyle(15, colors.neutral_900),
@@ -145,11 +137,12 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral_500,
     backgroundColor: colors.inputBg,
     borderRadius: 5,
-    paddingLeft: 12,
-    // paddingVertical: 10,
+    paddingVertical: 10,
     marginVertical: 20,
     marginHorizontal: wp(20),
-    height: 56
+    height: 56,
+    borderRadius: 5,
+    paddingHorizontal: 12,
   },
   tabMainView: {
     flexDirection: 'row',

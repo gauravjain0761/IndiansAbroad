@@ -100,17 +100,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     marginTop: 20,
   },
-  inputText1: {
-    ...FontStyle(15, colors.neutral_900),
-    borderWidth: 1,
-    borderColor: colors.neutral_500,
-    backgroundColor: colors.inputBg,
-    paddingVertical: 4,
-    borderRadius: 5,
-    paddingLeft: 12,
-    paddingVertical: 6,
-    // marginTop:12
-  },
   labelText: {
     ...FontStyle(15, colors.black),
     marginBottom: 4,

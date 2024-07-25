@@ -26,6 +26,8 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getallIndianUser, getallPagesUser } from '../Services/PostServices';
 import NoDataFound from '../Components/NoDataFound';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_PAGE_DETAIL } from '../Redux/ActionTypes';
 
 export default function IndiansPageMore() {
   const tabs = [

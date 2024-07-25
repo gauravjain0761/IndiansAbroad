@@ -27,7 +27,6 @@ export default function RenderComment({
             navigation.navigate(screenName.indiansDetails, { userId: item?.user ? item?.user?._id : item?.createdBy?._id })
         }
     }
-
     return (
         <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
@@ -56,7 +55,7 @@ export default function RenderComment({
                     </View>
                     <View style={styles.commentBg}>
                         <RenderText style={[styles.commentText2]} text={item?.comment}></RenderText>
-                        {item?.user?._id == user._id || item?.createdBy?._id == user._id &&
+                        {(item?.user?._id == user._id || item?.createdBy?._id == user._id) &&
                             <TouchableOpacity onPress={() => onDelete()} style={{ paddingHorizontal: 10 }}>
                                 <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                             </TouchableOpacity>

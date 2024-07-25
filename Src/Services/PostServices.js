@@ -1,4 +1,4 @@
-import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_GLOBAL_SEARCH } from "../Redux/ActionTypes";
+import { IS_LOADING, SET_ACTIVE_POST, SET_ALL_INDIANS, SET_ALL_PAGES, SET_ACTIVE_POST_COMMENTS, SET_ALL_POST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_REPLIES_COMMENTS, SET_GLOBAL_SEARCH, SET_PAGE_DETAIL } from "../Redux/ActionTypes";
 import { setAsyncUserInfo } from "../utils/AsyncStorage";
 import { GET, POST, api } from "../utils/apiConstants";
 import { dispatchAction, handleErrorRes, handleSuccessRes, makeAPIRequest } from "../utils/apiGlobal";
@@ -339,6 +339,23 @@ export const onDeletePostMedia = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+
+export const onGetPageDetail = (request) => async dispatch => {
+    return makeAPIRequest({
+        method: GET,
+        url: api.getPageDetail + request?.id,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                dispatchAction(dispatch, SET_PAGE_DETAIL, response?.data?.data)
             });
         })
         .catch(error => {

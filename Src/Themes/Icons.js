@@ -65,6 +65,10 @@ export const Icons = {
   plus: require('../assets/Icons/plus.png'),
   addphoto: require('../assets/Icons/addphoto.png'),
   plusPost: require('../assets/Icons/plusPost.png'),
+  imagelist: require('../assets/Icons/imagelist.png'),
+  users: require('../assets/Icons/users.png'),
+  files: require('../assets/Icons/files.png'),
+
 
   w_1: require('../assets/Icons/w_1.png'),
   w_2: require('../assets/Icons/w_2.png'),

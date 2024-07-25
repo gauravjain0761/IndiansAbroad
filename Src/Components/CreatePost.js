@@ -71,7 +71,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
           if (type == 'video') {
-            console.log('image--', image)
             let temp = []
             if (image.duration <= 90000) {
               createThumbnail({
@@ -110,7 +109,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
           errorToast('You can select maximum 9 files')
         } else {
           imageArray.forEach((element, index) => {
-            console.log('element---', element)
             let time = new Date().getTime() + index
             data['mediaFiles' + "[" + time + "]"] = {
               uri: imageArray[index].path,
@@ -135,8 +133,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
           }
         });
       }
-
-      console.log(data, imageArray.length)
       // setTimeout(() => {
       setcreatePostModal(false)
       dispatchAction(dispatch, IS_LOADING, true)
@@ -189,11 +185,9 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       compressImageQuality: 1,
     }).then(image => {
       setselectedImage(image)
-      console.log(image);
     });
   }
   const onPressSet = () => {
-    console.log(selectedImageIndex)
     let temp = Object.assign([], imageArray)
     temp.splice(selectedImageIndex, 1, selectedImage)
     setpreviewModal(false)

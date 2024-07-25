@@ -33,6 +33,8 @@ import {
   GET_CHAT_ROOMS,
   GET_CHAT_MESSAGES,
   MY_PAGES,
+  SET_PAGE_CONNECT_POST,
+  SET_PAGE_DETAIL,
 } from './ActionTypes';
 
 const initialState = {
@@ -63,7 +65,8 @@ const initialState = {
   mainFollowerList: undefined,
   chatRoomList: [],
   chatMessageList: [],
-  myPage: undefined
+  myPage: undefined,
+  pageDetail: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -258,6 +261,18 @@ export default function (state = initialState, action) {
       });
       return { ...state, allIndian: updates };
     }
+    case SET_PAGE_CONNECT_POST: {
+      let allPost = Object.assign([], state.allPost);
+      let index = allPost.findIndex(
+        item => item._id == action.payload.postId,
+      );
+      if (allPost[index].followingCommunityPage == 'following') {
+        allPost[index].followingCommunityPage = 'not_following'
+      } else {
+        allPost[index].followingCommunityPage = 'following'
+      }
+      return { ...state, allPost: allPost };
+    }
     case SET_POST_PAGES_CONNECT: {
       const updates = state.allPages.map(item => {
         if (item._id == action.payload.postId) {
@@ -372,6 +387,9 @@ export default function (state = initialState, action) {
     }
     case MY_PAGES: {
       return { ...state, myPage: action.payload }
+    }
+    case SET_PAGE_DETAIL: {
+      return { ...state, pageDetail: action.payload }
     }
     default:
       return state;

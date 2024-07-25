@@ -33,7 +33,7 @@ export default function Walkthrough() {
                     <View style={[styles.headerPosition, { top: insets.top }]}>
                         <Header showLeft logoShow={false} />
                     </View>
-                    <PagerView ref={PagerViewRef} onPageSelected={e => { console.log("Current page index", e.nativeEvent.position), setpage(e.nativeEvent.position) }} style={[ApplicationStyles.flex, { marginTop: wp(40) }]} initialPage={0}>
+                    <PagerView ref={PagerViewRef} onPageSelected={e => { setpage(e.nativeEvent.position) }} style={[ApplicationStyles.flex, { marginTop: wp(40) }]} initialPage={0}>
                         {data.map((item, index) => {
                             return (
                                 <View key={index} style={[ApplicationStyles.flex]}>

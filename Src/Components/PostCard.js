@@ -24,12 +24,14 @@ import {
   OTHER_USER_INFO,
   SET_LIKED_USER_LIST,
   SET_LIKE_DISLIKE,
+  SET_PAGE_CONNECT_POST,
 } from '../Redux/ActionTypes';
 import { api } from '../utils/apiConstants';
 import {
   onBlockUserApi,
   onConnectRequest,
   onGetOtherUserInfo,
+  onPagesConnectRequest,
 } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 import ReportModal from './ReportModal';
@@ -95,6 +97,22 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
     dispatch(onConnectRequest(obj));
   };
 
+  const onPressPageConnect = () => {
+    let obj = {
+      data: {
+        cpId: item?.cpId._id,
+        followingId: user._id,
+      },
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_PAGE_CONNECT_POST, {
+          postId: item._id,
+        });
+      },
+      onFailure: () => { },
+    };
+    dispatch(onPagesConnectRequest(obj));
+  }
+
   const onBlockuser = () => {
     setblockModal(false);
     let obj = {
@@ -137,59 +155,106 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
     }
   };
 
-  if (index == 0) {
-  }
 
   if (item?.createdBy) {
     return (
       <View key={item?._id}>
         <View style={styles.headerView}>
           <View style={styles.userImage}>
-            <RenderUserIcon
-              userId={isDetailScreen ? undefined : item?.createdBy?._id}
-              url={item?.createdBy?.avtar}
-              height={57}
-              isBorder={item?.createdBy?.subscribedMember}
-            />
+            {item?.type == 'cppost' ?
+              <TouchableOpacity onPress={() => navigation.navigate(screenName.pagesDetails, { pageDetail: { isfollowing: item?.followingCommunityPage == 'following' ? true : false, ...item?.cpId } })}>
+                <RenderUserIcon
+                  // userId={isDetailScreen ? undefined : item?.createdBy?._id}
+                  url={item?.cpId?.logo}
+                  height={57}
+                // isBorder={item?.createdBy?.subscribedMember}
+                />
+              </TouchableOpacity>
+              :
+              <RenderUserIcon
+                userId={isDetailScreen ? undefined : item?.createdBy?._id}
+                url={item?.createdBy?.avtar}
+                height={57}
+                isBorder={item?.createdBy?.subscribedMember}
+              />
+            }
+
           </View>
-          <TouchableOpacity
-            onPress={() => onOpenOtherUserDetail(item?.createdBy?._id)}
-            style={ApplicationStyles.flex}>
-            <View>
-              <Text style={styles.username1}>
-                {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
-              </Text>
-            </View>
-            {!isUser && (
+          {item?.type == 'cppost' ?
+            <TouchableOpacity
+              onPress={() => navigation.navigate(screenName.pagesDetails, { pageDetail: { isfollowing: item?.followingCommunityPage == 'following' ? true : false, ...item?.cpId } })}
+              style={ApplicationStyles.flex}>
               <View>
-                <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
+                <Text style={styles.username1}>
+                  {item?.cpId?.title}
+                </Text>
               </View>
-            )}
-            <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
-          </TouchableOpacity>
+              <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
+            </TouchableOpacity>
+            :
+            <TouchableOpacity
+              onPress={() => onOpenOtherUserDetail(item?.createdBy?._id)}
+              style={ApplicationStyles.flex}>
+              <View>
+                <Text style={styles.username1}>
+                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
+                </Text>
+              </View>
+              {!isUser && (
+                <View>
+                  <Text style={styles.degreeText1}>PhD Student, Seoul</Text>
+                </View>
+              )}
+              <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
+            </TouchableOpacity>
+          }
+
           {!isUser && (
             <View>
-              {item?.isFollowing ? (
-                <TouchableOpacity style={styles.messageView}>
-                  <Image
-                    source={Icons.messageIcon}
-                    style={ImageStyle(30, 30, 'cover')}
-                  />
-                  <Text style={styles.degreeText3}>Message</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => onPressConnect()}
-                  style={styles.messageView}>
-                  <Image
-                    source={Icons.personAdd}
-                    style={ImageStyle(30, 30, 'cover')}
-                  />
-                  <Text style={styles.degreeText3}>Connect</Text>
-                </TouchableOpacity>
-              )}
+              {item.type == 'cppost' ?
+                item?.followingCommunityPage == 'not_following' ?
+                  <TouchableOpacity
+                    onPress={() => onPressPageConnect()}
+                    style={styles.messageView}>
+                    <Image
+                      source={Icons.personAdd}
+                      style={ImageStyle(30, 30, 'cover')}
+                    />
+                    <Text style={styles.degreeText3}>Connect</Text>
+                  </TouchableOpacity>
+                  :
+
+                  <TouchableOpacity style={styles.messageView}>
+                    <Image
+                      source={Icons.messageIcon}
+                      style={ImageStyle(30, 30, 'cover')}
+                    />
+                    <Text style={styles.degreeText3}>Message</Text>
+                  </TouchableOpacity>
+                :
+                item?.isFollowing ? (
+                  <TouchableOpacity style={styles.messageView}>
+                    <Image
+                      source={Icons.messageIcon}
+                      style={ImageStyle(30, 30, 'cover')}
+                    />
+                    <Text style={styles.degreeText3}>Message</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => onPressConnect()}
+                    style={styles.messageView}>
+                    <Image
+                      source={Icons.personAdd}
+                      style={ImageStyle(30, 30, 'cover')}
+                    />
+                    <Text style={styles.degreeText3}>Connect</Text>
+                  </TouchableOpacity>
+                )}
             </View>
-          )}
+          )
+          }
+
         </View>
         {item?.message && item?.message !== '' && (
           <RenderText
@@ -269,6 +334,7 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
             setmenuModal={() => setmenuModal(false)}
             onPressBlock={() => setblockModal(true)}
             onReportUser={() => setReportModal(true)}
+            isPage={item?.type == 'cppost'}
           />
         )}
         {blockModal && (

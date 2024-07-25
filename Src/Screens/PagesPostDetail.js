@@ -10,7 +10,7 @@ import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
 import { useDispatch, useSelector } from 'react-redux';
-import { onAddComment, onCommentLike, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
+import { onAddComment, onCommentLike, onDeleteComment, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
 import { api } from '../utils/apiConstants';
 import { dispatchAction } from '../utils/apiGlobal';
 import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
@@ -18,12 +18,16 @@ import { screenName } from '../Navigation/ScreenConstants';
 import PagePostCard from '../Components/PagePostCard';
 import CommentInput from '../Components/CommentInput';
 import RenderComment from '../Components/RenderComment';
+import ConfirmationModal from '../Components/ConfirmationModal';
 
 export default function PagesPostDetail() {
   const navigation = useNavigation()
   const [commentText, setcommentText] = useState('')
   const { activePost, user, activePostAllComments } = useSelector(e => e.common)
   const dispatch = useDispatch()
+  const [deleteModal, setdeleteModal] = useState(false)
+  const [selectedComment, setselectedComment] = useState(undefined)
+
   useEffect(() => {
     dispatch(onGetSinglePost({
       data: {
@@ -38,46 +42,6 @@ export default function PagesPostDetail() {
       }
     }))
   }, [])
-
-  const RenderReply = ({ item, index, isLastIndex }) => {
-    return (
-      <View style={styles.replyCommentView}>
-        <View
-          style={[
-            styles.replyCommnt,
-            { alignItems: isLastIndex ? 'flex-start' : 'center' },
-          ]}>
-          <View
-            style={[
-              styles.verticalLine,
-              { height: isLastIndex ? '50%' : '100%' },
-            ]}
-          />
-          <View style={styles.horizontalLine} />
-          <View style={styles.innerCommentRow}>
-            <RenderUserIcon height={38} isBorder />
-            <View style={styles.commentBg}>
-              <View style={ApplicationStyles.flex}>
-                <Text style={[styles.username, { fontSize: 15 }]}>
-                  Nikita Khairnar
-                </Text>
-                <Text style={[styles.degreeText, { fontSize: 12 }]}>
-                  PhD Student, Seoul
-                </Text>
-                <Text style={styles.commentText}>Nice</Text>
-              </View>
-              <View style={styles.innerRow}>
-                <TouchableOpacity style={styles.likesRow}>
-                  <Image source={Icons.heart} style={ImageStyle(15, 15)} />
-                  <Text style={styles.likesText}>1 Likes</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  };
 
   const onLikeComment = (item) => {
     const isLike = item?.isCommentLiked
@@ -111,6 +75,31 @@ export default function PagesPostDetail() {
     }} />
   }
 
+  const deleteComment = (id) => {
+    setdeleteModal(false)
+    let obj = {
+      data: {
+        postId: activePost._id,
+        commentId: id
+      },
+      onSuccess: () => {
+        dispatch(onGetSinglePost({
+          data: {
+            postId: activePost?._id,
+            loginUserId: user._id
+          }
+        }))
+        dispatch(onGetAllComments({
+          data: {
+            postId: activePost?._id,
+            loginId: user._id
+          }
+        }))
+      }
+    }
+    dispatch(onDeleteComment(obj))
+  }
+
   const onComment = () => {
     if (commentText.trim() !== '') {
       let obj = {
@@ -121,6 +110,12 @@ export default function PagesPostDetail() {
         },
         onSuccess: () => {
           setcommentText('')
+          dispatch(onGetSinglePost({
+            data: {
+              postId: activePost?._id,
+              loginUserId: user._id
+            }
+          }))
           dispatch(onGetAllComments({
             data: {
               postId: activePost?._id,
@@ -155,6 +150,15 @@ export default function PagesPostDetail() {
         commentText={commentText}
         placeholder={'Add Comment'}
       />
+      {deleteModal && <ConfirmationModal
+        visible={deleteModal}
+        onClose={() => setdeleteModal(false)}
+        title={`Are you sure, you want to delete this comment?`}
+        successBtn={'Yes'}
+        canselBtn={'No'}
+        onPressCancel={() => setdeleteModal(false)}
+        onPressSuccess={() => deleteComment(selectedComment?._id)}
+      />}
     </SafeAreaView>
   );
 }

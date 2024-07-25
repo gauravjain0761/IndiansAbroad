@@ -75,6 +75,12 @@ export default function PostDetail() {
                 commentId: id
             },
             onSuccess: () => {
+                dispatch(onGetSinglePost({
+                    data: {
+                        postId: activePost?._id,
+                        loginUserId: user._id
+                    }
+                }))
                 dispatch(onGetAllComments({
                     data: {
                         postId: activePost?._id,
@@ -134,6 +140,12 @@ export default function PostDetail() {
                 },
                 onSuccess: () => {
                     setcommentText('')
+                    dispatch(onGetSinglePost({
+                        data: {
+                            postId: activePost?._id,
+                            loginUserId: user._id
+                        }
+                    }))
                     dispatch(onGetAllComments({
                         data: {
                             postId: activePost?._id,

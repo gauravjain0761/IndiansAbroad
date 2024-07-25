@@ -16,7 +16,6 @@ import ShareModal from './ShareModal';
 export default function DiscussionForumCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
   const [shareModal, setshareModal] = useState(false);
-  console.log(item)
   return (
     <View key={index} style={[ApplicationStyles.row, styles.cardView]}>
       <View style={{ flex: 1 }}>
@@ -48,7 +47,9 @@ export default function DiscussionForumCard({ item, index }) {
           </TouchableOpacity>
         </View>
       </View>
-      {item?.mediaFiles?.length > 0 && <View style={{ marginRight: 10, marginLeft: 20 }}>
+      {item?.mediaFiles?.length > 0 ? <View style={{ marginRight: 10, marginLeft: 20 }}>
+        <FastImage source={{ uri: item?.thumbNail?.location }} resizeMode={FastImage.resizeMode.cover} style={styles.userImage} />
+      </View> : <View style={{ marginRight: 10, marginLeft: 20 }}>
         <FastImage source={{ uri: item?.thumbNail?.location }} resizeMode={FastImage.resizeMode.cover} style={styles.userImage} />
       </View>}
       {shareModal && (
@@ -83,10 +84,12 @@ const styles = StyleSheet.create({
   },
   username: {
     ...FontStyle(16, colors.neutral_900, '700'),
+    textAlign: 'justify'
   },
   degreeText: {
     marginVertical: 3,
     ...FontStyle(14, colors.neutral_600, "400"),
+    textAlign: 'justify'
   },
   degreeText1: {
     // lineHeight:18,

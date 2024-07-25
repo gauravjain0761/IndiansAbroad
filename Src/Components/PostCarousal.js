@@ -15,7 +15,6 @@ export default function PostCarousal({ images, isDetailScreen, poster }) {
     useEffect(() => {
         images.forEach(element => {
             if (element.contentType.includes('video')) {
-                console.log(element)
                 createThumbnail({
                     url: element?.location,
                     timeStamp: 1000,

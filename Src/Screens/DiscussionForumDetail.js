@@ -89,6 +89,11 @@ export default function DiscussionForumDetail() {
                     comment: commentText.trim()
                 },
                 onSuccess: () => {
+                    dispatch(onGetThreadDetail({
+                        data: {
+                            threadId: activePost?._id,
+                        }
+                    }))
                     setcommentText('')
                     dispatch(onGetThreadAllComments({
                         id: activePost?._id
@@ -108,6 +113,11 @@ export default function DiscussionForumDetail() {
                 commentId: id
             },
             onSuccess: () => {
+                dispatch(onGetThreadDetail({
+                    data: {
+                        threadId: activePost?._id,
+                    }
+                }))
                 dispatch(onGetThreadAllComments({
                     id: activePost?._id
                 }))

@@ -101,7 +101,6 @@ export default function UpdatePostScreen() {
                 } else {
 
                     imageArray.forEach((element, index) => {
-                        console.log('element---', element)
                         let time = new Date().getTime() + index
                         if (imageArray[index].mime) {
                             data['mediaFiles' + "[" + time + "]"] = {

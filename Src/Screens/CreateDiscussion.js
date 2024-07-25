@@ -54,7 +54,6 @@ export default function CreateDiscussion() {
       ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
           if (type == 'video') {
-            console.log('image--', image)
             let temp = []
             if (image.duration <= 90000) {
               createThumbnail({
@@ -99,11 +98,9 @@ export default function CreateDiscussion() {
       compressImageQuality: 1,
     }).then(image => {
       setselectedImage(image)
-      console.log(image);
     });
   }
   const onPressSet = () => {
-    console.log(selectedImageIndex)
     let temp = Object.assign([], imageArray)
     temp.splice(selectedImageIndex, 1, selectedImage)
     setpreviewModal(false)
@@ -184,6 +181,7 @@ export default function CreateDiscussion() {
           style={styles.inputTitle}
           placeholder="Title"
           placeholderTextColor={colors.neutral_500}
+          multiline={true}
         />
         <View style={styles.inputBox}>
           <TextInput
@@ -311,7 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20,
     paddingLeft: 20,
-    height: 47
+    minHeight: 47
   },
   rowView: {
     flexDirection: 'row',

@@ -29,6 +29,8 @@ import {
   getalluserposts,
 } from '../Services/PostServices';
 import NoDataFound from '../Components/NoDataFound';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_PAGE_DETAIL } from '../Redux/ActionTypes';
 
 export default function IndiansPage() {
   const { navigate } = useNavigation();

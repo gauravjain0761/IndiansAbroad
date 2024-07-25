@@ -23,7 +23,7 @@ import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import ConnectCard from '../Components/ConnectCard';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { Icons } from '../Themes/Icons';
 import ConnectedIndians from '../Components/ConnectedIndians';
 import RenderUserIcon from '../Components/RenderUserIcon';
@@ -38,6 +38,7 @@ import { IS_LOADING, OTHER_USER_INFO, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS,
 import { dispatchAction } from '../utils/apiGlobal';
 import NoDataFound from '../Components/NoDataFound';
 import PageConnectedIndians from '../Components/PageConnectedIndians';
+import { onGetPageDetail } from '../Services/PostServices';
 
 export default function PagesDetails() {
   const tabs = [
@@ -63,6 +64,8 @@ export default function PagesDetails() {
   const [loading, setloading] = useState(false)
   const [page, setpage] = useState(1)
   const [followList, setfollowList] = useState([])
+  const isfocused = useIsFocused()
+
 
   useEffect(() => {
     setfollowList(allPageFollowerList)
@@ -86,13 +89,20 @@ export default function PagesDetails() {
   }
 
   useEffect(() => {
-    setpageDetail(params?.pageDetail)
-  }, [params])
+    // let obj = {
+    //   id: params?.pageDetail?._id
+    // }
+    // dispatch(onGetPageDetail(obj))
+    if (isfocused) {
+      getPostList(1)
+      onGetConnectedIndians()
+    }
+
+  }, [isfocused])
 
   useEffect(() => {
     if (!allPagePost) dispatchAction(dispatch, IS_LOADING, true)
-    getPostList(1)
-    onGetConnectedIndians()
+    setpageDetail(params?.pageDetail)
   }, []);
 
   const onGetConnectedIndians = () => {
@@ -165,7 +175,6 @@ export default function PagesDetails() {
     //   }
     // }
   };
-
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView>
@@ -204,16 +213,22 @@ export default function PagesDetails() {
           )}
         </View>
         <View style={styles.tabMainView}>
-          <TouchableOpacity onPress={() => { setTabSelection('ABOUT'), ref.current?.setPage(0) }} style={[{ marginRight: wp(5), }, styles.tabItemView,]}>
-            <Text style={tabSelection == 'ABOUT' ? styles.tabText : styles.tabText1}>{'ABOUT'}</Text>
+          <TouchableOpacity onPress={() => { setTabSelection('ABOUT') }} style={[{ marginRight: wp(5), borderBottomColor: tabSelection == 'ABOUT' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
+            <Image source={Icons.files} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'ABOUT' ? colors.primary_6a7e : colors.neutral_900 }} />
+
+            {/* <Text style={tabSelection == 'ABOUT' ? styles.tabText : styles.tabText1}>{'ABOUT'}</Text> */}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { setTabSelection('ACTIVITIES'); ref.current?.setPage(1); }} style={[{ marginRight: wp(5), }, styles.tabItemView,]}>
-            <Text style={tabSelection == 'ACTIVITIES' ? styles.tabText : styles.tabText1}>{'ACTIVITIES'}</Text>
+          <TouchableOpacity onPress={() => { setTabSelection('ACTIVITIES') }} style={[{ marginRight: wp(5), borderBottomColor: tabSelection == 'ACTIVITIES' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
+            <Image source={Icons.imagelist} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'ACTIVITIES' ? colors.primary_6a7e : colors.neutral_900 }} />
+
+            {/* <Text style={tabSelection == 'ACTIVITIES' ? styles.tabText : styles.tabText1}>{'ACTIVITIES'}</Text> */}
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { setTabSelection('CONNECTED INDIANS'); ref.current?.setPage(2); }} style={[{ marginLeft: wp(5), flex: 1, }, styles.tabItemView,]}>
-            <Text style={[tabSelection == 'CONNECTED INDIANS' ? styles.tabText : styles.tabText1, { bottom: 12 }]}>{'CONNECTED INDIANS'}</Text>
+          <TouchableOpacity onPress={() => { setTabSelection('CONNECTED INDIANS') }} style={[{ borderBottomColor: tabSelection == 'CONNECTED INDIANS' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
+            <Image source={Icons.users} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'CONNECTED INDIANS' ? colors.primary_6a7e : colors.neutral_900 }} />
+
+            {/* <Text style={[tabSelection == 'CONNECTED INDIANS' ? styles.tabText : styles.tabText1, { bottom: 12 }]}>{'CONNECTED INDIANS'}</Text> */}
           </TouchableOpacity>
-          <Animated.View style={[styles.animationView, { left: tabSelection == 'ABOUT' ? 0 : tabSelection == 'ACTIVITIES' ? SCREEN_WIDTH * 0.32 : SCREEN_WIDTH * 0.65, width: tabSelection == 'ABOUT' ? 130 : tabSelection == 'ACTIVITIES' ? 135 : `${80 / tabs.length}%`, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
+          {/* <Animated.View style={[styles.animationView, { left: tabSelection == 'ABOUT' ? 0 : tabSelection == 'ACTIVITIES' ? SCREEN_WIDTH / 3 : (SCREEN_WIDTH / 3) * 2, width: tabSelection == 'ABOUT' ? 130 : tabSelection == 'ACTIVITIES' ? 135 : `${80 / 3}%`, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} /> */}
         </View>
         {/* <PagerView
           style={{ flex: 1 }}
@@ -292,9 +307,12 @@ const styles = StyleSheet.create({
   },
   tabItemView: {
     flex: 1,
-    padding: wp(15),
-    borderRadius: 50,
+    padding: wp(10),
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: wp(10),
+    borderBottomWidth: 3
   },
   lineView: {
     width: SCREEN_WIDTH * 0.34,

@@ -9,32 +9,32 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import Header from '../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {fontname, wp} from '../Themes/Fonts';
-import {FontStyle} from '../utils/commonFunction';
+import { fontname, wp } from '../Themes/Fonts';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import SearchBar from '../Components/SearchBar';
 import PostCard from '../Components/PostCard';
 import CreatePost from '../Components/CreatePost';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
-import {getalluserposts} from '../Services/PostServices';
-import {dispatchAction} from '../utils/apiGlobal';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { getalluserposts } from '../Services/PostServices';
+import { dispatchAction } from '../utils/apiGlobal';
 import {
   IS_LOADING,
   SET_ACTIVE_POST,
   SET_ACTIVE_POST_COMMENTS,
   SET_GLOBAL_SEARCH,
 } from '../Redux/ActionTypes';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../Components/NoDataFound';
-import {getFollowerList} from '../Services/AuthServices';
-import {getDiscussionCountry} from '../Services/DiscussionServices';
-import {io} from 'socket.io-client';
+import { getFollowerList } from '../Services/AuthServices';
+import { getDiscussionCountry } from '../Services/DiscussionServices';
+import { io } from 'socket.io-client';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const {allPost, allPostsCount, user} = useSelector(e => e.common);
+  const { allPost, allPostsCount, user } = useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
@@ -74,7 +74,7 @@ export default function HomeScreen() {
     getPostList(1);
     dispatch(
       getFollowerList({
-        data: {userId: user?._id, search: ''},
+        data: { userId: user?._id, search: '' },
       }),
     );
     setTimeout(() => {
@@ -116,7 +116,7 @@ export default function HomeScreen() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -197,10 +197,10 @@ export default function HomeScreen() {
           dispatchAction(dispatch, SET_GLOBAL_SEARCH, undefined);
           navigation.navigate(screenName.SearchScreen);
         }}
-        // containerStyles={{top:-14}}
+      // containerStyles={{top:-14}}
       />
       <PagerView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -226,7 +226,7 @@ export default function HomeScreen() {
                     {allPost && loading && (
                       <ActivityIndicator size={'large'} color={colors.black} />
                     )}
-                    <View style={{height: 50}} />
+                    <View style={{ height: 50 }} />
                   </View>
                 );
               }}

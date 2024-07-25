@@ -150,16 +150,22 @@ export default function MyPageScreen() {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.tabMainView}>
-                                <TouchableOpacity onPress={() => { setTabSelection('ABOUT') }} style={[{ marginRight: wp(5), }, styles.tabItemView,]}>
-                                    <Text style={tabSelection == 'ABOUT' ? styles.tabText : styles.tabText1}>{'ABOUT'}</Text>
+                                <TouchableOpacity onPress={() => { setTabSelection('ABOUT') }} style={[{ marginRight: wp(5), borderBottomColor: tabSelection == 'ABOUT' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
+                                    <Image source={Icons.files} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'ABOUT' ? colors.primary_6a7e : colors.neutral_900 }} />
+
+                                    {/* <Text style={tabSelection == 'ABOUT' ? styles.tabText : styles.tabText1}>{'ABOUT'}</Text> */}
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => { setTabSelection('ACTIVITIES') }} style={[{ marginRight: wp(5), }, styles.tabItemView,]}>
-                                    <Text style={tabSelection == 'ACTIVITIES' ? styles.tabText : styles.tabText1}>{'ACTIVITIES'}</Text>
+                                <TouchableOpacity onPress={() => { setTabSelection('ACTIVITIES') }} style={[{ marginRight: wp(5), borderBottomColor: tabSelection == 'ACTIVITIES' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
+                                    <Image source={Icons.imagelist} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'ACTIVITIES' ? colors.primary_6a7e : colors.neutral_900 }} />
+
+                                    {/* <Text style={tabSelection == 'ACTIVITIES' ? styles.tabText : styles.tabText1}>{'ACTIVITIES'}</Text> */}
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => { setTabSelection('CONNECTED INDIANS') }} style={[{ marginLeft: wp(5), flex: 1, }, styles.tabItemView,]}>
-                                    <Text style={[tabSelection == 'CONNECTED INDIANS' ? styles.tabText : styles.tabText1, { bottom: 12 }]}>{'CONNECTED INDIANS'}</Text>
+                                <TouchableOpacity onPress={() => { setTabSelection('CONNECTED INDIANS') }} style={[{ borderBottomColor: tabSelection == 'CONNECTED INDIANS' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
+                                    <Image source={Icons.users} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'CONNECTED INDIANS' ? colors.primary_6a7e : colors.neutral_900 }} />
+
+                                    {/* <Text style={[tabSelection == 'CONNECTED INDIANS' ? styles.tabText : styles.tabText1, { bottom: 12 }]}>{'CONNECTED INDIANS'}</Text> */}
                                 </TouchableOpacity>
-                                <Animated.View style={[styles.animationView, { left: tabSelection == 'ABOUT' ? 0 : tabSelection == 'ACTIVITIES' ? SCREEN_WIDTH * 0.32 : SCREEN_WIDTH * 0.65, width: tabSelection == 'ABOUT' ? 130 : tabSelection == 'ACTIVITIES' ? 135 : `${80 / 3}%`, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
+                                {/* <Animated.View style={[styles.animationView, { left: tabSelection == 'ABOUT' ? 0 : tabSelection == 'ACTIVITIES' ? SCREEN_WIDTH / 3 : (SCREEN_WIDTH / 3) * 2, width: tabSelection == 'ABOUT' ? 130 : tabSelection == 'ACTIVITIES' ? 135 : `${80 / 3}%`, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} /> */}
                             </View>
                             {tabSelection == 'ABOUT' && <View >
                                 <View style={{ marginHorizontal: wp(12), }}>
@@ -254,9 +260,12 @@ const styles = StyleSheet.create({
     },
     tabItemView: {
         flex: 1,
-        padding: wp(15),
-        borderRadius: 50,
+        padding: wp(10),
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: wp(10),
+        borderBottomWidth: 3
     },
     lineView: {
         width: SCREEN_WIDTH * 0.34,
@@ -330,7 +339,7 @@ const styles = StyleSheet.create({
     animationView: {
         borderColor: colors.primary_500,
         position: 'absolute',
-        bottom: 20,
+        bottom: 10,
         left: 0,
     },
     imageView: {

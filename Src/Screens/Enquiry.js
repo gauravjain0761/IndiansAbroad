@@ -77,10 +77,11 @@ export default function Enquiry() {
                 />
                 <TextInput
                     placeholder={'Subject'}
-                    style={styles.inputText}
+                    style={[styles.inputText2]}
                     value={subject}
                     onChangeText={(text) => setsubject(text)}
                     placeholderTextColor={colors.neutral_400}
+                    multiline={true}
                 />
                 <TextInput
                     placeholder={'Write your message'}
@@ -131,10 +132,22 @@ const styles = StyleSheet.create({
         backgroundColor: colors.inputBg,
         paddingVertical: 4,
         borderRadius: 5,
-        paddingLeft: 12,
+        paddingHorizontal: 12,
         paddingVertical: 6,
         marginTop: 20,
-        height: 56
+        height: 56,
+    },
+    inputText2: {
+        ...FontStyle(14, colors.neutral_900),
+        borderWidth: 1,
+        borderColor: colors.neutral_500,
+        backgroundColor: colors.inputBg,
+        paddingVertical: 4,
+        borderRadius: 5,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        marginTop: 20,
+        minHeight: 56,
     },
     btnView: {
         backgroundColor: colors.buttonBlue,

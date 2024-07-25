@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.inputBg,
     paddingVertical: 4,
     borderRadius: 5,
-    paddingLeft: 12,
+    paddingHorizontal: 12,
     paddingVertical: 6,
     marginTop: 20,
   },

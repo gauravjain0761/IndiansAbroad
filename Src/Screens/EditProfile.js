@@ -162,7 +162,6 @@ export default function EditProfile() {
       } else {
         navigation.goBack()
       }
-      console.log(data)
     }
   }
 

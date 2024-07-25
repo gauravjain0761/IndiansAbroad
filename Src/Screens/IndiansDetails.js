@@ -191,7 +191,8 @@ export default function IndiansDetails() {
               setTabSelection('POST');
               ref.current?.setPage(0);
             }} style={[{}, styles.tabItemView]}>
-            <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Posts(' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
+            <Image source={Icons.imagelist} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900 }} />
+            <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{' (' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -200,7 +201,8 @@ export default function IndiansDetails() {
               setSearchText('')
             }}
             style={styles.tabItemView}>
-            <Text style={FontStyle(14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians(' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
+            <Image source={Icons.users} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900 }} />
+            <Text style={FontStyle(14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{' (' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
           </TouchableOpacity>
           <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
         </View>
@@ -262,6 +264,8 @@ const styles = StyleSheet.create({
     paddingVertical: wp(15),
     borderRadius: 50,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   lineView: {
     width: SCREEN_WIDTH * 0.34,

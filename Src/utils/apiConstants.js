@@ -61,6 +61,7 @@ export const api = {
   getMyPage: '/cp/list/',
   updatePage: '/cp/update',
   deletePage: '/cp/delete',
+  getPageDetail: '/cp/details/',
 
   // global search
   globalSearch: '/global/search',
