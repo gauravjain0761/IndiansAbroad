@@ -18,16 +18,6 @@ import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 import { onGetSignupCountry, onStepTwoSignUp } from '../../Services/AuthServices'
 
-const data = [
-    { label: 'Country 1', value: '1' },
-    { label: 'Country 2', value: '2' },
-    { label: 'Country 3', value: '3' },
-    { label: 'Country 4', value: '4' },
-    { label: 'Country 5', value: '5' },
-    { label: 'Country 6', value: '6' },
-    { label: 'Country 7', value: '7' },
-    { label: 'Country 8', value: '8' },
-];
 export default function CompleteProfile2() {
     const navigation = useNavigation()
     const [city, setcity] = useState('')

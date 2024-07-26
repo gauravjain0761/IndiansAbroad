@@ -76,7 +76,7 @@ export default function HomeScreen() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getPostList(1);
+    getData()
     dispatch(
       getFollowerList({
         data: { userId: user?._id, search: '' },
@@ -107,11 +107,24 @@ export default function HomeScreen() {
     dispatch(getDiscussionCountry({}));
   }, []);
 
-  useEffect(() => {
-    if (isFocuse) {
+  // useEffect(() => {
+  //   if (isFocuse) {
+  //     getPostList(1);
+  //   }
+  // }, [isFocuse]);
+
+  const getData = () => {
+    if (tabSelection == 'Activity') {
       getPostList(1);
+    } else {
+
     }
-  }, [isFocuse]);
+  }
+
+  useEffect(() => {
+    getData()
+  }, [tabSelection])
+
 
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
@@ -148,13 +161,16 @@ export default function HomeScreen() {
       </TouchableOpacity>
     );
   };
-
   const fetchMoreData = () => {
-    if (allPost) {
-      if (allPost.length < allPostsCount) {
-        setloading(true);
-        getPostList(page + 1);
+    if (tabSelection == 'Activity') {
+      if (allPost) {
+        if (allPost.length < allPostsCount) {
+          setloading(true);
+          getPostList(page + 1);
+        }
       }
+    } else {
+
     }
   };
 
@@ -163,7 +179,7 @@ export default function HomeScreen() {
   };
 
   const onCreateEvent = () => {
-
+    navigation.navigate(screenName.CreateEvent1)
   }
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -174,6 +190,7 @@ export default function HomeScreen() {
           isHome={true}
           onRightPress={onPressBell}
           onClickPlus={() => setcreatePostModal(true)}
+          showPlus={tabSelection == 'Activity'}
         />
       </SafeAreaView>
 

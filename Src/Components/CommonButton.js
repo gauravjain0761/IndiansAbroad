@@ -6,7 +6,7 @@ import colors from '../Themes/Colors'
 
 export default function CommonButton({ title, extraStyle, onPress }) {
     return (
-        <TouchableOpacity onPress={() => onPress()} style={[styles.blueButton, extraStyle]}>
+        <TouchableOpacity onPress={() => onPress ? onPress() : {}} style={[styles.blueButton, extraStyle]}>
             <Text style={styles.publishText}>{title}</Text>
         </TouchableOpacity>
     )

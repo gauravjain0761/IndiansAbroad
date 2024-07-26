@@ -17,7 +17,7 @@ import RenderUserIcon from './RenderUserIcon';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Dropdown } from 'react-native-element-dropdown';
 
-export default function Input({ value, onChangeText, label, placeholder, isPassword = false, keyboardType, extraStyle = {}, type, data, valueField, labelField }) {
+export default function Input({ value, onChangeText, label, mode = 'date', placeholder, isPassword = false, keyboardType, extraStyle = {}, type, data, valueField, labelField, showCalenderIcon = true }) {
   const [passwordHide, setpasswordHide] = useState(true)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -52,13 +52,13 @@ export default function Input({ value, onChangeText, label, placeholder, isPassw
             keyboardType={keyboardType ? keyboardType : 'default'}
             editable={false}
           />
-          <View>
+          {showCalenderIcon && <View>
             <Image source={Icons.calender} style={styles.imageView} />
-          </View>
+          </View>}
         </TouchableOpacity>
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
-          mode="date"
+          mode={mode}
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
         />

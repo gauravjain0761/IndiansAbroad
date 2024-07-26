@@ -18,7 +18,7 @@ export default function EventDashboardCard({ item, index }) {
                             <Text style={styles.organizerText}>By IndiansAbroad</Text>
                         </View>
                         <View style={ApplicationStyles.row}>
-                            <Text>1.1K</Text>
+                            <Text style={FontStyle(14, colors.neutral_900)}>1.1K</Text>
                             <Image source={Icons.group} style={styles.usersIcon} />
                         </View>
                     </View>
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     cardImage: {
         resizeMode: 'cover',
         height: 236,
-        resizeMode: 'cover',
         width: '100%'
     },
     footer: {

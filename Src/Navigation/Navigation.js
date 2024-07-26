@@ -65,6 +65,12 @@ import {
   onNotificationPress,
 } from '../Config/notificationHandle';
 import EventDetailScreen from '../Screens/Events/EventDetailScreen';
+import AttendanceRequestScreen from '../Screens/Events/AttendanceRequestScreen';
+import EventPaymentScreen from '../Screens/Events/EventPaymentScreen';
+import CreateEvent1 from '../Screens/Events/CreateEvent1';
+import CreateEvent2 from '../Screens/Events/CreateEvent2';
+import CreateEvent3 from '../Screens/Events/CreateEvent3';
+import CreateEvent4 from '../Screens/Events/CreateEvent4';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -428,6 +434,36 @@ export default function Navigation() {
         options={({ navigation }) => ({ ...headerStyleTransparent })}
         name={screenName.EventDetailScreen}
         component={EventDetailScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.AttendanceRequestScreen}
+        component={AttendanceRequestScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.EventPaymentScreen}
+        component={EventPaymentScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.CreateEvent1}
+        component={CreateEvent1}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.CreateEvent2}
+        component={CreateEvent2}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.CreateEvent3}
+        component={CreateEvent3}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.CreateEvent4}
+        component={CreateEvent4}
       />
     </Stack.Navigator>
   );

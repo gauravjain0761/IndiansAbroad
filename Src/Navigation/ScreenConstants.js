@@ -49,5 +49,11 @@ export const screenName = {
   ForgotPassword: 'ForgotPassword',
   NewPassword: 'NewPassword',
   PasswordChangeSuccess: "PasswordChangeSuccess",
-  EventDetailScreen: "EventDetailScreen"
+  EventDetailScreen: "EventDetailScreen",
+  AttendanceRequestScreen: "AttendanceRequestScreen",
+  EventPaymentScreen: "EventPaymentScreen",
+  CreateEvent1: "CreateEvent1",
+  CreateEvent2: "CreateEvent2",
+  CreateEvent3: "CreateEvent3",
+  CreateEvent4: "CreateEvent4",
 };

@@ -22,6 +22,8 @@ export default function Header({
   chatLeftPress,
   chatRightPress,
   isChatDetails,
+  onlyLabel,
+  showPlus = false
 }) {
   const navigation = useNavigation();
   if (isChatDetails) {
@@ -69,12 +71,12 @@ export default function Header({
           <Text style={[styles.titleText, titleStyle,]}>{title}</Text>
         </View>
         <View style={[ApplicationStyles.row, { gap: 15, position: 'absolute', right: 0, }]}>
-          <TouchableOpacity style={{
+          {showPlus && <TouchableOpacity style={{
             borderRadius: 4,
             overflow: 'hidden'
           }} onPress={() => onClickPlus()}>
             <Image source={Icons.plusHome} style={ImageStyle(24, 24, 'cover')} />
-          </TouchableOpacity>
+          </TouchableOpacity>}
           <TouchableOpacity style={{ paddingRight: wp(16) }} onPress={() => onRightPress()}>
             <Image source={Icons.bell} style={ImageStyle(24, 24)} />
           </TouchableOpacity>
@@ -93,7 +95,7 @@ export default function Header({
       }
       <View style={styles.middleView}>
         {logoShow && title !== '' && <Image source={Icons.logo} style={ImageStyle(23, 23)} />}
-        <Text style={[styles.titleText, titleStyle,]}>{title}</Text>
+        {onlyLabel ? <Text style={[styles.titleText, titleStyle,]}>{onlyLabel}</Text> : <Text style={[styles.titleText, titleStyle,]}>{title}</Text>}
       </View>
       {showRight &&
         <TouchableOpacity style={styles.rigthIconView} onPress={() => onRightPress ? onRightPress() : {}}>
