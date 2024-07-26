@@ -68,6 +68,18 @@ export const Icons = {
   imagelist: require('../assets/Icons/imagelist.png'),
   users: require('../assets/Icons/users.png'),
   files: require('../assets/Icons/files.png'),
+  starOutline: require('../assets/Icons/starOutline.png'),
+  favorite: require('../assets/Icons/favorite.png'),
+  checkSquare: require('../assets/Icons/checkSquare.png'),
+  group: require('../assets/Icons/group.png'),
+  // files: require('../assets/Icons/files.png'),
+  // files: require('../assets/Icons/files.png'),
+  // files: require('../assets/Icons/files.png'),
+  // files: require('../assets/Icons/files.png'),
+  // files: require('../assets/Icons/files.png'),
+  // files: require('../assets/Icons/files.png'),
+  // files: require('../assets/Icons/files.png'),
+
 
 
   w_1: require('../assets/Icons/w_1.png'),

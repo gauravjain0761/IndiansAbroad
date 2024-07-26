@@ -48,5 +48,6 @@ export const screenName = {
   Messaging: 'Messaging',
   ForgotPassword: 'ForgotPassword',
   NewPassword: 'NewPassword',
-  PasswordChangeSuccess: "PasswordChangeSuccess"
+  PasswordChangeSuccess: "PasswordChangeSuccess",
+  EventDetailScreen: "EventDetailScreen"
 };

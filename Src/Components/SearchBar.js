@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: wp(10),
     width: screen_width * 0.85,
-    ...FontStyle(14, colors.black, "500"),
+    ...FontStyle(13, colors.black, "500"),
     height: 43
   },
 });

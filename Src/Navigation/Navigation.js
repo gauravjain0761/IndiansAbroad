@@ -1,38 +1,38 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from '../Screens/HomeScreen';
+import HomeScreen from '../Screens/Home/HomeScreen';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
 import { screenName } from './ScreenConstants';
-import IndiansPage from '../Screens/IndiansPage';
+import IndiansPage from '../Screens/Indian/IndiansPage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DiscussionForum from '../Screens/DiscussionForum';
+import DiscussionForum from '../Screens/Discussion/DiscussionForum';
 import MyTabbar from '../Components/MyTabbar';
-import ChatScreen from '../Screens/ChatScreen';
-import ProfileScreen from '../Screens/ProfileScreen';
+import ChatScreen from '../Screens/Chat/ChatScreen';
+import ProfileScreen from '../Screens/Profile/ProfileScreen';
 import CustomDrawer from '../Components/CustomDrawer';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import MyPageScreen from '../Screens/MyPageScreen';
-import InviteFriendScreen from '../Screens/InviteFriendScreen';
-import FeedBackForum from '../Screens/FeedBackForum';
-import Enquiry from '../Screens/Enquiry';
-import Terms from '../Screens/Terms';
-import Privacy from '../Screens/Privacy';
-import IndiansDetails from '../Screens/IndiansDetails';
-import PostDetail from '../Screens/PostDetail';
-import PagesDetails from '../Screens/PagesDetails';
-import Setting from '../Screens/Setting';
-import EditProfile from '../Screens/EditProfile';
-import PagesPostDetail from '../Screens/PagesPostDetail';
-import DiscussionForumDetail from '../Screens/DiscussionForumDetail';
-import CreateDiscussion from '../Screens/CreateDiscussion';
-import MyConnections from '../Screens/MyConnections';
-import CreateGroup from '../Screens/CreateGroup';
-import NotificationScreen from '../Screens/NotificationScreen';
-import IndiansPageMore from '../Screens/IndiansPageMore';
-import IndiansPageUpdate from '../Screens/IndiansPageUpdate';
+import MyPageScreen from '../Screens/Drawer/MyPageScreen';
+import InviteFriendScreen from '../Screens/Drawer/InviteFriendScreen';
+import FeedBackForum from '../Screens/Drawer/FeedBackForum';
+import Enquiry from '../Screens/Drawer/Enquiry';
+import Terms from '../Screens/Drawer/Terms';
+import Privacy from '../Screens/Drawer/Privacy';
+import IndiansDetails from '../Screens/Indian/IndiansDetails';
+import PostDetail from '../Screens/Home/PostDetail';
+import PagesDetails from '../Screens/Indian/PagesDetails';
+import Setting from '../Screens/Setting/Setting';
+import EditProfile from '../Screens/Profile/EditProfile';
+import PagesPostDetail from '../Screens/Indian/PagesPostDetail';
+import DiscussionForumDetail from '../Screens/Discussion/DiscussionForumDetail';
+import CreateDiscussion from '../Screens/Discussion/CreateDiscussion';
+import MyConnections from '../Screens/Home/MyConnections';
+import CreateGroup from '../Screens/Chat/CreateGroup';
+import NotificationScreen from '../Screens/Home/NotificationScreen';
+import IndiansPageMore from '../Screens/Indian/IndiansPageMore';
+import IndiansPageUpdate from '../Screens/Indian/IndiansPageUpdate';
 import ChangePasswordNew from '../Screens/Setting/ChangePasswordNew';
 import ChangePasswordVerify from '../Screens/Setting/ChangePasswordVerify';
 import ChangePasswordEmail from '../Screens/Setting/ChangePasswordEmail';
@@ -40,30 +40,31 @@ import Subscription from '../Screens/Setting/Subscription';
 import BlockedUsers from '../Screens/Setting/BlockedUsers';
 import ChangePhone from '../Screens/Setting/ChangePhone';
 import ChangePhoneVerify from '../Screens/Setting/ChangePhoneVerify';
-import ChatDetailsScreen from '../Screens/ChatDetailsScreen';
-import LikesScreen from '../Screens/LikesScreen';
-import RepliesComments from '../Screens/RepliesComments';
-import SearchScreen from '../Screens/SearchScreen';
-import UpdatePostScreen from '../Screens/UpdatePostScreen';
-import LoginScreen from '../Screens/LoginScreen';
-import SignupScreen from '../Screens/SignupScreen';
-import OTPScreen from '../Screens/OTPScreen';
-import CompleteProfile from '../Screens/CompleteProfile';
-import Walkthrough from '../Screens/Walkthrough';
-import CompleteProfile2 from '../Screens/CompleteProfile2';
-import PaymentModalScreen from '../Screens/PaymentModalScreen';
-import SplashScreen from '../Screens/SplashScreen';
-import MediaScreen from '../Screens/MediaScreen';
-import SecurityScreen from '../Screens/SecurityScreen';
+import ChatDetailsScreen from '../Screens/Chat/ChatDetailsScreen';
+import LikesScreen from '../Screens/Home/LikesScreen';
+import RepliesComments from '../Screens/Home/RepliesComments';
+import SearchScreen from '../Screens/Home/SearchScreen';
+import UpdatePostScreen from '../Screens/Home/UpdatePostScreen';
+import LoginScreen from '../Screens/Auth/LoginScreen';
+import SignupScreen from '../Screens/Auth/SignupScreen';
+import OTPScreen from '../Screens/Auth/OTPScreen';
+import CompleteProfile from '../Screens/Auth/CompleteProfile';
+import Walkthrough from '../Screens/Auth/Walkthrough';
+import CompleteProfile2 from '../Screens/Auth/CompleteProfile2';
+import PaymentModalScreen from '../Screens/Auth/PaymentModalScreen';
+import SplashScreen from '../Screens/Auth/SplashScreen';
+import MediaScreen from '../Screens/Home/MediaScreen';
+import SecurityScreen from '../Screens/Auth/SecurityScreen';
 import Messaging from '../Screens/Setting/Messaging';
-import ForgotPassword from '../Screens/ForgotPassword';
-import NewPassword from '../Screens/NewPassword';
-import PasswordChangeSuccess from '../Screens/PasswordChangeSuccess';
+import ForgotPassword from '../Screens/Auth/ForgotPassword';
+import NewPassword from '../Screens/Auth/NewPassword';
+import PasswordChangeSuccess from '../Screens/Auth/PasswordChangeSuccess';
 import {
   onBackgroundNotificationPress,
   onMessage,
   onNotificationPress,
 } from '../Config/notificationHandle';
+import EventDetailScreen from '../Screens/Events/EventDetailScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -422,6 +423,11 @@ export default function Navigation() {
         options={({ navigation }) => ({ ...headerStyleTransparent })}
         name={screenName.Messaging}
         component={Messaging}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.EventDetailScreen}
+        component={EventDetailScreen}
       />
     </Stack.Navigator>
   );
