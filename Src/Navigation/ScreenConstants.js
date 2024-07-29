@@ -56,4 +56,6 @@ export const screenName = {
   CreateEvent2: "CreateEvent2",
   CreateEvent3: "CreateEvent3",
   CreateEvent4: "CreateEvent4",
+  SavedEvents: "SavedEvents",
+  EventDashboard: "EventDashboard"
 };

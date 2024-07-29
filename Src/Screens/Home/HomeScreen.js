@@ -1,15 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  RefreshControl,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, Image, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -25,14 +14,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { getalluserposts } from '../../Services/PostServices';
 import { dispatchAction } from '../../utils/apiGlobal';
-import {
-  IS_LOADING,
-  SET_ACTIVE_EVENT,
-  SET_ACTIVE_POST,
-  SET_ACTIVE_POST_COMMENTS,
-  SET_ALL_EVENTS,
-  SET_GLOBAL_SEARCH,
-} from '../../Redux/ActionTypes';
+import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_ALL_EVENTS, SET_GLOBAL_SEARCH, } from '../../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
 import { getFollowerList } from '../../Services/AuthServices';
@@ -43,7 +25,6 @@ import { Icons } from '../../Themes/Icons';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
-  const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('Activity');
@@ -106,12 +87,6 @@ export default function HomeScreen() {
     if (!allPost) dispatchAction(dispatch, IS_LOADING, true);
     dispatch(getDiscussionCountry({}));
   }, []);
-
-  // useEffect(() => {
-  //   if (isFocuse) {
-  //     getPostList(1);
-  //   }
-  // }, [isFocuse]);
 
   const getData = () => {
     if (tabSelection == 'Activity') {
@@ -202,12 +177,7 @@ export default function HomeScreen() {
             ref.current?.setPage(0);
           }}
           style={styles.tabItemView}>
-          <Text
-            style={
-              tabSelection == 'Activity'
-                ? styles.selectedText
-                : styles.unSewlectedText
-            }>
+          <Text style={tabSelection == 'Activity' ? styles.selectedText : styles.unSewlectedText}>
             {'ACTIVITY'}
           </Text>
         </TouchableOpacity>
@@ -218,12 +188,7 @@ export default function HomeScreen() {
             setIsLeftButtonActive(false);
           }}
           style={styles.tabItemView}>
-          <Text
-            style={
-              tabSelection == 'Events'
-                ? styles.selectedText
-                : styles.unSewlectedText
-            }>
+          <Text style={tabSelection == 'Events' ? styles.selectedText : styles.unSewlectedText}>
             {'EVENTS'}
           </Text>
         </TouchableOpacity>
@@ -276,7 +241,7 @@ export default function HomeScreen() {
         </View>
         <View key={'2'}>
           <View style={styles.rowSearchView}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate(screenName.SavedEvents)}>
               <Image style={styles.iconSearch} source={Icons.favorite} />
             </TouchableOpacity>
             <SearchBar
@@ -289,7 +254,7 @@ export default function HomeScreen() {
               }}
               containerStyles={{ flex: 1, paddingHorizontal: 0 }}
             />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate(screenName.EventDashboard)}>
               <Image style={styles.iconSearch} source={Icons.calender} />
             </TouchableOpacity>
           </View>

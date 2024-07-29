@@ -1,0 +1,191 @@
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, Image, ScrollView, } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ApplicationStyles from '../../Themes/ApplicationStyles';
+import Header from '../../Components/Header';
+import PagerView from 'react-native-pager-view';
+import { fontname, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import colors from '../../Themes/Colors';
+import SearchBar from '../../Components/SearchBar';
+import PostCard from '../../Components/PostCard';
+import CreatePost from '../../Components/CreatePost';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { getalluserposts } from '../../Services/PostServices';
+import { dispatchAction } from '../../utils/apiGlobal';
+import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_ALL_EVENTS, SET_GLOBAL_SEARCH, } from '../../Redux/ActionTypes';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import NoDataFound from '../../Components/NoDataFound';
+import { getFollowerList } from '../../Services/AuthServices';
+import { getDiscussionCountry } from '../../Services/DiscussionServices';
+import { io } from 'socket.io-client';
+import EventDashboardCard from '../../Components/EventDashboardCard';
+import { Icons } from '../../Themes/Icons';
+import RenderEventTicket from '../../Components/RenderEventTicket';
+
+export default function SavedEvents() {
+    const dispatch = useDispatch();
+    const [searchText, setSearchText] = useState('');
+    const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
+    const [tabSelection, setTabSelection] = useState('saved');
+    const buttonTranslateX = useRef(new Animated.Value(0)).current;
+    const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
+    const [createPostModal, setcreatePostModal] = useState(false);
+    const navigation = useNavigation();
+    const { allPost, allPostsCount, user } = useSelector(e => e.common);
+    const isFocuse = useIsFocused();
+    const [refreshing, setRefreshing] = React.useState(false);
+    const [page, setpage] = useState(1);
+    const [loading, setloading] = useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        getData()
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+
+    const getData = () => {
+        if (tabSelection == 'saved') {
+            //   getPostList(1);
+        } else {
+
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [tabSelection])
+
+    useEffect(() => {
+        Animated.timing(buttonTranslateX, {
+            toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
+            duration: 400,
+        }).start();
+    }, [isLeftButtonActive]);
+    const ref = React.createRef(PagerView);
+
+    const renderEventItem = ({ item, index }) => {
+        return (
+            <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                    dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
+                    // dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+                    navigation.navigate(screenName.EventDetailScreen);
+                }}>
+                <EventDashboardCard item={item} index={index} />
+            </TouchableOpacity>
+        );
+    };
+
+    const fetchMoreData = () => {
+        if (tabSelection == 'saved') {
+
+        } else {
+
+        }
+    };
+
+    return (
+        <View style={ApplicationStyles.applicationView}>
+            <SafeAreaView edges={['top']}>
+                <Header title={'IndiansAbroad'} showLeft />
+            </SafeAreaView>
+            <View style={styles.tabMainView}>
+                <TouchableOpacity
+                    onPress={() => {
+                        setTabSelection('saved');
+                        setIsLeftButtonActive(true);
+                        ref.current?.setPage(0);
+                    }} style={styles.tabItemView}>
+                    <Text style={tabSelection == 'saved' ? styles.selectedText : styles.unSewlectedText}>{'Saved'}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        setTabSelection('participating');
+                        ref.current?.setPage(1);
+                        setIsLeftButtonActive(false);
+                    }} style={styles.tabItemView}>
+                    <Text style={tabSelection == 'participating' ? styles.selectedText : styles.unSewlectedText}>{'Participating'}</Text>
+                </TouchableOpacity>
+                <Animated.View style={[styles.animationView, { left: tabSelection == 'saved' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
+            </View>
+            <PagerView
+                style={{ flex: 1 }}
+                initialPage={tabSelectionIndex}
+                ref={ref}
+                onPageSelected={e => {
+                    setTabSelection(e?.nativeEvent?.position == 0 ? 'saved' : 'participating',);
+                    setTabSelectionIndex(e?.nativeEvent?.position);
+                    setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
+                }}>
+                <View key={'1'}>
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
+                        data={allPost}
+                        renderItem={renderEventItem}
+                        onEndReached={fetchMoreData}
+                        onEndReachedThreshold={0.3}
+                        ListFooterComponent={() => {
+                            return (
+                                <View>
+                                    {allPost && loading && (
+                                        <ActivityIndicator size={'large'} color={colors.black} />
+                                    )}
+                                    <View style={{ height: 50 }} />
+                                </View>
+                            );
+                        }}
+                        ListEmptyComponent={<NoDataFound />}
+                    />
+                </View>
+                <View key={'2'}>
+                    <ScrollView>
+                        <RenderEventTicket />
+                        <View style={{ height: 50 }} />
+                    </ScrollView>
+                </View>
+            </PagerView>
+            <CreatePost createPostModal={createPostModal} setcreatePostModal={setcreatePostModal} />
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    tabMainView: {
+        flexDirection: 'row',
+        // top: -8,
+        // alignSelf:'center'
+        justifyContent: 'space-around',
+        marginBottom: 3
+    },
+    tabItemView: {
+        // flex: 1,
+        paddingBottom: wp(14),
+        paddingHorizontal: wp(14),
+        borderRadius: 50,
+        alignItems: 'center',
+    },
+    selectedText: FontStyle(14, colors.tertiary1_500, '700'),
+    unSewlectedText: FontStyle(14, colors.neutral_900, '700'),
+    rowSearchView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.secondary_500,
+    },
+    iconSearch: {
+        height: 23, width: 23, resizeMode: 'contain',
+        margin: 8
+    },
+    animationView: {
+        borderColor: colors.primary_500,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+    },
+});
