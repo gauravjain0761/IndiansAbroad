@@ -31,7 +31,7 @@ export default function CreateEvent3() {
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
             <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
-                <RenderSteps totalStep={4} currentStep={2} />
+                <RenderSteps totalStep={4} currentStep={3} />
                 <Text style={styles.title}>Provide your bank details to receive payments if you charge any event fee to the attendees.</Text>
                 <Input value={bankName} placeholder={'Bank name'} onChangeText={(text) => setbankName(text)} />
                 <Input keyboardType="number-pad" extraStyle={{ marginTop: wp(10) }} value={accountNumber} placeholder={'Account Number'} onChangeText={(text) => setaccountNumber(text)} />
@@ -41,6 +41,7 @@ export default function CreateEvent3() {
                 <Input value={firstName} placeholder={'First name'} onChangeText={(text) => setfirstName(text)} />
                 <Input extraStyle={{ marginTop: wp(10) }} value={middleName} placeholder={'Middle name'} onChangeText={(text) => setmiddleName(text)} />
                 <Input extraStyle={{ marginTop: wp(10) }} value={lastName} placeholder={'Last name'} onChangeText={(text) => setlastName(text)} />
+                <Text style={styles.des}>Your bank details will be used exclusively for event payment processing and will remain secure and confidential.</Text>
                 <CommonButton onPress={() => navigation.navigate(screenName.CreateEvent4)} title={'Next'} extraStyle={{ width: 140, height: 45, alignSelf: 'center', marginTop: 20 }} />
 
             </KeyboardAwareScrollView>
@@ -54,4 +55,9 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginBottom: 5
     },
+    des: {
+        ...FontStyle(14, colors.neutral_900),
+        marginTop: 10,
+        // marginBottom: 5
+    }
 })

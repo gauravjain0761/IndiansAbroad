@@ -32,7 +32,7 @@ export default function CreateEvent2() {
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
             <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
-                <RenderSteps totalStep={4} currentStep={1} />
+                <RenderSteps totalStep={4} currentStep={2} />
                 <View style={[ApplicationStyles.row, { gap: 20 }]}>
                     <TouchableOpacity onPress={() => settype('onSite')} style={styles.radioView}>
                         {type == 'onSite' ? <Image source={Icons.check} style={ImageStyle(20, 20)} /> : <View style={styles.unSelected} />}

@@ -84,12 +84,12 @@ const styles = StyleSheet.create({
   },
   username: {
     ...FontStyle(16, colors.neutral_900, '700'),
-    textAlign: 'justify'
+    // textAlign: 'justify'
   },
   degreeText: {
     marginVertical: 3,
     ...FontStyle(14, colors.neutral_600, "400"),
-    textAlign: 'justify'
+    // textAlign: 'justify'
   },
   degreeText1: {
     // lineHeight:18,

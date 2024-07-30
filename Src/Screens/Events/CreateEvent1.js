@@ -38,7 +38,7 @@ export default function CreateEvent1() {
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
             <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
-                <RenderSteps totalStep={4} currentStep={0} />
+                <RenderSteps totalStep={4} currentStep={1} />
                 <Text style={styles.title}>Please note that once an event is listed, cancellations are not permitted, so ensure your event details and confirmation are final before submission.</Text>
                 <TouchableOpacity onPress={() => onSelectImage()}>
                     {image ?
@@ -46,12 +46,12 @@ export default function CreateEvent1() {
                         :
                         <View style={styles.uploadView}>
                             <Image source={Icons.photoUpload} style={styles.photoUpload} />
-                            <Text style={styles.addText}>Add Photos</Text>
+                            <Text style={styles.addText}>Add Photo</Text>
                         </View>
                     }
                 </TouchableOpacity>
                 <Input extraStyle={styles.input} value={eventTitle} placeholder={'Your Event Title'} onChangeText={(text) => seteventTitle(text)} />
-                <Input keyboardType={'phone-pad'} extraStyle={styles.input} value={contact} placeholder={'Mobile No./Email ID'} onChangeText={(text) => setcontact(text)} />
+                <Input extraStyle={styles.input} value={contact} placeholder={'Mobile No./Email ID'} onChangeText={(text) => setcontact(text)} />
                 <Text style={styles.title}>Provide detailed information about event</Text>
                 <TextInput
                     placeholder={'Description'}

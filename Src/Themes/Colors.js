@@ -5,6 +5,7 @@ const colors = {
   primary_500: '#5071BEFF',
   primary_100: '#FAFAFBFF;',
   primary_4574ca: '#4574CAFF',
+  primary_300: '#F4F6FBFF',
   neutral_400: '#BDC1CAFF',
   neutral_500: '#9095A1FF',
   neutral_200: '#F3F4F6FF',

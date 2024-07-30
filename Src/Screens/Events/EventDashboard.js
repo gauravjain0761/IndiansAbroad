@@ -1,29 +1,17 @@
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, Image, ScrollView, } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, } from 'react-native';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
-import PagerView from 'react-native-pager-view';
-import { fontname, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import { wp } from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import SearchBar from '../../Components/SearchBar';
-import PostCard from '../../Components/PostCard';
-import CreatePost from '../../Components/CreatePost';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { screenName } from '../../Navigation/ScreenConstants';
-import { getalluserposts } from '../../Services/PostServices';
-import { dispatchAction } from '../../utils/apiGlobal';
-import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_ALL_EVENTS, SET_GLOBAL_SEARCH, } from '../../Redux/ActionTypes';
+import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import NoDataFound from '../../Components/NoDataFound';
-import { getFollowerList } from '../../Services/AuthServices';
-import { getDiscussionCountry } from '../../Services/DiscussionServices';
-import { io } from 'socket.io-client';
-import EventDashboardCard from '../../Components/EventDashboardCard';
-import { Icons } from '../../Themes/Icons';
-import RenderEventTicket from '../../Components/RenderEventTicket';
 import RenderUserIcon from '../../Components/RenderUserIcon';
+import RenderOngoingEventTable from '../../Components/RenderOngoingEventTable';
+import RenderDebitedTable from '../../Components/RenderDebitedTable';
+import RenderScanningTable from '../../Components/RenderScanningTable';
 
 export default function EventDashboard() {
     const dispatch = useDispatch();
@@ -40,33 +28,46 @@ export default function EventDashboard() {
                             <Text style={FontStyle(16, colors.neutral_900, '700')}>IndiansAbroad</Text>
                             <Text style={FontStyle(11, colors.neutral_900)}>Community page,London</Text>
                         </View>
-                        <Image source={require('../../assets/Icons/qr-code.png')} style={styles.qrImage} />
+                        <Image source={require('../../assets/Icons/qr-scan.png')} style={styles.qrImage} />
                     </View>
                     <View style={styles.boxView}>
                         <View style={styles.innerBox}>
-                            <Text style={FontStyle(17, colors.neutral_900, '700')}>Balance</Text>
+                            <Text style={FontStyle(16, colors.neutral_900, '700')}>Balance</Text>
                             <Text style={FontStyle(14, colors.neutral_900)}>£630</Text>
                         </View>
                         <View style={styles.innerBox}>
-                            <Text style={FontStyle(17, colors.neutral_900, '700')}>Events</Text>
+                            <Text style={FontStyle(16, colors.neutral_900, '700')}>Events</Text>
                             <Text style={FontStyle(14, colors.neutral_900)}>2</Text>
                         </View>
                     </View>
                     <View style={styles.boxView}>
                         <View style={styles.innerBox}>
-                            <Text style={FontStyle(17, colors.neutral_900, '700')}>Total Bookings</Text>
+                            <Text style={FontStyle(16, colors.neutral_900, '700')}>Total Bookings</Text>
                             <Text style={FontStyle(14, colors.neutral_900)}>890</Text>
                         </View>
                         <View style={styles.innerBox}>
-                            <Text style={FontStyle(17, colors.neutral_900, '700')}>Total Transactions</Text>
+                            <Text style={FontStyle(16, colors.neutral_900, '700')}>Total Transactions</Text>
                             <Text style={FontStyle(14, colors.neutral_900)}>8</Text>
                         </View>
                     </View>
                     <View style={styles.boxView}>
                         <Text style={styles.title}>Ongoing Event</Text>
                     </View>
+                    <RenderOngoingEventTable />
+                    <View style={styles.boxView}>
+                        <Text style={styles.title}>Completed Event</Text>
+                    </View>
+                    <RenderOngoingEventTable showAction={false} />
+                    <View style={styles.boxView}>
+                        <Text style={styles.title}>Debited</Text>
+                    </View>
+                    <RenderDebitedTable />
+                    <View style={styles.boxView}>
+                        <Text style={styles.title}>Scanning Data</Text>
+                    </View>
+                    <RenderScanningTable />
                 </ScrollView>
-                <View style={{ paddingHorizontal: 10 }}>
+                <View style={{ paddingHorizontal: 10, marginTop: 10 }}>
                     <Text style={styles.title}>Withdraw</Text>
                     <View style={styles.withdrawView}>
                         <View style={{ flex: 1, marginVertical: 10, paddingLeft: 5 }}>
@@ -85,7 +86,6 @@ export default function EventDashboard() {
                             </View>
                         </View>
                     </View>
-
                 </View>
             </SafeAreaView>
         </View>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.neutral_300,
     },
     priceViewTotal: {
-        backgroundColor: '#F4F6FBFF',
+        backgroundColor: colors.primary_300,
         alignSelf: 'center',
         flex: 1,
         justifyContent: 'center',
@@ -156,5 +156,5 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingVertical: 15
-    }
+    },
 })

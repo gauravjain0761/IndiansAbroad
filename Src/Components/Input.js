@@ -17,7 +17,7 @@ import RenderUserIcon from './RenderUserIcon';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Dropdown } from 'react-native-element-dropdown';
 
-export default function Input({ value, onChangeText, label, mode = 'date', placeholder, isPassword = false, keyboardType, extraStyle = {}, type, data, valueField, labelField, showCalenderIcon = true }) {
+export default function Input({ value, onChangeText, multiline = false, label, mode = 'date', placeholder, isPassword = false, keyboardType, extraStyle = {}, type, data, valueField, labelField, showCalenderIcon = true }) {
   const [passwordHide, setpasswordHide] = useState(true)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -115,6 +115,7 @@ export default function Input({ value, onChangeText, label, mode = 'date', place
               placeholderTextColor={colors.neutral_500}
               secureTextEntry={isPassword ? passwordHide : false}
               keyboardType={keyboardType ? keyboardType : 'default'}
+              multiline={true}
             />
             {isPassword &&
               <TouchableOpacity onPress={() => setpasswordHide(!passwordHide)}>
@@ -141,6 +142,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 4,
+    minHeight: 56,
+    justifyContent: 'center'
   },
   selectedTextStyle: {
     ...FontStyle(15, colors.neutral_900),
@@ -171,7 +174,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 12,
     // paddingVertical: Platform.OS == 'ios' ? 19 : 6,
-    height: 56
+    // minHeight: 56,
+    textAlignVertical: 'center',
+    // maxHeight: 150,
+    // backgroundColor: 'red',
+    padding: 0
     // marginTop:12
   },
   imageView: {

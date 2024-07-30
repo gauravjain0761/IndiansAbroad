@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20,
     paddingLeft: 20,
-    minHeight: 47
+    minHeight: 47,
   },
   rowView: {
     flexDirection: 'row',

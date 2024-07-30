@@ -27,9 +27,17 @@ export const onGetThreadList = (request) => async dispatch => {
         data: request?.data
     })
         .then(async (response) => {
-            handleSuccessRes(response, request, dispatch, () => {
-                dispatchAction(dispatch, SET_THREAD_LIST, response?.data?.Threads)
-            });
+            if (response?.status === 200 || response?.status === 201) {
+                dispatchAction(dispatch, IS_LOADING, false)
+                if (response?.data && response?.data?.err == 200) {
+                    dispatchAction(dispatch, SET_THREAD_LIST, response?.data?.Threads)
+                } else {
+                    if (response?.data && response?.data?.err == 300) {
+                        dispatchAction(dispatch, SET_THREAD_LIST, response?.data?.Threads)
+                    }
+                    if (request?.onFailure) request.onFailure(response?.data);
+                }
+            }
         })
         .catch(error => {
             handleErrorRes(error, request, dispatch);

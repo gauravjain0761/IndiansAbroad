@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, Image, } from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, Image, Platform, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -280,16 +280,16 @@ export default function HomeScreen() {
               ListEmptyComponent={<NoDataFound />}
             />
           )}
-          <TouchableOpacity onPress={() => onCreateEvent()} style={{ position: 'absolute', bottom: wp(20) + 50, right: wp(20), backgroundColor: colors.white, borderRadius: 50, padding: 2 }}>
+          <TouchableOpacity onPress={() => onCreateEvent()} style={{ position: 'absolute', bottom: wp(20) + (Platform.OS == 'ios' ? 0 : 50), right: wp(20), backgroundColor: colors.white, borderRadius: 50, padding: 2 }}>
             <Image source={Icons.plusPost} style={[ImageStyle(46, 46), { tintColor: '#5278D9FF' }]} />
           </TouchableOpacity>
         </View>
-      </PagerView>
+      </PagerView >
       <CreatePost
         createPostModal={createPostModal}
         setcreatePostModal={setcreatePostModal}
       />
-    </View>
+    </View >
   );
 }
 

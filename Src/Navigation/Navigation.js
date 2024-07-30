@@ -73,6 +73,9 @@ import CreateEvent3 from '../Screens/Events/CreateEvent3';
 import CreateEvent4 from '../Screens/Events/CreateEvent4';
 import SavedEvents from '../Screens/Events/SavedEvents';
 import EventDashboard from '../Screens/Events/EventDashboard';
+import EditEventScreen from '../Screens/Events/EditEventScreen';
+import ListParticipantsScreen from '../Screens/Events/ListParticipantsScreen';
+import AnnouncementScreen from '../Screens/Events/AnnouncementScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -476,6 +479,21 @@ export default function Navigation() {
         options={({ navigation }) => ({ ...headerStyleTransparent })}
         name={screenName.EventDashboard}
         component={EventDashboard}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.EditEventScreen}
+        component={EditEventScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.ListParticipantsScreen}
+        component={ListParticipantsScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.AnnouncementScreen}
+        component={AnnouncementScreen}
       />
     </Stack.Navigator>
   );

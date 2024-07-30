@@ -40,9 +40,9 @@ export default function CreateEvent4() {
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
             <KeyboardAwareScrollView >
                 <View style={{ paddingHorizontal: wp(16) }}>
-                    <RenderSteps totalStep={4} currentStep={2} />
-                    <Text style={styles.titleDes}>Please provide the name of the page owner. In case of any fraudulent or illegitimate activities, they will be held accountable person.</Text>
-                    <Text style={styles.title}>Page Owner*</Text>
+                    <RenderSteps totalStep={4} currentStep={4} />
+                    <Text style={styles.titleDes}>Please provide the name of the responsible person. In case of any fraudulent or illegitimate activities, they will be held accountable person.</Text>
+                    <Text style={styles.title}>Responsible person*</Text>
                     <Input value={name} placeholder={'Name'} onChangeText={(text) => setname(text)} />
                     <Text style={styles.titleDes}>To ensure the legitimacy of our events and protect our community from fraud, we require a passport ID for event submissions. Rest assured, your personal information will remain confidential and will not be shared with anyone for any other purposes.</Text>
                     <Text style={[styles.title, { marginTop: 0, textAlign: 'center' }]}>Upload your Passport ID*</Text>

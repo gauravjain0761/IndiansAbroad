@@ -29,7 +29,7 @@ export default function EventDetailScreen() {
 
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
-            <Header title={''} onlyLabel={'Event Details'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
+            <Header showRight={true} icon={Icons.editEvent} onRightPress={() => navigation.navigate(screenName.EditEventScreen)} title={''} onlyLabel={'Event Details'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
             <ScrollView>
                 <View style={styles.postImage}>
                     <Image source={require('../../assets/Icons/eventImage.jpg')} style={styles.image} />
@@ -66,6 +66,9 @@ export default function EventDetailScreen() {
                 </View>
                 <View style={[styles.blueView, { marginVertical: hp(30) }]}>
                     <CommonButton onPress={() => navigation.navigate(screenName.AttendanceRequestScreen)} title={'Attend'} extraStyle={{ width: 110, height: 50 }} />
+                </View>
+                <View style={[styles.blueView, { marginVertical: hp(30) }]}>
+                    <CommonButton onPress={() => navigation.navigate(screenName.ListParticipantsScreen)} title={'List of Participants'} extraStyle={{ width: 170, height: 50 }} />
                 </View>
             </ScrollView>
         </SafeAreaView>

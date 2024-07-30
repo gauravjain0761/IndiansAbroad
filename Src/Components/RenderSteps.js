@@ -5,7 +5,6 @@ import { Icons } from '../Themes/Icons'
 import { ImageStyle } from '../utils/commonFunction'
 
 export default function RenderSteps({ currentStep, totalStep }) {
-    console.log([...Array(totalStep).keys()])
     return (
         <View style={styles.main}>
             <View style={styles.rows} />

@@ -107,7 +107,7 @@ export default function DeleteModal({
             </TouchableOpacity>
             <Text style={styles.checkText}>
               {
-                'I acknowledge that my personal data linked to my account will be permanently erased and cannot be retrieved. I accept that i will not receive a refund for any remaining duration of my IndiansAbroad premium membership that I have already paid for.'
+                'I acknowledge that my personal data linked to my account will be permanently erased and cannot be retrieved. I accept that I will not receive a refund for any remaining duration of my IndiansAbroad premium membership that I have already paid for.'
               }
             </Text>
           </View>

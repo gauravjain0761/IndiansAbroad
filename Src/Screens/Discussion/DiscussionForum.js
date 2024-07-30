@@ -28,11 +28,13 @@ export default function DiscussionForum() {
   const [refreshing, setRefreshing] = React.useState(false);
   const { discussionCountry, threadList, user } = useSelector(e => e.common)
   useEffect(() => {
-    dispatch(getDiscussionCountry({}))
-  }, [])
+    if (isFocused) { dispatch(getDiscussionCountry({})) }
+  }, [isFocused])
   useEffect(() => {
     if (discussionCountry) {
       let temp = discussionCountry.filter(obj => obj.isSelected)
+
+
       getThreadsList(temp[0]?._id, searchText)
     }
   }, [discussionCountry, searchText])
@@ -44,6 +46,7 @@ export default function DiscussionForum() {
   }, []);
 
   const getThreadsList = (id, search) => {
+    console.log('calleddd-----', id)
     let obj = {
       data: {
         page: 0,
