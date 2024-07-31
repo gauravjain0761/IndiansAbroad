@@ -74,7 +74,7 @@ export default function DiscussionForumDetail() {
     }
 
     const RenderItem = ({ item, itemIndex }) => {
-        return <RenderComment isThread={true} item={item} onLikeComment={() => onLikeComment(item)} onOpenReplies={() => onOpenReplies(item)} onDelete={() => {
+        return <RenderComment isThread={true} item={item} onOpenReplies={() => onOpenReplies(item)} onDelete={() => {
             setselectedComment(item)
             setdeleteModal(true)
         }} />

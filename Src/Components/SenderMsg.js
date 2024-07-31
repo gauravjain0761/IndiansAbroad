@@ -23,11 +23,14 @@ const SenderMsg = ({ data }) => {
             <TouchableOpacity
               onLongPress={showMenu}
               style={styles.boxContainer}>
-              {/* <Text style={styles.nameTextStyle}>{'You'}</Text> */}
-              <Text style={styles.msgTextStyle}>{data?.content}</Text>
-              <Text style={styles.timeTextStyle}>
+              <Text style={styles.nameTextStyle}>{'You'}</Text>
+              <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { opacity: 0 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
+              <Text style={[styles.timeTextStyle, {
+                marginTop: -13,
+              }]}>
                 {moment(data?.createdAt).format('HH:mm')}
               </Text>
+
             </TouchableOpacity>
           }
           onRequestClose={hideMenu}>
@@ -59,7 +62,7 @@ const SenderMsg = ({ data }) => {
 
 const styles = StyleSheet.create({
   conatiner: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     maxWidth: SCREEN_WIDTH - wp(50),
     marginHorizontal: wp(10),
     marginBottom: hp(10),
@@ -73,27 +76,26 @@ const styles = StyleSheet.create({
   boxContainer: {
     borderRadius: wp(5),
     backgroundColor: colors.primary_500,
-    flexDirection: 'row'
   },
   nameTextStyle: {
-    ...FontStyle(14, colors.white, '900'),
+    ...FontStyle(14, colors.white, '700'),
+    paddingHorizontal: wp(10),
+    paddingTop: wp(5)
   },
   msgTextStyle: {
     ...FontStyle(14, colors.white, '400'),
-    paddingHorizontal: wp(15),
-    paddingVertical: wp(8)
-    // marginTop: hp(5),
+    paddingHorizontal: wp(10),
+    paddingBottom: wp(5),
   },
   columnContainer: {
     marginLeft: wp(10),
   },
   timeTextStyle: {
     ...FontStyle(10, colors.white, '400'),
-    // marginTop: hp(5),
     textAlign: 'right',
     alignSelf: 'flex-end',
     paddingHorizontal: 4,
-    paddingVertical: 3
+    paddingBottom: 3,
   },
   menuStyle: {
     backgroundColor: colors.neutral_400,

@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
@@ -21,7 +21,9 @@ export default function PasswordChangeSuccess() {
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <Header showLeft logoShow={false} />
+                <SafeAreaView>
+                    <Header showLeft logoShow={false} />
+                </SafeAreaView>
                 <View style={styles.hightView}>
                     <Image source={Icons.checkCircle} style={ImageStyle(130, 130)} />
                     <Text style={styles.des}>Paasword changed successfully</Text>

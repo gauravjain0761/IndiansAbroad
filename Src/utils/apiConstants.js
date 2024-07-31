@@ -83,6 +83,7 @@ export const api = {
 
   //chat
   chatRoom: '/chat/list/personal',
+  groupRoom: '/chat/list/groups',
   message: '/message/listall',
 };
 

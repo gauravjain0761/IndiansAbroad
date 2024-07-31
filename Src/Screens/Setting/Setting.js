@@ -14,7 +14,7 @@ export default function Setting() {
     const navigation = useNavigation()
     let data = [
         { title: 'Edit Profile', onPress: () => { navigation.navigate('EditProfile') } },
-        { title: 'Change Phone Number', onPress: () => { navigation.navigate(screenName.ChangePhone) } },
+        // { title: 'Change Phone Number', onPress: () => { navigation.navigate(screenName.ChangePhone) } },
         { title: 'Change Password', onPress: () => { navigation.navigate(screenName.ChangePasswordEmail) } },
         { title: 'Subscription', onPress: () => { navigation.navigate(screenName.Subscription) } },
         { title: 'Blocked Users', onPress: () => { navigation.navigate(screenName.BlockedUsers) } },

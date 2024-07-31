@@ -35,6 +35,8 @@ import {
   MY_PAGES,
   SET_PAGE_CONNECT_POST,
   SET_PAGE_DETAIL,
+  SET_ACTIVE_CHAT_ROOM_USER,
+  GET_GROUP_ROOMS,
 } from './ActionTypes';
 
 const initialState = {
@@ -64,9 +66,13 @@ const initialState = {
   countries: undefined,
   mainFollowerList: undefined,
   chatRoomList: [],
+  allChatRoomCount: 0,
+  groupRoomList: [],
+  allGroupRoomCount: 0,
   chatMessageList: [],
   myPage: undefined,
-  pageDetail: undefined
+  pageDetail: undefined,
+  activeChatRoomUser: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -380,7 +386,24 @@ export default function (state = initialState, action) {
       return { ...state, mainFollowerList: action.payload };
     }
     case GET_CHAT_ROOMS: {
-      return { ...state, chatRoomList: action.payload };
+      return {
+        ...state,
+        chatRoomList:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.chatRoomList, ...action.payload.data],
+        allChatRoomCount: action.payload.count,
+      };
+    }
+    case GET_GROUP_ROOMS: {
+      return {
+        ...state,
+        groupRoomList:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.groupRoomList, ...action.payload.data],
+        allGroupRoomCount: action.payload.count,
+      };
     }
     case GET_CHAT_MESSAGES: {
       return { ...state, chatMessageList: action.payload };
@@ -390,6 +413,9 @@ export default function (state = initialState, action) {
     }
     case SET_PAGE_DETAIL: {
       return { ...state, pageDetail: action.payload }
+    }
+    case SET_ACTIVE_CHAT_ROOM_USER: {
+      return { ...state, activeChatRoomUser: action.payload }
     }
     default:
       return state;

@@ -1,12 +1,16 @@
 import {
+  ActivityIndicator,
+  Animated,
+  Dimensions,
   FlatList,
   Image,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { FontStyle } from '../../utils/commonFunction';
@@ -17,29 +21,85 @@ import { Icons } from '../../Themes/Icons';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import ConnectCard from '../../Components/ConnectCard';
 import { screenName } from '../../Navigation/ScreenConstants';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import ChatCard from '../../Components/ChatCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { getChatMessage, getChatRooms } from '../../Services/ChatServices';
+import { getChatMessage, getChatRooms, getGroupRooms } from '../../Services/ChatServices';
+import { dispatchAction } from '../../utils/apiGlobal';
+import { GET_CHAT_MESSAGES, SET_ACTIVE_CHAT_ROOM_USER } from '../../Redux/ActionTypes';
+import PagerView from 'react-native-pager-view';
+import NoDataFound from '../../Components/NoDataFound';
 
 export default function ChatScreen() {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
   const { navigate } = useNavigation();
-  const { user, chatRoomList } = useSelector(e => e.common);
+  const { user, chatRoomList, groupRoomList, allChatRoomCount, allGroupRoomCount } = useSelector(e => e.common);
+  const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
+  const [tabSelection, setTabSelection] = useState('personal');
+  const buttonTranslateX = useRef(new Animated.Value(0)).current;
+  const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setloading] = useState(false);
+  const [page, setpage] = useState(1)
+  const isFocuse = useIsFocused();
+
+  console.log('allChatRoomCount--', allChatRoomCount)
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getData(1)
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
+    if (isFocuse) { getData(1) }
+  }, [tabSelection, isFocuse])
+  const getData = (page) => {
+    if (tabSelection == 'personal') {
+      getPersonalchats(page);
+    } else {
+      ongetGroupRooms(page)
+    }
+  }
+
+  const getPersonalchats = (page) => {
     let obj = {
       data: {
         curruntUser: user._id,
         searchText: '',
-        page: 1,
+        page: page,
+        // limit: 5
       },
-      onSuccess: () => { },
+      onSuccess: () => {
+        setpage(page);
+      },
     };
     dispatch(getChatRooms(obj));
-  }, []);
+  }
+
+  const ongetGroupRooms = (page) => {
+    let obj = {
+      data: {
+        curruntUser: user._id,
+        searchText: '',
+        page: page,
+      },
+      onSuccess: () => {
+        setpage(page);
+      },
+    };
+    dispatch(getGroupRooms(obj));
+  }
+  useEffect(() => {
+    Animated.timing(buttonTranslateX, {
+      toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
+      duration: 400,
+    }).start();
+  }, [isLeftButtonActive]);
+  const ref = React.createRef(PagerView);
 
   const ChatList = () => {
     return (
@@ -57,7 +117,28 @@ export default function ChatScreen() {
     );
   };
 
+  const fetchMoreData = () => {
+    if (tabSelection == 'personal') {
+      if (chatRoomList) {
+        if (chatRoomList.length < allChatRoomCount) {
+          setloading(true);
+          getPersonalchats(page);
+        }
+      }
+    } else {
+      if (groupRoomList) {
+        if (groupRoomList.length < allGroupRoomCount) {
+          setloading(true);
+          ongetGroupRooms(page);
+        }
+      }
+    }
+  };
+
   const onPressItem = (item, currentUser) => {
+    dispatchAction(dispatch, GET_CHAT_MESSAGES, []);
+    dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser, chatId: item._id })
+    navigate(screenName.Messaging);
     let obj = {
       data: {
         search: '',
@@ -67,7 +148,7 @@ export default function ChatScreen() {
         userId: user._id,
       },
       onSuccess: () => {
-        navigate(screenName.Messaging, { currentUser, chatId: item._id });
+
       },
     };
     dispatch(getChatMessage(obj));
@@ -84,36 +165,139 @@ export default function ChatScreen() {
           chatRightPress={() => navigate(screenName.CreateGroup)}
         />
       </SafeAreaView>
-      <Text style={styles.chatText}>Chat Room</Text>
-      <SearchBar
-        value={searchText}
-        onChangeText={text => setSearchText(text)}
-        placeholder={'Search Chats here'}
-      />
-      {/* <ChatList /> */}
-      <FlatList
-        style={{
-          paddingHorizontal: wp(8),
-          paddingTop: hp(10),
-        }}
-        columnWrapperStyle={{
-          width: '100%',
-          columnGap: wp(5),
-          rowGap: hp(10),
-        }}
-        numColumns={2}
-        bounces={false}
-        data={chatRoomList}
-        renderItem={({ item }) => {
-          return (
-            <ChatCard
-              data={item}
-              cardPress={currentUser => onPressItem(item, currentUser)}
-            />
+      <View style={styles.tabMainView}>
+        <TouchableOpacity
+          onPress={() => {
+            setTabSelection('personal');
+            setIsLeftButtonActive(true);
+            ref.current?.setPage(0);
+          }}
+          style={styles.tabItemView}>
+          <Text style={tabSelection == 'personal' ? styles.selectedText : styles.unSewlectedText}>
+            {'Chat Room'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setTabSelection('group');
+            ref.current?.setPage(1);
+            setIsLeftButtonActive(false);
+          }}
+          style={styles.tabItemView}>
+          <Text style={tabSelection == 'group' ? styles.selectedText : styles.unSewlectedText}>
+            {'Group Room'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <PagerView
+        style={{ flex: 1 }}
+        initialPage={tabSelectionIndex}
+        ref={ref}
+        onPageSelected={e => {
+          setTabSelection(
+            e?.nativeEvent?.position == 0 ? 'personal' : 'group',
           );
-        }}
-        showsVerticalScrollIndicator={false}
-      />
+          setTabSelectionIndex(e?.nativeEvent?.position);
+          setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
+        }}>
+        <View key={'1'}>
+          <SearchBar
+            value={searchText}
+            onChangeText={text => setSearchText(text)}
+            placeholder={'Search Chats here'}
+          />
+          {/* <ChatList /> */}
+          {chatRoomList && <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            style={{
+              paddingHorizontal: wp(8),
+              paddingTop: hp(10),
+            }}
+            columnWrapperStyle={{
+              width: '100%',
+              columnGap: wp(5),
+              rowGap: hp(10),
+            }}
+            numColumns={2}
+            bounces={false}
+            data={chatRoomList}
+            renderItem={({ item }) => {
+              return (
+                <ChatCard
+                  data={item}
+                  cardPress={currentUser => onPressItem(item, currentUser)}
+                />
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            onEndReached={fetchMoreData}
+            onEndReachedThreshold={0.3}
+            ListFooterComponent={() => {
+              return (
+                <View>
+                  {chatRoomList && loading && (
+                    <ActivityIndicator size={'large'} color={colors.black} />
+                  )}
+                  <View style={{ height: 50 }} />
+                </View>
+              );
+            }}
+            ListEmptyComponent={<NoDataFound />}
+          />}
+        </View>
+        <View key={'2'}>
+          <SearchBar
+            value={searchText}
+            onChangeText={text => setSearchText(text)}
+            placeholder={'Search Chats here'}
+          />
+          {/* <ChatList /> */}
+          {groupRoomList && <FlatList
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            style={{
+              paddingHorizontal: wp(8),
+              paddingTop: hp(10),
+            }}
+            columnWrapperStyle={{
+              width: '100%',
+              columnGap: wp(5),
+              rowGap: hp(10),
+            }}
+            numColumns={2}
+            bounces={false}
+            data={groupRoomList}
+            renderItem={({ item }) => {
+              return (
+                <ChatCard
+                  data={item}
+                  isGroup={item?.isGroupChat}
+                  cardPress={() => { }}
+                />
+              );
+            }}
+            showsVerticalScrollIndicator={false}
+            onEndReached={fetchMoreData}
+            onEndReachedThreshold={0.3}
+            ListFooterComponent={() => {
+              return (
+                <View>
+                  {groupRoomList && loading && (
+                    <ActivityIndicator size={'large'} color={colors.black} />
+                  )}
+                  <View style={{ height: 50 }} />
+                </View>
+              );
+            }}
+            ListEmptyComponent={<NoDataFound />}
+          />}
+        </View>
+      </PagerView>
+
     </View>
   );
 }
@@ -150,4 +334,19 @@ const styles = StyleSheet.create({
     top: -8,
     ...FontStyle(12, colors.neutral_600),
   },
+  tabMainView: {
+    flexDirection: 'row',
+    // top: -8,
+    // alignSelf:'center'
+    justifyContent: 'space-around',
+  },
+  tabItemView: {
+    // flex: 1,
+    paddingBottom: wp(14),
+    paddingHorizontal: wp(14),
+    borderRadius: 50,
+    alignItems: 'center',
+  },
+  selectedText: FontStyle(14, colors.tertiary1_500, '700'),
+  unSewlectedText: FontStyle(14, colors.neutral_900, '700'),
 });

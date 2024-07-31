@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,10 @@ import colors from '../../Themes/Colors';
 import SenderMsg from '../../Components/SenderMsg';
 import ChatInput from '../../Components/ChatInput';
 import { useSelector } from 'react-redux';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { io } from 'socket.io-client';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { sendData } from '../../Socket/Socket';
 
 let data = [
   {
@@ -77,29 +79,22 @@ let data = [
 ];
 
 const Messaging = () => {
-  const { chatMessageList, user } = useSelector(e => e.common);
-  const { params } = useRoute();
+  const { chatMessageList, user, activeChatRoomUser } = useSelector(e => e.common);
+  const navigation = useNavigation()
 
   useEffect(() => {
-    const mSocket = io('https://express.indiansabroad.online/');
-    mSocket.emit('joinRoom', params?.chatId);
-
-    mSocket.on('msgReceive', data => {
-      console.log('msgReceive', data);
-    });
-    mSocket.on('msgReceiveSelf', data => {
-      console.log('damsgReceiveSelfta', data);
-    });
+    sendData('joinRoom', activeChatRoomUser?.chatId)
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <ChatHeader
-        url={params?.currentUser?.avtar}
+        url={activeChatRoomUser?.currentUser?.avtar}
         name={
-          params?.currentUser?.first_Name + ' ' + params?.currentUser?.last_Name
+          activeChatRoomUser?.currentUser?.first_Name + ' ' + activeChatRoomUser?.currentUser?.last_Name
         }
-        subscribedMember={params?.currentUser?.subscribedMember}
+        subscribedMember={activeChatRoomUser?.currentUser?.subscribedMember}
+        onPressName={() => navigation.navigate(screenName.PersonalUserDetailScreen, { user: activeChatRoomUser?.currentUser })}
       />
       <FlatList
         inverted
@@ -116,6 +111,7 @@ const Messaging = () => {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
         <ChatInput />
       </KeyboardAvoidingView>
+
     </SafeAreaView>
   );
 };

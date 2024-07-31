@@ -1095,6 +1095,14 @@ PODS:
   - React-Mapbuffer (0.74.2):
     - glog
     - React-debug
+  - react-native-camera (4.2.1):
+    - React-Core
+    - react-native-camera/RCT (= 4.2.1)
+    - react-native-camera/RN (= 4.2.1)
+  - react-native-camera/RCT (4.2.1):
+    - React-Core
+  - react-native-camera/RN (4.2.1):
+    - React-Core
   - react-native-create-thumbnail (2.0.0):
     - React-Core
   - react-native-document-picker (9.3.0):
@@ -1450,6 +1458,8 @@ PODS:
     - RNNotifee/NotifeeCore (= 7.8.2)
   - RNNotifee/NotifeeCore (7.8.2):
     - React-Core
+  - RNPermissions (4.1.5):
+    - React-Core
   - RNReanimated (3.12.0):
     - DoubleConversion
     - glog
@@ -1565,6 +1575,7 @@ DEPENDENCIES:
   - React-jsitracing (from `../node_modules/react-native/ReactCommon/hermes/executor/`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-create-thumbnail (from `../node_modules/react-native-create-thumbnail`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -1602,6 +1613,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -1693,6 +1705,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-create-thumbnail:
     :path: "../node_modules/react-native-create-thumbnail"
   react-native-document-picker:
@@ -1767,6 +1781,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-crop-picker"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1824,6 +1840,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 0fa7f78d8fdda794667cb2e6f19c874c1cf31d7e
   React-logger: 29fa3e048f5f67fe396bc08af7606426d9bd7b5d
   React-Mapbuffer: bf56147c9775491e53122a94c423ac201417e326
+  react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-create-thumbnail: ab55d24aea01723cf386f18b0b542aabb1982f27
   react-native-document-picker: 5b97e24a7f1a1e4a50a72c540a043f32d29a70a2
   react-native-pager-view: f848f89049a8e888d38f10ff31588eb63292a95f
@@ -1861,6 +1878,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8dbcccada4a7e702e7dec9338c251b1cf393c960
   RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
+  RNPermissions: f61ebf52bb670809d522bba0b09b3e6a9ea5ab7e
   RNReanimated: 8978449b2a511388ea71faf1e66f669134e87658
   RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
   RNVectorIcons: 2a2f79274248390b80684ea3c4400bd374a15c90
@@ -1870,6 +1888,6 @@ SPEC CHECKSUMS:
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   Yoga: ae3c32c514802d30f687a04a6a35b348506d411f
 
-PODFILE CHECKSUM: b57357c954a8e35a834a812c07bf0fc465b213b1
+PODFILE CHECKSUM: 22a8b50526d69be26f2c8792b7b3cd9b3f01dc7b
 
 COCOAPODS: 1.15.2

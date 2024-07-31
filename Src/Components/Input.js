@@ -115,7 +115,7 @@ export default function Input({ value, onChangeText, multiline = false, label, m
               placeholderTextColor={colors.neutral_500}
               secureTextEntry={isPassword ? passwordHide : false}
               keyboardType={keyboardType ? keyboardType : 'default'}
-              multiline={true}
+              multiline={isPassword ? false : true}
             />
             {isPassword &&
               <TouchableOpacity onPress={() => setpasswordHide(!passwordHide)}>

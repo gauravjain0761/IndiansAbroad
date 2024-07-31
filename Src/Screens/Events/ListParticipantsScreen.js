@@ -1,5 +1,5 @@
-import { StyleSheet, View, SafeAreaView, Image, Text, TouchableOpacity, TextInput, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, View, SafeAreaView, Image, Text, TouchableOpacity, FlatList } from 'react-native'
+import React from 'react'
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
@@ -7,13 +7,8 @@ import { FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { screenName } from '../../Navigation/ScreenConstants';
-import { SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { wp } from '../../Themes/Fonts';
 import { Icons } from '../../Themes/Icons';
-import CommonButton from '../../Components/CommonButton';
-import ImageCropPicker from 'react-native-image-crop-picker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Input from '../../Components/Input';
-import { currenciesArray } from '../../utils/constants';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 export default function ListParticipantsScreen() {
     const navigation = useNavigation()
@@ -41,7 +36,7 @@ export default function ListParticipantsScreen() {
                     <Image source={Icons.megaphone} style={[ImageStyle(26, 26), { marginHorizontal: 10 }]} />
                 </TouchableOpacity>
             </View>
-            <View>
+            <View style={ApplicationStyles.flex}>
                 <FlatList
                     data={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 11, 23]}
                     renderItem={renderItem}

@@ -1,4 +1,4 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
@@ -41,7 +41,9 @@ export default function NewPassword() {
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <Header showLeft logoShow={false} />
+                <SafeAreaView>
+                    <Header showLeft logoShow={false} />
+                </SafeAreaView>
                 <View style={{ marginHorizontal: wp(20) }}>
                     <Text style={styles.title}>Reset Password</Text>
                     <Text style={styles.des}>Set your new password</Text>

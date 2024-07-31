@@ -60,5 +60,8 @@ export const screenName = {
   EventDashboard: "EventDashboard",
   EditEventScreen: "EditEventScreen",
   AnnouncementScreen: "AnnouncementScreen",
-  ListParticipantsScreen: "ListParticipantsScreen"
+  ListParticipantsScreen: "ListParticipantsScreen",
+  QRSuccessScreen: "QRSuccessScreen",
+  QRScannerScreen: "QRScannerScreen",
+  PersonalUserDetailScreen: "PersonalUserDetailScreen"
 };

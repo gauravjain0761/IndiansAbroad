@@ -1,5 +1,5 @@
-import {GET_CHAT_MESSAGES, GET_CHAT_ROOMS} from '../Redux/ActionTypes';
-import {POST, api} from '../utils/apiConstants';
+import { GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS } from '../Redux/ActionTypes';
+import { POST, api } from '../utils/apiConstants';
 import {
   dispatchAction,
   handleErrorRes,
@@ -15,7 +15,7 @@ export const getChatRooms = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
-        dispatchAction(dispatch, GET_CHAT_ROOMS, response.data?.data);
+        dispatchAction(dispatch, GET_CHAT_ROOMS, { ...response?.data, current_page: request?.data?.page });
       });
     })
     .catch(error => {
@@ -32,6 +32,22 @@ export const getChatMessage = request => async dispatch => {
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, GET_CHAT_MESSAGES, response.data.data);
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getGroupRooms = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.groupRoom,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, GET_GROUP_ROOMS, { ...response?.data, current_page: request?.data?.page });
       });
     })
     .catch(error => {

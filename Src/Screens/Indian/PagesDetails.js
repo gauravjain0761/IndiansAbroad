@@ -41,20 +41,11 @@ import PageConnectedIndians from '../../Components/PageConnectedIndians';
 import { onGetPageDetail } from '../../Services/PostServices';
 
 export default function PagesDetails() {
-  const tabs = [
-    { id: 1, label: 'Posts' },
-    { id: 2, label: 'Connected Indians' },
-  ];
-  const showCurrent = false;
 
   const navigation = useNavigation();
   const { navigate, goBack } = useNavigation();
-  const [tabType, setTabType] = useState('All');
   const [searchText, setSearchText] = useState('');
-  const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('ABOUT');
-  const buttonTranslateX = useRef(new Animated.Value(0)).current;
-  const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [deletePop, setDeletePop] = useState(false);
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);

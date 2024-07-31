@@ -34,13 +34,15 @@ const ReciverMsg = ({ data }) => {
               <TouchableOpacity
                 onLongPress={showMenu}
                 style={styles.boxContainer}>
-                {/* <Text style={styles.nameTextStyle}>
+                <Text style={styles.nameTextStyle}>
                   {data?.createdBy?.first_Name +
                     ' ' +
                     data?.createdBy?.last_Name}
-                </Text> */}
-                <Text style={styles.msgTextStyle}>{data?.content}</Text>
-                <Text style={styles.timeTextStyle}>
+                </Text>
+                <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { opacity: 0 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
+                <Text style={[styles.timeTextStyle, {
+                  marginTop: -13,
+                }]}>
                   {moment(data?.createdAt).format('HH:mm')}
                 </Text>
               </TouchableOpacity>
@@ -67,7 +69,7 @@ const ReciverMsg = ({ data }) => {
 const styles = StyleSheet.create({
   conatiner: {
     flexDirection: 'row',
-    maxWidth: SCREEN_WIDTH - wp(50),
+    maxWidth: SCREEN_WIDTH - wp(100),
     marginHorizontal: wp(10),
     marginBottom: hp(10),
     // alignItems: 'center'
@@ -80,29 +82,27 @@ const styles = StyleSheet.create({
   boxContainer: {
     borderRadius: wp(5),
     backgroundColor: colors.neutral_300,
-    flexDirection: 'row'
+    // flexDirection: 'row'
   },
   nameTextStyle: {
-    ...FontStyle(14, colors.neutral_900, '900'),
+    ...FontStyle(14, colors.neutral_900, '700'),
+    paddingHorizontal: wp(10),
+    paddingTop: wp(5)
   },
   msgTextStyle: {
     ...FontStyle(14, colors.neutral_900, '400'),
-    paddingHorizontal: wp(15),
-    paddingVertical: wp(8)
+    paddingHorizontal: wp(10),
+    paddingBottom: wp(5),
   },
   columnContainer: {
     marginLeft: wp(10),
   },
   timeTextStyle: {
-    // ...FontStyle(10, colors.neutral_500, '400'),
-    // marginTop: hp(5),
-
     ...FontStyle(10, colors.neutral_900, '400'),
-    // marginTop: hp(5),
     textAlign: 'right',
     alignSelf: 'flex-end',
     paddingHorizontal: 4,
-    paddingVertical: 3
+    paddingBottom: 3,
 
   },
   menuStyle: {

@@ -86,9 +86,7 @@ export default function ChangePhoneVerify() {
             />
           }
         />
-        <CommonButton title={'Verify'} onPress={() => {
-
-        }} extraStyle={[styles.btnView, { marginTop: 25 }]} />
+        <CommonButton title={'Verify'} onPress={() => { }} extraStyle={[styles.btnView, { marginTop: 25 }]} />
         <TouchableOpacity
           style={[
             styles.btnView,

@@ -21,15 +21,36 @@ export default function LikesScreen() {
     const dispatch = useDispatch()
     const { params } = useRoute()
     const navigation = useNavigation()
+    const [followList, setfollowList] = useState([])
+
+
+    const onSearchName = (search) => {
+        let list = likedUserList
+        const filtered = list.filter((val) =>
+            val.first_Name.toLowerCase().includes(search.toLowerCase())
+        );
+        const filter2 = list.filter((val) =>
+            val.last_Name.toLowerCase().includes(search.toLowerCase())
+        );
+        let searchTextContact = Object.values(
+            filtered.concat(filter2).reduce((r, o) => {
+                r[o._id] = o;
+                return r;
+            }, {})
+        );
+        setfollowList(searchTextContact)
+    }
+
+    useEffect(() => {
+        setfollowList(likedUserList)
+    }, [likedUserList])
+
 
     useEffect(() => {
         dispatch(onGetLikedUserList({
             data: { postId: params?.postId }
         }))
     }, [])
-
-
-
 
     const renderItem = ({ item, index }) => {
         return (
@@ -55,13 +76,13 @@ export default function LikesScreen() {
                 <Text style={styles.chatText}>Likes</Text>
                 <SearchBar
                     value={searchText}
-                    onChangeText={text => setSearchText(text)}
+                    onChangeText={text => { setSearchText(text), onSearchName(text) }}
                     placeholder={'Search'}
                 />
             </View>
             <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
-                {likedUserList && <FlatList
-                    data={likedUserList}
+                {followList && <FlatList
+                    data={followList}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<NoDataFound />}

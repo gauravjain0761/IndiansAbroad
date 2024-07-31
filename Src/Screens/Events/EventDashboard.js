@@ -12,6 +12,7 @@ import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderOngoingEventTable from '../../Components/RenderOngoingEventTable';
 import RenderDebitedTable from '../../Components/RenderDebitedTable';
 import RenderScanningTable from '../../Components/RenderScanningTable';
+import { screenName } from '../../Navigation/ScreenConstants';
 
 export default function EventDashboard() {
     const dispatch = useDispatch();
@@ -28,7 +29,9 @@ export default function EventDashboard() {
                             <Text style={FontStyle(16, colors.neutral_900, '700')}>IndiansAbroad</Text>
                             <Text style={FontStyle(11, colors.neutral_900)}>Community page,London</Text>
                         </View>
-                        <Image source={require('../../assets/Icons/qr-scan.png')} style={styles.qrImage} />
+                        <TouchableOpacity onPress={() => navigation.navigate(screenName.QRScannerScreen)}>
+                            <Image source={require('../../assets/Icons/qr-scan.png')} style={styles.qrImage} />
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.boxView}>
                         <View style={styles.innerBox}>

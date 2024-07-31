@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
@@ -23,6 +23,9 @@ import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../../Navigation/ScreenConstants';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { IS_LOADING } from '../../Redux/ActionTypes';
+import { dispatchAction } from '../../utils/apiGlobal';
+import { getFollowerList } from '../../Services/AuthServices';
 
 export default function MyConnections() {
   const { navigate, goBack } = useNavigation();
@@ -30,20 +33,49 @@ export default function MyConnections() {
   const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
   const [tabSelection, setTabSelection] = useState('INDIANS');
   const dispatch = useDispatch();
+  const { followerList, user } = useSelector(e => e.common)
+  const [followList, setfollowList] = useState([])
+
+
+  const onSearchName = (search) => {
+    let list = followerList
+    const filtered = list.filter((val) =>
+      val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    const filter2 = list.filter((val) =>
+      val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    let searchTextContact = Object.values(
+      filtered.concat(filter2).reduce((r, o) => {
+        r[o._id] = o;
+        return r;
+      }, {})
+    );
+    setfollowList(searchTextContact)
+  }
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
+    setfollowList(followerList)
+  }, [followerList])
+
+  useEffect(() => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    dispatch(getFollowerList({
+      data: { userId: user?._id, search: '' }
+    }))
   }, []);
 
-  const renderItem = () => {
+  const renderItem = ({ item, index }) => {
     return (
-      <>
+      <View key={index}>
         <TouchableOpacity style={[ApplicationStyles.row, styles.listView]}>
-          <RenderUserIcon height={45} />
-          <Text style={styles.listText}>das</Text>
+          <RenderUserIcon url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
+          <Text numberOfLines={1} style={styles.listText}>
+            {item?.followingId.first_Name} {item?.followingId.last_Name}
+          </Text>
         </TouchableOpacity>
         <View style={styles.lineStyle} />
-      </>
+      </View>
     );
   };
 
@@ -59,16 +91,17 @@ export default function MyConnections() {
         <Text style={styles.chatText}>My connections</Text>
         <SearchBar
           value={searchText}
-          onChangeText={text => setSearchText(text)}
+          onChangeText={text => { setSearchText(text), onSearchName(text) }}
           placeholder={'Search'}
+        // containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
         />
       </View>
-      <View style={{ paddingHorizontal: 0, marginTop: 8 }}>
-        <FlatList
-          data={[1, 2, 1, 2, 3, 4, 5, 6]}
+      <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
+        {followList && <FlatList
+          data={followList}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
-        />
+        />}
       </View>
     </SafeAreaView>
   );

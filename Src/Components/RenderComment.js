@@ -16,7 +16,7 @@ export default function RenderComment({
     onLikeComment,
     onOpenReplies,
     onDelete,
-    isThread = false
+    isThread = false,
 }) {
     const { user } = useSelector(e => e.common)
     const navigation = useNavigation()
@@ -43,10 +43,10 @@ export default function RenderComment({
                             {/* <Text style={styles.commentText2}>{item?.comment}</Text> */}
                         </TouchableOpacity>
                         <View style={styles.innerRow}>
-                            <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
+                            {!isThread && <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
                                 <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
                                 <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                             <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
                                 <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
                                 <Text style={styles.likesText}>{item?.replyCount} {isThread ? 'Respond' : 'Reply'}</Text>

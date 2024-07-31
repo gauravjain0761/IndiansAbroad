@@ -22,6 +22,7 @@ import { getDiscussionCountry } from '../../Services/DiscussionServices';
 import { io } from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
 import { Icons } from '../../Themes/Icons';
+import { socket, socketConnect } from '../../Socket/Socket';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -39,20 +40,24 @@ export default function HomeScreen() {
   const [loading, setloading] = useState(false);
 
   useEffect(() => {
-    const socket = io('https://express.indiansabroad.online/');
-    // Listen for the 'connect' event
-    socket.on('connect', () => {
-      console.log('Connected to the server:::');
+
+    socketConnect(dispatch, (flag) => {
+      if (flag) {
+        /**
+         * Client server socket connection true so
+         */
+      } else {
+        /**
+         * Client server socket connection fail so
+         * TODO: Refresh popup code Goes here
+         */
+      }
     });
 
-    // Listen for the 'disconnect' event
-    socket.on('disconnect', () => {
-      console.log('Disconnected from the server');
-    });
-    return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-    };
+    // return () => {
+    //   socket.off('connect');
+    //   socket.off('disconnect');
+    // };
   }, []);
 
   const onRefresh = React.useCallback(() => {

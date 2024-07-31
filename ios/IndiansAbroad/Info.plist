@@ -41,6 +41,8 @@
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Update your profile picture using the photo library</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>For qr scanner</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenSans-Light.ttf</string>

@@ -55,7 +55,7 @@ import PaymentModalScreen from '../Screens/Auth/PaymentModalScreen';
 import SplashScreen from '../Screens/Auth/SplashScreen';
 import MediaScreen from '../Screens/Home/MediaScreen';
 import SecurityScreen from '../Screens/Auth/SecurityScreen';
-import Messaging from '../Screens/Setting/Messaging';
+import Messaging from '../Screens/Chat/Messaging';
 import ForgotPassword from '../Screens/Auth/ForgotPassword';
 import NewPassword from '../Screens/Auth/NewPassword';
 import PasswordChangeSuccess from '../Screens/Auth/PasswordChangeSuccess';
@@ -76,6 +76,9 @@ import EventDashboard from '../Screens/Events/EventDashboard';
 import EditEventScreen from '../Screens/Events/EditEventScreen';
 import ListParticipantsScreen from '../Screens/Events/ListParticipantsScreen';
 import AnnouncementScreen from '../Screens/Events/AnnouncementScreen';
+import QRScannerScreen from '../Screens/Events/QRScannerScreen';
+import QRSuccessScreen from '../Screens/Events/QRSuccessScreen';
+import PersonalUserDetailScreen from '../Screens/Chat/PersonalUserDetailScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -494,6 +497,21 @@ export default function Navigation() {
         options={({ navigation }) => ({ ...headerStyleTransparent })}
         name={screenName.AnnouncementScreen}
         component={AnnouncementScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.QRScannerScreen}
+        component={QRScannerScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.QRSuccessScreen}
+        component={QRSuccessScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ ...headerStyleTransparent })}
+        name={screenName.PersonalUserDetailScreen}
+        component={PersonalUserDetailScreen}
       />
     </Stack.Navigator>
   );

@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     },
     blueButton: {
         backgroundColor: colors.buttonBlue,
-        paddingVertical: 10,
+        // paddingVertical: 10,
         height: 55,
         alignItems: 'center',
         justifyContent: 'center',
