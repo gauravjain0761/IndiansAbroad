@@ -10,10 +10,12 @@ import ApplicationStyles from '../Themes/ApplicationStyles';
 import App from '../App';
 import { screenName } from '../Navigation/ScreenConstants';
 import MessageScreenMoreMenu from './MessageScreenMoreMenu';
+import GroupChatMoreMenu from './GroupChatMoreMenu';
 
-const ChatHeader = ({ url, name, subscribedMember, onPressName }) => {
+const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false }) => {
   const { goBack, navigate } = useNavigation();
   const [moreMenu, setmoreMenu] = useState(false)
+  const [moreMenuGroup, setmoreMenuGroup] = useState(false)
   return (
     <View style={styles.conatiner}>
       <TouchableOpacity onPress={() => goBack()} style={styles.menuIcon}>
@@ -27,10 +29,12 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName }) => {
         <Text style={styles.headerTextStyle}>{name}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => setmoreMenu(true)} style={styles.menuIcon}>
+      <TouchableOpacity onPress={() => { isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
         <Image source={Icons.more} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
       {moreMenu && <MessageScreenMoreMenu visible={moreMenu} onClose={() => setmoreMenu(false)} />}
+      {moreMenuGroup && <GroupChatMoreMenu visible={moreMenuGroup} onClose={() => setmoreMenuGroup(false)} />}
+
     </View>
   );
 };

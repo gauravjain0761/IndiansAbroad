@@ -63,5 +63,9 @@ export const screenName = {
   ListParticipantsScreen: "ListParticipantsScreen",
   QRSuccessScreen: "QRSuccessScreen",
   QRScannerScreen: "QRScannerScreen",
-  PersonalUserDetailScreen: "PersonalUserDetailScreen"
+  PersonalUserDetailScreen: "PersonalUserDetailScreen",
+  GroupMessaging: "GroupMessaging",
+  GroupDetailScreen: "GroupDetailScreen",
+  GroupMediaScreen: "GroupMediaScreen",
+  AddMemberScreen: "AddMemberScreen"
 };

@@ -45,7 +45,7 @@ export default function EditEventScreen() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header onRightPress={() => navigation.navigate(screenName.EditEventScreen)} title={''} onlyLabel={'Edit Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
+            <KeyboardAwareScrollView extraScrollHeight={50} style={{ paddingHorizontal: wp(16) }}>
                 <TouchableOpacity onPress={() => onSelectImage()}>
                     {image ?
                         <Image source={{ uri: image.path }} style={styles.uploadImage} />

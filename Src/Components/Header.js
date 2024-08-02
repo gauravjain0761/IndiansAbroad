@@ -23,7 +23,8 @@ export default function Header({
   chatRightPress,
   isChatDetails,
   onlyLabel,
-  showPlus = false
+  showPlus = false,
+  renderRight
 }) {
   const navigation = useNavigation();
   if (isChatDetails) {
@@ -97,6 +98,11 @@ export default function Header({
         {logoShow && title !== '' && <Image source={Icons.logo} style={ImageStyle(23, 23)} />}
         {onlyLabel ? <Text style={[styles.titleText, titleStyle,]}>{onlyLabel}</Text> : <Text style={[styles.titleText, titleStyle,]}>{title}</Text>}
       </View>
+      {renderRight &&
+        <View style={[styles.rigthIconView, { paddingHorizontal: 0 }]}>
+          {renderRight()}
+        </View>
+      }
       {showRight &&
         <TouchableOpacity style={styles.rigthIconView} onPress={() => onRightPress ? onRightPress() : {}}>
           <Image source={icon ? icon : Icons.bell} style={ImageStyle(24, 24)} />

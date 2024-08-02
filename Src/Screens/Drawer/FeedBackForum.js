@@ -54,7 +54,7 @@ export default function FeedBackForum() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-            <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
+            <KeyboardAwareScrollView extraScrollHeight={50} showsVerticalScrollIndicator={false} style={{ marginHorizontal: wp(16), flex: 1 }}>
                 <Text style={styles.headerText}>FeedBack Form</Text>
                 <Text style={styles.headerText1}>
                     We respect your opinions and suggestions.Help us improve with your counsel

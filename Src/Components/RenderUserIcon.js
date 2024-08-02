@@ -1,12 +1,12 @@
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React from 'react';
-import {Icons} from '../Themes/Icons';
-import {useNavigation} from '@react-navigation/native';
-import {screenName} from '../Navigation/ScreenConstants';
+import { Icons } from '../Themes/Icons';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
 import colors from '../Themes/Colors';
-import {api} from '../utils/apiConstants';
+import { api } from '../utils/apiConstants';
 import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function RenderUserIcon({
   height,
@@ -16,7 +16,7 @@ export default function RenderUserIcon({
   userId = undefined,
 }) {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   let isUrl = url !== undefined && url !== '';
   let styles = StyleSheet.create({
     userImage: {
@@ -28,7 +28,7 @@ export default function RenderUserIcon({
 
   const onOpenUserDetail = () => {
     if (userId !== undefined && userId !== user._id) {
-      navigation.navigate(screenName.indiansDetails, {userId: userId});
+      navigation.navigate(screenName.indiansDetails, { userId: userId });
     }
     //  else {
     //     navigation.navigate(screenName.indiansDetails)
@@ -56,7 +56,7 @@ export default function RenderUserIcon({
         }
         source={
           isUrl
-            ? {uri: api.IMAGE_URL + url, priority: FastImage.priority.normal}
+            ? { uri: api.IMAGE_URL + url, priority: FastImage.priority.normal }
             : Icons.logo
         }
         style={styles.userImage}

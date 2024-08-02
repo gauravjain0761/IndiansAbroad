@@ -142,6 +142,7 @@ export default function HomeScreen() {
     );
   };
   const fetchMoreData = () => {
+    console.log('hereee', allPostsCount)
     if (tabSelection == 'Activity') {
       if (allPost) {
         if (allPost.length < allPostsCount) {
@@ -229,7 +230,7 @@ export default function HomeScreen() {
               data={allPost}
               renderItem={renderItem}
               onEndReached={fetchMoreData}
-              onEndReachedThreshold={0.3}
+              onEndReachedThreshold={0.5}
               ListFooterComponent={() => {
                 return (
                   <View>

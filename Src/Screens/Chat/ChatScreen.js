@@ -154,6 +154,25 @@ export default function ChatScreen() {
     dispatch(getChatMessage(obj));
   };
 
+  const onPressGroupChat = (item) => {
+    dispatchAction(dispatch, GET_CHAT_MESSAGES, []);
+    dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item, chatId: item._id })
+    navigate(screenName.GroupMessaging);
+    let obj = {
+      data: {
+        search: '',
+        chatId: item._id,
+        currUser: user._id,
+        page: 1,
+        userId: user._id,
+      },
+      onSuccess: () => {
+
+      },
+    };
+    dispatch(getChatMessage(obj));
+  }
+
   return (
     <View style={ApplicationStyles.applicationView}>
       <SafeAreaView edges={['top']}>
@@ -212,15 +231,8 @@ export default function ChatScreen() {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            style={{
-              paddingHorizontal: wp(8),
-              paddingTop: hp(10),
-            }}
-            columnWrapperStyle={{
-              width: '100%',
-              columnGap: wp(5),
-              rowGap: hp(10),
-            }}
+            style={styles.flatlist}
+            columnWrapperStyle={styles.column}
             numColumns={2}
             bounces={false}
             data={chatRoomList}
@@ -259,15 +271,8 @@ export default function ChatScreen() {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            style={{
-              paddingHorizontal: wp(8),
-              paddingTop: hp(10),
-            }}
-            columnWrapperStyle={{
-              width: '100%',
-              columnGap: wp(5),
-              rowGap: hp(10),
-            }}
+            style={styles.flatlist}
+            columnWrapperStyle={styles.column}
             numColumns={2}
             bounces={false}
             data={groupRoomList}
@@ -276,7 +281,7 @@ export default function ChatScreen() {
                 <ChatCard
                   data={item}
                   isGroup={item?.isGroupChat}
-                  cardPress={() => { }}
+                  cardPress={() => onPressGroupChat(item)}
                 />
               );
             }}
@@ -349,4 +354,13 @@ const styles = StyleSheet.create({
   },
   selectedText: FontStyle(14, colors.tertiary1_500, '700'),
   unSewlectedText: FontStyle(14, colors.neutral_900, '700'),
+  flatlist: {
+    paddingHorizontal: wp(8),
+    paddingTop: hp(10),
+  },
+  column: {
+    width: '100%',
+    columnGap: wp(5),
+    rowGap: hp(10),
+  }
 });

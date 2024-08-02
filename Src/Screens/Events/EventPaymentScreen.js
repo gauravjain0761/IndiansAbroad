@@ -27,7 +27,7 @@ export default function EventPaymentScreen() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView extraScrollHeight={50}>
                 <View style={styles.mainView}>
                     <Text style={styles.labelText}>Provide your bank details</Text>
                     <Input extraStyle={styles.input} value={inputData?.cardName} placeholder={'Card Holder Name'} onChangeText={(text) => setInputData({ ...inputData, cardName: text })} />

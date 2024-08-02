@@ -1,4 +1,4 @@
-import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, Platform, KeyboardAvoidingView, ScrollView, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
@@ -41,12 +41,16 @@ export default function ForgotPassword() {
                 <SafeAreaView>
                     <Header showLeft logoShow={false} />
                 </SafeAreaView>
-                <View style={{ marginHorizontal: wp(20) }}>
-                    <Text style={styles.title}>Verification</Text>
-                    <Text style={styles.des}>Please enter your mobile number or email address to receive verification code.</Text>
-                    <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
-                    <CommonButton title={'Send'} onPress={() => onSend()} extraStyle={styles.btn} />
-                </View>
+                <KeyboardAvoidingView style={{ flex: 1 }} {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+                    <ScrollView >
+                        <View style={{ marginHorizontal: wp(20) }}>
+                            <Text style={styles.title}>Verification</Text>
+                            <Text style={styles.des}>Please enter your mobile number or email address to receive verification code.</Text>
+                            <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
+                            <CommonButton title={'Send'} onPress={() => onSend()} extraStyle={styles.btn} />
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
             </ImageBackground>
         </View>
     )

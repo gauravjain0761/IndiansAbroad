@@ -39,7 +39,7 @@ const ReciverMsg = ({ data }) => {
                     ' ' +
                     data?.createdBy?.last_Name}
                 </Text>
-                <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { opacity: 0 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
+                <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
                 <Text style={[styles.timeTextStyle, {
                   marginTop: -13,
                 }]}>

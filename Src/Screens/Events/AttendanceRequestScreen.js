@@ -28,7 +28,7 @@ export default function AttendanceRequestScreen() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Attendance request'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView extraScrollHeight={50}>
                 <View style={styles.topView}>
                     <Text style={styles.title}>Indian Festival Guide for November 2024 </Text>
                     <Input value={inputData?.firstName} label={'Your first name *'} placeholder={''} onChangeText={(text) => setInputData({ ...inputData, firstName: text })} />

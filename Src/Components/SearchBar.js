@@ -5,6 +5,8 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Platform,
+  KeyboardAvoidingView, ScrollView
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -24,22 +26,23 @@ export default function SearchBar({
   // const onPressIn = () => {
   //   c
   // }
+
   return (
-    <View style={[styles.header, containerStyles]}>
-      <View style={[ApplicationStyles.row, styles.textInput]}>
-        <Image source={Icons.search} style={ImageStyle(18, 18)} />
-        <TextInput
-          placeholder={placeholder}
-          placeholderTextColor={colors.neutral_500}
-          style={styles.inputStyle}
-          value={value}
-          onChangeText={onChangeText}
-          onPress={() => onPressIn ? onPressIn() : {}}
-        // onFocus={() => onPressIn()}
-        // editable={onPressIn ? false : true}
-        />
+    <KeyboardAvoidingView {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+      <View style={[styles.header, containerStyles]}>
+        <View style={[ApplicationStyles.row, styles.textInput]}>
+          <Image source={Icons.search} style={ImageStyle(18, 18)} />
+          <TextInput
+            placeholder={placeholder}
+            placeholderTextColor={colors.neutral_500}
+            style={styles.inputStyle}
+            value={value}
+            onChangeText={onChangeText}
+            onPress={() => onPressIn ? onPressIn() : {}}
+          />
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

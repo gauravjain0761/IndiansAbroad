@@ -168,7 +168,7 @@ export default function EditProfile() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={'Update Profile'} showLeft onLeftPress={() => navigation.goBack()} logoShow={false} />
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: wp(20) }}>
+      <KeyboardAwareScrollView extraScrollHeight={50} showsVerticalScrollIndicator={false} style={{ flex: 1, paddingHorizontal: wp(20), paddingBottom: 50 }}>
         <TouchableOpacity style={styles.uploadPhotoView}>
           <View>
             <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.innerUploadView}>
@@ -193,8 +193,8 @@ export default function EditProfile() {
         {user?.catchLine && <View style={styles.cardView}>
           <Text style={styles.cardText}>{user?.catchLine}</Text>
         </View>}
-        <Input value={inputData?.firstName} label={'First Name'} placeholder={'First Name'} onChangeText={(text) => setInputData({ ...inputData, firstName: text })} />
-        <Input value={inputData?.lastName} label={'Last Name'} placeholder={'Last Name'} onChangeText={(text) => setInputData({ ...inputData, lastName: text })} />
+        <Input editable={false} value={inputData?.firstName} label={'First Name'} placeholder={'First Name'} onChangeText={(text) => setInputData({ ...inputData, firstName: text })} />
+        <Input editable={false} value={inputData?.lastName} label={'Last Name'} placeholder={'Last Name'} onChangeText={(text) => setInputData({ ...inputData, lastName: text })} />
         <Input value={inputData?.catchLine} label={'Catchline'} placeholder={'Catchline'} onChangeText={(text) => setInputData({ ...inputData, catchLine: text })} />
         <Input label={'Your birthday'} type={'dob'} value={inputData.dob !== '' ? moment(inputData.dob).format('DD MMMM YYYY') : ''} onChangeText={(text) => setInputData({ ...inputData, dob: text })} placeholder={'Select your Birthdate'} />
         <Input placeholder={'City'} onChangeText={(text) => setInputData({ ...inputData, city: text })} value={inputData?.city} label={'City'} />

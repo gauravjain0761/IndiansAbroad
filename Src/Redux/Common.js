@@ -65,9 +65,9 @@ const initialState = {
   threadList: undefined,
   countries: undefined,
   mainFollowerList: undefined,
-  chatRoomList: [],
+  chatRoomList: undefined,
   allChatRoomCount: 0,
-  groupRoomList: [],
+  groupRoomList: undefined,
   allGroupRoomCount: 0,
   chatMessageList: [],
   myPage: undefined,
@@ -86,7 +86,7 @@ export default function (state = initialState, action) {
           action.payload.current_page == 1
             ? action.payload.data
             : [...state.allPost, ...action.payload.data],
-        allPostsCount: action.payload.allPostsCount,
+        allPostsCount: action.payload.totalCount,
       };
     }
     case SET_ALL_INDIANS: {

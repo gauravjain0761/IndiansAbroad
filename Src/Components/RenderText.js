@@ -6,6 +6,7 @@ import { FontStyle } from '../utils/commonFunction';
 
 export default function RenderText({ text, style, showReadMore }) {
     const [showMore, setshowMore] = useState(false)
+    // console.log(text)
     return (
         <View style={style}>
             {/* <Text style={style}>{text}</Text> */}

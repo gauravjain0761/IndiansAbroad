@@ -1,4 +1,4 @@
-import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, Platform, SafeAreaView, StyleSheet, Text, View, ScrollView, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
@@ -44,14 +44,18 @@ export default function NewPassword() {
                 <SafeAreaView>
                     <Header showLeft logoShow={false} />
                 </SafeAreaView>
-                <View style={{ marginHorizontal: wp(20) }}>
-                    <Text style={styles.title}>Reset Password</Text>
-                    <Text style={styles.des}>Set your new password</Text>
-                    <Input value={password} placeholder={'New Password'} onChangeText={(text) => setpassword(text)} isPassword />
-                    <View style={styles.hightView} />
-                    <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
-                    <CommonButton title={'Continue'} onPress={() => onSend()} extraStyle={styles.btn} />
-                </View>
+                <KeyboardAvoidingView style={{ flex: 1 }} {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+                    <ScrollView >
+                        <View style={{ marginHorizontal: wp(20) }}>
+                            <Text style={styles.title}>Reset Password</Text>
+                            <Text style={styles.des}>Set your new password</Text>
+                            <Input value={password} placeholder={'New Password'} onChangeText={(text) => setpassword(text)} isPassword />
+                            <View style={styles.hightView} />
+                            <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
+                            <CommonButton title={'Continue'} onPress={() => onSend()} extraStyle={styles.btn} />
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
             </ImageBackground>
         </View>
     )

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput, Image } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, KeyboardAvoidingView, ScrollView, View, TouchableOpacity, TextInput, Image, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../../Components/Header'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
@@ -164,57 +164,59 @@ export default function UpdatePostScreen() {
 
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
-            <Header
-                title={'IndiansAbroad'}
-                showLeft={true}
-                showRight={false}
-                onLeftPress={() => goBack()}
-            />
+            <Header title={'IndiansAbroad'} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
             <View style={{ borderTopWidth: 1, borderTopColor: colors.secondary_500, }}>
                 <Text style={styles.chatText}>Update</Text>
-
             </View>
-            <View style={{ paddingHorizontal: 0, marginTop: 8, }}>
-
-                <View style={styles.inputBox}>
-                    <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
-                    <View style={styles.rowView}>
-                        <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
-                            <Image source={Icons.photoUpload} style={styles.photoUpload} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
-                            <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-            {imageArray.length > 0 &&
-                <View style={styles.imageView}>
-                    {imageArray.map((elem, index) => {
-                        return (
-                            <View >
-                                {elem?.location ?
-                                    elem?.contentType.includes('image') ?
-                                        <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.location }} style={styles.imageStyles} />
-                                        :
-                                        <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.thumbnail ? elem.thumbnail : params?.item?.thumbNail?.location }} style={styles.imageStyles} />
-                                    :
-                                    elem?.mime.includes('image') ?
-                                        <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.path }} style={styles.imageStyles} />
-                                        :
-                                        <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.thumbnail?.path }} style={styles.imageStyles} />
-                                }
-                                <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
-                                    <Image source={Icons.closeRound} style={styles.closeIcon} />
+            <KeyboardAvoidingView
+                {...(Platform.OS === 'ios'
+                    ? {
+                        behavior: 'padding',
+                    }
+                    : {})}>
+                <ScrollView>
+                    <View style={{ paddingHorizontal: 0, marginTop: 8, }}>
+                        <View style={styles.inputBox}>
+                            <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
+                            <View style={styles.rowView}>
+                                <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
+                                    <Image source={Icons.photoUpload} style={styles.photoUpload} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
+                                    <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
                                 </TouchableOpacity>
                             </View>
-                        )
-                    })}
-                </View>
-            }
-            <TouchableOpacity onPress={() => onPressPublish()} style={styles.blueButton}>
-                <Text style={styles.publishText}>Update</Text>
-            </TouchableOpacity>
+                        </View>
+                    </View>
+                    {imageArray.length > 0 &&
+                        <View style={styles.imageView}>
+                            {imageArray.map((elem, index) => {
+                                return (
+                                    <View >
+                                        {elem?.location ?
+                                            elem?.contentType.includes('image') ?
+                                                <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.location }} style={styles.imageStyles} />
+                                                :
+                                                <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.thumbnail ? elem.thumbnail : params?.item?.thumbNail?.location }} style={styles.imageStyles} />
+                                            :
+                                            elem?.mime.includes('image') ?
+                                                <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.path }} style={styles.imageStyles} />
+                                                :
+                                                <FastImage resizeMode={FastImage.resizeMode.cover} source={{ uri: elem.thumbnail?.path }} style={styles.imageStyles} />
+                                        }
+                                        <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
+                                            <Image source={Icons.closeRound} style={styles.closeIcon} />
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
+                    }
+                    <TouchableOpacity onPress={() => onPressPublish()} style={styles.blueButton}>
+                        <Text style={styles.publishText}>Update</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }

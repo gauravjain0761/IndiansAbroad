@@ -20,10 +20,10 @@ export default function RenderComment({
 }) {
     const { user } = useSelector(e => e.common)
     const navigation = useNavigation()
-    let isUser = item?.user ? item?.user?._id : item?.createdBy?._id == user?._id
+    let isUser = (item?.user ? item?.user?._id : item?.createdBy?._id) == user?._id
 
     const onOpenOtherUserDetails = () => {
-        if (!isUser) {
+        if (isUser == false) {
             navigation.navigate(screenName.indiansDetails, { userId: item?.user ? item?.user?._id : item?.createdBy?._id })
         }
     }

@@ -40,7 +40,7 @@ export default function ChangePhoneVerify() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-      <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
+      <KeyboardAwareScrollView extraScrollHeight={50} style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Mobile Number</Text>
         <Text style={styles.headerText1}>
           We've sent the code to your new mobile number. Please enter the code

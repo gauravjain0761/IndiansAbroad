@@ -7,7 +7,7 @@ import { getFollowerList } from '../Services/AuthServices';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { SCREEN_HEIGHT, fontname, hp, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
-import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction';
+import { FontStyle, ImageStyle, errorToast, searchUserByName } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { onShareApi } from '../Services/PostServices';
@@ -97,20 +97,23 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         );
     };
     const onSearchName = (search) => {
-        let tempList = Object.assign([], mainFollowerList)
-        const filtered = tempList.filter((val) =>
-            val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
-        );
-        const filter2 = tempList.filter((val) =>
-            val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
-        );
-        let searchTextContact = Object.values(
-            filtered.concat(filter2).reduce((r, o) => {
-                r[o._id] = o;
-                return r;
-            }, {})
-        );
-        setlist(searchTextContact)
+        // let tempList = Object.assign([], mainFollowerList)
+
+        let arr = searchUserByName(mainFollowerList, 'followingId', search)
+        setlist(arr)
+        // const filtered = tempList.filter((val) =>
+        //     val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
+        // );
+        // const filter2 = tempList.filter((val) =>
+        //     val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
+        // );
+        // let searchTextContact = Object.values(
+        //     filtered.concat(filter2).reduce((r, o) => {
+        //         r[o._id] = o;
+        //         return r;
+        //     }, {})
+        // );
+        // setlist(searchTextContact)
     }
     return (
         <ModalContainer statusBarTranslucent={true} avoidKeyboard={false} isVisible={visible} onClose={() => onClose()} transparent={true} >

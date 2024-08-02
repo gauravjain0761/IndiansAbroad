@@ -7,6 +7,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -171,61 +173,65 @@ export default function CreateDiscussion() {
             goBack();
           }}
         />
-        <Text style={styles.startText}>Start writing</Text>
-        <Text style={styles.startText1}>
-          Your thread will be posted in the {selectedType.countryName !== 'World Wide' ? 'Local' : selectedType.countryName} discussion forum
-        </Text>
-        <TextInput
-          onChangeText={text => setpostText(text)}
-          value={postText}
-          style={styles.inputTitle}
-          placeholder="Title"
-          placeholderTextColor={colors.neutral_500}
-          multiline={true}
-        />
-        <View style={styles.inputBox}>
-          <TextInput
-            onChangeText={text => setpostDes(text)}
-            value={postDes}
-            style={styles.input}
-            placeholder="Write Here"
-            multiline={true}
-            placeholderTextColor={colors.neutral_500}
-          />
-          <View style={styles.rowView}>
-            <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
-              <Image source={Icons.photoUpload} style={styles.photoUpload} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
-              <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View>
-          {imageArray.length > 0 &&
-            <View style={styles.imageView}>
-              {imageArray.map((item, index) => {
-                return (
-                  <TouchableOpacity onPress={() => {
-                    if (item?.mime.includes('image')) { setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index) }
-                  }}>
-                    {item?.mime.includes('image') ?
-                      <Image source={{ uri: item.path }} style={styles.imageStyles} />
-                      :
-                      <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
-                    }
-                    <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
-                      <Image source={Icons.closeRound} style={styles.closeIcon} />
-                    </TouchableOpacity>
-                  </TouchableOpacity>
-                )
-              })}
+        <KeyboardAvoidingView {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+          <ScrollView>
+            <Text style={styles.startText}>Start writing</Text>
+            <Text style={styles.startText1}>
+              Your thread will be posted in the {selectedType.countryName !== 'World Wide' ? 'Local' : selectedType.countryName} discussion forum
+            </Text>
+            <TextInput
+              onChangeText={text => setpostText(text)}
+              value={postText}
+              style={styles.inputTitle}
+              placeholder="Title"
+              placeholderTextColor={colors.neutral_500}
+              multiline={true}
+            />
+            <View style={styles.inputBox}>
+              <TextInput
+                onChangeText={text => setpostDes(text)}
+                value={postDes}
+                style={styles.input}
+                placeholder="Write Here"
+                multiline={true}
+                placeholderTextColor={colors.neutral_500}
+              />
+              <View style={styles.rowView}>
+                <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
+                  <Image source={Icons.photoUpload} style={styles.photoUpload} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
+                  <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
+                </TouchableOpacity>
+              </View>
             </View>
-          }
-        </View>
-        <TouchableOpacity onPress={() => onPublish()} style={styles.blueButton}>
-          <Text style={styles.publishText}>Publish</Text>
-        </TouchableOpacity>
+            <View>
+              {imageArray.length > 0 &&
+                <View style={styles.imageView}>
+                  {imageArray.map((item, index) => {
+                    return (
+                      <TouchableOpacity onPress={() => {
+                        if (item?.mime.includes('image')) { setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index) }
+                      }}>
+                        {item?.mime.includes('image') ?
+                          <Image source={{ uri: item.path }} style={styles.imageStyles} />
+                          :
+                          <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
+                        }
+                        <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
+                          <Image source={Icons.closeRound} style={styles.closeIcon} />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    )
+                  })}
+                </View>
+              }
+            </View>
+            <TouchableOpacity onPress={() => onPublish()} style={styles.blueButton}>
+              <Text style={styles.publishText}>Publish</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
       {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
         style={{ justifyContent: 'flex-end', margin: 0, }} >
@@ -276,7 +282,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   startText: {
-    top: -12,
+    // top: -12,
     textAlign: 'center',
     ...FontStyle(15, colors.neutral_900, '700'),
   },

@@ -18,7 +18,6 @@ import moment from 'moment';
 
 export default function ChatCard({ data, cardPress, isGroup }) {
   const { user } = useSelector(e => e.common);
-
   let currentUser = data?.users?.filter(item => item._id !== user?._id)?.[0];
 
   return (
@@ -27,7 +26,7 @@ export default function ChatCard({ data, cardPress, isGroup }) {
       style={[styles.header]}>
       <View style={styles.imageStyle}>
         <RenderUserIcon
-          // url={currentUser?.avtar}
+          url={isGroup ? data?.chatLogo[0]?.location : currentUser?.avtar}
           height={78}
         // isBorder={currentUser?.subscribedMember}
         />

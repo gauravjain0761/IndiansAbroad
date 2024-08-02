@@ -24,7 +24,7 @@ const SenderMsg = ({ data }) => {
               onLongPress={showMenu}
               style={styles.boxContainer}>
               <Text style={styles.nameTextStyle}>{'You'}</Text>
-              <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { opacity: 0 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
+              <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
               <Text style={[styles.timeTextStyle, {
                 marginTop: -13,
               }]}>

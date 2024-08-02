@@ -40,7 +40,7 @@ export default function ChangePasswordVerify() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-      <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
+      <KeyboardAwareScrollView extraScrollHeight={50} style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Password</Text>
         <Text style={styles.headerText1}>
           We've sent the code to your email. Please enter the code to proceed

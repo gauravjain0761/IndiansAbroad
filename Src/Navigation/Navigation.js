@@ -79,6 +79,10 @@ import AnnouncementScreen from '../Screens/Events/AnnouncementScreen';
 import QRScannerScreen from '../Screens/Events/QRScannerScreen';
 import QRSuccessScreen from '../Screens/Events/QRSuccessScreen';
 import PersonalUserDetailScreen from '../Screens/Chat/PersonalUserDetailScreen';
+import GroupMessaging from '../Screens/Chat/GroupMessaging';
+import GroupDetailScreen from '../Screens/Chat/GroupDetailScreen';
+import GroupMediaScreen from '../Screens/Chat/GroupMediaScreen';
+import AddMemberScreen from '../Screens/Chat/AddMemberScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -95,15 +99,13 @@ function MyDrawer() {
           ...headerStyleTransparent,
         })}
         name={screenName.homeScreen}
-        component={MyTabs}
-      />
+        component={MyTabs} />
       <Drawer.Screen
         options={({ navigation }) => ({
           ...headerStyleTransparent,
         })}
         name={screenName.MyPageScreen}
-        component={MyPageScreen}
-      />
+        component={MyPageScreen} />
       <Drawer.Screen
         options={({ navigation }) => ({
           ...headerStyleTransparent,
@@ -226,293 +228,67 @@ export default function Navigation() {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.SplashScreen}
-        component={SplashScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.LoginScreen}
-        component={LoginScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.SignupScreen}
-        component={SignupScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.OTPScreen}
-        component={OTPScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.SecurityScreen}
-        component={SecurityScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ForgotPassword}
-        component={ForgotPassword}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.NewPassword}
-        component={NewPassword}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.PasswordChangeSuccess}
-        component={PasswordChangeSuccess}
-      />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SplashScreen} component={SplashScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.LoginScreen} component={LoginScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SignupScreen} component={SignupScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.OTPScreen} component={OTPScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SecurityScreen} component={SecurityScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ForgotPassword} component={ForgotPassword} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.NewPassword} component={NewPassword} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PasswordChangeSuccess} component={PasswordChangeSuccess} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile} component={CompleteProfile} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile2} component={CompleteProfile2} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentModalScreen} component={PaymentModalScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Walkthrough} component={Walkthrough} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyDrawer} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.indiansPage} component={IndiansPage} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PostDetail} component={PostDetail} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.indiansDetails} component={IndiansDetails} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.pagesDetails} component={PagesDetails} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Setting} component={Setting} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EditProfile} component={EditProfile} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PagesPostDetail} component={PagesPostDetail} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.DiscussionForumDetail} component={DiscussionForumDetail} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateDiscussion} component={CreateDiscussion} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MyConnections} component={MyConnections} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateGroup} component={CreateGroup} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.NotificationScreen} component={NotificationScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.IndiansPageMore} component={IndiansPageMore} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.IndiansPageUpdate} component={IndiansPageUpdate} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePasswordEmail} component={ChangePasswordEmail} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePasswordVerify} component={ChangePasswordVerify} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePasswordNew} component={ChangePasswordNew} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Subscription} component={Subscription} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.BlockedUsers} component={BlockedUsers} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePhone} component={ChangePhone} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChangePhoneVerify} component={ChangePhoneVerify} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChatDetailsScreen} component={ChatDetailsScreen} />
+      <Stack.Screen options={({ navigation }) => ({ cardStyleInterpolator: CardStyleInterpolators.forNoAnimation, headerShown: false, })} name={screenName.LikesScreen} component={LikesScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.RepliesComments} component={RepliesComments} />
+      <Stack.Screen options={({ navigation }) => ({ cardStyleInterpolator: CardStyleInterpolators.forNoAnimation, headerShown: false, })} name={screenName.SearchScreen} component={SearchScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.UpdatePostScreen} component={UpdatePostScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MediaScreen} component={MediaScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Messaging} component={Messaging} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EventDetailScreen} component={EventDetailScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.AttendanceRequestScreen} component={AttendanceRequestScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EventPaymentScreen} component={EventPaymentScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateEvent1} component={CreateEvent1} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateEvent2} component={CreateEvent2} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateEvent3} component={CreateEvent3} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateEvent4} component={CreateEvent4} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.SavedEvents} component={SavedEvents} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EventDashboard} component={EventDashboard} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EditEventScreen} component={EditEventScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ListParticipantsScreen} component={ListParticipantsScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.AnnouncementScreen} component={AnnouncementScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.QRScannerScreen} component={QRScannerScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.QRSuccessScreen} component={QRSuccessScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PersonalUserDetailScreen} component={PersonalUserDetailScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupMessaging} component={GroupMessaging} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupDetailScreen} component={GroupDetailScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupMediaScreen} component={GroupMediaScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.AddMemberScreen} component={AddMemberScreen} />
 
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CompleteProfile}
-        component={CompleteProfile}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CompleteProfile2}
-        component={CompleteProfile2}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.PaymentModalScreen}
-        component={PaymentModalScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.Walkthrough}
-        component={Walkthrough}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name="Home"
-        component={MyDrawer}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.indiansPage}
-        component={IndiansPage}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.PostDetail}
-        component={PostDetail}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.indiansDetails}
-        component={IndiansDetails}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.pagesDetails}
-        component={PagesDetails}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.Setting}
-        component={Setting}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.EditProfile}
-        component={EditProfile}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.PagesPostDetail}
-        component={PagesPostDetail}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.DiscussionForumDetail}
-        component={DiscussionForumDetail}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CreateDiscussion}
-        component={CreateDiscussion}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.MyConnections}
-        component={MyConnections}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CreateGroup}
-        component={CreateGroup}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.NotificationScreen}
-        component={NotificationScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.IndiansPageMore}
-        component={IndiansPageMore}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.IndiansPageUpdate}
-        component={IndiansPageUpdate}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ChangePasswordEmail}
-        component={ChangePasswordEmail}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ChangePasswordVerify}
-        component={ChangePasswordVerify}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ChangePasswordNew}
-        component={ChangePasswordNew}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.Subscription}
-        component={Subscription}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.BlockedUsers}
-        component={BlockedUsers}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ChangePhone}
-        component={ChangePhone}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ChangePhoneVerify}
-        component={ChangePhoneVerify}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ChatDetailsScreen}
-        component={ChatDetailsScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({
-          cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
-          headerShown: false,
-        })}
-        name={screenName.LikesScreen}
-        component={LikesScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.RepliesComments}
-        component={RepliesComments}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({
-          cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
-          headerShown: false,
-        })}
-        name={screenName.SearchScreen}
-        component={SearchScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.UpdatePostScreen}
-        component={UpdatePostScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.MediaScreen}
-        component={MediaScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.Messaging}
-        component={Messaging}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.EventDetailScreen}
-        component={EventDetailScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.AttendanceRequestScreen}
-        component={AttendanceRequestScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.EventPaymentScreen}
-        component={EventPaymentScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CreateEvent1}
-        component={CreateEvent1}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CreateEvent2}
-        component={CreateEvent2}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CreateEvent3}
-        component={CreateEvent3}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.CreateEvent4}
-        component={CreateEvent4}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.SavedEvents}
-        component={SavedEvents}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.EventDashboard}
-        component={EventDashboard}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.EditEventScreen}
-        component={EditEventScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.ListParticipantsScreen}
-        component={ListParticipantsScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.AnnouncementScreen}
-        component={AnnouncementScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.QRScannerScreen}
-        component={QRScannerScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.QRSuccessScreen}
-        component={QRSuccessScreen}
-      />
-      <Stack.Screen
-        options={({ navigation }) => ({ ...headerStyleTransparent })}
-        name={screenName.PersonalUserDetailScreen}
-        component={PersonalUserDetailScreen}
-      />
     </Stack.Navigator>
   );
 }

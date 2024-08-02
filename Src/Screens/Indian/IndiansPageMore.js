@@ -56,6 +56,17 @@ export default function IndiansPageMore() {
   const [page, setpage] = useState(1);
   const [pagePages, setPagePages] = useState(1);
   const [loading, setloading] = useState(false);
+  const [allIndianList, setallIndianList] = useState(undefined)
+
+  useEffect(() => {
+    if (allIndian && searchText == '') {
+      let temp = allIndian?.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0)
+      setallIndianList(temp)
+    } else {
+      setallIndianList(allIndian)
+    }
+  }, [allIndian])
+
   useEffect(() => {
     dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
@@ -229,7 +240,7 @@ export default function IndiansPageMore() {
             FontStyle(14, colors.neutral_900, '700'),
             { marginHorizontal: wp(16), marginVertical: 8 },
           ]}> {tabSelection == 'INDIANS' ? 'People you may know' : 'Pages from your area'}</Text>
-          {allIndian.length > 0 ? <FlatList
+          {allIndianList && <FlatList
             style={{
               paddingHorizontal: wp(16),
               flex: 1
@@ -245,7 +256,7 @@ export default function IndiansPageMore() {
             numColumns={2}
             onEndReached={fetchMoreData}
             onEndReachedThreshold={0.3}
-            data={allIndian}
+            data={allIndianList}
             ListEmptyComponent={<NoDataFound />}
             renderItem={({ item, index }) => {
               return (
@@ -275,7 +286,7 @@ export default function IndiansPageMore() {
                 </View>
               )
             }}
-          /> : <NoDataFound />}
+          />}
           {/*  */}
         </View>
         <View style={{ flex: 1 }} key={'2'}>

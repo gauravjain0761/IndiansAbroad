@@ -1,4 +1,4 @@
-import { StyleSheet, View, SafeAreaView, Image, Text, TouchableOpacity, TextInput, FlatList } from 'react-native'
+import { StyleSheet, View, SafeAreaView, KeyboardAvoidingView, ScrollView, Image, Text, TouchableOpacity, TextInput, FlatList, Platform } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -29,20 +29,23 @@ export default function AnnouncementScreen() {
                 <Text style={styles.totalText}>Announcement</Text>
             </View>
             <View style={ApplicationStyles.flex}>
-                <Text style={styles.titleHeader}>
-                    This announcement will be sent to all the registered users for this event. You have total 5 announcements, so use it accordingly.
-                </Text>
-                <TextInput
-                    placeholder={'Description'}
-                    style={styles.inputText}
-                    multiline={true}
-                    placeholderTextColor={colors.neutral_500}
-                    value={discription}
-                    onChangeText={(text) => setdiscription(text)}
-                />
-                <Text style={styles.remainText}>Announcements remaining (5/5)</Text>
-                <CommonButton onPress={() => navigation.pop(2)} title={'Send'} extraStyle={{ width: 140, height: 45, alignSelf: 'center', marginTop: 20 }} />
-
+                <KeyboardAvoidingView {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+                    <ScrollView>
+                        <Text style={styles.titleHeader}>
+                            This announcement will be sent to all the registered users for this event. You have total 5 announcements, so use it accordingly.
+                        </Text>
+                        <TextInput
+                            placeholder={'Description'}
+                            style={styles.inputText}
+                            multiline={true}
+                            placeholderTextColor={colors.neutral_500}
+                            value={discription}
+                            onChangeText={(text) => setdiscription(text)}
+                        />
+                        <Text style={styles.remainText}>Announcements remaining (5/5)</Text>
+                        <CommonButton onPress={() => navigation.pop(2)} title={'Send'} extraStyle={{ width: 140, height: 45, alignSelf: 'center', marginTop: 20 }} />
+                    </ScrollView>
+                </KeyboardAvoidingView>
             </View>
         </SafeAreaView>
     )

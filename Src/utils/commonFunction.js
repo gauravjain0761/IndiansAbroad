@@ -26,7 +26,7 @@ export const FontStyle = (size, color, fontWeight) => {
 };
 
 
-export const emailCheck = (email: string) => {
+export const emailCheck = (email) => {
   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
   if (reg.test(email) === false) {
     return false;
@@ -35,7 +35,7 @@ export const emailCheck = (email: string) => {
   }
 };
 
-export const nameCheck = (name: string) => {
+export const nameCheck = (name) => {
   let reg = /^([a-zA-Z ]){2,30}$/;
   if (reg.test(name) === false) {
     return false;
@@ -44,12 +44,44 @@ export const nameCheck = (name: string) => {
   }
 };
 
-export const passwordCheck = (string: string) => {
+export const passwordCheck = (string) => {
   let reg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/;
   return reg.test(string);
 };
 
-export const mobileNumberCheck = (mobileNo: string) => {
+export const mobileNumberCheck = (mobileNo) => {
   let reg = /^\d*$/
   return reg.test(mobileNo);
+}
+
+export const mergeJsonArraysByID = (...jsonArrays) => {
+  // Create an object to hold the merged data
+  const mergedObj = {};
+
+  // Iterate over each JSON array
+  jsonArrays.forEach(array => {
+    array.forEach(item => {
+      // Use the unique key (id) to manage entries
+      mergedObj[item._id] = { ...mergedObj[item._id], ...item };
+    });
+  });
+
+  // Convert the object back to an array
+  return Object.values(mergedObj);
+}
+
+export const searchUserByName = (mainArray, field1, searchText) => {
+  let list = mainArray
+  const filtered = list.filter((val) =>
+    field1 ? val[field1]['first_Name'].toLowerCase().includes(searchText.toLowerCase()) : val['first_Name'].toLowerCase().includes(searchText.toLowerCase())
+  );
+  const filter2 = list.filter((val) =>
+    field1 ? val[field1]['last_Name'].toLowerCase().includes(searchText.toLowerCase()) : val['last_Name'].toLowerCase().includes(searchText.toLowerCase())
+
+  );
+  const filter3 = list.filter((val) =>
+    field1 ? (val[field1]['first_Name'] + ' ' + val[field1]['last_Name']).toLowerCase().includes(searchText.toLowerCase()) : (val['first_Name'] + ' ' + val['last_Name']).toLowerCase().includes(searchText.toLowerCase())
+  );
+  let arr = mergeJsonArraysByID(filtered, filter2, filter3);
+  return arr
 }

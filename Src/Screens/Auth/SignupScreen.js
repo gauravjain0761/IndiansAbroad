@@ -1,4 +1,4 @@
-import { Image, ImageBackground, SafeAreaView, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, SafeAreaView, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native'
 import React, { useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'

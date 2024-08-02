@@ -9,6 +9,8 @@ import {
   FlatList,
   ScrollView,
   Image,
+  Platform,
+  KeyboardAvoidingView
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +18,7 @@ import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
 import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import { FontStyle, ImageStyle, searchUserByName } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import ConnectCard from '../../Components/ConnectCard';
@@ -63,20 +65,8 @@ export default function IndiansDetails() {
 
 
   const onSearchName = (search) => {
-    let list = otherUserFollowList.data
-    const filtered = list.filter((val) =>
-      val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
-    );
-    const filter2 = list.filter((val) =>
-      val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
-    );
-    let searchTextContact = Object.values(
-      filtered.concat(filter2).reduce((r, o) => {
-        r[o._id] = o;
-        return r;
-      }, {})
-    );
-    setfollowList(searchTextContact)
+    let arr = searchUserByName(otherUserFollowList, 'followingId', search)
+    setfollowList(arr)
   }
 
   useEffect(() => {
@@ -148,92 +138,96 @@ export default function IndiansDetails() {
           goBack();
         }}
       />
-      {otherUserInfo && <ScrollView style={{ flex: 1 }} >
-        <View style={styles.userViewStyle}>
-          <View style={styles.imageView}>
-            <RenderUserIcon url={otherUserInfo?.avtar} height={100} isBorder={otherUserInfo?.subscribedMember} />
-          </View>
-          <Text style={styles.userText}>{otherUserInfo?.first_Name} {otherUserInfo?.last_Name}</Text>
-          {otherUserInfo?.catchLine !== '' && <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>}
-          <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
-            {otherUserInfo?.isFollowing == 'notfollowing' && <TouchableOpacity onPress={() => onPressConnect()} style={styles.btnView}>
-              <Text style={styles.btnText}>{otherUserInfo?.isFollowing == 'notfollowing' ? 'Connect' : otherUserInfo?.isFollowing == 'requested' ? 'Cancel Request' : 'Disconnect'}</Text>
-            </TouchableOpacity>}
-            <TouchableOpacity
-              style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
-              <Text style={styles.btnText}>Message</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ position: 'absolute', right: -22, }} onPress={() => setmenuModal(true)}>
-              <Image
-                source={Icons.more}
-                resizeMode="contain"
-                style={ImageStyle(22, 22)}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.detailsView}>
-          <Text style={[styles.text1, { ...FontStyle(14, colors.neutral_900, '700') }]}>About</Text>
-          <Text style={styles.text2}>From</Text>
-          <Text style={styles.text1}>{otherUserInfo?.city}, {otherUserInfo?.state}</Text>
-          <Text style={styles.text2}>Now</Text>
-          <Text style={styles.text1}>{otherUserInfo?.region}, {otherUserInfo?.country}</Text>
-          <Text style={styles.text2}>At</Text>
-          <Text style={styles.text1}>{otherUserInfo?.universityORcompany}</Text>
-          {/* <Text style={styles.text2}>At</Text>
+      {otherUserInfo &&
+        <KeyboardAvoidingView style={{ flex: 1 }} {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+          <ScrollView style={{ flex: 1 }}>
+            <View style={styles.userViewStyle}>
+              <View style={styles.imageView}>
+                <RenderUserIcon url={otherUserInfo?.avtar} height={100} isBorder={otherUserInfo?.subscribedMember} />
+              </View>
+              <Text style={styles.userText}>{otherUserInfo?.first_Name} {otherUserInfo?.last_Name}</Text>
+              {otherUserInfo?.catchLine !== '' && <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>}
+              <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
+                {otherUserInfo?.isFollowing == 'notfollowing' && <TouchableOpacity onPress={() => onPressConnect()} style={styles.btnView}>
+                  <Text style={styles.btnText}>{otherUserInfo?.isFollowing == 'notfollowing' ? 'Connect' : otherUserInfo?.isFollowing == 'requested' ? 'Cancel Request' : 'Disconnect'}</Text>
+                </TouchableOpacity>}
+                <TouchableOpacity
+                  style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
+                  <Text style={styles.btnText}>Message</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ position: 'absolute', right: -22, }} onPress={() => setmenuModal(true)}>
+                  <Image
+                    source={Icons.more}
+                    resizeMode="contain"
+                    style={ImageStyle(22, 22)}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.detailsView}>
+              <Text style={[styles.text1, { ...FontStyle(14, colors.neutral_900, '700') }]}>About</Text>
+              <Text style={styles.text2}>From</Text>
+              <Text style={styles.text1}>{otherUserInfo?.city}, {otherUserInfo?.state}</Text>
+              <Text style={styles.text2}>Now</Text>
+              <Text style={styles.text1}>{otherUserInfo?.region}, {otherUserInfo?.country}</Text>
+              <Text style={styles.text2}>At</Text>
+              <Text style={styles.text1}>{otherUserInfo?.universityORcompany}</Text>
+              {/* <Text style={styles.text2}>At</Text>
           <Text style={styles.text1}>{otherUserInfo?.universityORcompany}</Text> */}
-          {/* <Text style={styles.text2}>Link</Text>
+              {/* <Text style={styles.text2}>Link</Text>
           <Text style={styles.text1}>app.visily.ai</Text> */}
-        </View>
-        <View style={styles.tabMainView}>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('POST');
-              ref.current?.setPage(0);
-            }} style={[{}, styles.tabItemView]}>
-            <Image source={Icons.imagelist} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900 }} />
-            <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{' (' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setTabSelection('INDIANS');
-              ref.current?.setPage(1);
-              setSearchText('')
-            }}
-            style={styles.tabItemView}>
-            <Image source={Icons.users} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900 }} />
-            <Text style={FontStyle(14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{' (' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
-          </TouchableOpacity>
-          <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
-        </View>
-        {tabSelection == 'POST' ?
-          <View>
-            {otherUserAllPost && <FlatList initialNumToRender={5} data={otherUserAllPost.data} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
-          </View>
-          :
-          <View >
-            {/* <ScrollView> */}
-            <SearchBar
-              value={searchText}
-              onChangeText={text => { setSearchText(text), onSearchName(text) }}
-              placeholder={'Search Indians here'}
-              containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
-            />
-            {followList && <FlatList
-              data={followList}
-              renderItem={({ item }) => {
-                return <ConnectedIndians cardPress={() => {
-                  dispatchAction(dispatch, OTHER_USER_INFO, undefined)
-                  navigation.push(screenName.indiansDetails, { userId: item?.followingId?._id })
-                }} item={item} onUpdate={() => onGetOtherUserFollower()} />;
-              }}
-              ListEmptyComponent={<NoDataFound />}
-              showsVerticalScrollIndicator={false}
-            />}
-            {/* </ScrollView> */}
-          </View>
-        }
-      </ScrollView>}
+            </View>
+            <View style={styles.tabMainView}>
+              <TouchableOpacity
+                onPress={() => {
+                  setTabSelection('POST');
+                  ref.current?.setPage(0);
+                }} style={[{}, styles.tabItemView]}>
+                <Image source={Icons.imagelist} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900 }} />
+                <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{' (' + (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) + ')'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setTabSelection('INDIANS');
+                  ref.current?.setPage(1);
+                  setSearchText('')
+                }}
+                style={styles.tabItemView}>
+                <Image source={Icons.users} style={{ ...ImageStyle(21, 21), tintColor: tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900 }} />
+                <Text style={FontStyle(14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{' (' + (otherUserFollowList ? otherUserFollowList?.connectedIndiansCount : 0) + ')'}</Text>
+              </TouchableOpacity>
+              <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
+            </View>
+            {tabSelection == 'POST' ?
+              <View>
+                {otherUserAllPost && <FlatList initialNumToRender={5} data={otherUserAllPost.data} renderItem={renderItem} ListEmptyComponent={<NoDataFound />} />}
+              </View>
+              :
+              <View >
+                {/* <ScrollView> */}
+                <SearchBar
+                  value={searchText}
+                  onChangeText={text => { setSearchText(text), onSearchName(text) }}
+                  placeholder={'Search Indians here'}
+                  containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
+                />
+                {followList && <FlatList
+                  data={followList}
+                  renderItem={({ item }) => {
+                    return <ConnectedIndians cardPress={() => {
+                      dispatchAction(dispatch, OTHER_USER_INFO, undefined)
+                      navigation.push(screenName.indiansDetails, { userId: item?.followingId?._id })
+                    }} item={item} onUpdate={() => onGetOtherUserFollower()} />;
+                  }}
+                  ListEmptyComponent={<NoDataFound />}
+                  showsVerticalScrollIndicator={false}
+                />}
+                {/* </ScrollView> */}
+              </View>
+            }
+          </ScrollView>
+        </KeyboardAvoidingView>
+      }
 
       <IndianDetailShareModal
         item={otherUserInfo}

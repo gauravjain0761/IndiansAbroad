@@ -38,7 +38,7 @@ export default function CreateEvent4() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView >
+            <KeyboardAwareScrollView extraScrollHeight={50} >
                 <View style={{ paddingHorizontal: wp(16) }}>
                     <RenderSteps totalStep={4} currentStep={4} />
                     <Text style={styles.titleDes}>Please provide the name of the responsible person. In case of any fraudulent or illegitimate activities, they will be held accountable person.</Text>

@@ -1,9 +1,9 @@
-import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, ScrollView, View, TouchableOpacity, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../../Components/Header'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { FontStyle } from '../../utils/commonFunction'
+import { FontStyle, searchUserByName } from '../../utils/commonFunction'
 import { fontname } from '../../Themes/Fonts'
 import colors from '../../Themes/Colors'
 import SearchBar from '../../Components/SearchBar'
@@ -23,22 +23,9 @@ export default function LikesScreen() {
     const navigation = useNavigation()
     const [followList, setfollowList] = useState([])
 
-
     const onSearchName = (search) => {
-        let list = likedUserList
-        const filtered = list.filter((val) =>
-            val.first_Name.toLowerCase().includes(search.toLowerCase())
-        );
-        const filter2 = list.filter((val) =>
-            val.last_Name.toLowerCase().includes(search.toLowerCase())
-        );
-        let searchTextContact = Object.values(
-            filtered.concat(filter2).reduce((r, o) => {
-                r[o._id] = o;
-                return r;
-            }, {})
-        );
-        setfollowList(searchTextContact)
+        let arr = searchUserByName(likedUserList, undefined, search)
+        setfollowList(arr)
     }
 
     useEffect(() => {
@@ -52,9 +39,9 @@ export default function LikesScreen() {
         }))
     }, [])
 
-    const renderItem = ({ item, index }) => {
+    const ReactenderItem = ({ item, index }) => {
         return (
-            <View key={item._id}>
+            <View key={index}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate(screenName.indiansDetails, { userId: item?._id })} style={[ApplicationStyles.row, styles.listView]}>
                     <RenderUserIcon url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
@@ -80,15 +67,20 @@ export default function LikesScreen() {
                     placeholder={'Search'}
                 />
             </View>
-            <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
-                {followList && <FlatList
+            <ScrollView style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
+                {followList && followList.map((item, index) => {
+                    return (
+                        <ReactenderItem index={index} item={item} />
+                    )
+                })}
+                {/* {followList && <FlatList
                     data={followList}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<NoDataFound />}
-                />}
+                />} */}
 
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

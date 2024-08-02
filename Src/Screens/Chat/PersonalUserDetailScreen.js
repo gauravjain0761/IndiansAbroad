@@ -60,18 +60,10 @@ export default function PersonalUserDetailScreen() {
                 {tabSelection == 'media' ?
                     <View>
                         <FlatList
-                            style={{
-                                paddingHorizontal: wp(10),
-
-                            }}
+                            style={styles.flatList}
                             key={'#'}
                             keyExtractor={item => "#" + item?._id}
-                            columnWrapperStyle={{
-                                width: '100%',
-                                columnGap: wp(10),
-                                rowGap: wp(10),
-                                paddingBottom: wp(10)
-                            }}
+                            columnWrapperStyle={styles.columnStyle}
                             numColumns={3}
                             bounces={false}
                             data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
@@ -85,9 +77,7 @@ export default function PersonalUserDetailScreen() {
                             key={'_'}
                             keyExtractor={item => "_" + item?._id}
                             numColumns={1}
-                            style={{
-                                paddingHorizontal: wp(10),
-                            }}
+                            style={styles.flatList}
                             data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
                             renderItem={renderItemLink}
                             showsVerticalScrollIndicator={false}
@@ -144,10 +134,19 @@ const styles = StyleSheet.create({
     },
     tabText: {
         textAlign: 'center',
-        ...FontStyle(15, colors.primary_6a7e, '400'),
+        ...FontStyle(15, colors.primary_6a7e, '700'),
     },
     tabText1: {
         textAlign: 'center',
-        ...FontStyle(15, colors.neutral_900, '400'),
+        ...FontStyle(15, colors.neutral_900, '700'),
     },
+    columnStyle: {
+        width: '100%',
+        columnGap: wp(10),
+        rowGap: wp(10),
+        paddingBottom: wp(10)
+    },
+    flatList: {
+        paddingHorizontal: wp(10),
+    }
 })

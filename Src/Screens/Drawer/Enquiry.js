@@ -59,7 +59,7 @@ export default function Enquiry() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} showLeft onLeftPress={() => navigation.goBack()} />
-            <KeyboardAwareScrollView style={{ marginHorizontal: wp(16), flex: 1 }}>
+            <KeyboardAwareScrollView extraScrollHeight={50} style={{ marginHorizontal: wp(16), flex: 1 }}>
                 <Text style={styles.headerText}>Enquiry</Text>
                 <TextInput
                     placeholder={'Name'}

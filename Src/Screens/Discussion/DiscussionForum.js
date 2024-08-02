@@ -28,13 +28,11 @@ export default function DiscussionForum() {
   const [refreshing, setRefreshing] = React.useState(false);
   const { discussionCountry, threadList, user } = useSelector(e => e.common)
   useEffect(() => {
-    if (isFocused) { dispatch(getDiscussionCountry({})) }
-  }, [isFocused])
+    dispatch(getDiscussionCountry({}))
+  }, [])
   useEffect(() => {
     if (discussionCountry) {
       let temp = discussionCountry.filter(obj => obj.isSelected)
-
-
       getThreadsList(temp[0]?._id, searchText)
     }
   }, [discussionCountry, searchText])

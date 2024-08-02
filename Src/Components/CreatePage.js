@@ -51,7 +51,7 @@ export default function CreatePage({ onSuccessCreate }) {
     const [city, setcity] = useState('')
     const [country, setcountry] = useState(undefined)
     const dispatch = useDispatch()
-    const [region, setregion] = useState('')
+    // const [region, setregion] = useState('')
     useEffect(() => {
         dispatch(onGetSignupCountry({}))
     }, [])
@@ -79,9 +79,11 @@ export default function CreatePage({ onSuccessCreate }) {
             errorToast('Please enter about')
         } else if (!country) {
             errorToast('Please select country')
-        } else if (region.trim() == '') {
-            errorToast('Please enter region')
-        } else if (city.trim() == '') {
+        }
+        // else if (region.trim() == '') {
+        //     errorToast('Please enter region')
+        // } 
+        else if (city.trim() == '') {
             errorToast('Please enter an city')
         } else {
             let data = {}
@@ -95,7 +97,7 @@ export default function CreatePage({ onSuccessCreate }) {
             }
             data.title = title.trim()
             data.countryId = country?._id
-            data.region = region.trim()
+            // data.region = region.trim()
             data.city = city.trim()
             data.createdBy = user._id
             data.about = about.trim()
@@ -159,7 +161,7 @@ export default function CreatePage({ onSuccessCreate }) {
                         placeholder={'Website'} />
                     <Text style={styles.locationText}>Location</Text>
                     {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country*'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
-                    <Input extraStyle={styles.input} value={region} onChangeText={(text) => setregion(text)} placeholder={'Region*'} />
+                    {/* <Input extraStyle={styles.input} value={region} onChangeText={(text) => setregion(text)} placeholder={'Region*'} /> */}
 
                     <Input extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City*'} />
                     <CommonButton title={'CREATE PAGE'} onPress={() => onPressCreatePage()} extraStyle={{ width: '50%', alignSelf: 'center', marginTop: 20, marginBottom: 50 }} />

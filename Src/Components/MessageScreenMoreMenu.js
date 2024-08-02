@@ -1,23 +1,12 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, } from 'react-native';
 import React from 'react';
-import ApplicationStyles from '../Themes/ApplicationStyles';
 import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import { fontname, screen_width, wp } from '../Themes/Fonts';
+import { wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { onConnectRequest, onGetOtherUserInfo, onPagesConnectRequest, onPagesDisConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
-import { dispatchAction } from '../utils/apiGlobal';
-import { SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, UPDATE_POST_LIST } from '../Redux/ActionTypes';
 
 
 export default function MessageScreenMoreMenu({ visible, onClose }) {

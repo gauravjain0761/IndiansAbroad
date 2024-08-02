@@ -30,7 +30,7 @@ export default function CreateEvent3() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
+            <KeyboardAwareScrollView extraScrollHeight={50} style={{ paddingHorizontal: wp(16) }}>
                 <RenderSteps totalStep={4} currentStep={3} />
                 <Text style={styles.title}>Provide your bank details to receive payments if you charge any event fee to the attendees.</Text>
                 <Input value={bankName} placeholder={'Bank name'} onChangeText={(text) => setbankName(text)} />

@@ -15,7 +15,7 @@ import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
 import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
-import { FontStyle } from '../../utils/commonFunction';
+import { FontStyle, searchUserByName } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import ConnectCard from '../../Components/ConnectCard';
@@ -38,20 +38,8 @@ export default function MyConnections() {
 
 
   const onSearchName = (search) => {
-    let list = followerList
-    const filtered = list.filter((val) =>
-      val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
-    );
-    const filter2 = list.filter((val) =>
-      val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
-    );
-    let searchTextContact = Object.values(
-      filtered.concat(filter2).reduce((r, o) => {
-        r[o._id] = o;
-        return r;
-      }, {})
-    );
-    setfollowList(searchTextContact)
+    let arr = searchUserByName(followerList, 'followingId', search)
+    setfollowList(arr)
   }
 
   useEffect(() => {

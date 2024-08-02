@@ -4,10 +4,17 @@ import { Icons } from '../Themes/Icons'
 import { SCREEN_WIDTH, wp } from '../Themes/Fonts'
 import colors from '../Themes/Colors'
 
-export default function RenderChatMedia({ item, index }) {
+export default function RenderChatMedia({ item, index, noOfItem }) {
+    let size = (SCREEN_WIDTH - wp(noOfItem ? 50 : 40)) / (noOfItem ? noOfItem : 3)
     return (
-        <View key={index} style={styles.mainView}>
-            <Image source={Icons.userImage} style={styles.userImage} />
+        <View key={index} style={{
+            width: size,
+            height: size
+        }}>
+            <Image source={Icons.userImage} style={[styles.userImage, {
+                width: size,
+                height: size
+            }]} />
             {index == 1 && <View style={styles.mainViewPlayBtn}>
                 <View style={styles.videoPlayIcon}>
                     <Image source={Icons.playVideo} style={styles.playBtn} />
@@ -22,12 +29,9 @@ const styles = StyleSheet.create({
 
     },
     mainView: {
-        width: (SCREEN_WIDTH - wp(40)) / 3,
-        height: (SCREEN_WIDTH - wp(40)) / 3
+
     },
     userImage: {
-        width: (SCREEN_WIDTH - wp(40)) / 3,
-        height: (SCREEN_WIDTH - wp(40)) / 3,
         resizeMode: 'cover'
     },
     videoPlayIcon: {

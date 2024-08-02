@@ -37,7 +37,7 @@ export default function CreateEvent1() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
+            <KeyboardAwareScrollView extraScrollHeight={50} style={{ paddingHorizontal: wp(16) }}>
                 <RenderSteps totalStep={4} currentStep={1} />
                 <Text style={styles.title}>Please note that once an event is listed, cancellations are not permitted, so ensure your event details and confirmation are final before submission.</Text>
                 <TouchableOpacity onPress={() => onSelectImage()}>

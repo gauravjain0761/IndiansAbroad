@@ -31,7 +31,7 @@ export default function CreateEvent2() {
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} onlyLabel={'Create Event'} showLeft={true} onLeftPress={() => { navigation.goBack() }} />
-            <KeyboardAwareScrollView style={{ paddingHorizontal: wp(16) }}>
+            <KeyboardAwareScrollView extraScrollHeight={50} style={{ paddingHorizontal: wp(16) }}>
                 <RenderSteps totalStep={4} currentStep={2} />
                 <View style={[ApplicationStyles.row, { gap: 20 }]}>
                     <TouchableOpacity onPress={() => settype('onSite')} style={styles.radioView}>
