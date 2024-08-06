@@ -30,9 +30,7 @@ import Header from '../../Components/Header';
 import { requestNotificationUserPermission } from '../../Config/firebaseConfig';
 
 export default function LoginScreen() {
-  const [email, setemail] = useState(
-    __DEV__ ? 'jadhavharshal.510@gmail.com' : '',
-  );
+  const [email, setemail] = useState(__DEV__ ? 'jadhavharshal.510@gmail.com' : '',);
   const [password, setpassword] = useState(__DEV__ ? 'Trtr#789' : '');
   const navigation = useNavigation();
   const dispatch = useDispatch();

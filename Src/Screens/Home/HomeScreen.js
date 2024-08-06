@@ -97,10 +97,12 @@ export default function HomeScreen() {
     if (tabSelection == 'Activity') {
       getPostList(1);
     } else {
-
+      getEventList(1)
     }
   }
-
+  const getEventList = (page) => {
+    // call event list api
+  }
   useEffect(() => {
     getData()
   }, [tabSelection])
@@ -142,7 +144,6 @@ export default function HomeScreen() {
     );
   };
   const fetchMoreData = () => {
-    console.log('hereee', allPostsCount)
     if (tabSelection == 'Activity') {
       if (allPost) {
         if (allPost.length < allPostsCount) {
@@ -151,7 +152,7 @@ export default function HomeScreen() {
         }
       }
     } else {
-
+      // event list pagination
     }
   };
 
