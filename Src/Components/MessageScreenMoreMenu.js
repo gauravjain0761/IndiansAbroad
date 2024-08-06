@@ -9,17 +9,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-export default function MessageScreenMoreMenu({ visible, onClose }) {
+export default function MessageScreenMoreMenu({ visible, onClose, onPressClear }) {
     const insets = useSafeAreaInsets();
-    const { user, otherUserInfo } = useSelector((state) => state.common);
     const dispatch = useDispatch()
+    const { user, activeChatRoomUser, chatMessageList } = useSelector(e => e.common)
+
     return (
         <ModalContainer isVisible={visible} onClose={() => onClose()} >
             <View style={styles.modalView}>
-                <TouchableOpacity style={styles.row}>
+                {chatMessageList?.length > 0 && <TouchableOpacity onPress={() => onPressClear()} style={styles.row}>
                     <Image style={styles.image} source={Icons.close} />
                     <Text style={styles.text}>Clear Chat</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
                 <TouchableOpacity style={styles.row}>
                     <Image style={styles.image} source={Icons.blockUser} />
                     <Text style={styles.text}>Disconnect</Text>

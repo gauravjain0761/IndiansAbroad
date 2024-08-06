@@ -26,7 +26,7 @@ export default function ChatCard({ data, cardPress, isGroup }) {
       style={[styles.header]}>
       <View style={styles.imageStyle}>
         <RenderUserIcon
-          url={isGroup ? data?.chatLogo[0]?.location : currentUser?.avtar}
+          url={isGroup ? data?.chatLogo[0]?.cdnlocation : currentUser?.avtar}
           height={78}
         // isBorder={currentUser?.subscribedMember}
         />

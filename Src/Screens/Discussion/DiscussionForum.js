@@ -44,7 +44,6 @@ export default function DiscussionForum() {
   }, []);
 
   const getThreadsList = (id, search) => {
-    console.log('calleddd-----', id)
     let obj = {
       data: {
         page: 0,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Linking, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import RenderUserIcon from './RenderUserIcon'
 import { wp } from '../Themes/Fonts'
@@ -9,10 +9,10 @@ import colors from '../Themes/Colors'
 export default function RenderLinkChat({ item, index, name, profileImage }) {
     return (
         <View key={index} style={styles.mainView} >
-            <RenderUserIcon height={36} url={profileImage} />
+            <RenderUserIcon height={36} url={item?.avtar} isBorder={item?.subscribedMember} />
             <View style={ApplicationStyles.flex}>
-                <Text style={styles.nameText}>{name}</Text>
-                <Text style={styles.linkText}>{'https ://remixicon.com/'}</Text>
+                <Text style={styles.nameText}>{item?.first_Name + ' ' + item?.last_Name}</Text>
+                <Text onPress={() => Linking.openURL(item?.content.match(/https?:\/\/[^\s]+/)[0])} style={styles.linkText}>{item?.content}</Text>
             </View>
         </View>
     )

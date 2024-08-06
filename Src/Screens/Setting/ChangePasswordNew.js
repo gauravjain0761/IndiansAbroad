@@ -18,6 +18,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { screenName } from '../../Navigation/ScreenConstants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CommonButton from '../../Components/CommonButton';
+import Input from '../../Components/Input';
 
 export default function ChangePasswordNew() {
   const [email, setEmail] = useState('');
@@ -28,18 +29,15 @@ export default function ChangePasswordNew() {
       <KeyboardAwareScrollView extraScrollHeight={50} style={{ marginHorizontal: wp(16), flex: 1 }}>
         <Text style={styles.headerText}>Change Password</Text>
         <Text style={styles.headerText1}>Please enter your new password</Text>
-        <TextInput
-          placeholder={'Password'}
-          style={styles.inputText}
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
+        <Input value={email} placeholder={'Password'} onChangeText={setEmail} />
+        <Input extraStyle={{ marginTop: wp(20) }} value={email} placeholder={'Confirm Password'} onChangeText={setEmail} />
+
+        {/* <TextInput
           placeholder={'Confirm Password'}
           style={styles.inputText}
           value={email}
           onChangeText={setEmail}
-        />
+        /> */}
         <CommonButton title={'Submit'} onPress={() => {
           navigation.navigate(screenName.Setting);
         }} extraStyle={[styles.btnView]} />

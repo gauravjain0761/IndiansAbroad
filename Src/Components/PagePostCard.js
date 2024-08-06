@@ -93,6 +93,9 @@ export default function PagePostCard({ item, index, }) {
               {item?.cpId?.title}
             </Text>
           </View>
+          <View>
+            <Text style={styles.degreeText1}>Page, {item?.cpId?.countryId?.countryName}</Text>
+          </View>
           <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
         </View>
         {/* <View>

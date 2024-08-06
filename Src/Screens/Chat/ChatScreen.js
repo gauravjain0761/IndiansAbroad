@@ -45,7 +45,6 @@ export default function ChatScreen() {
   const [page, setpage] = useState(1)
   const isFocuse = useIsFocused();
 
-  console.log('allChatRoomCount--', allChatRoomCount)
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getData(1)
@@ -55,21 +54,21 @@ export default function ChatScreen() {
   }, []);
 
   useEffect(() => {
-    if (isFocuse) { getData(1) }
+    if (isFocuse) { getData(1, searchText.trim() !== '' ? searchText : undefined) }
   }, [tabSelection, isFocuse])
-  const getData = (page) => {
+  const getData = (page, search) => {
     if (tabSelection == 'personal') {
-      getPersonalchats(page);
+      getPersonalchats(page, search);
     } else {
-      ongetGroupRooms(page)
+      ongetGroupRooms(page, search)
     }
   }
 
-  const getPersonalchats = (page) => {
+  const getPersonalchats = (page, search) => {
     let obj = {
       data: {
         curruntUser: user._id,
-        searchText: '',
+        searchText: search ? search : '',
         page: page,
         // limit: 5
       },
@@ -80,11 +79,11 @@ export default function ChatScreen() {
     dispatch(getChatRooms(obj));
   }
 
-  const ongetGroupRooms = (page) => {
+  const ongetGroupRooms = (page, search) => {
     let obj = {
       data: {
         curruntUser: user._id,
-        searchText: '',
+        searchText: search ? search : '',
         page: page,
       },
       onSuccess: () => {
@@ -101,76 +100,34 @@ export default function ChatScreen() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const ChatList = () => {
-    return (
-      <View style={styles.rowStyle}>
-        <TouchableOpacity style={styles.userImage}>
-          <RenderUserIcon height={64} isBorder />
-        </TouchableOpacity>
-        <View style={{ marginLeft: 12, flex: 1 }}>
-          <Text style={styles.text}>Community Group</Text>
-          <Text style={styles.text1}>ISRK</Text>
-          <Text style={styles.text2}>Good Morning,Guys</Text>
-        </View>
-        <Text style={styles.text3}>2024-05-13</Text>
-      </View>
-    );
-  };
-
   const fetchMoreData = () => {
     if (tabSelection == 'personal') {
       if (chatRoomList) {
         if (chatRoomList.length < allChatRoomCount) {
           setloading(true);
-          getPersonalchats(page);
+          getPersonalchats(page, searchText.trim() !== '' ? searchText : undefined);
         }
       }
     } else {
       if (groupRoomList) {
         if (groupRoomList.length < allGroupRoomCount) {
           setloading(true);
-          ongetGroupRooms(page);
+          ongetGroupRooms(page, searchText.trim() !== '' ? searchText : undefined);
         }
       }
     }
   };
 
   const onPressItem = (item, currentUser) => {
-    dispatchAction(dispatch, GET_CHAT_MESSAGES, []);
+    dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
     dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser, chatId: item._id })
     navigate(screenName.Messaging);
-    let obj = {
-      data: {
-        search: '',
-        chatId: item._id,
-        currUser: user._id,
-        page: 1,
-        userId: user._id,
-      },
-      onSuccess: () => {
-
-      },
-    };
-    dispatch(getChatMessage(obj));
   };
 
   const onPressGroupChat = (item) => {
-    dispatchAction(dispatch, GET_CHAT_MESSAGES, []);
+    dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
     dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item, chatId: item._id })
     navigate(screenName.GroupMessaging);
-    let obj = {
-      data: {
-        search: '',
-        chatId: item._id,
-        currUser: user._id,
-        page: 1,
-        userId: user._id,
-      },
-      onSuccess: () => {
-
-      },
-    };
-    dispatch(getChatMessage(obj));
   }
 
   return (
@@ -223,7 +180,7 @@ export default function ChatScreen() {
         <View key={'1'}>
           <SearchBar
             value={searchText}
-            onChangeText={text => setSearchText(text)}
+            onChangeText={text => { setSearchText(text), getData(1, text) }}
             placeholder={'Search Chats here'}
           />
           {/* <ChatList /> */}
@@ -253,7 +210,7 @@ export default function ChatScreen() {
                   {chatRoomList && loading && (
                     <ActivityIndicator size={'large'} color={colors.black} />
                   )}
-                  <View style={{ height: 50 }} />
+                  <View style={{ height: 60 }} />
                 </View>
               );
             }}
@@ -263,7 +220,7 @@ export default function ChatScreen() {
         <View key={'2'}>
           <SearchBar
             value={searchText}
-            onChangeText={text => setSearchText(text)}
+            onChangeText={text => { setSearchText(text), getData(1, text) }}
             placeholder={'Search Chats here'}
           />
           {/* <ChatList /> */}
@@ -294,7 +251,7 @@ export default function ChatScreen() {
                   {groupRoomList && loading && (
                     <ActivityIndicator size={'large'} color={colors.black} />
                   )}
-                  <View style={{ height: 50 }} />
+                  <View style={{ height: 60 }} />
                 </View>
               );
             }}

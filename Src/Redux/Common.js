@@ -37,6 +37,10 @@ import {
   SET_PAGE_DETAIL,
   SET_ACTIVE_CHAT_ROOM_USER,
   GET_GROUP_ROOMS,
+  SET_UNREAD_MSG_COUNT,
+  ADD_ONE_MESSAGE,
+  SET_CHAT_DETAIL,
+  SET_CHAT_MEDIA_LINK,
 } from './ActionTypes';
 
 const initialState = {
@@ -69,10 +73,14 @@ const initialState = {
   allChatRoomCount: 0,
   groupRoomList: undefined,
   allGroupRoomCount: 0,
-  chatMessageList: [],
+  chatMessageList: undefined,
+  allChatMessageCount: 0,
   myPage: undefined,
   pageDetail: undefined,
-  activeChatRoomUser: undefined
+  activeChatRoomUser: undefined,
+  unreadMsgCount: 0,
+  activeChatDetails: undefined,
+  activeChatMediaLinks: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -406,7 +414,21 @@ export default function (state = initialState, action) {
       };
     }
     case GET_CHAT_MESSAGES: {
-      return { ...state, chatMessageList: action.payload };
+      if (action?.payload) {
+        return {
+          ...state,
+          chatMessageList:
+            action.payload.current_page == 1
+              ? action.payload.data
+              : [...state.chatMessageList, ...action.payload.data],
+          allChatMessageCount: action.payload.totalDocuments,
+        };
+      } else {
+        return {
+          ...state,
+          chatMessageList: action.payload
+        }
+      }
     }
     case MY_PAGES: {
       return { ...state, myPage: action.payload }
@@ -416,6 +438,26 @@ export default function (state = initialState, action) {
     }
     case SET_ACTIVE_CHAT_ROOM_USER: {
       return { ...state, activeChatRoomUser: action.payload }
+    }
+    case SET_UNREAD_MSG_COUNT: {
+      return { ...state, unreadMsgCount: action.payload }
+    }
+    case ADD_ONE_MESSAGE: {
+      if (action?.payload?.room == state?.activeChatRoomUser?.chatId && state.chatMessageList.filter(obj => obj?._id == action.payload.message?.messageId).length == 0) {
+        let chatMessageList = Object.assign([], state.chatMessageList)
+        chatMessageList.unshift({ ...action.payload.message, _id: action.payload.message.messageId })
+        return { ...state, chatMessageList }
+      }
+    }
+    case SET_CHAT_DETAIL: {
+      if (action.payload == undefined) {
+        return { ...state, activeChatDetails: action.payload, activeChatMediaLinks: action.payload }
+      } else {
+        return { ...state, activeChatDetails: action.payload }
+      }
+    }
+    case SET_CHAT_MEDIA_LINK: {
+      return { ...state, activeChatMediaLinks: action.payload }
     }
     default:
       return state;

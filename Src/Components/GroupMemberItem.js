@@ -42,7 +42,7 @@ export default function GroupMemberItem({ item, index, }) {
         <View key={index}>
             <TouchableOpacity onPress={() => onOpenUserDetail()} style={[styles.header]}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                    <RenderUserIcon url={item?.userAvtar?.location} height={45} isBorder={item?.subscribedMember} />
+                    <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
                     <Text numberOfLines={1} style={styles.text1}>
                         {item.first_Name} {item.last_Name}
                     </Text>
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         // marginBottom: hp(16),
         // paddingVertical: hp(5),
         paddingVertical: hp(15),
-        paddingLeft: hp(15)
+        paddingLeft: hp(15),
     },
     text1: {
         marginLeft: 12,

@@ -155,7 +155,6 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
     }
   };
 
-
   if (item?.createdBy) {
     return (
       <View key={item?._id}>
@@ -188,6 +187,9 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
                 <Text style={styles.username1}>
                   {item?.cpId?.title}
                 </Text>
+              </View>
+              <View>
+                <Text style={styles.degreeText1}>Page, {item?.cpId?.countryId?.countryName}</Text>
               </View>
               <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
             </TouchableOpacity>

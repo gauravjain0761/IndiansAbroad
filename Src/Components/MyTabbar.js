@@ -13,8 +13,10 @@ import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
 import { screenName } from '../Navigation/ScreenConstants';
 import { FontStyle } from '../utils/commonFunction';
+import { useSelector } from 'react-redux';
 
 export default function MyTabbar({ state, descriptors, navigation }) {
+  const { unreadMsgCount } = useSelector(e => e.common)
   return (
     <SafeAreaView style={{ backgroundColor: colors.white }}>
       <View style={styles.container}>
@@ -79,6 +81,11 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                   }}
                   source={iconName}
                 />
+                {route.name == screenName.chatScreen && unreadMsgCount > 0 &&
+                  <View style={{ position: 'absolute', zIndex: 1, top: 8, right: 0, width: 30 }}>
+                    <Text style={FontStyle(14, colors.red_DE6161, '700')}>{unreadMsgCount}</Text>
+                  </View>
+                }
                 {isFocused && (
                   <Text
                     style={{
@@ -88,6 +95,7 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                     {label}
                   </Text>
                 )}
+
               </TouchableOpacity>
             );
           })}

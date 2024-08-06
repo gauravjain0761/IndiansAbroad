@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
@@ -11,20 +11,27 @@ import { FontStyle } from '../../utils/commonFunction';
 import { screenName } from '../../Navigation/ScreenConstants';
 import RenderChatMedia from '../../Components/RenderChatMedia';
 import RenderLinkChat from '../../Components/RenderLinkChat';
+import { onGetMediaLinks } from '../../Services/ChatServices';
+import NoDataFound from '../../Components/NoDataFound';
 export default function GroupMediaScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { chatMessageList, user, activeChatRoomUser } = useSelector(e => e.common);
+    const { chatMessageList, user, activeChatRoomUser, activeChatMediaLinks } = useSelector(e => e.common);
     const [tabSelection, setTabSelection] = useState('media');
+
+    useEffect(() => {
+        dispatch(onGetMediaLinks({ data: { chatId: activeChatRoomUser?.chatId } }))
+    }, [tabSelection])
+
     const renderItem = ({ item, index }) => {
         return (
-            <RenderChatMedia item={item} index={index} />
+            <RenderChatMedia item={item?.file[0]} index={index} />
         )
     }
 
     const renderItemLink = ({ item, index }) => {
         return (
-            <RenderLinkChat item={item} index={index} profileImage={undefined} name={'Shree Ramranjan'} />
+            <RenderLinkChat item={item} index={index} />
         )
     }
 
@@ -66,9 +73,10 @@ export default function GroupMediaScreen() {
                             columnWrapperStyle={styles.columnStyle}
                             numColumns={3}
                             bounces={false}
-                            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                            data={activeChatMediaLinks?.media}
                             renderItem={renderItem}
                             showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={<NoDataFound />}
                         />
                     </View>
                     :
@@ -78,9 +86,10 @@ export default function GroupMediaScreen() {
                             keyExtractor={item => "_" + item?._id}
                             numColumns={1}
                             style={styles.flatList}
-                            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                            data={activeChatMediaLinks?.links}
                             renderItem={renderItemLink}
                             showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={<NoDataFound />}
                         />
                     </View>
                 }

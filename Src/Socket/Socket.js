@@ -1,4 +1,6 @@
 import { io } from 'socket.io-client';
+import { dispatchAction } from '../utils/apiGlobal';
+import { ADD_ONE_MESSAGE } from '../Redux/ActionTypes';
 
 let socket = null;
 export { socket };
@@ -34,12 +36,20 @@ export const socketConnect = (dispatch, next) => {
         console.log("-----------socket disconnect-----------");
     });
     socket.on('msgReceive', data => {
-        console.log('msgReceive', data);
+        dispatchAction(dispatch, ADD_ONE_MESSAGE, data)
+        console.log('msgReceive---', data);
     });
     socket.on('msgReceiveSelf', data => {
-        console.log('damsgReceiveSelfta', data);
+        dispatchAction(dispatch, ADD_ONE_MESSAGE, data)
+        console.log('msgReceiveSelf----', data);
     });
     socket.on('joinRoom', data => {
-        console.log('joinRoom', data);
+        console.log('joinRoom---', data);
+    });
+    socket.on('userOnline', data => {
+        console.log('userOnline---', data);
+    });
+    socket.on('messageDeleted', data => {
+        console.log('messageDeleted---', data);
     });
 };

@@ -84,7 +84,12 @@ export const api = {
   //chat
   chatRoom: '/chat/list/personal',
   groupRoom: '/chat/list/groups',
-  message: '/message/listall',
+  messageList: '/message/listall',
+  getUnreadMessage: '/message/unreadmsg',
+  chatDetails: '/chat/detail',
+  getMediaFilesLinks: '/chat/group/media/files-links',
+  clearAllChat: '/message/clearall',
+  leaveGroup: '/chat/leave'
 };
 
 export const POST = 'POST';

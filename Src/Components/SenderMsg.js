@@ -5,6 +5,7 @@ import colors from '../Themes/Colors';
 import { FontStyle } from '../utils/commonFunction';
 import { Menu, MenuItem } from 'react-native-material-menu';
 import moment from 'moment';
+import RenderText from './RenderText';
 
 const SenderMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
@@ -24,7 +25,11 @@ const SenderMsg = ({ data }) => {
               onLongPress={showMenu}
               style={styles.boxContainer}>
               <Text style={styles.nameTextStyle}>{'You'}</Text>
-              <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
+              <View style={{ flexDirection: 'row' }}>
+                <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
+                <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+              </View>
+              {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
               <Text style={[styles.timeTextStyle, {
                 marginTop: -13,
               }]}>
@@ -63,10 +68,11 @@ const SenderMsg = ({ data }) => {
 const styles = StyleSheet.create({
   conatiner: {
     // flexDirection: 'row',
-    maxWidth: SCREEN_WIDTH - wp(50),
+    // maxWidth: SCREEN_WIDTH - wp(50),
     marginHorizontal: wp(10),
     marginBottom: hp(10),
     alignSelf: 'flex-end',
+    // backgroundColor: 'red'
   },
   imgStyle: {
     height: wp(35),
@@ -84,8 +90,9 @@ const styles = StyleSheet.create({
   },
   msgTextStyle: {
     ...FontStyle(14, colors.white, '400'),
-    paddingHorizontal: wp(10),
+    paddingLeft: wp(5),
     paddingBottom: wp(5),
+    maxWidth: SCREEN_WIDTH - wp(130),
   },
   columnContainer: {
     marginLeft: wp(10),

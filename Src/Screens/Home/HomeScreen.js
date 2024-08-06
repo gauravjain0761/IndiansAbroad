@@ -23,6 +23,7 @@ import { io } from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
 import { Icons } from '../../Themes/Icons';
 import { socket, socketConnect } from '../../Socket/Socket';
+import { onGetUnreadMsgCount } from '../../Services/ChatServices';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -38,6 +39,11 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
+
+  useEffect(() => {
+    dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }))
+  }, [])
+
 
   useEffect(() => {
 

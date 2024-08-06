@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,9 @@ import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
 import { FontStyle } from '../utils/commonFunction';
 
-const ChatInput = () => {
+const ChatInput = ({ message, setmessage, onSend }) => {
+
+
   return (
     <View style={styles.conatiner}>
       <TouchableOpacity style={styles.plusBoxStyle}>
@@ -27,9 +29,11 @@ const ChatInput = () => {
           style={styles.inputStyle}
           placeholder="Type Here"
           placeholderTextColor={colors.secondary_500}
+          value={message}
+          onChangeText={(text) => setmessage(text)}
         />
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => onSend()}>
         <Image
           source={Icons.send}
           resizeMode="contain"

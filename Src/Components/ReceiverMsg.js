@@ -7,6 +7,8 @@ import { Menu } from 'react-native-material-menu';
 import { api } from '../utils/apiConstants';
 import moment from 'moment';
 import RenderUserIcon from './RenderUserIcon';
+import RenderText from './RenderText';
+
 
 const ReciverMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
@@ -39,7 +41,11 @@ const ReciverMsg = ({ data }) => {
                     ' ' +
                     data?.createdBy?.last_Name}
                 </Text>
-                <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text>
+                <View style={{ flexDirection: 'row' }}>
+                  <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
+                  <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                </View>
+                {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
                 <Text style={[styles.timeTextStyle, {
                   marginTop: -13,
                 }]}>
@@ -69,7 +75,8 @@ const ReciverMsg = ({ data }) => {
 const styles = StyleSheet.create({
   conatiner: {
     flexDirection: 'row',
-    maxWidth: SCREEN_WIDTH - wp(100),
+    // backgroundColor: 'red',
+    // maxWidth: SCREEN_WIDTH - wp(100),
     marginHorizontal: wp(10),
     marginBottom: hp(10),
     // alignItems: 'center'
@@ -91,8 +98,9 @@ const styles = StyleSheet.create({
   },
   msgTextStyle: {
     ...FontStyle(14, colors.neutral_900, '400'),
-    paddingHorizontal: wp(10),
+    paddingLeft: wp(5),
     paddingBottom: wp(5),
+    maxWidth: SCREEN_WIDTH - wp(170)
   },
   columnContainer: {
     marginLeft: wp(10),

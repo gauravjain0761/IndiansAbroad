@@ -20,13 +20,14 @@ import ReactNativeModal from 'react-native-modal';
 import { Icons } from '../Themes/Icons';
 import { api } from '../utils/apiConstants';
 
-const ImageModalShow = ({modalVisible, onClose,url}) => {
+const ImageModalShow = ({ modalVisible, onClose, url }) => {
   let isUrl = url !== undefined && url !== '';
+  console.log(url)
   return (
     <ReactNativeModal
       backdropOpacity={0.5}
       isVisible={modalVisible}
-      style={{margin: 0, backgroundColor: colors.white}}
+      style={{ margin: 0, backgroundColor: colors.white }}
       onBackButtonPress={() => onClose()}
       onBackdropPress={() => onClose()}>
       <View style={styles.container}>
@@ -70,14 +71,14 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: screen_width,
     height: screen_Height * 0.8,
-    resizeMode:'contain'
+    resizeMode: 'contain'
   },
-  closeStyle:{
+  closeStyle: {
     width: 24,
     height: 24,
   },
-  closeView:{
-    alignSelf:'flex-end',
+  closeView: {
+    alignSelf: 'flex-end',
     marginRight: 20,
   }
 });

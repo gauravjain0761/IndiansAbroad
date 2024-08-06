@@ -11,11 +11,49 @@ import App from '../App';
 import { screenName } from '../Navigation/ScreenConstants';
 import MessageScreenMoreMenu from './MessageScreenMoreMenu';
 import GroupChatMoreMenu from './GroupChatMoreMenu';
+import ConfirmationModal from './ConfirmationModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { onClearAllChat, onLeaveFromGroup } from '../Services/ChatServices';
+import { resetNavigation } from '../utils/Global';
 
 const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false }) => {
   const { goBack, navigate } = useNavigation();
   const [moreMenu, setmoreMenu] = useState(false)
   const [moreMenuGroup, setmoreMenuGroup] = useState(false)
+  const [clearChatModal, setclearChatModal] = useState(false)
+  const dispatch = useDispatch()
+  const { user, activeChatRoomUser, chatMessageList } = useSelector(e => e.common)
+  const [leaveGroupModal, setleaveGroupModal] = useState(false)
+  const navigation = useNavigation()
+
+  const onClearChat = () => {
+    setclearChatModal(false)
+    dispatch(onClearAllChat(
+      {
+        data: {
+          userId: user._id,
+          chatId: activeChatRoomUser?.chatId,
+        },
+      }
+    ))
+  }
+
+  const onLeaveGroup = () => {
+    setleaveGroupModal(false)
+    dispatch(onLeaveFromGroup(
+      {
+        data: {
+          curruntUser: user._id,
+          groupId: activeChatRoomUser?.chatId,
+        },
+        onSuccess: () => {
+          navigation.goBack()
+          // resetNavigation('Home')
+        }
+      }
+    ))
+  }
+
   return (
     <View style={styles.conatiner}>
       <TouchableOpacity onPress={() => goBack()} style={styles.menuIcon}>
@@ -32,9 +70,38 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
       <TouchableOpacity onPress={() => { isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
         <Image source={Icons.more} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
-      {moreMenu && <MessageScreenMoreMenu visible={moreMenu} onClose={() => setmoreMenu(false)} />}
-      {moreMenuGroup && <GroupChatMoreMenu visible={moreMenuGroup} onClose={() => setmoreMenuGroup(false)} />}
+      {moreMenu && <MessageScreenMoreMenu
+        onPressClear={() => { setmoreMenu(false), setTimeout(() => { setclearChatModal(true) }, 500) }}
+        visible={moreMenu}
+        onClose={() => setmoreMenu(false)} />}
+      {moreMenuGroup && <GroupChatMoreMenu
+        onLeaveGroup={() => { setmoreMenuGroup(false), setTimeout(() => { setleaveGroupModal(true) }, 500) }}
 
+        onPressClear={() => { setmoreMenuGroup(false), setTimeout(() => { setclearChatModal(true) }, 500) }}
+        visible={moreMenuGroup}
+        onClose={() => setmoreMenuGroup(false)} />}
+      {clearChatModal && (
+        <ConfirmationModal
+          visible={clearChatModal}
+          onClose={() => setclearChatModal(false)}
+          title={`Are you sure you want to clear chat?`}
+          successBtn={'Clear'}
+          canselBtn={'No'}
+          onPressCancel={() => setclearChatModal(false)}
+          onPressSuccess={() => onClearChat()}
+        />
+      )}
+      {leaveGroupModal && (
+        <ConfirmationModal
+          visible={leaveGroupModal}
+          onClose={() => setleaveGroupModal(false)}
+          title={`Are you sure you want to exit from group?`}
+          successBtn={'Exit'}
+          canselBtn={'No'}
+          onPressCancel={() => setleaveGroupModal(false)}
+          onPressSuccess={() => onLeaveGroup()}
+        />
+      )}
     </View>
   );
 };

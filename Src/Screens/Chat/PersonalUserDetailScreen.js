@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
@@ -11,21 +11,37 @@ import { FontStyle } from '../../utils/commonFunction';
 import { screenName } from '../../Navigation/ScreenConstants';
 import RenderChatMedia from '../../Components/RenderChatMedia';
 import RenderLinkChat from '../../Components/RenderLinkChat';
+import { onGetChatDetail, onGetMediaLinks } from '../../Services/ChatServices';
+import NoDataFound from '../../Components/NoDataFound';
+import ImageModalShow from '../../Components/ImageModal';
 
 export default function PersonalUserDetailScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { chatMessageList, user, activeChatRoomUser } = useSelector(e => e.common);
+    const { chatMessageList, user, activeChatRoomUser, activeChatDetails, activeChatMediaLinks } = useSelector(e => e.common);
     const [tabSelection, setTabSelection] = useState('media');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectURI, setSelectURI] = useState('');
+
+    useEffect(() => {
+        let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
+        dispatch(onGetChatDetail(obj))
+    }, [])
+
+    useEffect(() => {
+        dispatch(onGetMediaLinks({ data: { chatId: activeChatRoomUser?.chatId } }))
+    }, [tabSelection])
+
+
     const renderItem = ({ item, index }) => {
         return (
-            <RenderChatMedia item={item} index={index} />
+            <RenderChatMedia item={item?.file[0]} index={index} />
         )
     }
 
     const renderItemLink = ({ item, index }) => {
         return (
-            <RenderLinkChat item={item} index={index} profileImage={activeChatRoomUser?.currentUser?.avtar} name={`${activeChatRoomUser?.currentUser?.first_Name} ${activeChatRoomUser?.currentUser?.last_Name}`} />
+            <RenderLinkChat item={item} index={index} />
         )
     }
     return (
@@ -39,9 +55,12 @@ export default function PersonalUserDetailScreen() {
             />
             <ScrollView style={{ flex: 1 }} >
                 <View style={styles.userViewStyle}>
-                    <View style={styles.imageView}>
+                    <TouchableOpacity onPress={() => {
+                        setSelectURI(activeChatRoomUser?.currentUser?.avtar);
+                        setModalVisible(true);
+                    }} style={styles.imageView}>
                         <RenderUserIcon url={activeChatRoomUser?.currentUser?.avtar} height={100} isBorder={activeChatRoomUser?.currentUser?.subscribedMember} />
-                    </View>
+                    </TouchableOpacity>
                     <Text style={styles.userText}>{activeChatRoomUser?.currentUser?.first_Name} {activeChatRoomUser?.currentUser?.last_Name}</Text>
                     <TouchableOpacity
                         onPress={() => navigation.navigate(screenName.indiansDetails, { userId: activeChatRoomUser?.currentUser?._id })}
@@ -59,32 +78,43 @@ export default function PersonalUserDetailScreen() {
                 </View>
                 {tabSelection == 'media' ?
                     <View>
-                        <FlatList
+                        {activeChatMediaLinks && <FlatList
                             style={styles.flatList}
                             key={'#'}
                             keyExtractor={item => "#" + item?._id}
                             columnWrapperStyle={styles.columnStyle}
                             numColumns={3}
                             bounces={false}
-                            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                            data={activeChatMediaLinks?.media}
                             renderItem={renderItem}
                             showsVerticalScrollIndicator={false}
-                        />
+                            ListEmptyComponent={<NoDataFound />}
+                        />}
                     </View>
                     :
                     <View>
-                        <FlatList
+                        {activeChatMediaLinks && <FlatList
                             key={'_'}
                             keyExtractor={item => "_" + item?._id}
                             numColumns={1}
                             style={styles.flatList}
-                            data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+                            data={activeChatMediaLinks?.links}
                             renderItem={renderItemLink}
                             showsVerticalScrollIndicator={false}
-                        />
+                            ListEmptyComponent={<NoDataFound />}
+                        />}
                     </View>
                 }
             </ScrollView>
+            {modalVisible && (
+                <ImageModalShow
+                    modalVisible={modalVisible}
+                    url={selectURI}
+                    onClose={() => {
+                        setModalVisible(false);
+                    }}
+                />
+            )}
         </SafeAreaView>
     )
 }

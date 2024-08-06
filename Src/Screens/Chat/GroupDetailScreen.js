@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, FlatList, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
@@ -15,14 +15,44 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { Icons } from '../../Themes/Icons';
 import NoDataFound from '../../Components/NoDataFound';
 import GroupMemberItem from '../../Components/GroupMemberItem';
+import { onGetChatDetail, onGetMediaLinks, onLeaveFromGroup } from '../../Services/ChatServices';
+import ImageModalShow from '../../Components/ImageModal';
+import ConfirmationModal from '../../Components/ConfirmationModal';
 
 export default function GroupDetailScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { chatMessageList, user, activeChatRoomUser } = useSelector(e => e.common);
+    const { chatMessageList, user, activeChatRoomUser, activeChatDetails, activeChatMediaLinks } = useSelector(e => e.common);
     const [tabSelection, setTabSelection] = useState('media');
     const [visible, setVisible] = useState(false);
     const listData = [1, 2, 3, 4]
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectURI, setSelectURI] = useState('');
+    const [leaveGroupModal, setleaveGroupModal] = useState(false)
+
+    const onLeaveGroup = () => {
+        setleaveGroupModal(false)
+        dispatch(onLeaveFromGroup(
+            {
+                data: {
+                    curruntUser: user._id,
+                    groupId: activeChatRoomUser?.chatId,
+                },
+                onSuccess: () => {
+                    navigation.pop(2)
+                    // resetNavigation('Home')
+                }
+            }
+        ))
+    }
+
+
+    useEffect(() => {
+        let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
+        dispatch(onGetChatDetail(obj))
+        dispatch(onGetMediaLinks({ data: { chatId: activeChatRoomUser?.chatId } }))
+    }, [])
+
 
     const hideMenu = () => setVisible(false);
 
@@ -31,9 +61,9 @@ export default function GroupDetailScreen() {
     const renderItem = ({ item, index }) => {
         return (
             <View>
-                <RenderChatMedia noOfItem={4} item={item} index={index} />
-                {index == listData.length - 1 &&
-                    <TouchableOpacity onPress={() => navigation.navigate(screenName.GroupMediaScreen)} style={styles.moreView}><Text style={styles.moreText}>50{'\n'}more</Text></TouchableOpacity>
+                <RenderChatMedia noOfItem={4} item={item?.file[0]} index={index} />
+                {index == 3 &&
+                    <TouchableOpacity onPress={() => navigation.navigate(screenName.GroupMediaScreen)} style={styles.moreView}><Text style={styles.moreText}>{activeChatMediaLinks?.media.length - 3}{'\n'}more</Text></TouchableOpacity>
                 }
             </View>
         )
@@ -61,7 +91,7 @@ export default function GroupDetailScreen() {
                             <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { }, 500); }}>
                                 Edit
                             </MenuItem>
-                            <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { }, 500); }}>
+                            <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { setleaveGroupModal(true) }, 500) }}>
                                 Leave Group
                             </MenuItem>
                         </Menu>
@@ -70,14 +100,22 @@ export default function GroupDetailScreen() {
             />
             <ScrollView style={{ flex: 1 }} >
                 <View style={styles.userViewStyle}>
-                    <View style={styles.imageView}>
-                        <RenderUserIcon url={activeChatRoomUser?.currentUser?.chatLogo[0]?.location} height={100} isBorder={false} />
-                    </View>
-                    <Text style={styles.userText}>{activeChatRoomUser?.currentUser?.chatName}</Text>
+                    <TouchableOpacity onPress={() => {
+                        setSelectURI(activeChatDetails?.chatLogo[0]?.cdnlocation);
+                        setModalVisible(true);
+                    }} style={styles.imageView}>
+                        <RenderUserIcon url={activeChatDetails?.chatLogo[0]?.cdnlocation} height={100} isBorder={false} />
+                    </TouchableOpacity>
+                    <Text style={styles.userText}>{activeChatDetails?.chatName}</Text>
 
                 </View>
-                <Text style={styles.title}>Media & Links</Text>
-                <View>
+                <View style={styles.memberView}>
+                    <Text style={styles.title}>Media & Links</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate(screenName.GroupMediaScreen)} style={ApplicationStyles.row}>
+                        <Text style={[styles.menberText, { color: colors.primary_500 }]}>View All</Text>
+                    </TouchableOpacity>
+                </View>
+                {activeChatMediaLinks && <View>
                     <FlatList
                         style={styles.flatList}
                         key={'#'}
@@ -85,30 +123,53 @@ export default function GroupDetailScreen() {
                         columnWrapperStyle={styles.columnStyle}
                         numColumns={4}
                         bounces={false}
-                        data={listData}
+                        data={activeChatMediaLinks?.media.slice(0, 4)}
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={<View style={{ height: 100, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ ...FontStyle(14, colors.neutral_400), }} >Media files are not available</Text>
+                        </View>}
                     />
-                </View>
+                </View>}
                 <View style={styles.memberView}>
-                    <Text style={styles.menberText}>Member ({activeChatRoomUser?.currentUser?.users?.length})</Text>
+                    <Text style={styles.menberText}>Member ({activeChatDetails?.users?.length})</Text>
                     <TouchableOpacity onPress={() => navigation.navigate(screenName.AddMemberScreen)} style={ApplicationStyles.row}>
                         <Image source={Icons.plus} style={styles.plusIcon} />
                         <Text style={[styles.menberText, { color: colors.primary_500 }]}>Add Member</Text>
                     </TouchableOpacity>
                 </View>
-                <View>
-                    {/* activeChatRoomUser?.currentUser?.users */}
+                {activeChatDetails && <View>
+                    {/* activeChatDetails?.users */}
                     <FlatList
-                        data={activeChatRoomUser?.currentUser?.users}
+                        data={activeChatDetails?.users}
                         renderItem={({ item, index }) => {
                             return <GroupMemberItem item={item} index={index} />
                         }}
                         ListEmptyComponent={<NoDataFound />}
                         showsVerticalScrollIndicator={false}
                     />
-                </View>
+                </View>}
             </ScrollView>
+            {modalVisible && (
+                <ImageModalShow
+                    modalVisible={modalVisible}
+                    url={selectURI}
+                    onClose={() => {
+                        setModalVisible(false);
+                    }}
+                />
+            )}
+            {leaveGroupModal && (
+                <ConfirmationModal
+                    visible={leaveGroupModal}
+                    onClose={() => setleaveGroupModal(false)}
+                    title={`Are you sure you want to exit from group?`}
+                    successBtn={'Exit'}
+                    canselBtn={'No'}
+                    onPressCancel={() => setleaveGroupModal(false)}
+                    onPressSuccess={() => onLeaveGroup()}
+                />
+            )}
         </SafeAreaView>
     )
 }
@@ -141,7 +202,7 @@ const styles = StyleSheet.create({
     },
     title: {
         ...FontStyle(18, colors.neutral_900, '700'),
-        marginHorizontal: wp(10),
+        // marginLeft: wp(10),
         marginBottom: 10
     },
     columnStyle: {

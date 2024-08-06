@@ -8,18 +8,18 @@ import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function GroupChatMoreMenu({ visible, onClose }) {
+export default function GroupChatMoreMenu({ visible, onClose, onPressClear, onLeaveGroup }) {
     const insets = useSafeAreaInsets();
-    const { user, otherUserInfo } = useSelector((state) => state.common);
+    const { user, activeChatRoomUser, chatMessageList } = useSelector(e => e.common)
     const dispatch = useDispatch()
     return (
         <ModalContainer isVisible={visible} onClose={() => onClose()} >
             <View style={styles.modalView}>
-                <TouchableOpacity style={styles.row}>
+                {chatMessageList?.length > 0 && <TouchableOpacity onPress={() => onPressClear()} style={styles.row}>
                     <Image style={styles.image} source={Icons.close} />
                     <Text style={styles.text}>Clear Chat</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.row}>
+                </TouchableOpacity>}
+                <TouchableOpacity onPress={() => onLeaveGroup()} style={styles.row}>
                     <Image style={styles.image} source={Icons.logout} />
                     <Text style={styles.text}>Leave group</Text>
                 </TouchableOpacity>
