@@ -68,7 +68,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
   }, [])
   const openDocPicker = async (type) => {
     if (imageArray.length < 9) {
-      ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
+      ImageCropPicker.openPicker({ cropping: true, maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
           if (type == 'video') {
             let temp = []

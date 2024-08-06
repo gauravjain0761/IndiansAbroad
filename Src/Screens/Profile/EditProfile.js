@@ -86,19 +86,31 @@ export default function EditProfile() {
 
   const openPicker = () => {
     closeActionSheet();
-    ImageCropPicker.openCamera({
-      mediaType: 'photo',
-    }).then(image => {
-      setimage(image)
-    }).catch(error => { console.log('err---', error); });
+    setTimeout(() => {
+      ImageCropPicker.openCamera({
+        mediaType: 'photo',
+        multiple: false,
+        cropping: true,
+        freeStyleCropEnabled: true,
+      }).then(image => {
+        setimage(image)
+      }).catch(error => { console.log('err---', error); });
+    }, 500);
+
   };
   const openGallery = () => {
-    closeActionSheet()
-    ImageCropPicker.openPicker({
-      mediaType: 'photo',
-    }).then(image => {
-      setimage(image)
-    }).catch(error => { console.log('err---', error); });
+    setTimeout(() => {
+      ImageCropPicker.openPicker({
+        mediaType: 'photo',
+        multiple: false,
+        cropping: true,
+        freeStyleCropEnabled: true,
+      }).then(image => {
+        setimage(image)
+      }).catch(error => { console.log('err---', error); });
+    }, 500);
+    closeActionSheet();
+    
   };
 
   const onSave = () => {

@@ -88,19 +88,25 @@ export default function IndiansPageUpdate() {
   }, [myPage])
   const openPicker = () => {
     closeActionSheet();
-    ImageCropPicker.openCamera({
-      mediaType: 'photo',
-    }).then(image => {
-      setimage(image)
-    }).catch(error => { console.log('err---', error); });
+    setTimeout(() => {
+      ImageCropPicker.openCamera({
+        mediaType: 'photo',
+      }).then(image => {
+        setimage(image)
+      }).catch(error => { console.log('err---', error); });
+    }, 500);
+   
   };
   const openGallery = () => {
     closeActionSheet()
-    ImageCropPicker.openPicker({
-      mediaType: 'photo',
-    }).then(image => {
-      setimage(image)
-    }).catch(error => { console.log('err---', error); });
+    setTimeout(() => {
+      ImageCropPicker.openPicker({
+        mediaType: 'photo',
+      }).then(image => {
+        setimage(image)
+      }).catch(error => { console.log('err---', error); });
+    }, 500);
+    
   };
   const DropView = ({ value, onChangeText, placeholder, label }) => {
     return (
