@@ -83,7 +83,7 @@ let data = [
 ];
 
 const Messaging = () => {
-  const { chatMessageList, user, activeChatRoomUser, allChatMessageCount } = useSelector(e => e.common);
+  const { chatMessageList, user, followerList, activeChatRoomUser, allChatMessageCount } = useSelector(e => e.common);
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const [message, setmessage] = useState('')
@@ -177,10 +177,9 @@ const Messaging = () => {
           );
         }}
       />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
+      {followerList.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 && <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
         <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
-      </KeyboardAvoidingView>
-
+      </KeyboardAvoidingView>}
     </SafeAreaView>
   );
 };

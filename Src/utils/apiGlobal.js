@@ -23,7 +23,7 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
       .then(response => {
         // console.log("res--->", api.BASE_URL + url, data, params);
 
-        console.log("res--->", api.BASE_URL + url, data, params, JSON.stringify(response?.data));
+        console.log("res--->", api.BASE_URL + url, data, params, response?.data);
         if (response.status === 200 || response.status === 201) {
           resolve(response);
         } else {

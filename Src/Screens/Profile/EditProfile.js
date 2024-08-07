@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import colors from '../../Themes/Colors';
 import { Icons } from '../../Themes/Icons';
 import { errorToast, FontStyle, ImageStyle, successToast } from '../../utils/commonFunction';
-import { fontname, hp, wp } from '../../Themes/Fonts';
+import { fontname, hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import Input from '../../Components/Input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -91,7 +91,8 @@ export default function EditProfile() {
         mediaType: 'photo',
         multiple: false,
         cropping: true,
-        freeStyleCropEnabled: true,
+        height: SCREEN_WIDTH,
+        width: SCREEN_WIDTH,
       }).then(image => {
         setimage(image)
       }).catch(error => { console.log('err---', error); });
@@ -104,13 +105,14 @@ export default function EditProfile() {
         mediaType: 'photo',
         multiple: false,
         cropping: true,
-        freeStyleCropEnabled: true,
+        height: SCREEN_WIDTH,
+        width: SCREEN_WIDTH,
       }).then(image => {
         setimage(image)
       }).catch(error => { console.log('err---', error); });
     }, 500);
     closeActionSheet();
-    
+
   };
 
   const onSave = () => {

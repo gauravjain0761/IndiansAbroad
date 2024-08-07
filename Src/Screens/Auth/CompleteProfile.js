@@ -4,7 +4,7 @@ import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
 import colors from '../../Themes/Colors'
 import { FontStyle, ImageStyle, errorToast, successToast } from '../../utils/commonFunction'
-import { fontname, hp, wp } from '../../Themes/Fonts'
+import { fontname, hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts'
 import Input from '../../Components/Input'
 import CommonButton from '../../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
@@ -56,6 +56,10 @@ export default function CompleteProfile() {
         setTimeout(() => {
             ImageCropPicker.openCamera({
                 mediaType: 'photo',
+                multiple: false,
+                cropping: true,
+                height: SCREEN_WIDTH,
+                width: SCREEN_WIDTH,
             }).then(image => {
                 setimage(image)
             }).catch(error => { console.log('err---', error); });
@@ -66,11 +70,15 @@ export default function CompleteProfile() {
         setTimeout(() => {
             ImageCropPicker.openPicker({
                 mediaType: 'photo',
+                multiple: false,
+                cropping: true,
+                height: SCREEN_WIDTH,
+                width: SCREEN_WIDTH,
             }).then(image => {
                 setimage(image)
             }).catch(error => { console.log('err---', error); });
         }, 500);
-       
+
     };
 
     const onNext = () => {

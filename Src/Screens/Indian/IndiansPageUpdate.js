@@ -91,22 +91,30 @@ export default function IndiansPageUpdate() {
     setTimeout(() => {
       ImageCropPicker.openCamera({
         mediaType: 'photo',
+        multiple: false,
+        cropping: true,
+        height: SCREEN_WIDTH,
+        width: SCREEN_WIDTH,
       }).then(image => {
         setimage(image)
       }).catch(error => { console.log('err---', error); });
     }, 500);
-   
+
   };
   const openGallery = () => {
     closeActionSheet()
     setTimeout(() => {
       ImageCropPicker.openPicker({
         mediaType: 'photo',
+        multiple: false,
+        cropping: true,
+        height: SCREEN_WIDTH,
+        width: SCREEN_WIDTH,
       }).then(image => {
         setimage(image)
       }).catch(error => { console.log('err---', error); });
     }, 500);
-    
+
   };
   const DropView = ({ value, onChangeText, placeholder, label }) => {
     return (

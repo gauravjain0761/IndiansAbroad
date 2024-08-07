@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, TextInput, } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
-import { SCREEN_WIDTH, wp } from '../../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import { hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { errorToast, FontStyle, ImageStyle, searchUserByName } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,14 @@ import RenderUserIcon from '../../Components/RenderUserIcon';
 import { Icons } from '../../Themes/Icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Input from '../../Components/Input';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import ActionSheet from '../../Components/ActionSheet';
+import ReactNativeModal from 'react-native-modal';
+import { SET_MAIN_FOLLOWER_LIST } from '../../Redux/ActionTypes';
+import { dispatchAction } from '../../utils/apiGlobal';
+import NoDataFound from '../../Components/NoDataFound';
+import CommonButton from '../../Components/CommonButton';
+
 
 export default function CreateGroup() {
   const { navigate, goBack } = useNavigation();
@@ -20,27 +28,126 @@ export default function CreateGroup() {
   const [tabSelection, setTabSelection] = useState('INDIANS');
   const dispatch = useDispatch();
   const [checkBox, setCheckBox] = useState(false);
+  const actionItems = [
+    {
+      id: 1,
+      label: 'Open Camera',
+      onPress: () => {
+        openPicker();
+      },
+    },
+    {
+      id: 2,
+      label: 'Open Gallery',
+      onPress: () => {
+        openGallery();
+      },
+    },
+  ];
+  const [actionSheet, setActionSheet] = useState(false);
+  const closeActionSheet = () => setActionSheet(false);
+  const [image, setimage] = useState(undefined)
+  const [groupName, setgroupName] = useState('')
+  const [des, setdes] = useState('')
+  const { followerList, user, mainFollowerList } = useSelector(e => e.common)
+  const [list, setlist] = useState(undefined)
 
   useEffect(() => {
-    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
-  }, []);
+    if (followerList && followerList.length > 0) {
+      followerList.forEach(element => {
+        element.isSelected = false
+      });
+      setlist(followerList)
+      dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, followerList)
+    }
+  }, [followerList])
+  const setSelect = (id) => {
+    let temp = Object.assign([], mainFollowerList)
+    temp.forEach(element => {
+      if (element._id == id) {
+        element.isSelected = !element.isSelected
+      }
 
-  const renderItem = () => {
+    });
+    setlist(temp)
+  }
+
+  const openPicker = () => {
+    closeActionSheet();
+    setTimeout(() => {
+      ImageCropPicker.openCamera({
+        mediaType: 'photo',
+        multiple: false,
+        cropping: true,
+        height: SCREEN_WIDTH,
+        width: SCREEN_WIDTH,
+      }).then(image => {
+        setimage(image)
+      }).catch(error => { console.log('err---', error); });
+    }, 500);
+  };
+  const openGallery = () => {
+    closeActionSheet()
+    setTimeout(() => {
+      ImageCropPicker.openPicker({
+        mediaType: 'photo',
+        multiple: false,
+        cropping: true,
+        height: SCREEN_WIDTH,
+        width: SCREEN_WIDTH,
+      }).then(image => {
+        setimage(image)
+      }).catch(error => { console.log('err---', error); });
+    }, 500);
+
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
-      <View style={[ApplicationStyles.row, { paddingHorizontal: wp(20) }]}>
+      <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
         <View style={[ApplicationStyles.row, styles.listView]}>
-          <RenderUserIcon height={48} />
-          <Text style={styles.listText}>Pratik Katkar</Text>
+          <RenderUserIcon url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
+          <Text style={styles.listText}>{item?.followingId?.first_Name} {item?.followingId?.last_Name}</Text>
         </View>
-        <TouchableOpacity onPress={() => setCheckBox(!checkBox)}>
+        <TouchableOpacity onPress={() => setSelect(item._id)}>
           <Image
-            source={checkBox ? Icons.checkbox1 : Icons.checkbox}
+            source={item?.isSelected ? Icons.checkbox1 : Icons.checkbox}
             style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
           />
         </TouchableOpacity>
       </View>
     );
   };
+  const onSearchName = (search) => {
+    // let tempList = Object.assign([], mainFollowerList)
+
+    let arr = searchUserByName(mainFollowerList, 'followingId', search)
+    setlist(arr)
+    // const filtered = tempList.filter((val) =>
+    //     val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
+    // );
+    // const filter2 = tempList.filter((val) =>
+    //     val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
+    // );
+    // let searchTextContact = Object.values(
+    //     filtered.concat(filter2).reduce((r, o) => {
+    //         r[o._id] = o;
+    //         return r;
+    //     }, {})
+    // );
+    // setlist(searchTextContact)
+  }
+
+  const onCreateGroup = () => {
+    let temp = mainFollowerList.filter(element => element.isSelected == true)
+    if (groupName.trim() == '') {
+      errorToast('Please enter group name')
+    } else if (temp.length == 0) {
+      errorToast('Please select at least one member')
+    } else {
+
+    }
+  }
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -58,34 +165,63 @@ export default function CreateGroup() {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <TouchableOpacity style={styles.addImage}>
-          <Image source={Icons.addImage1} style={styles.addImage1} />
+
+        <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.addImage}>
+          {image ?
+            <Image style={{
+              width: 66,
+              height: 66,
+              borderRadius: 66 / 2
+            }} source={image ? { uri: image.path } : Icons.camera} />
+            :
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Image source={Icons.addImage1} style={styles.addImage1} />
+            </View>
+          }
+          <ReactNativeModal
+            onBackdropPress={() => closeActionSheet()}
+            isVisible={actionSheet}
+            style={{ margin: 0, justifyContent: 'flex-end', }}>
+            <ActionSheet actionItems={actionItems} onCancel={closeActionSheet} />
+          </ReactNativeModal>
         </TouchableOpacity>
+
+
+        {/* <TouchableOpacity style={styles.addImage}>
+          <Image source={Icons.addImage1} style={styles.addImage1} />
+        </TouchableOpacity> */}
         {/* <Input placeholder={'Group Name'} style={styles.inputText} /> */}
-        <Input placeholder={'Group Name'} extraStyle={styles.inputText} />
+        <Input onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
         {/* <TextInput placeholder={'Group Name'} style={styles.inputText} /> */}
       </View>
-      <TextInput
-        placeholder={'Description of group'}
-        style={styles.inputText1}
-        placeholderTextColor={colors.neutral_500}
-      />
+      <Input extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
       {/* <Input placeholder={'Description of group'} extraStyle={styles.inputText1} /> */}
 
       <Text style={styles.searchText}>Add Group Member</Text>
       <SearchBar
         value={searchText}
-        onChangeText={text => setSearchText(text)}
-        placeholder={'Search here'}
-        containerStyles={{ backgroundColor: colors.white, marginHorizontal: 8 }}
+        onChangeText={text => { setSearchText(text), onSearchName(text) }}
+        placeholder={'Search'}
+        containerStyles={{ marginVertical: 5 }}
       />
-      <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
-        <FlatList
-          data={[1, 2, 1, 2, 3, 4, 5, 6]}
-          renderItem={renderItem}
-          showsVerticalScrollIndicator={false}
-        // style={{flex: 1}}
-        />
+      {list && <FlatList
+        data={list}
+        renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={<NoDataFound />}
+
+      />}
+      <View style={styles.footer}>
+        <TouchableOpacity style={{
+          height: 55,
+          justifyContent: 'center'
+        }} onPress={() => goBack()}>
+          <Text style={styles.cancelBtn}>Cancel</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.createBtn}>
+          <Text>Create</Text>
+        </TouchableOpacity> */}
+        <CommonButton onPress={() => onCreateGroup()} title={'Create'} extraStyle={{ paddingHorizontal: 20 }} />
       </View>
     </SafeAreaView>
   );
@@ -119,30 +255,10 @@ const styles = StyleSheet.create({
   inputText: {
     flex: 1,
     marginLeft: 20,
-    // ...FontStyle(15, colors.neutral_900),
-    // borderWidth: 1,
-    // borderColor: colors.neutral_500,
-    // backgroundColor: colors.inputBg,
-    // borderRadius: 5,
-    // paddingLeft: 12,
-    // // paddingVertical: 10,
-    // // marginTop:12,
-    // width: SCREEN_WIDTH * 0.65,
-    // marginLeft: 20,
-    // height: 56,
   },
   inputText1: {
-    ...FontStyle(15, colors.neutral_900),
-    borderWidth: 1,
-    borderColor: colors.neutral_500,
-    backgroundColor: colors.inputBg,
-    borderRadius: 5,
-    paddingVertical: 10,
-    marginVertical: 20,
+    paddingVertical: wp(20),
     marginHorizontal: wp(20),
-    height: 56,
-    borderRadius: 5,
-    paddingHorizontal: 12,
   },
   tabMainView: {
     flexDirection: 'row',
@@ -170,4 +286,18 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     borderColor: colors.secondary_500,
   },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: wp(20),
+    paddingVertical: wp(20),
+    alignItems: 'center',
+  },
+  cancelBtn: {
+    ...FontStyle(16, colors.neutral_900),
+    paddingHorizontal: 20,
+  },
+  createBtn: {
+
+  }
 });

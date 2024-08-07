@@ -6,10 +6,10 @@ export const api = {
   checkSession: '/user/check-session',
   getUser: '/user/getuser',
   getOtp: '/user/getotp',
-  verifyotp: 'user/verifyotp',
-  retryotp: 'user/retryotp',
+  verifyotp: '/user/verifyotp',
+  retryotp: '/user/retryotp',
   registerstepone: '/user/registerstepone',
-  registersteptwo: 'user/registersteptwo',
+  registersteptwo: '/user/registersteptwo',
   getSignupCountries: '/countries/list/0',
   forgotPassword: '/user/forgotpass',
   resetPass: '/user/resetpass?key=1',
@@ -22,8 +22,8 @@ export const api = {
   getalluserposts: '/post/getalluserposts',
   likedislike: '/postlike/likedislike',
   likeduserlist: '/postlike/userlist',
-  getsinglepost: 'post/getsinglepost',
-  getallcomments: 'comment/allcomments',
+  getsinglepost: '/post/getsinglepost',
+  getallcomments: '/comment/allcomments',
   commentLike: '/comment/like',
   commentReplyList: '/reply/list',
   onreport: '/report/create',
@@ -89,7 +89,8 @@ export const api = {
   chatDetails: '/chat/detail',
   getMediaFilesLinks: '/chat/group/media/files-links',
   clearAllChat: '/message/clearall',
-  leaveGroup: '/chat/leave'
+  leaveGroup: '/chat/leave',
+  getChatCpMessage: '/cp/message'
 };
 
 export const POST = 'POST';

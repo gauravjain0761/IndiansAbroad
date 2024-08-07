@@ -19,13 +19,14 @@ import { FontStyle, searchUserByName } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import ConnectCard from '../../Components/ConnectCard';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { screenName } from '../../Navigation/ScreenConstants';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IS_LOADING } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
 import { getFollowerList } from '../../Services/AuthServices';
+import { onOpenNewChatForUser } from '../../Services/ChatServices';
 
 export default function MyConnections() {
   const { navigate, goBack } = useNavigation();
@@ -35,7 +36,7 @@ export default function MyConnections() {
   const dispatch = useDispatch();
   const { followerList, user } = useSelector(e => e.common)
   const [followList, setfollowList] = useState([])
-
+  const navigation = useNavigation();
 
   const onSearchName = (search) => {
     let arr = searchUserByName(followerList, 'followingId', search)
@@ -53,10 +54,28 @@ export default function MyConnections() {
     }))
   }, []);
 
+  // console.log()
+  const openChatScreen = (item) => {
+    console.log(item?.followingId?._id)
+    let obj = {
+      data: {
+        CpUserId: item?.followingId?._id,
+        userId: user?._id,
+        communityPageId: 'NA'
+      },
+      onSuccess: () => {
+        navigation.dispatch(
+          StackActions.replace(screenName.Messaging)
+        );
+      }
+    }
+    dispatch(onOpenNewChatForUser(obj))
+  }
+
   const renderItem = ({ item, index }) => {
     return (
       <View key={index}>
-        <TouchableOpacity style={[ApplicationStyles.row, styles.listView]}>
+        <TouchableOpacity onPress={() => openChatScreen(item)} style={[ApplicationStyles.row, styles.listView]}>
           <RenderUserIcon url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
           <Text numberOfLines={1} style={styles.listText}>
             {item?.followingId.first_Name} {item?.followingId.last_Name}

@@ -1,4 +1,4 @@
-import { GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS, IS_LOADING, SET_CHAT_DETAIL, SET_CHAT_MEDIA_LINK, SET_UNREAD_MSG_COUNT } from '../Redux/ActionTypes';
+import { GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_CHAT_DETAIL, SET_CHAT_MEDIA_LINK, SET_UNREAD_MSG_COUNT } from '../Redux/ActionTypes';
 import { POST, api } from '../utils/apiConstants';
 import {
   dispatchAction,
@@ -132,6 +132,24 @@ export const onLeaveFromGroup = request => async dispatch => {
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const onOpenNewChatForUser = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
+  return makeAPIRequest({
+    method: POST,
+    url: api.getChatCpMessage,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: response?.data?.data?.users?.filter(item => item._id !== request?.data?.userId)?.[0], chatId: response?.data?.data._id })
       });
     })
     .catch(error => {

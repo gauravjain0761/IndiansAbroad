@@ -40,7 +40,7 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         }
     }, [followerList])
     const setSelect = (id) => {
-        let temp = Object.assign([], list)
+        let temp = Object.assign([], mainFollowerList)
         temp.forEach(element => {
             if (element._id == id) {
                 element.isSelected = !element.isSelected
@@ -59,13 +59,15 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, temp2)
     }
     const onPressShare = () => {
-        onClose()
-        dispatchAction(dispatch, IS_LOADING, true)
+
+
         let temp = mainFollowerList.filter(element => element.isSelected == true)
         if (temp.length > 0) {
+            dispatchAction(dispatch, IS_LOADING, true)
+            onClose()
             let idArray = []
             temp.forEach(element => {
-                idArray.push(element._id)
+                idArray.push(element?.followingId?._id)
             });
             let obj = {
                 data: {

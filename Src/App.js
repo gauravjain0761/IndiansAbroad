@@ -58,9 +58,9 @@ function App() {
 
   useEffect(() => {
     LogBox.ignoreAllLogs(true);
-    // if (!__DEV__) {
-    console.log = () => { };
-    // }
+    if (!__DEV__) {
+      console.log = () => { };
+    }
     Text.defaultProps = Text.defaultProps || {};
     Text.defaultProps.allowFontScaling = false;
     TextInput.defaultProps = TextInput.defaultProps || {};
