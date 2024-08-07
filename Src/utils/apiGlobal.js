@@ -78,8 +78,8 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
   })
     .then(response => {
       return response.json().then(responseJson => {
-        console.log(responseJson);
-        if (responseJson.err == 200) {
+        console.log("responseJson",responseJson);
+        if (responseJson.err == 200 || responseJson.statusCode == 200) {
           onSuccess(responseJson);
         } else {
           if (onFailure) onFailure();
@@ -103,7 +103,7 @@ export const dispatchAction = (dispatch, action, data) => {
 export const handleSuccessRes = (res, req, dispatch, fun) => {
   if (res?.status === 200 || res?.status === 201) {
     dispatchAction(dispatch, IS_LOADING, false);
-    if (res?.data && (res?.data?.err == 200 || res?.data?.error == 200)) {
+    if (res?.data && (res?.data?.err == 200 || res?.data?.error == 200 || res?.data?.statusCode == 200)) {
       if (fun) fun();
       if (req?.onSuccess) req?.onSuccess(res?.data);
     } else {

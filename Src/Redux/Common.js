@@ -41,20 +41,25 @@ import {
   ADD_ONE_MESSAGE,
   SET_CHAT_DETAIL,
   SET_CHAT_MEDIA_LINK,
+  SET_ALL_EVENTS,
+  SET_ACTIVE_EVENT,
 } from './ActionTypes';
 
 const initialState = {
   user: undefined,
   preLoader: false,
   allPost: undefined,
+  allEvent: undefined,
   allIndian: undefined,
   allPages: undefined,
   allPostsCount: 0,
+  allEventCount: 0,
   allIndianCount: 0,
   allPagesCount: 0,
   likedUserList: undefined,
   blockUserList: undefined,
   activePost: undefined,
+  activeEvent: undefined,
   activePostAllComments: undefined,
   repliesComments: undefined,
   otherUserInfo: undefined,
@@ -95,6 +100,16 @@ export default function (state = initialState, action) {
             ? action.payload.data
             : [...state.allPost, ...action.payload.data],
         allPostsCount: action.payload.totalCount,
+      };
+    }
+    case SET_ALL_EVENTS: {
+      return {
+        ...state,
+        allEvent:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.allEvent, ...action.payload.data],
+          allEventCount: action.payload.count,
       };
     }
     case SET_ALL_INDIANS: {
@@ -211,6 +226,9 @@ export default function (state = initialState, action) {
     }
     case SET_ACTIVE_POST: {
       return { ...state, activePost: action.payload };
+    }
+    case SET_ACTIVE_EVENT: {
+      return { ...state, activeEvent: action.payload };
     }
     case SET_ACTIVE_POST_COMMENTS: {
       return { ...state, activePostAllComments: action.payload };
