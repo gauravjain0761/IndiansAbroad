@@ -125,15 +125,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       if (page) {
         data.cpId = page._id
       }
-      let formData = new FormData()
-      if (data) {
-        Object.keys(data).map((element) => {
-          if (data[element] !== undefined) {
-            formData.append(element, data[element]);
-          }
-        });
-      }
-      // setTimeout(() => {
       setcreatePostModal(false)
       dispatchAction(dispatch, IS_LOADING, true)
       formDataApiCall(api.createPost, data, (res) => {
@@ -177,7 +168,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       { text: 'YES', onPress: () => setcreatePostModal(false) },
     ]);
   }
-
   const onPressRotate = () => {
     ImageCropPicker.openCropper({
       path: selectedImage.path,

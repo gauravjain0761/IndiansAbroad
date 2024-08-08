@@ -19,24 +19,37 @@ import { onBlockUserApi, onConnectRequest, onUnFollowRequest } from '../Services
 import ConfirmationModal from './ConfirmationModal';
 import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../Navigation/ScreenConstants';
+import { onGetChatDetail, onRemoveMember } from '../Services/ChatServices';
 
 export default function GroupMemberItem({ item, index, }) {
     const [RemoveMenu, setRemoveMenu] = useState(false);
-    const { user } = useSelector(e => e.common)
+    const { user, activeChatDetails, activeChatRoomUser } = useSelector(e => e.common)
     const dispatch = useDispatch()
     const navigation = useNavigation()
     let isUser = item?._id == user._id;
     const hideMenuRemove = () => setRemoveMenu(false);
     const showMenuRemove = () => setRemoveMenu(true);
-
+    const [removeModal, setremoveModal] = useState(false)
     const onOpenUserDetail = () => {
         if (!isUser) {
             navigation.navigate(screenName.indiansDetails, { userId: item?._id });
         }
-        //  else {
-        //     navigation.navigate(screenName.indiansDetails)
-        // }
     };
+
+    const onRemoveUser = () => {
+        setremoveModal(false)
+        let obj = {
+            data: {
+                userId: item?._id,
+                groupId: activeChatDetails?._id
+            },
+            onSuccess: () => {
+                let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
+                dispatch(onGetChatDetail(obj))
+            }
+        }
+        dispatch(onRemoveMember(obj))
+    }
 
     return (
         <View key={index}>
@@ -50,7 +63,7 @@ export default function GroupMemberItem({ item, index, }) {
                 {item?.isAdmin ?
                     <Text style={[styles.menberText]}>Group Admin</Text>
                     :
-                    <Menu
+                    activeChatDetails?.createdBy?._id == user?._id ? <Menu
                         visible={RemoveMenu}
                         anchor={
                             <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingHorizontal: wp(16), height: 50 }} onPress={showMenuRemove}>
@@ -59,13 +72,24 @@ export default function GroupMemberItem({ item, index, }) {
                         }
                         onRequestClose={hideMenuRemove}
                         style={styles.menu}>
-                        <MenuItem textStyle={styles.itemText} onPress={() => { hideMenuRemove(), setTimeout(() => { }, 500); }}>
+                        <MenuItem textStyle={styles.itemText} onPress={() => { hideMenuRemove(), setTimeout(() => { setremoveModal(true) }, 500); }}>
                             Remove
                         </MenuItem>
-                    </Menu>
+                    </Menu> : null
                 }
 
             </TouchableOpacity>
+            {removeModal && (
+                <ConfirmationModal
+                    visible={removeModal}
+                    onClose={() => setremoveModal(false)}
+                    title={`Are you sure you want remove this member?`}
+                    successBtn={'Remove'}
+                    canselBtn={'No'}
+                    onPressCancel={() => setremoveModal(false)}
+                    onPressSuccess={() => onRemoveUser()}
+                />
+            )}
         </View>
     )
 }

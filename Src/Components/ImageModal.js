@@ -22,7 +22,6 @@ import { api } from '../utils/apiConstants';
 
 const ImageModalShow = ({ modalVisible, onClose, url }) => {
   let isUrl = url !== undefined && url !== '';
-  console.log(url)
   return (
     <ReactNativeModal
       backdropOpacity={0.5}

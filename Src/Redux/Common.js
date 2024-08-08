@@ -43,6 +43,7 @@ import {
   SET_CHAT_MEDIA_LINK,
   SET_ALL_EVENTS,
   SET_ACTIVE_EVENT,
+  SET_GROUP_CREATE_USERS,
 } from './ActionTypes';
 
 const initialState = {
@@ -85,7 +86,8 @@ const initialState = {
   activeChatRoomUser: undefined,
   unreadMsgCount: 0,
   activeChatDetails: undefined,
-  activeChatMediaLinks: undefined
+  activeChatMediaLinks: undefined,
+  groupCreateAllUsers: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -109,7 +111,7 @@ export default function (state = initialState, action) {
           action.payload.current_page == 1
             ? action.payload.data
             : [...state.allEvent, ...action.payload.data],
-          allEventCount: action.payload.count,
+        allEventCount: action.payload.count,
       };
     }
     case SET_ALL_INDIANS: {
@@ -476,6 +478,9 @@ export default function (state = initialState, action) {
     }
     case SET_CHAT_MEDIA_LINK: {
       return { ...state, activeChatMediaLinks: action.payload }
+    }
+    case SET_GROUP_CREATE_USERS: {
+      return { ...state, groupCreateAllUsers: action.payload }
     }
     default:
       return state;

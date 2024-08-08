@@ -15,82 +15,84 @@ import NoDataFound from '../../Components/NoDataFound';
 import { Icons } from '../../Themes/Icons';
 import colors from '../../Themes/Colors';
 import CommonButton from '../../Components/CommonButton';
+import { onGetGroupCreateUser, onInviteMember } from '../../Services/ChatServices';
 
 export default function AddMemberScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { followerList, user, mainFollowerList } = useSelector(e => e.common)
+    const { followerList, user, groupCreateAllUsers, activeChatDetails } = useSelector(e => e.common)
     const [list, setlist] = useState(undefined)
+    const [selectedUsers, setselectedUsers] = useState([])
     const [searchText, setSearchText] = useState('')
 
     useEffect(() => {
-        dispatch(getFollowerList({
-            data: { userId: user._id, search: '' }
-        }))
+        setselectedUsers([])
+        let obj = {
+            params: {
+                search: '',
+                groupId: activeChatDetails?._id
+            },
+            onSuccess: (res) => {
+                setlist(res?.data)
+            }
+        }
+        dispatch(onGetGroupCreateUser(obj))
     }, [])
 
-    useEffect(() => {
-        if (followerList && followerList.length > 0) {
-            followerList.forEach(element => {
-                element.isSelected = false
-            });
-            setlist(followerList)
-            dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, followerList)
-        }
-    }, [followerList])
     const setSelect = (id) => {
-        let temp = Object.assign([], list)
-        temp.forEach(element => {
-            if (element._id == id) {
-                element.isSelected = !element.isSelected
+        let temp = Object.assign([], selectedUsers)
+        if (temp.includes(id)) {
+            const index = temp.indexOf(id);
+            if (index > -1) { // only splice array when item is found
+                temp.splice(index, 1); // 2nd parameter means remove one item only
             }
+            setselectedUsers(temp)
+        } else {
+            temp.push(id)
+            setselectedUsers(temp)
+        }
+    }
 
-        });
-        setlist(temp)
-    }
-    const onUpdateMain = (id) => {
-        let temp2 = Object.assign([], mainFollowerList)
-        temp2.forEach(element => {
-            if (element._id == id) {
-                element.isSelected = !element.isSelected
-            }
-        });
-        dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, temp2)
-    }
 
     const renderItem = ({ item, index }) => {
         return (
             <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
                 <View style={[ApplicationStyles.row, styles.listView]}>
-                    <RenderUserIcon url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
-                    <Text style={styles.listText}>{item?.followingId?.first_Name} {item?.followingId?.last_Name}</Text>
+                    <RenderUserIcon url={item?.avtar} height={48} isBorder={item?.subscribedMember} />
+                    <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
                 </View>
                 <TouchableOpacity onPress={() => setSelect(item._id)}>
-                    <Image
-                        source={item?.isSelected ? Icons.checkbox1 : Icons.checkbox}
-                        style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
-                    />
+                    <Image source={selectedUsers.includes(item?._id) ? Icons.checkbox1 : Icons.checkbox} style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]} />
                 </TouchableOpacity>
             </View>
         );
     };
 
     const onSearchName = (search) => {
-        let arr = searchUserByName(mainFollowerList, 'followingId', search)
+        let arr = searchUserByName(groupCreateAllUsers, undefined, search)
         setlist(arr)
+    }
+
+    const onPressAdd = () => {
+        let obj = {
+            data: {
+                groupId: activeChatDetails?._id,
+                currentUser: user?._id,
+                invitedUser: selectedUsers
+            },
+            onSuccess: () => {
+                navigation.goBack()
+            }
+        }
+        dispatch(onInviteMember(obj))
     }
 
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} showLeft={true} onLeftPress={() => { navigation.goBack() }} onlyLabel={'Send Group Invitation'} />
-            <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search users, posts, forums'} containerStyles={{ marginVertical: 5 }} />
-            {list && <FlatList
-                data={list}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<NoDataFound />}
-            />}
-            <CommonButton title={'Add'} extraStyle={{ margin: wp(20) }} />
+            <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search users'} containerStyles={{ marginVertical: 5 }} />
+            {list && <FlatList data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />}
+            <CommonButton onPress={() => onPressAdd()} title={'Add'} extraStyle={{ margin: wp(20) }} />
         </SafeAreaView>
     )
 }
@@ -106,7 +108,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         borderRadius: 5,
         borderColor: colors.neutral_400,
-        // backgroundColor: colors.inputBg,
         flex: 1,
     },
     publishText: {

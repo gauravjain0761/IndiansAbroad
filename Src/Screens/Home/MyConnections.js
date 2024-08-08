@@ -56,7 +56,6 @@ export default function MyConnections() {
 
   // console.log()
   const openChatScreen = (item) => {
-    console.log(item?.followingId?._id)
     let obj = {
       data: {
         CpUserId: item?.followingId?._id,

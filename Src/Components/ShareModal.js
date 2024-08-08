@@ -99,23 +99,8 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         );
     };
     const onSearchName = (search) => {
-        // let tempList = Object.assign([], mainFollowerList)
-
         let arr = searchUserByName(mainFollowerList, 'followingId', search)
         setlist(arr)
-        // const filtered = tempList.filter((val) =>
-        //     val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
-        // );
-        // const filter2 = tempList.filter((val) =>
-        //     val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
-        // );
-        // let searchTextContact = Object.values(
-        //     filtered.concat(filter2).reduce((r, o) => {
-        //         r[o._id] = o;
-        //         return r;
-        //     }, {})
-        // );
-        // setlist(searchTextContact)
     }
     return (
         <ModalContainer statusBarTranslucent={true} avoidKeyboard={false} isVisible={visible} onClose={() => onClose()} transparent={true} >

@@ -12,15 +12,15 @@ import {
   SET_PAGE_DETAIL,
   SET_ALL_EVENTS,
 } from '../Redux/ActionTypes';
-import {setAsyncUserInfo} from '../utils/AsyncStorage';
-import {GET, POST, api} from '../utils/apiConstants';
+import { setAsyncUserInfo } from '../utils/AsyncStorage';
+import { GET, POST, api } from '../utils/apiConstants';
 import {
   dispatchAction,
   handleErrorRes,
   handleSuccessRes,
   makeAPIRequest,
 } from '../utils/apiGlobal';
-import {successToast} from '../utils/commonFunction';
+import { successToast } from '../utils/commonFunction';
 
 export const getalluserposts = request => async dispatch => {
   return makeAPIRequest({
@@ -48,7 +48,7 @@ export const onLikePost = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => {});
+      handleSuccessRes(response, request, dispatch, () => { });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);
@@ -184,7 +184,7 @@ export const onCommentLike = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => {});
+      handleSuccessRes(response, request, dispatch, () => { });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);
@@ -369,7 +369,7 @@ export const onDeletePostMedia = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => {});
+      handleSuccessRes(response, request, dispatch, () => { });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);
@@ -418,8 +418,6 @@ export const getalluserEventCreate = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      console.log('getalluserEventCreate',response.data);
-      console.log('getalluserEventCreate request',request);
       handleSuccessRes(response, request, dispatch, () => {
         successToast(response?.data?.msg);
       });

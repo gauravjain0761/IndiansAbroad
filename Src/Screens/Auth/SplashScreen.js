@@ -34,7 +34,6 @@ export default function SplashScreen() {
         onSuccess: async response => {
           await setAuthorization(token);
           let user = await getAsyncUserInfo();
-          // console.log('user--', user)
           dispatchAction(dispatch, SET_USER, user);
           if (user && user._id) {
             dispatch(

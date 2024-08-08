@@ -6,6 +6,7 @@ import { FontStyle } from '../utils/commonFunction';
 import { Menu, MenuItem } from 'react-native-material-menu';
 import moment from 'moment';
 import RenderText from './RenderText';
+import RenderUserIcon from './RenderUserIcon';
 
 const SenderMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
@@ -13,6 +14,8 @@ const SenderMsg = ({ data }) => {
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
+
+  console.log(data)
 
   return (
     <View style={styles.conatiner}>
@@ -25,10 +28,22 @@ const SenderMsg = ({ data }) => {
               onLongPress={showMenu}
               style={styles.boxContainer}>
               <Text style={styles.nameTextStyle}>{'You'}</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
-                <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
-              </View>
+
+              {data?.shareContentType == 'group-invitation' &&
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={20} />
+                  </View>
+                  <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                </View>
+              }
+              {data?.shareContentType == 'normalmessage' &&
+                <View style={{ flexDirection: 'row' }}>
+                  <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
+                  <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                </View>
+              }
+
               {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
               <Text style={[styles.timeTextStyle, {
                 marginTop: -13,

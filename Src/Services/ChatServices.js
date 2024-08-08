@@ -1,11 +1,12 @@
-import { GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_CHAT_DETAIL, SET_CHAT_MEDIA_LINK, SET_UNREAD_MSG_COUNT } from '../Redux/ActionTypes';
-import { POST, api } from '../utils/apiConstants';
+import { GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_CHAT_DETAIL, SET_CHAT_MEDIA_LINK, SET_GROUP_CREATE_USERS, SET_UNREAD_MSG_COUNT } from '../Redux/ActionTypes';
+import { GET, POST, api } from '../utils/apiConstants';
 import {
   dispatchAction,
   handleErrorRes,
   handleSuccessRes,
   makeAPIRequest,
 } from '../utils/apiGlobal';
+import { successToast } from '../utils/commonFunction';
 
 export const getChatRooms = request => async dispatch => {
   return makeAPIRequest({
@@ -150,6 +151,55 @@ export const onOpenNewChatForUser = request => async dispatch => {
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
         dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: response?.data?.data?.users?.filter(item => item._id !== request?.data?.userId)?.[0], chatId: response?.data?.data._id })
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const onGetGroupCreateUser = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
+  return makeAPIRequest({
+    method: GET,
+    url: api.groupCreateUser,
+    params: request?.params,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, SET_GROUP_CREATE_USERS, response?.data?.data);
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const onRemoveMember = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
+  return makeAPIRequest({
+    method: POST,
+    url: api.removeMember,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => { });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const onInviteMember = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
+  return makeAPIRequest({
+    method: POST,
+    url: api.inviteMember,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        successToast(response?.data?.msg);
       });
     })
     .catch(error => {

@@ -29,7 +29,6 @@ export default function GroupDetailScreen() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectURI, setSelectURI] = useState('');
     const [leaveGroupModal, setleaveGroupModal] = useState(false)
-
     const onLeaveGroup = () => {
         setleaveGroupModal(false)
         dispatch(onLeaveFromGroup(

@@ -1,6 +1,6 @@
 export const api = {
-  // BASE_URL: 'https://express.indiansabroad.online/api',
-  BASE_URL: 'http://ec2-3-95-222-146.compute-1.amazonaws.com/api',
+  BASE_URL: 'https://express.indiansabroad.online/api',
+  // BASE_URL: 'http://ec2-3-95-222-146.compute-1.amazonaws.com/api',
   IMAGE_URL: 'https://cdn.indiansabroad.online/',
 
   login: '/user/login',
@@ -39,8 +39,8 @@ export const api = {
   deletepostmedia: '/post/deletepostmedia',
 
   //event
-  getAllEvents:"/event/getAllEvents",
-  eventCreate:"/event/create",
+  getAllEvents: "/event/getAllEvents",
+  eventCreate: "/event/create",
 
   //Indians
   indiansList: '/user/suggestion/filter',
@@ -95,7 +95,11 @@ export const api = {
   getMediaFilesLinks: '/chat/group/media/files-links',
   clearAllChat: '/message/clearall',
   leaveGroup: '/chat/leave',
-  getChatCpMessage: '/cp/message'
+  getChatCpMessage: '/cp/message',
+  groupCreateUser: '/chat/groupcreate/filter/users',
+  createGroup: '/chat/create',
+  removeMember: '/chat/remove',
+  inviteMember: '/chat/sendinvitation'
 };
 
 export const POST = 'POST';

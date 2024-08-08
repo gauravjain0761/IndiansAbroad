@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import { hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
-import { errorToast, FontStyle, ImageStyle, searchUserByName } from '../../utils/commonFunction';
+import { errorToast, FontStyle, ImageStyle, searchUserByName, successToast } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import { useNavigation } from '@react-navigation/native';
@@ -15,19 +15,19 @@ import Input from '../../Components/Input';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import ActionSheet from '../../Components/ActionSheet';
 import ReactNativeModal from 'react-native-modal';
-import { SET_MAIN_FOLLOWER_LIST } from '../../Redux/ActionTypes';
-import { dispatchAction } from '../../utils/apiGlobal';
+import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../../Redux/ActionTypes';
+import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import NoDataFound from '../../Components/NoDataFound';
 import CommonButton from '../../Components/CommonButton';
+import { getFollowerList } from '../../Services/AuthServices';
+import { onGetGroupCreateUser } from '../../Services/ChatServices';
+import { api } from '../../utils/apiConstants';
 
 
 export default function CreateGroup() {
   const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [tabSelectionIndex, setTabSelectionIndex] = useState(0);
-  const [tabSelection, setTabSelection] = useState('INDIANS');
   const dispatch = useDispatch();
-  const [checkBox, setCheckBox] = useState(false);
   const actionItems = [
     {
       id: 1,
@@ -49,27 +49,37 @@ export default function CreateGroup() {
   const [image, setimage] = useState(undefined)
   const [groupName, setgroupName] = useState('')
   const [des, setdes] = useState('')
-  const { followerList, user, mainFollowerList } = useSelector(e => e.common)
+  const { user, groupCreateAllUsers } = useSelector(e => e.common)
   const [list, setlist] = useState(undefined)
+  const [selectedUsers, setselectedUsers] = useState([])
 
   useEffect(() => {
-    if (followerList && followerList.length > 0) {
-      followerList.forEach(element => {
-        element.isSelected = false
-      });
-      setlist(followerList)
-      dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, followerList)
-    }
-  }, [followerList])
-  const setSelect = (id) => {
-    let temp = Object.assign([], mainFollowerList)
-    temp.forEach(element => {
-      if (element._id == id) {
-        element.isSelected = !element.isSelected
+    setselectedUsers([])
+    let obj = {
+      params: {
+        search: '',
+        groupId: 'NA'
+      },
+      onSuccess: (res) => {
+        setlist(res?.data)
       }
+    }
+    dispatch(onGetGroupCreateUser(obj))
+  }, [])
 
-    });
-    setlist(temp)
+
+  const setSelect = (id) => {
+    let temp = Object.assign([], selectedUsers)
+    if (temp.includes(id)) {
+      const index = temp.indexOf(id);
+      if (index > -1) { // only splice array when item is found
+        temp.splice(index, 1); // 2nd parameter means remove one item only
+      }
+      setselectedUsers(temp)
+    } else {
+      temp.push(id)
+      setselectedUsers(temp)
+    }
   }
 
   const openPicker = () => {
@@ -106,12 +116,12 @@ export default function CreateGroup() {
     return (
       <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
         <View style={[ApplicationStyles.row, styles.listView]}>
-          <RenderUserIcon url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
-          <Text style={styles.listText}>{item?.followingId?.first_Name} {item?.followingId?.last_Name}</Text>
+          <RenderUserIcon url={item?.avtar} height={48} isBorder={item?.subscribedMember} />
+          <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
         </View>
         <TouchableOpacity onPress={() => setSelect(item._id)}>
           <Image
-            source={item?.isSelected ? Icons.checkbox1 : Icons.checkbox}
+            source={selectedUsers.includes(item?._id) ? Icons.checkbox1 : Icons.checkbox}
             style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
           />
         </TouchableOpacity>
@@ -119,108 +129,73 @@ export default function CreateGroup() {
     );
   };
   const onSearchName = (search) => {
-    // let tempList = Object.assign([], mainFollowerList)
-
-    let arr = searchUserByName(mainFollowerList, 'followingId', search)
+    let arr = searchUserByName(groupCreateAllUsers, undefined, search)
     setlist(arr)
-    // const filtered = tempList.filter((val) =>
-    //     val.followingId.first_Name.toLowerCase().includes(search.toLowerCase())
-    // );
-    // const filter2 = tempList.filter((val) =>
-    //     val.followingId.last_Name.toLowerCase().includes(search.toLowerCase())
-    // );
-    // let searchTextContact = Object.values(
-    //     filtered.concat(filter2).reduce((r, o) => {
-    //         r[o._id] = o;
-    //         return r;
-    //     }, {})
-    // );
-    // setlist(searchTextContact)
   }
 
   const onCreateGroup = () => {
-    let temp = mainFollowerList.filter(element => element.isSelected == true)
     if (groupName.trim() == '') {
       errorToast('Please enter group name')
-    } else if (temp.length == 0) {
+    } else if (des.trim() == '') {
+      errorToast('Please enter group description')
+    } else if (selectedUsers.length == 0) {
       errorToast('Please select at least one member')
     } else {
-
+      let data = {}
+      data.chatName = groupName.trim()
+      data.chatDesc = des.trim()
+      data.isGroupChat = true
+      data.createdBy = user?._id
+      if (image?.path) {
+        let time = new Date().getTime()
+        data['chatLogo'] = {
+          uri: image.path,
+          type: image.mime, // or photo.type image/jpg
+          name: 'chatLogo_[' + time + '].' + image.path.split('.').pop()
+        }
+      }
+      selectedUsers.map((element, index) => {
+        data['users' + "[" + index + "]"] = element
+      })
+      data['users' + "[" + selectedUsers.length + "]"] = user?._id
+      dispatchAction(dispatch, IS_LOADING, true)
+      formDataApiCall(api.createGroup, data, (res) => {
+        dispatchAction(dispatch, IS_LOADING, false)
+        successToast(res.msg)
+        goBack()
+      }, () => {
+        dispatchAction(dispatch, IS_LOADING, false)
+      })
     }
   }
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
-      <Header
-        title={''}
-        showLeft={true}
-        showRight={false}
-        onLeftPress={() => goBack()}
-      />
-
+      <Header title={''} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
       <Text style={styles.chatText}>Create Group</Text>
-      <View
-        style={{
-          marginHorizontal: wp(20),
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-
+      <View style={{ marginHorizontal: wp(20), flexDirection: 'row', alignItems: 'center', }}>
         <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.addImage}>
           {image ?
-            <Image style={{
-              width: 66,
-              height: 66,
-              borderRadius: 66 / 2
-            }} source={image ? { uri: image.path } : Icons.camera} />
+            <Image style={{ width: 66, height: 66, borderRadius: 66 / 2 }} source={image ? { uri: image.path } : Icons.camera} />
             :
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image source={Icons.addImage1} style={styles.addImage1} />
             </View>
           }
-          <ReactNativeModal
-            onBackdropPress={() => closeActionSheet()}
-            isVisible={actionSheet}
-            style={{ margin: 0, justifyContent: 'flex-end', }}>
+          <ReactNativeModal onBackdropPress={() => closeActionSheet()} isVisible={actionSheet} style={{ margin: 0, justifyContent: 'flex-end', }}>
             <ActionSheet actionItems={actionItems} onCancel={closeActionSheet} />
           </ReactNativeModal>
         </TouchableOpacity>
-
-
-        {/* <TouchableOpacity style={styles.addImage}>
-          <Image source={Icons.addImage1} style={styles.addImage1} />
-        </TouchableOpacity> */}
-        {/* <Input placeholder={'Group Name'} style={styles.inputText} /> */}
         <Input onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
-        {/* <TextInput placeholder={'Group Name'} style={styles.inputText} /> */}
       </View>
       <Input extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
-      {/* <Input placeholder={'Description of group'} extraStyle={styles.inputText1} /> */}
-
       <Text style={styles.searchText}>Add Group Member</Text>
-      <SearchBar
-        value={searchText}
-        onChangeText={text => { setSearchText(text), onSearchName(text) }}
-        placeholder={'Search'}
-        containerStyles={{ marginVertical: 5 }}
-      />
-      {list && <FlatList
-        data={list}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<NoDataFound />}
-
-      />}
+      <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search'} containerStyles={{ marginVertical: 5 }} />
+      {list && <FlatList data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />}
       <View style={styles.footer}>
-        <TouchableOpacity style={{
-          height: 55,
-          justifyContent: 'center'
-        }} onPress={() => goBack()}>
+        <TouchableOpacity style={{ height: 55, justifyContent: 'center' }} onPress={() => goBack()}>
           <Text style={styles.cancelBtn}>Cancel</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.createBtn}>
-          <Text>Create</Text>
-        </TouchableOpacity> */}
         <CommonButton onPress={() => onCreateGroup()} title={'Create'} extraStyle={{ paddingHorizontal: 20 }} />
       </View>
     </SafeAreaView>
