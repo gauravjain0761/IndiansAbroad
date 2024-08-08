@@ -214,7 +214,7 @@ export default function ChatScreen() {
                 </View>
               );
             }}
-            ListEmptyComponent={<NoDataFound />}
+            ListEmptyComponent={<NoDataFound text={'Your new friend could be one message away. Start chatting!'} />}
           />}
         </View>
         <View key={'2'}>
@@ -224,39 +224,40 @@ export default function ChatScreen() {
             placeholder={'Search Chats here'}
           />
           {/* <ChatList /> */}
-          {groupRoomList && <FlatList
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            style={styles.flatlist}
-            columnWrapperStyle={styles.column}
-            numColumns={2}
-            bounces={false}
-            data={groupRoomList}
-            renderItem={({ item }) => {
-              return (
-                <ChatCard
-                  data={item}
-                  isGroup={item?.isGroupChat}
-                  cardPress={() => onPressGroupChat(item)}
-                />
-              );
-            }}
-            showsVerticalScrollIndicator={false}
-            onEndReached={fetchMoreData}
-            onEndReachedThreshold={0.3}
-            ListFooterComponent={() => {
-              return (
-                <View>
-                  {groupRoomList && loading && (
-                    <ActivityIndicator size={'large'} color={colors.black} />
-                  )}
-                  <View style={{ height: 60 }} />
-                </View>
-              );
-            }}
-            ListEmptyComponent={<NoDataFound />}
-          />}
+          {groupRoomList &&
+            <FlatList
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              style={styles.flatlist}
+              columnWrapperStyle={styles.column}
+              numColumns={2}
+              bounces={false}
+              data={groupRoomList}
+              renderItem={({ item }) => {
+                return (
+                  <ChatCard
+                    data={item}
+                    isGroup={item?.isGroupChat}
+                    cardPress={() => onPressGroupChat(item)}
+                  />
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+              onEndReached={fetchMoreData}
+              onEndReachedThreshold={0.3}
+              ListFooterComponent={() => {
+                return (
+                  <View>
+                    {groupRoomList && loading && (
+                      <ActivityIndicator size={'large'} color={colors.black} />
+                    )}
+                    <View style={{ height: 60 }} />
+                  </View>
+                );
+              }}
+              ListEmptyComponent={<NoDataFound text={'Your group could be the next big thing. Create it now!'} />}
+            />}
         </View>
       </PagerView>
 

@@ -8,12 +8,12 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, hp, wp} from '../../Themes/Fonts';
+import { SCREEN_WIDTH, hp, wp } from '../../Themes/Fonts';
 import {
   FontStyle,
   ImageStyle,
@@ -22,38 +22,38 @@ import {
 } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import {Icons} from '../../Themes/Icons';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
+import { Icons } from '../../Themes/Icons';
 import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import PostCard from '../../Components/PostCard';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getallpostsOfUser,
   onBlockUserApi,
 } from '../../Services/OtherUserServices';
-import {dispatchAction} from '../../utils/apiGlobal';
+import { dispatchAction } from '../../utils/apiGlobal';
 import {
   OTHER_USER_INFO,
   SET_ACTIVE_POST,
   SET_ACTIVE_POST_COMMENTS,
 } from '../../Redux/ActionTypes';
 import NoDataFound from '../../Components/NoDataFound';
-import {getFollowerList} from '../../Services/AuthServices';
+import { getFollowerList } from '../../Services/AuthServices';
 import ImageModalShow from '../../Components/ImageModal';
 import { api } from '../../utils/apiConstants';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const [menuModal, setmenuModal] = useState(false);
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelection, setTabSelection] = useState('POST');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
-  const {params} = useRoute();
+  const { params } = useRoute();
   const [followList, setfollowList] = useState([]);
-  const {user, otherUserAllPost, followerList} = useSelector(e => e.common);
+  const { user, otherUserAllPost, followerList } = useSelector(e => e.common);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectURI, setSelectURI] = useState("");
 
@@ -84,7 +84,7 @@ export default function ProfileScreen() {
 
   useEffect(() => {
     if (isFocused) {
-      dispatch(getallpostsOfUser({data: {createdBy: user._id}}));
+      dispatch(getallpostsOfUser({ data: { createdBy: user._id } }));
       onGetOtherUserFollower();
     }
   }, [isFocused]);
@@ -92,12 +92,12 @@ export default function ProfileScreen() {
   const onGetOtherUserFollower = () => {
     dispatch(
       getFollowerList({
-        data: {userId: user?._id, search: ''},
+        data: { userId: user?._id, search: '' },
       }),
     );
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={item._id}
@@ -136,12 +136,13 @@ export default function ProfileScreen() {
         onRightPress={() => navigate(screenName.Setting)}
       />
       {user && (
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{ flex: 1 }}>
           <View style={styles.userViewStyle}>
             <TouchableOpacity
               onPress={() => {
                 setSelectURI(user?.avtar)
-                setModalVisible(true)}}
+                setModalVisible(true)
+              }}
               style={styles.imageView}>
               <RenderUserIcon
                 url={user?.avtar}
@@ -217,7 +218,7 @@ export default function ProfileScreen() {
                 styles.animationView,
                 {
                   left: tabSelection == 'POST' ? 0 : 0,
-                  transform: [{translateX: buttonTranslateX}],
+                  transform: [{ translateX: buttonTranslateX }],
                   width: (SCREEN_WIDTH - 20) / 2,
                   borderWidth: 0.9,
                   borderColor: colors.primary_4574ca,
@@ -226,20 +227,20 @@ export default function ProfileScreen() {
             />
           </View>
           {tabSelection == 'POST' ? (
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               {otherUserAllPost && (
                 <FlatList
                   ListFooterComponent={() => {
                     return (
                       <View>
-                        <View style={{height: 50}} />
+                        <View style={{ height: 50 }} />
                       </View>
                     );
                   }}
                   initialNumToRender={5}
                   data={otherUserAllPost.data}
                   renderItem={renderItem}
-                  ListEmptyComponent={<NoDataFound />}
+                  ListEmptyComponent={<NoDataFound text={'Let the community hear your voice. Post something today!'} />}
                 />
               )}
             </View>
@@ -252,7 +253,7 @@ export default function ProfileScreen() {
                   setSearchText(text), onSearchName(text);
                 }}
                 placeholder={'Search Indians here'}
-                containerStyles={{backgroundColor: colors.white, marginTop: 5}}
+                containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
               />
               {followList && (
                 <FlatList
@@ -260,11 +261,11 @@ export default function ProfileScreen() {
                   ListFooterComponent={() => {
                     return (
                       <View>
-                        <View style={{height: 50}} />
+                        <View style={{ height: 50 }} />
                       </View>
                     );
                   }}
-                  renderItem={({item}) => {
+                  renderItem={({ item }) => {
                     return (
                       <ConnectedIndians
                         cardPress={() => {
@@ -278,7 +279,7 @@ export default function ProfileScreen() {
                       />
                     );
                   }}
-                  ListEmptyComponent={<NoDataFound />}
+                  ListEmptyComponent={<NoDataFound text={'Your next friend is just a click away. Start connecting!'} />}
                   showsVerticalScrollIndicator={false}
                 />
               )}

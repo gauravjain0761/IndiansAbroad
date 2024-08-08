@@ -12,12 +12,12 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../../Themes/Fonts';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
 import {
   FontStyle,
   ImageStyle,
@@ -26,14 +26,14 @@ import {
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import ConnectCard from '../../Components/ConnectCard';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import {Icons} from '../../Themes/Icons';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
+import { Icons } from '../../Themes/Icons';
 import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import PostCard from '../../Components/PostCard';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { screenName } from '../../Navigation/ScreenConstants';
 import PostShareModal from '../../Components/PostShareModal';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getOtherUserFollowList,
   getallpostsOfUser,
@@ -43,7 +43,7 @@ import {
   onGetOtherUserInfo,
   onUnFollowRequest,
 } from '../../Services/OtherUserServices';
-import {dispatchAction} from '../../utils/apiGlobal';
+import { dispatchAction } from '../../utils/apiGlobal';
 import {
   IS_LOADING,
   OTHER_USER_INFO,
@@ -58,14 +58,14 @@ import ImageModalShow from '../../Components/ImageModal';
 export default function IndiansDetails() {
   const navigation = useNavigation();
   const [menuModal, setmenuModal] = useState(false);
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelection, setTabSelection] = useState('POST');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   // const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
-  const {params} = useRoute();
+  const { params } = useRoute();
   const [followList, setfollowList] = useState([]);
-  const {otherUserInfo, user, otherUserAllPost, otherUserFollowList} =
+  const { otherUserInfo, user, otherUserAllPost, otherUserFollowList } =
     useSelector(e => e.common);
   const handleTabPress = (id, index) => {
     Animated.spring(buttonTranslateX, {
@@ -99,22 +99,22 @@ export default function IndiansDetails() {
     } else {
       dispatchAction(dispatch, OTHER_USER_INFO, undefined);
       dispatchAction(dispatch, IS_LOADING, true);
-      dispatch(onGetOtherUserInfo({params: {userId: params?.userId}}));
-      dispatch(getallpostsOfUser({data: {createdBy: params?.userId}}));
+      dispatch(onGetOtherUserInfo({ params: { userId: params?.userId } }));
+      dispatch(getallpostsOfUser({ data: { createdBy: params?.userId } }));
       onGetOtherUserFollower();
     }
   }, [isFocused]);
 
   const onGetOtherUserFollower = () => {
     dispatch(
-      getOtherUserFollowList({data: {userId: params?.userId, search: ''}}),
+      getOtherUserFollowList({ data: { userId: params?.userId, search: '' } }),
     );
   };
   const onPressConnect = () => {
     let obj = {
-      data: {userId: user._id, followingId: otherUserInfo._id},
+      data: { userId: user._id, followingId: otherUserInfo._id },
       onSuccess: () => {
-        dispatch(onGetOtherUserInfo({params: {userId: otherUserInfo._id}}));
+        dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo._id } }));
       },
     };
     if (otherUserInfo?.isFollowing == 'notfollowing') {
@@ -126,7 +126,7 @@ export default function IndiansDetails() {
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={item._id}
@@ -166,9 +166,9 @@ export default function IndiansDetails() {
       />
       {otherUserInfo && (
         <KeyboardAvoidingView
-          style={{flex: 1}}
-          {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
-          <ScrollView style={{flex: 1}}>
+          style={{ flex: 1 }}
+          {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+          <ScrollView style={{ flex: 1 }}>
             <View style={styles.userViewStyle}>
               <TouchableOpacity
                 onPress={() => {
@@ -188,7 +188,7 @@ export default function IndiansDetails() {
               {otherUserInfo?.catchLine !== '' && (
                 <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>
               )}
-              <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
+              <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
                 {otherUserInfo?.isFollowing == 'notfollowing' && (
                   <TouchableOpacity
                     onPress={() => onPressConnect()}
@@ -197,17 +197,17 @@ export default function IndiansDetails() {
                       {otherUserInfo?.isFollowing == 'notfollowing'
                         ? 'Connect'
                         : otherUserInfo?.isFollowing == 'requested'
-                        ? 'Cancel Request'
-                        : 'Disconnect'}
+                          ? 'Cancel Request'
+                          : 'Disconnect'}
                     </Text>
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity
-                  style={[styles.btnView, {marginLeft: 8, marginRight: 2}]}>
+                  style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
                   <Text style={styles.btnText}>Message</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{position: 'absolute', right: -22}}
+                  style={{ position: 'absolute', right: -22 }}
                   onPress={() => setmenuModal(true)}>
                   <Image
                     source={Icons.more}
@@ -221,7 +221,7 @@ export default function IndiansDetails() {
               <Text
                 style={[
                   styles.text1,
-                  {...FontStyle(14, colors.neutral_900, '700')},
+                  { ...FontStyle(14, colors.neutral_900, '700') },
                 ]}>
                 About
               </Text>
@@ -309,7 +309,7 @@ export default function IndiansDetails() {
                   styles.animationView,
                   {
                     left: tabSelection == 'POST' ? 0 : 0,
-                    transform: [{translateX: buttonTranslateX}],
+                    transform: [{ translateX: buttonTranslateX }],
                     width: (SCREEN_WIDTH - 20) / 2,
                     borderWidth: 0.9,
                     borderColor: colors.primary_4574ca,
@@ -345,7 +345,7 @@ export default function IndiansDetails() {
                 {followList && (
                   <FlatList
                     data={followList}
-                    renderItem={({item}) => {
+                    renderItem={({ item }) => {
                       return (
                         <ConnectedIndians
                           cardPress={() => {
