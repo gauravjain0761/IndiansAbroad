@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
@@ -29,7 +29,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Input from '../../Components/Input';
 import RenderSteps from '../../Components/RenderSteps';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import { getalluserEventCreate } from '../../Services/PostServices';
+import { getalluserEventCreate, getCurrenciesListAction } from '../../Services/PostServices';
 import moment from 'moment';
 import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import { api } from '../../utils/apiConstants';
@@ -57,6 +57,10 @@ export default function CreateEvent1() {
       });
   };
 
+  useEffect(()=>{
+     dispatch(getCurrenciesListAction())
+  },[])
+
   const onNextPress = () => {
     if (image == null) {
       errorToast('Please select image');
@@ -79,6 +83,7 @@ export default function CreateEvent1() {
       data.description = discription;
       data.email = contact.trim();
       data.step = 1;
+      data.mobile = phone;
 
       dispatchAction(dispatch, IS_LOADING, true);
       formDataApiCall(

@@ -44,6 +44,7 @@ import {
   SET_ALL_EVENTS,
   SET_ACTIVE_EVENT,
   SET_GROUP_CREATE_USERS,
+  GET_ALL_CURRENCIES,
 } from './ActionTypes';
 
 const initialState = {
@@ -87,7 +88,8 @@ const initialState = {
   unreadMsgCount: 0,
   activeChatDetails: undefined,
   activeChatMediaLinks: undefined,
-  groupCreateAllUsers: undefined
+  groupCreateAllUsers: undefined,
+  getCurrenciesList:undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -481,6 +483,9 @@ export default function (state = initialState, action) {
     }
     case SET_GROUP_CREATE_USERS: {
       return { ...state, groupCreateAllUsers: action.payload }
+    }
+    case GET_ALL_CURRENCIES: {
+      return { ...state, getCurrenciesList: action.payload }
     }
     default:
       return state;

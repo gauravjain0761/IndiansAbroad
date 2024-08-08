@@ -11,6 +11,8 @@ import {
   SET_GLOBAL_SEARCH,
   SET_PAGE_DETAIL,
   SET_ALL_EVENTS,
+  GET_ALL_CURRENCIES,
+  SET_ACTIVE_EVENT,
 } from '../Redux/ActionTypes';
 import { setAsyncUserInfo } from '../utils/AsyncStorage';
 import { GET, POST, api } from '../utils/apiConstants';
@@ -421,6 +423,68 @@ export const getalluserEventCreate = request => async dispatch => {
       handleSuccessRes(response, request, dispatch, () => {
         successToast(response?.data?.msg);
       });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getCurrenciesListAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: GET,
+    url: api.getCurrencies,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, GET_ALL_CURRENCIES, response?.data?.data);
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getDetailsListAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: GET,
+    url: `${api.getById}/${request?.data}`,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, SET_ACTIVE_EVENT, response?.data?.data);
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getAttendeeCreateAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.attendeeCreate,
+    data: request?.data,
+  })
+    .then(async response => {      
+      handleSuccessRes(response, request, dispatch, () => {
+        successToast(response?.data?.msg);
+      });
+    })
+    .catch(error => {
+      console.log('errorerror',error.response);
+      
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getTransactionDashboardAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: GET,
+    url: api.transactionDashboard,
+  })
+    .then(async response => {      
+      handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);

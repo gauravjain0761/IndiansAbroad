@@ -27,7 +27,7 @@ import {currenciesArray} from '../../utils/constants';
 import {getalluserEventCreate} from '../../Services/PostServices';
 export default function CreateEvent2() {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const {user,getCurrenciesList} = useSelector(e => e.common);
   const dispatch = useDispatch();
   const {params} = useRoute();
   const [type, settype] = useState('Onsite');
@@ -38,6 +38,7 @@ export default function CreateEvent2() {
   const [price, setprice] = useState('');
   const [available, setavailable] = useState('');
   const [address, setaddress] = useState('');
+console.log('currency ',currency);
 
   const onNextPress = () => {
     if (starts.date == '') {
@@ -71,6 +72,7 @@ export default function CreateEvent2() {
           end_time: '2024-08-10T18:00:00Z',
           event_fee: price,
           no_of_tickets: available,
+          currency:currency
         },
         onSuccess: (res) => {
           navigation.navigate(screenName.CreateEvent3, {
@@ -209,13 +211,13 @@ export default function CreateEvent2() {
             extraStyle={{width: '35%'}}
             value={currency ? currency : ''}
             onChangeText={text => {
-              setcurrency(text.code);
+              setcurrency(text.currencyCode);
             }}
             placeholder={'Currency'}
             type={'dropdown'}
-            data={currenciesArray}
-            labelField={'code'}
-            valueField={'code'}
+            data={getCurrenciesList}
+            labelField={'currencyCode'}
+            valueField={'currencyCode'}
           />
           <Input
             keyboardType="number-pad"

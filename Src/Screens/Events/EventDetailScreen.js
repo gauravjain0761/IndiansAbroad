@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation} from '@react-navigation/native';
@@ -21,12 +21,29 @@ import CommonButton from '../../Components/CommonButton';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderText from '../../Components/RenderText';
 import moment from 'moment';
+import { getDetailsListAction } from '../../Services/PostServices';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
-  const {activeEvent} = useSelector(e => e.common);
+  const {activeEvent,user} = useSelector(e => e.common);
 
   const dispatch = useDispatch();
+
+  console.log('activeEventactiveEvent',user?._id);
+  
+
+useEffect(()=>{
+  getEventList()
+},[activeEvent?._id])
+
+  const getEventList = page => {
+    let obj = {
+      data: activeEvent?._id,
+      onSuccess: () => {},
+    };
+    dispatch(getDetailsListAction(obj));
+  };
+
 
   const RenderRowList = ({icon, title}) => {
     return (
@@ -40,7 +57,7 @@ export default function EventDetailScreen() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
-        showRight={true}
+        showRight={user?._id == activeEvent?.createdBy ?true : false}
         icon={Icons.editEvent}
         onRightPress={() => navigation.navigate(screenName.EditEventScreen)}
         title={''}
@@ -78,7 +95,7 @@ export default function EventDetailScreen() {
             icon={Icons.tickets}
             title={`£ ${activeEvent?.event_fee}`}
           />
-          <RenderRowList icon={Icons.contacts} title={activeEvent?.email} />
+          <RenderRowList icon={Icons.contacts} title={activeEvent?.mobile || activeEvent?.email} />
           {/* <RenderRowList icon={Icons.contacts} title={'+44 7899653486'} /> */}
           <View style={styles.bottomRow}>
             <Text style={[styles.titleDes, {marginBottom: 10}]}>{activeEvent?.total_earnings}</Text>
@@ -113,7 +130,7 @@ export default function EventDetailScreen() {
             text={activeEvent?.description}
           />
         </View>
-        <View style={[styles.blueView, {marginVertical: hp(30)}]}>
+       {user?._id !== activeEvent?.createdBy&& <View style={[styles.blueView, {marginVertical: hp(30)}]}>
           <CommonButton
             onPress={() =>
               navigation.navigate(screenName.AttendanceRequestScreen)
@@ -121,8 +138,8 @@ export default function EventDetailScreen() {
             title={'Attend'}
             extraStyle={{width: 110, height: 50}}
           />
-        </View>
-        <View style={[styles.blueView, {marginVertical: hp(30)}]}>
+        </View>}
+       {user?._id == activeEvent?.createdBy && <View style={[styles.blueView, {marginVertical: hp(30)}]}>
           <CommonButton
             onPress={() =>
               navigation.navigate(screenName.ListParticipantsScreen)
@@ -130,7 +147,7 @@ export default function EventDetailScreen() {
             title={'List of Participants'}
             extraStyle={{width: 170, height: 50}}
           />
-        </View>
+        </View>}
       </ScrollView>
     </SafeAreaView>
   );
