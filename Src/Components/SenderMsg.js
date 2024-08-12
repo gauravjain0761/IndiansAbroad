@@ -7,16 +7,46 @@ import { Menu, MenuItem } from 'react-native-material-menu';
 import moment from 'moment';
 import RenderText from './RenderText';
 import RenderUserIcon from './RenderUserIcon';
+import ChatMessageMedia from './ChatMessageMedia';
+import { onGetSinglePost } from '../Services/PostServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
+import { screenName } from '../Navigation/ScreenConstants';
+import { dispatchAction } from '../utils/apiGlobal';
+import { useNavigation } from '@react-navigation/native';
 
 const SenderMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
-
+  const { user } = useSelector(e => e.common)
+  const dispatch = useDispatch()
   const hideMenu = () => setVisible(false);
-
+  const navigation = useNavigation()
   const showMenu = () => setVisible(true);
 
-  console.log(data)
 
+
+  const onOpenPostDetail = () => {
+    dispatchAction(dispatch, IS_LOADING, true);
+
+    dispatch(onGetSinglePost({
+      data: {
+        postId: data?.sharePostId,
+        loginUserId: user._id
+      },
+      onSuccess: (res) => {
+        console.log('-------', res)
+        if (res.data?.type == 'cppost') {
+          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+          dispatchAction(dispatch, SET_ACTIVE_POST, { _id: data?.sharePostId });
+          navigation.navigate(screenName.PagesPostDetail);
+        } else {
+          dispatchAction(dispatch, SET_ACTIVE_POST, { _id: data?.sharePostId });
+          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+          navigation.navigate(screenName.PostDetail);
+        }
+      }
+    }))
+  }
   return (
     <View style={styles.conatiner}>
       <View style={styles.columnContainer}>
@@ -27,15 +57,36 @@ const SenderMsg = ({ data }) => {
             <TouchableOpacity
               onLongPress={showMenu}
               style={styles.boxContainer}>
-              <Text style={styles.nameTextStyle}>{'You'}</Text>
-
+              {data?.shareContentType == 'group-invitation' ?
+                <Text style={styles.sharedNAme}>{'Group Invite'}</Text>
+                :
+                <View style={styles.nameView}>
+                  <Text style={styles.nameTextStyle}>{'You'}</Text>
+                  {(data?.shareContentType == 'post' || data?.shareContentType == 'cppost') && <Text style={styles.sharedNAme}>{'Shared Post'}</Text>}
+                </View>}
               {data?.shareContentType == 'group-invitation' &&
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={20} />
-                  </View>
-                  <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                <View style={styles.groupView}>
+                  <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
+                  <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
                 </View>
+              }
+              {data?.shareContentType == 'post' &&
+                <TouchableOpacity onPress={() => onOpenPostDetail()} >
+                  <ChatMessageMedia data={data} />
+                  <View style={{ flexDirection: 'row' }}>
+                    <RenderText style={[styles.msgTextStyle, { width: wp(250) }]} text={data?.content}></RenderText>
+                    {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
+                  </View>
+                </TouchableOpacity>
+              }
+              {data?.shareContentType == 'cppost' &&
+                <TouchableOpacity onPress={() => onOpenPostDetail()} >
+                  <ChatMessageMedia data={data} />
+                  <View style={{ flexDirection: 'row' }}>
+                    <RenderText style={[styles.msgTextStyle, { width: wp(250) }]} text={data?.content}></RenderText>
+                    {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
+                  </View>
+                </TouchableOpacity>
               }
               {data?.shareContentType == 'normalmessage' &&
                 <View style={{ flexDirection: 'row' }}>
@@ -43,17 +94,12 @@ const SenderMsg = ({ data }) => {
                   <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
                 </View>
               }
-
               {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
-              <Text style={[styles.timeTextStyle, {
-                marginTop: -13,
-              }]}>
+              <Text style={[styles.timeTextStyle, { marginTop: -13, }]}>
                 {moment(data?.createdAt).format('HH:mm')}
               </Text>
-
             </TouchableOpacity>
-          }
-          onRequestClose={hideMenu}>
+          } onRequestClose={hideMenu}>
           <View style={styles.menuChildrenContainer}>
             <TouchableOpacity onPress={hideMenu}>
               <Text style={styles.itemMenuTextStyle}>{'Forward'}</Text>
@@ -131,6 +177,30 @@ const styles = StyleSheet.create({
     ...FontStyle(14, colors.neutral_900, '600'),
     marginVertical: hp(1),
   },
+  nameView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  sharedNAme: {
+    ...FontStyle(12, '#B0C2E3FF'),
+    paddingHorizontal: wp(10),
+    paddingTop: wp(5)
+  },
+  groupView: {
+    backgroundColor: colors.white,
+    marginHorizontal: 10,
+    marginTop: 5,
+    marginBottom: 15,
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    gap: 10
+  },
+  groupName: {
+    ...FontStyle(13, colors.neutral_900),
+  }
 });
 
 export default SenderMsg;

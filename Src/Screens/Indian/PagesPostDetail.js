@@ -104,7 +104,7 @@ export default function PagesPostDetail() {
     if (commentText.trim() !== '') {
       let obj = {
         data: {
-          postId: activePost._id,
+          postId: activePost?._id,
           createdBy: user._id,
           comment: commentText.trim()
         },

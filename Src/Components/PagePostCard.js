@@ -119,7 +119,7 @@ export default function PagePostCard({ item, index, }) {
           <Text style={styles.aboutTextMore}>{`${!textShown ? 'Read more' : 'Read less'}`}</Text>
         </TouchableOpacity>
         : null} */}
-      {item?.mediaFiles.length > 0 && (
+      {item?.mediaFiles?.length > 0 && (
         <PostCarousal images={item?.mediaFiles} />
       )}
       <View style={styles.bottomRow}>

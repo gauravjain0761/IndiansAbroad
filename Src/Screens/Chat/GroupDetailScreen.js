@@ -132,10 +132,10 @@ export default function GroupDetailScreen() {
                 </View>}
                 <View style={styles.memberView}>
                     <Text style={styles.menberText}>Member ({activeChatDetails?.users?.length})</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate(screenName.AddMemberScreen)} style={ApplicationStyles.row}>
+                    {activeChatDetails?.createdBy?._id == user?._id && <TouchableOpacity onPress={() => navigation.navigate(screenName.AddMemberScreen)} style={ApplicationStyles.row}>
                         <Image source={Icons.plus} style={styles.plusIcon} />
                         <Text style={[styles.menberText, { color: colors.primary_500 }]}>Add Member</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
                 {activeChatDetails && <View>
                     {/* activeChatDetails?.users */}
