@@ -1,5 +1,5 @@
 import { screenName } from "../Navigation/ScreenConstants";
-import { IS_LOADING, MY_PAGES, SET_ALL_POST, SET_COUNTRIES, SET_FOLLOWER_LIST, SET_USER } from "../Redux/ActionTypes";
+import { IS_LOADING, MY_PAGES, SET_ALL_POST, SET_COUNTRIES, SET_FOLLOWER_LIST, SET_NOTIFICATION_LIST, SET_USER } from "../Redux/ActionTypes";
 import { clearAsync, setAsyncToken, setAsyncUserInfo } from "../utils/AsyncStorage";
 import { resetNavigation } from "../utils/Global";
 import { GET, POST, api } from "../utils/apiConstants";
@@ -307,3 +307,37 @@ export const onDeleteAccount = (request) => async dispatch => {
             handleErrorRes(error, request, dispatch);
         });
 };
+
+
+export const onGetNotification = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.notificationList,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, async () => {
+                dispatchAction(dispatch, SET_NOTIFICATION_LIST, response?.data)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+export const onUpdateFbToken = (request) => async dispatch => {
+    return makeAPIRequest({
+        method: POST,
+        url: api.updateFbToken,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, async () => {
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+

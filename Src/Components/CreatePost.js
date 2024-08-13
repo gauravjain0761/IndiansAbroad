@@ -27,13 +27,6 @@ import ConnectCard from '../Components/ConnectCard';
 import PostCard from '../Components/PostCard';
 import ModalContainer from '../Components/ModalContainer';
 import { Icons } from '../Themes/Icons';
-import DocumentPicker, {
-  DirectoryPickerResponse,
-  DocumentPickerResponse,
-  isCancel,
-  isInProgress,
-  types,
-} from 'react-native-document-picker';
 import { openImagePickerForMultiple } from '../utils/Global';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { createThumbnail } from "react-native-create-thumbnail";

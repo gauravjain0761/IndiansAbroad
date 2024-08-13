@@ -9,10 +9,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-export default function MessageScreenMoreMenu({ visible, onClose, onPressClear }) {
+export default function MessageScreenMoreMenu({ onReport, onPressDisconnect, visible, onClose, onPressClear, onPressBlock }) {
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch()
-    const { user, activeChatRoomUser, chatMessageList } = useSelector(e => e.common)
+    const { user, activeChatRoomUser, followerList, chatMessageList } = useSelector(e => e.common)
 
     return (
         <ModalContainer isVisible={visible} onClose={() => onClose()} >
@@ -21,18 +21,18 @@ export default function MessageScreenMoreMenu({ visible, onClose, onPressClear }
                     <Image style={styles.image} source={Icons.close} />
                     <Text style={styles.text}>Clear Chat</Text>
                 </TouchableOpacity>}
-                <TouchableOpacity style={styles.row}>
+                {followerList.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 && <TouchableOpacity onPress={() => onPressDisconnect()} style={styles.row}>
                     <Image style={styles.image} source={Icons.blockUser} />
                     <Text style={styles.text}>Disconnect</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.row}>
+                </TouchableOpacity>}
+                {followerList.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 && <TouchableOpacity onPress={() => onPressBlock()} style={styles.row}>
                     <Image style={styles.image} source={Icons.block} />
                     <Text style={styles.text}>Block</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.row}>
+                </TouchableOpacity>}
+                {/* {followerList.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 && <TouchableOpacity onPress={() => onReport()} style={styles.row}>
                     <Image style={[styles.image, { tintColor: colors.danger_500 }]} source={Icons.report} />
                     <Text style={[styles.text, { color: colors.danger_500 }]}>Report</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>} */}
                 <View style={{ paddingBottom: insets.bottom }} />
             </View>
         </ModalContainer>

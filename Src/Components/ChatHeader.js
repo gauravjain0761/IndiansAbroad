@@ -15,6 +15,9 @@ import ConfirmationModal from './ConfirmationModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { onClearAllChat, onLeaveFromGroup } from '../Services/ChatServices';
 import { resetNavigation } from '../utils/Global';
+import { onBlockUserApi, onUnFollowRequest } from '../Services/OtherUserServices';
+import { getFollowerList } from '../Services/AuthServices';
+import ReportModal from './ReportModal';
 
 const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false }) => {
   const { goBack, navigate } = useNavigation();
@@ -25,6 +28,8 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
   const { user, activeChatRoomUser, chatMessageList } = useSelector(e => e.common)
   const [leaveGroupModal, setleaveGroupModal] = useState(false)
   const navigation = useNavigation()
+  const [blockModal, setblockModal] = useState(false)
+  const [reportModal, setReportModal] = useState(false);
 
   const onClearChat = () => {
     setclearChatModal(false)
@@ -53,6 +58,44 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
       }
     ))
   }
+  const onUnfollowUser = () => {
+    let obj = {
+      data: {
+        userId: user._id,
+        followingId: activeChatRoomUser?.currentUser?._id
+      },
+      onSuccess: () => {
+        dispatch(
+          getFollowerList({
+            data: { userId: user?._id, search: '' },
+          }),
+        );
+        goBack()
+      }
+    }
+    dispatch(onUnFollowRequest(obj))
+  }
+
+  const onBlockuser = () => {
+    setblockModal(false)
+    setTimeout(() => {
+      let obj = {
+        data: {
+          userId: activeChatRoomUser?.currentUser?._id,
+          action: 'block'
+        },
+        onSuccess: () => {
+          dispatch(
+            getFollowerList({
+              data: { userId: user?._id, search: '' },
+            }),
+          );
+          goBack()
+        }
+      }
+      dispatch(onBlockUserApi(obj))
+    }, 500);
+  }
 
   return (
     <View style={styles.conatiner}>
@@ -73,6 +116,21 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
       {moreMenu && <MessageScreenMoreMenu
         onPressClear={() => { setmoreMenu(false), setTimeout(() => { setclearChatModal(true) }, 500) }}
         visible={moreMenu}
+        onPressBlock={() => {
+          setmoreMenu(false), setTimeout(() => {
+            setblockModal(true)
+          }, 500);
+        }}
+        onPressDisconnect={() => {
+          setmoreMenu(false), setTimeout(() => {
+            onUnfollowUser()
+          }, 500)
+        }}
+        onReport={() => {
+          setmoreMenu(false), setTimeout(() => {
+            setReportModal(true)
+          }, 500)
+        }}
         onClose={() => setmoreMenu(false)} />}
       {moreMenuGroup && <GroupChatMoreMenu
         onLeaveGroup={() => { setmoreMenuGroup(false), setTimeout(() => { setleaveGroupModal(true) }, 500) }}
@@ -100,6 +158,25 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
           canselBtn={'No'}
           onPressCancel={() => setleaveGroupModal(false)}
           onPressSuccess={() => onLeaveGroup()}
+        />
+      )}
+
+      {blockModal && <ConfirmationModal
+        visible={blockModal}
+        onClose={() => setblockModal(false)}
+        title={`Do you want to block ${name}?`}
+        successBtn={'Yes'}
+        canselBtn={'No'}
+        onPressCancel={() => setblockModal(false)}
+        onPressSuccess={() => {
+          onBlockuser()
+        }}
+      />}
+      {reportModal && (
+        <ReportModal
+          visible={reportModal}
+          onClose={() => setReportModal(false)}
+          postId={activeChatRoomUser?.currentUser?._id}
         />
       )}
     </View>

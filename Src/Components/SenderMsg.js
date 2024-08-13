@@ -14,6 +14,9 @@ import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/
 import { screenName } from '../Navigation/ScreenConstants';
 import { dispatchAction } from '../utils/apiGlobal';
 import { useNavigation } from '@react-navigation/native';
+import RenderFileMessageView from './RenderFileMessageView';
+import ConfirmationModal from './ConfirmationModal';
+import { onDeleteMessage, onDeleteMessageForUser } from '../Services/ChatServices';
 
 const SenderMsg = ({ data }) => {
   const [visible, setVisible] = useState(false);
@@ -22,8 +25,8 @@ const SenderMsg = ({ data }) => {
   const hideMenu = () => setVisible(false);
   const navigation = useNavigation()
   const showMenu = () => setVisible(true);
-
-
+  const [deletePostModal, setdeletePostModal] = useState(false)
+  const [deleteFor, setdeleteFor] = useState(undefined)
 
   const onOpenPostDetail = () => {
     dispatchAction(dispatch, IS_LOADING, true);
@@ -34,7 +37,6 @@ const SenderMsg = ({ data }) => {
         loginUserId: user._id
       },
       onSuccess: (res) => {
-        console.log('-------', res)
         if (res.data?.type == 'cppost') {
           dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
           dispatchAction(dispatch, SET_ACTIVE_POST, { _id: data?.sharePostId });
@@ -47,6 +49,33 @@ const SenderMsg = ({ data }) => {
       }
     }))
   }
+  const onOpenThreadDetail = () => {
+    dispatchAction(dispatch, SET_ACTIVE_POST, { ...data?.shareThreadId });
+    dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+    navigation.navigate(screenName.DiscussionForumDetail)
+  }
+
+  const onDeleteMessgae = () => {
+    setdeletePostModal(false)
+    let obj = {
+      data: {
+        messageId: data?._id,
+      }
+    }
+    dispatch(onDeleteMessage(obj))
+  }
+
+  const onDeleteMessgaeForMe = () => {
+    setdeletePostModal(false)
+    let obj = {
+      data: {
+        messageId: data?._id,
+        deleted_for: user?._id
+      }
+    }
+    dispatch(onDeleteMessageForUser(obj))
+  }
+
   return (
     <View style={styles.conatiner}>
       <View style={styles.columnContainer}>
@@ -62,6 +91,7 @@ const SenderMsg = ({ data }) => {
                 :
                 <View style={styles.nameView}>
                   <Text style={styles.nameTextStyle}>{'You'}</Text>
+                  {data?.shareContentType == 'thread' && <Text style={styles.sharedNAme}>{'Shared Thread'}</Text>}
                   {(data?.shareContentType == 'post' || data?.shareContentType == 'cppost') && <Text style={styles.sharedNAme}>{'Shared Post'}</Text>}
                 </View>}
               {data?.shareContentType == 'group-invitation' &&
@@ -72,28 +102,57 @@ const SenderMsg = ({ data }) => {
               }
               {data?.shareContentType == 'post' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                  <ChatMessageMedia data={data} />
-                  <View style={{ flexDirection: 'row' }}>
-                    <RenderText style={[styles.msgTextStyle, { width: wp(250) }]} text={data?.content}></RenderText>
-                    {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
-                  </View>
+                  {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                  <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
+                  {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
+                </TouchableOpacity>
+              }
+              {data?.shareContentType == 'thread' &&
+                <TouchableOpacity onPress={() => onOpenThreadDetail()} >
+                  {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                  <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
+                  {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'cppost' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                  <ChatMessageMedia data={data} />
-                  <View style={{ flexDirection: 'row' }}>
-                    <RenderText style={[styles.msgTextStyle, { width: wp(250) }]} text={data?.content}></RenderText>
-                    {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
-                  </View>
+                  {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                  <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
+                  {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
               }
-              {data?.shareContentType == 'normalmessage' &&
-                <View style={{ flexDirection: 'row' }}>
-                  <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
-                  <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
-                </View>
+
+
+              {data?.shareContentType == 'normalmessage' ?
+                data?.content_type == 'text/plain' ?
+                  <View style={{ flexDirection: 'row' }}>
+                    <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
+                    <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                  </View>
+                  : data?.content_type == 'file/*' ?
+                    <View>
+                      <RenderFileMessageView data={data} />
+                    </View>
+                    : data?.content_type == 'image/*' ?
+                      <View>
+                        {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                        <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
+                      </View>
+                      : data?.content_type == 'video/*' ?
+                        <View>
+                          {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                          <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
+                        </View>
+                        : <View style={{ height: 10 }} />
+                :
+                null
               }
+
+              {!data.shareContentType && <View style={{ flexDirection: 'row' }}>
+                <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
+                <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+              </View>}
+
               {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
               <Text style={[styles.timeTextStyle, { marginTop: -13, }]}>
                 {moment(data?.createdAt).format('HH:mm')}
@@ -101,7 +160,7 @@ const SenderMsg = ({ data }) => {
             </TouchableOpacity>
           } onRequestClose={hideMenu}>
           <View style={styles.menuChildrenContainer}>
-            <TouchableOpacity onPress={hideMenu}>
+            {/* <TouchableOpacity onPress={hideMenu}>
               <Text style={styles.itemMenuTextStyle}>{'Forward'}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={hideMenu}>
@@ -109,11 +168,21 @@ const SenderMsg = ({ data }) => {
             </TouchableOpacity>
             <TouchableOpacity onPress={hideMenu}>
               <Text style={styles.itemMenuTextStyle}>{'Copy'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={hideMenu}>
+            </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => {
+              setdeleteFor('me')
+              hideMenu(), setTimeout(() => {
+                setdeletePostModal(true)
+              }, 500)
+            }}>
               <Text style={styles.itemMenuTextStyle}>{'Delete for me'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={hideMenu}>
+            <TouchableOpacity onPress={() => {
+              setdeleteFor('all')
+              hideMenu(), setTimeout(() => {
+                setdeletePostModal(true)
+              }, 500)
+            }}>
               <Text style={styles.itemMenuTextStyle}>
                 {'Delete for everyone'}
               </Text>
@@ -121,8 +190,19 @@ const SenderMsg = ({ data }) => {
           </View>
         </Menu>
 
-      </View>
-    </View>
+      </View >
+      {deletePostModal && (
+        <ConfirmationModal
+          visible={deletePostModal}
+          onClose={() => setdeletePostModal(false)}
+          title={`Are you sure you want to delete this message?`}
+          successBtn={'Delete'}
+          canselBtn={'No'}
+          onPressCancel={() => setdeletePostModal(false)}
+          onPressSuccess={() => deleteFor == 'me' ? onDeleteMessgaeForMe() : onDeleteMessgae()}
+        />
+      )}
+    </View >
   );
 };
 
@@ -151,9 +231,10 @@ const styles = StyleSheet.create({
   },
   msgTextStyle: {
     ...FontStyle(14, colors.white, '400'),
-    paddingLeft: wp(5),
+    marginHorizontal: wp(10),
     paddingBottom: wp(5),
     maxWidth: SCREEN_WIDTH - wp(130),
+    // backgroundColor: 'red'
   },
   columnContainer: {
     marginLeft: wp(10),
@@ -172,6 +253,7 @@ const styles = StyleSheet.create({
     padding: wp(10),
     borderWidth: 1,
     borderColor: colors.neutral_150,
+    // width: 150
   },
   itemMenuTextStyle: {
     ...FontStyle(14, colors.neutral_900, '600'),

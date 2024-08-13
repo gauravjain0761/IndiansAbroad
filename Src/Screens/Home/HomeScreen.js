@@ -17,7 +17,7 @@ import { dispatchAction } from '../../utils/apiGlobal';
 import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_ALL_EVENTS, SET_GLOBAL_SEARCH, } from '../../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
-import { getFollowerList } from '../../Services/AuthServices';
+import { getFollowerList, onUpdateFbToken } from '../../Services/AuthServices';
 import { getDiscussionCountry } from '../../Services/DiscussionServices';
 import { io } from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
@@ -34,7 +34,7 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const { allPost, allPostsCount, user, allEvent, allEventCount } = useSelector(
+  const { allPost, allPostsCount, user, allEvent, allEventCount, fcmToken } = useSelector(
     e => e.common,
   );
   const isFocuse = useIsFocused();
@@ -43,8 +43,8 @@ export default function HomeScreen() {
   const [loading, setloading] = useState(false);
 
   useEffect(() => {
-    dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }));
-  }, []);
+    if (isFocuse) { dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } })); }
+  }, [isFocuse]);
 
   useEffect(() => {
     socketConnect(dispatch, flag => {
@@ -89,6 +89,10 @@ export default function HomeScreen() {
     if (!allPost) dispatchAction(dispatch, IS_LOADING, true);
     if (!allEvent) dispatchAction(dispatch, IS_LOADING, true);
     dispatch(getDiscussionCountry({}));
+    console.log('fcmToken---', fcmToken)
+    if (fcmToken) {
+      dispatch(onUpdateFbToken({ data: { userId: user?._id, firebaseToken: fcmToken } }))
+    }
     dispatch(getFollowerList({ data: { userId: user?._id, search: '' }, }),);
   }, []);
 

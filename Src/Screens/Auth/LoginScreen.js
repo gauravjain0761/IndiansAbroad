@@ -35,9 +35,6 @@ export default function LoginScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    requestNotificationUserPermission();
-  }, []);
 
   const onLogin = () => {
     if (!emailCheck(email.trim())) {

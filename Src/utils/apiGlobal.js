@@ -60,6 +60,7 @@ export const removeAuthorization = async () => {
 export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
   let formData = new FormData();
   const token = await getAsyncToken();
+  console.log('data---', data)
   if (data) {
     Object.keys(data).map(element => {
       if (data[element] !== undefined) {
@@ -78,7 +79,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
   })
     .then(response => {
       return response.json().then(responseJson => {
-        console.log("responseJson",responseJson);
+        console.log("responseJson", responseJson);
         if (responseJson.err == 200 || responseJson.statusCode == 200) {
           onSuccess(responseJson);
         } else {
@@ -91,7 +92,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
     })
     .catch(err => {
       console.log('err---', err)
-      if (onFailure) onFailure();
+      if (onFailure) onFailure(err);
       errorToast('Please try again');
     });
 };

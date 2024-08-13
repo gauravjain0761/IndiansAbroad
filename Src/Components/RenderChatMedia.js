@@ -10,7 +10,6 @@ export default function RenderChatMedia({ item, index, noOfItem }) {
     const [thumbnail, setthumbnail] = useState(undefined)
 
     useEffect(() => {
-
         createThumbnail({
             url: item?.location,
             timeStamp: 1000,
@@ -19,25 +18,13 @@ export default function RenderChatMedia({ item, index, noOfItem }) {
         }).catch(err => console.log('err==', err));
     }, [])
 
-
-
     return (
-        <View key={index} style={{
-            width: size,
-            height: size,
-        }}>
+        <View key={index} style={{ width: size, height: size, }}>
             {item?.contentType?.includes('image') ?
-                <Image source={{ uri: item?.location }} style={[styles.userImage, {
-                    width: size,
-                    height: size
-                }]} />
+                <Image source={{ uri: item?.location }} style={[styles.userImage, { width: size, height: size }]} />
                 :
-                <Image source={{ uri: thumbnail }} style={[styles.userImage, {
-                    width: size,
-                    height: size
-                }]} />
+                <Image source={{ uri: thumbnail }} style={[styles.userImage, { width: size, height: size }]} />
             }
-
             {item?.contentType?.includes('video') && <View style={styles.mainViewPlayBtn}>
                 <View style={styles.videoPlayIcon}>
                     <Image source={Icons.playVideo} style={styles.playBtn} />

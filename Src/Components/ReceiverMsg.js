@@ -10,11 +10,14 @@ import RenderUserIcon from './RenderUserIcon';
 import RenderText from './RenderText';
 import ChatMessageMedia from './ChatMessageMedia';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { dispatchAction } from '../utils/apiGlobal';
-import { IS_LOADING, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
+import { GET_CHAT_MESSAGES, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../Redux/ActionTypes';
 import { onGetSinglePost } from '../Services/PostServices';
 import { screenName } from '../Navigation/ScreenConstants';
+import { onDeleteMessageForUser, onJoinGroupChat } from '../Services/ChatServices';
+import RenderFileMessageView from './RenderFileMessageView';
+import ConfirmationModal from './ConfirmationModal';
 
 
 const ReciverMsg = ({ data }) => {
@@ -22,25 +25,21 @@ const ReciverMsg = ({ data }) => {
   const { user } = useSelector(e => e.common)
   const dispatch = useDispatch()
   const navigation = useNavigation()
+  const [deletePostModal, setdeletePostModal] = useState(false)
 
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
-  if (data?.shareContentType == 'group-invitation') {
-    console.log('-------', data)
 
-  }
 
   const onOpenPostDetail = () => {
     dispatchAction(dispatch, IS_LOADING, true);
-
     dispatch(onGetSinglePost({
       data: {
         postId: data?.sharePostId,
         loginUserId: user._id
       },
       onSuccess: (res) => {
-        console.log('-------', res)
         if (res.data?.type == 'cppost') {
           dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
           dispatchAction(dispatch, SET_ACTIVE_POST, { _id: data?.sharePostId });
@@ -52,6 +51,42 @@ const ReciverMsg = ({ data }) => {
         }
       }
     }))
+  }
+
+  const onPressJoinNowBtn = () => {
+    let obj = {
+      data: {
+        curruntUser: user._id,
+        groupId: data?.invitedGroupId?._id,
+        messageId: data?._id,
+        notificationId: ''
+      },
+      onSuccess: (res) => {
+        dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: res?.data, chatId: res?.data?._id })
+        navigation.dispatch(
+          StackActions.replace(screenName.GroupMessaging)
+        );
+      }
+    }
+    dispatch(onJoinGroupChat(obj))
+  }
+
+  const onOpenThreadDetail = () => {
+    dispatchAction(dispatch, SET_ACTIVE_POST, { ...data?.shareThreadId });
+    dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+    navigation.navigate(screenName.DiscussionForumDetail)
+  }
+
+  const onDeleteMessgaeForMe = () => {
+    setdeletePostModal(false)
+    let obj = {
+      data: {
+        messageId: data?._id,
+        deleted_for: user?._id
+      }
+    }
+    dispatch(onDeleteMessageForUser(obj))
   }
 
 
@@ -85,40 +120,72 @@ const ReciverMsg = ({ data }) => {
                         ' ' +
                         data?.createdBy?.last_Name}
                     </Text>
+                    {data?.shareContentType == 'thread' && <Text style={styles.sharedNAme}>{'Shared Thread'}</Text>}
+
                     {(data?.shareContentType == 'post' || data?.shareContentType == 'cppost') && <Text style={styles.sharedNAme}>{'Shared Post'}</Text>}
                   </View>}
                 {data?.shareContentType == 'group-invitation' &&
-                  <View style={styles.groupView}>
-                    <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
-                    <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
+                  <View style={{ marginBottom: 15, }}>
+                    <View style={styles.groupView}>
+                      <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
+                      <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
+                    </View>
+                    {!data?.joinedGroup && <TouchableOpacity onPress={() => onPressJoinNowBtn()} style={styles.joinNowBtn}>
+                      <Text style={styles.joinNowText}>Join Now</Text>
+                    </TouchableOpacity>}
                   </View>
+
                 }
                 {data?.shareContentType == 'post' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                    <ChatMessageMedia data={data} />
-                    <View style={{ flexDirection: 'row' }}>
-                      <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
-                    </View>
+                    {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                    <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
+                  </TouchableOpacity>
+                }
+                {data?.shareContentType == 'thread' &&
+                  <TouchableOpacity onPress={() => onOpenThreadDetail()} >
+                    {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                    <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
                 {data?.shareContentType == 'cppost' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                    <ChatMessageMedia data={data} />
-                    <View style={{ flexDirection: 'row' }}>
-                      <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
-                    </View>
+                    {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                    <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
-                {data?.shareContentType == 'normalmessage' &&
+
+                {data?.shareContentType == 'normalmessage' ?
+                  data?.content_type == 'text/plain' ?
+                    <View style={{ flexDirection: 'row' }}>
+                      <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
+                      <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                    </View>
+                    : data?.content_type == 'file/*' ?
+                      <View>
+                        <RenderFileMessageView data={data} />
+                      </View>
+                      : data?.content_type == 'image/*' ?
+                        <View>
+                          {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                          <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
+                        </View>
+                        : data?.content_type == 'video/*' ?
+                          <View>
+                            {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                            <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
+                          </View>
+                          : <View style={{ height: 10 }} />
+                  :
+                  <View style={{ height: 10 }} />
+                }
+
+                {!data?.shareContentType &&
                   <View style={{ flexDirection: 'row' }}>
                     <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
                     <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
                   </View>
                 }
-
-
-
-
                 {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
                 <Text style={[styles.timeTextStyle, {
                   marginTop: -13,
@@ -127,21 +194,37 @@ const ReciverMsg = ({ data }) => {
                 </Text>
               </TouchableOpacity>
             }
+
             onRequestClose={hideMenu}>
             <View style={styles.menuChildrenContainer}>
-              <TouchableOpacity onPress={hideMenu}>
+              {/* <TouchableOpacity onPress={hideMenu}>
                 <Text style={styles.itemMenuTextStyle}>{'Forward'}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={hideMenu}>
                 <Text style={styles.itemMenuTextStyle}>{'Copy'}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={hideMenu}>
+              </TouchableOpacity> */}
+              <TouchableOpacity onPress={() => {
+                hideMenu(), setTimeout(() => {
+                  setdeletePostModal(true)
+                }, 500)
+              }}>
                 <Text style={styles.itemMenuTextStyle}>{'Delete for me'}</Text>
               </TouchableOpacity>
             </View>
           </Menu>
         </View>
       </View>
+      {deletePostModal && (
+        <ConfirmationModal
+          visible={deletePostModal}
+          onClose={() => setdeletePostModal(false)}
+          title={`Are you sure you want to delete this message?`}
+          successBtn={'Delete'}
+          canselBtn={'No'}
+          onPressCancel={() => setdeletePostModal(false)}
+          onPressSuccess={() => onDeleteMessgaeForMe()}
+        />
+      )}
     </View>
   );
 };
@@ -184,7 +267,7 @@ const styles = StyleSheet.create({
     ...FontStyle(14, colors.neutral_900, '400'),
     paddingLeft: wp(5),
     paddingBottom: wp(5),
-    maxWidth: SCREEN_WIDTH - wp(170)
+    maxWidth: SCREEN_WIDTH - wp(170),
   },
   columnContainer: {
     marginLeft: wp(10),
@@ -204,6 +287,7 @@ const styles = StyleSheet.create({
     padding: wp(10),
     borderWidth: 1,
     borderColor: colors.neutral_150,
+    width: 150
   },
   itemMenuTextStyle: {
     ...FontStyle(14, colors.neutral_900, '600'),
@@ -213,7 +297,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     marginHorizontal: 10,
     marginTop: 5,
-    marginBottom: 15,
+
     borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
@@ -222,7 +306,20 @@ const styles = StyleSheet.create({
   },
   groupName: {
     ...FontStyle(13, colors.neutral_900),
-  }
+  },
+  joinNowBtn: {
+
+    alignSelf: 'center',
+    backgroundColor: colors.primary_500,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    justifyContent: 'center',
+    marginTop: 8
+  },
+  joinNowText: {
+    ...FontStyle(14, colors.white, '600'),
+  },
 });
 
 export default ReciverMsg;

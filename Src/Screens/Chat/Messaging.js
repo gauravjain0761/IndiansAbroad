@@ -96,7 +96,6 @@ const Messaging = () => {
       getData(1)
     }, [])
   );
-
   const getData = (page) => {
     let obj = {
       data: {

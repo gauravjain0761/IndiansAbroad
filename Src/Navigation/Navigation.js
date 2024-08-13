@@ -83,6 +83,14 @@ import GroupMessaging from '../Screens/Chat/GroupMessaging';
 import GroupDetailScreen from '../Screens/Chat/GroupDetailScreen';
 import GroupMediaScreen from '../Screens/Chat/GroupMediaScreen';
 import AddMemberScreen from '../Screens/Chat/AddMemberScreen';
+import MediaWithInputScreen from '../Screens/Chat/MediaWithInputScreen';
+import { requestNotificationUserPermission } from '../Config/firebaseConfig';
+import notifee from '@notifee/react-native';
+import firebase from '@react-native-firebase/app';
+import messaging from '@react-native-firebase/messaging';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_FCM_TOKEN } from '../Redux/ActionTypes';
+import { useDispatch } from 'react-redux';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -220,6 +228,58 @@ const headerStyleTransparent = {
 
 const Stack = createStackNavigator();
 export default function Navigation() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    messaging().setAutoInitEnabled(true);
+    setNotification();
+  }, []);
+  const setNotification = async () => {
+    let authStatus = await firebase.messaging().hasPermission();
+
+    if (authStatus !== firebase.messaging.AuthorizationStatus.AUTHORIZED) {
+      requestPermission();
+    }
+
+    if (authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED) {
+      getToken();
+    }
+  };
+  const requestPermission = () => {
+    messaging()
+      .requestPermission({
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: true,
+        provisional: false,
+        sound: true,
+      })
+      .then(() => {
+        getToken();
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  };
+  const getToken = async () => {
+    messaging()
+      .getToken()
+      .then(fcmToken => {
+        if (fcmToken) {
+          console.log('fcm--', fcmToken);
+          dispatchAction(dispatch, SET_FCM_TOKEN, fcmToken)
+        } else {
+          console.log('[FCMService] User does not have a device token');
+        }
+      })
+      .catch(error => {
+        let err = `FCm token get error${error}`;
+        console.log(err);
+      });
+  };
+
+
   useEffect(() => {
     onNotificationPress();
     onBackgroundNotificationPress();
@@ -288,6 +348,8 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupDetailScreen} component={GroupDetailScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupMediaScreen} component={GroupMediaScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.AddMemberScreen} component={AddMemberScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MediaWithInputScreen} component={MediaWithInputScreen} />
+
 
     </Stack.Navigator>
   );

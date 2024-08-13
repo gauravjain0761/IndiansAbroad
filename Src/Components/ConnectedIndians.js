@@ -82,7 +82,7 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
           }, 500);
         }}>Block</MenuItem>
       </Menu>
-      <ConfirmationModal
+      {blockModal && <ConfirmationModal
         visible={blockModal}
         onClose={() => setblockModal(false)}
         title={`Do you want to block ${item?.followingId?.first_Name} ${item?.followingId?.last_Name}?`}
@@ -92,7 +92,7 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
         onPressSuccess={() => {
           onBlockuser()
         }}
-      />
+      />}
     </TouchableOpacity>
   );
 }

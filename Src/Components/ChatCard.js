@@ -19,7 +19,6 @@ import moment from 'moment';
 export default function ChatCard({ data, cardPress, isGroup }) {
   const { user } = useSelector(e => e.common);
   let currentUser = data?.users?.filter(item => item._id !== user?._id)?.[0];
-
   return (
     <TouchableOpacity
       onPress={() => cardPress(currentUser)}
@@ -44,6 +43,9 @@ export default function ChatCard({ data, cardPress, isGroup }) {
           {moment(data?.latestMessage?.createdAt).format('HH:mm')}
         </Text>
       </View>
+      {data?.unreadMessages > 0 && <View style={styles.unreadMsg}>
+        <Text style={styles.unreadMsgText}>{data?.unreadMessages}</Text>
+      </View>}
     </TouchableOpacity>
   );
 }
@@ -94,4 +96,16 @@ const styles = StyleSheet.create({
     marginRight: 0,
     resizeMode: 'contain',
   },
+  unreadMsg: {
+    backgroundColor: colors.danger_500,
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    borderRadius: 100,
+    paddingHorizontal: 5,
+    paddingVertical: 0,
+  },
+  unreadMsgText: {
+    ...FontStyle(12, colors.white, '600')
+  }
 });

@@ -45,6 +45,9 @@ import {
   SET_ACTIVE_EVENT,
   SET_GROUP_CREATE_USERS,
   GET_ALL_CURRENCIES,
+  DELETE_MESSAGE,
+  SET_NOTIFICATION_LIST,
+  SET_FCM_TOKEN,
 } from './ActionTypes';
 
 const initialState = {
@@ -89,7 +92,9 @@ const initialState = {
   activeChatDetails: undefined,
   activeChatMediaLinks: undefined,
   groupCreateAllUsers: undefined,
-  getCurrenciesList:undefined
+  getCurrenciesList: undefined,
+  notificationList: undefined,
+  fcmToken: null
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -465,9 +470,14 @@ export default function (state = initialState, action) {
       return { ...state, unreadMsgCount: action.payload }
     }
     case ADD_ONE_MESSAGE: {
+
       if (action?.payload?.room == state?.activeChatRoomUser?.chatId && state.chatMessageList.filter(obj => obj?._id == action.payload.message?.messageId).length == 0) {
         let chatMessageList = Object.assign([], state.chatMessageList)
         chatMessageList.unshift({ ...action.payload.message, _id: action.payload.message.messageId })
+        return { ...state, chatMessageList }
+      } else if (action?.payload?.chatId == state?.activeChatRoomUser?.chatId && state.chatMessageList.filter(obj => obj?._id == action.payload?.messageId).length == 0) {
+        let chatMessageList = Object.assign([], state.chatMessageList)
+        chatMessageList.unshift({ ...action.payload, _id: action.payload.messageId })
         return { ...state, chatMessageList }
       }
     }
@@ -486,6 +496,17 @@ export default function (state = initialState, action) {
     }
     case GET_ALL_CURRENCIES: {
       return { ...state, getCurrenciesList: action.payload }
+    }
+    case DELETE_MESSAGE: {
+      let chatMessageList = Object.assign([], state.chatMessageList)
+      chatMessageList = chatMessageList.filter(obj => obj?._id !== action.payload?._id)
+      return { ...state, chatMessageList }
+    }
+    case SET_NOTIFICATION_LIST: {
+      return { ...state, notificationList: action.payload }
+    }
+    case SET_FCM_TOKEN: {
+      return { ...state, fcmToken: action.payload }
     }
     default:
       return state;

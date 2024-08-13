@@ -18,6 +18,8 @@ export const api = {
   enquiry: '/enquiryform/create',
   updateProfile: '/user/updateprofile',
   deleteUserAccount: '/user/delete/account',
+  notificationList: '/notifications/list',
+  updateFbToken: '/user/update/fbtoken',
 
   // post
   getalluserposts: '/post/getalluserposts',
@@ -106,7 +108,11 @@ export const api = {
   groupCreateUser: '/chat/groupcreate/filter/users',
   createGroup: '/chat/create',
   removeMember: '/chat/remove',
-  inviteMember: '/chat/sendinvitation'
+  inviteMember: '/chat/sendinvitation',
+  joinGroup: '/chat/join',
+  addMessage: '/message/addmessage',
+  deleteMessage: '/message/delete',
+  deleteMessageForMe: '/message/deletemessage'
 };
 
 export const POST = 'POST';

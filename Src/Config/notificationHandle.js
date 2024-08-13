@@ -1,6 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
-import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
-import {Platform} from 'react-native';
+import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
+import { Platform } from 'react-native';
 
 export const onNotificationPress = () => {
   messaging()
@@ -51,14 +51,15 @@ async function onDisplayNotification(message) {
         id: 'default',
         launchActivity: 'default',
       },
+      smallIcon: '@drawable/ic_stat_name',
     },
   });
 }
 
-export const navigateToOrderDetails = remoteMessage => {};
+export const navigateToOrderDetails = remoteMessage => { };
 
 export const openAppNotifiactionEvent = async () => {
-  return notifee.onForegroundEvent(async ({type, detail}) => {
+  return notifee.onForegroundEvent(async ({ type, detail }) => {
     switch (type) {
       case EventType.DISMISSED:
         console.log('User dismissed notification', detail.notification);

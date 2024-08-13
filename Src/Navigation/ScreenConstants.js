@@ -67,5 +67,6 @@ export const screenName = {
   GroupMessaging: "GroupMessaging",
   GroupDetailScreen: "GroupDetailScreen",
   GroupMediaScreen: "GroupMediaScreen",
-  AddMemberScreen: "AddMemberScreen"
+  AddMemberScreen: "AddMemberScreen",
+  MediaWithInputScreen: "MediaWithInputScreen"
 };
