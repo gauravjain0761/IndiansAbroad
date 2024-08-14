@@ -12,6 +12,7 @@ import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
 import {
   emailCheck,
+  errorToast,
   FontStyle,
   ImageStyle,
   mobileNumberCheck,
@@ -24,7 +25,10 @@ import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
-import { getAttendeeCreateAction } from '../../Services/PostServices';
+import {
+  getAttendeeCreateAction,
+  getAttendeePaymentAction,
+} from '../../Services/PostServices';
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
@@ -39,7 +43,9 @@ export default function AttendanceRequestScreen() {
     email: '',
     numberOfTickets: 1,
   });
-  const totalAmount = Number(activeEvent?.platformFees) + (Number(activeEvent?.event_fee) * inputData.numberOfTickets)
+  const totalAmount =
+    Number(activeEvent?.platformFees || 0) +
+    Number(activeEvent?.event_fee) * inputData.numberOfTickets;
 
 
   const onNextPress = () => {
@@ -60,12 +66,35 @@ export default function AttendanceRequestScreen() {
           email: inputData.email,
           no_of_tickets: inputData.numberOfTickets,
           event_fees: activeEvent?.event_fee,
-          plateform_fees: activeEvent?.platformFees,
+          plateform_fees: activeEvent?.platformFees || 0,
           total_amount: totalAmount,
           event_id: activeEvent?._id,
         },
         onSuccess: res => {
-          navigation.navigate(screenName.EventPaymentScreen);
+          console.log('res?._id', res?.data?._id);
+
+          // navigation.navigate(screenName.EventPaymentScreen);
+          let obj = {
+            data: {
+              amount: totalAmount,
+              attendeeId: res?.data?._id,
+              currency: 'USD',
+            },
+            onSuccess: res => {
+              setInputData({
+                firstName: '',
+                lastName: '',
+                phone: '',
+                email: '',
+                numberOfTickets: 1,
+              });
+              // navigation.navigate(screenName.EventPaymentScreen);
+            },
+          };
+          dispatch(getAttendeePaymentAction(obj));
+        },
+        onFailure: err => {
+          errorToast(err.data?.msg);
         },
       };
       dispatch(getAttendeeCreateAction(obj));
@@ -159,8 +188,9 @@ export default function AttendanceRequestScreen() {
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Platform fee</Text>
-            <Text
-              style={styles.ticketText}>{`£${activeEvent?.platformFees}`}</Text>
+            <Text style={styles.ticketText}>{`£${
+              activeEvent?.platformFees || 0
+            }`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Total (Price+Tax)</Text>

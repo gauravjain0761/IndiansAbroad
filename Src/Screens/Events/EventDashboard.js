@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import {wp} from '../../Themes/Fonts';
@@ -20,27 +20,25 @@ import RenderOngoingEventTable from '../../Components/RenderOngoingEventTable';
 import RenderDebitedTable from '../../Components/RenderDebitedTable';
 import RenderScanningTable from '../../Components/RenderScanningTable';
 import {screenName} from '../../Navigation/ScreenConstants';
-import { getTransactionDashboardAction } from '../../Services/PostServices';
+import {getTransactionDashboardAction} from '../../Services/PostServices';
 
 export default function EventDashboard() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [dashBoard,setDashBoard]=useState({})
+  const [dashBoard, setDashBoard] = useState({});
+  const {user} = useSelector(e => e.common);
 
   useEffect(() => {
     let obj = {
-        onSuccess: res => {
-            console.log('getTransactionDashboardAction',res);
-            
-            // setDashBoard(res)
-        },
-      };
+      onSuccess: res => {
+        console.log('getTransactionDashboardAction', res);
+        setDashBoard(res?.data);
+      },
+    };
     dispatch(getTransactionDashboardAction(obj));
   }, []);
 
-  console.log('dashBoard',dashBoard);
-  
-
+  console.log('dashBoard', dashBoard);
 
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -48,10 +46,10 @@ export default function EventDashboard() {
         <Header title={'IndiansAbroad'} showLeft />
         <ScrollView style={styles.bottomView}>
           <View style={styles.mainNameView}>
-            <RenderUserIcon height={40} />
+            <RenderUserIcon url={user?.avtar} height={40} isBorder={user?.subscribedMember} />
             <View style={ApplicationStyles.flex}>
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
-                IndiansAbroad
+              {user?.first_Name} {user?.last_Name}
               </Text>
               <Text style={FontStyle(11, colors.neutral_900)}>
                 Community page,London
@@ -70,13 +68,19 @@ export default function EventDashboard() {
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
                 Balance
               </Text>
-              <Text style={FontStyle(14, colors.neutral_900)}>£630</Text>
+              <Text
+                style={FontStyle(
+                  14,
+                  colors.neutral_900,
+                )}>{`£${dashBoard?.balance}`}</Text>
             </View>
             <View style={styles.innerBox}>
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
                 Events
               </Text>
-              <Text style={FontStyle(14, colors.neutral_900)}>2</Text>
+              <Text style={FontStyle(14, colors.neutral_900)}>
+                {dashBoard?.totalEventCount}
+              </Text>
             </View>
           </View>
           <View style={styles.boxView}>
@@ -84,13 +88,17 @@ export default function EventDashboard() {
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
                 Total Bookings
               </Text>
-              <Text style={FontStyle(14, colors.neutral_900)}>890</Text>
+              <Text style={FontStyle(14, colors.neutral_900)}>
+                {dashBoard?.totalBookingCount}
+              </Text>
             </View>
             <View style={styles.innerBox}>
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
                 Total Transactions
               </Text>
-              <Text style={FontStyle(14, colors.neutral_900)}>8</Text>
+              <Text style={FontStyle(14, colors.neutral_900)}>
+                {dashBoard?.totalTransactionCount}
+              </Text>
             </View>
           </View>
           <View style={styles.boxView}>
@@ -120,7 +128,7 @@ export default function EventDashboard() {
             <View
               style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
               <View style={styles.priceViewTotal}>
-                <Text style={FontStyle(12, colors.primary_500)}>£1650</Text>
+                <Text style={FontStyle(12, colors.primary_500)}>{`£${dashBoard?.balance}`}</Text>
               </View>
             </View>
             <View style={styles.line} />

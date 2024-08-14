@@ -78,6 +78,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
     body: formData,
   })
     .then(response => {
+      console.log('responsedasda',response);
       return response.json().then(responseJson => {
         console.log("responseJson", responseJson);
         if (responseJson.err == 200 || responseJson.statusCode == 200) {

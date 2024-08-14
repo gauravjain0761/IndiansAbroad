@@ -6,8 +6,9 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  Share,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation} from '@react-navigation/native';
@@ -21,20 +22,17 @@ import CommonButton from '../../Components/CommonButton';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderText from '../../Components/RenderText';
 import moment from 'moment';
-import { getDetailsListAction } from '../../Services/PostServices';
+import {getDetailsListAction} from '../../Services/PostServices';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
-  const {activeEvent,user} = useSelector(e => e.common);
+  const {activeEvent, user} = useSelector(e => e.common);
 
   const dispatch = useDispatch();
 
-  console.log('activeEventactiveEvent',user?._id);
-  
-
-useEffect(()=>{
-  getEventList()
-},[activeEvent?._id])
+  useEffect(() => {
+    getEventList();
+  }, [activeEvent?._id]);
 
   const getEventList = page => {
     let obj = {
@@ -43,7 +41,6 @@ useEffect(()=>{
     };
     dispatch(getDetailsListAction(obj));
   };
-
 
   const RenderRowList = ({icon, title}) => {
     return (
@@ -54,10 +51,29 @@ useEffect(()=>{
     );
   };
 
+  const onSharePress = async link => {
+    try {
+      const result = await Share.share({
+        message: link,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
-        showRight={user?._id == activeEvent?.createdBy ?true : false}
+        showRight={user?._id == activeEvent?.createdBy ? true : false}
         icon={Icons.editEvent}
         onRightPress={() => navigation.navigate(screenName.EditEventScreen)}
         title={''}
@@ -95,16 +111,27 @@ useEffect(()=>{
             icon={Icons.tickets}
             title={`£ ${activeEvent?.event_fee}`}
           />
-          <RenderRowList icon={Icons.contacts} title={activeEvent?.mobile || activeEvent?.email} />
+          <RenderRowList
+            icon={Icons.contacts}
+            title={activeEvent?.mobile || activeEvent?.email}
+          />
           {/* <RenderRowList icon={Icons.contacts} title={'+44 7899653486'} /> */}
           <View style={styles.bottomRow}>
-            <Text style={[styles.titleDes, {marginBottom: 10}]}>{activeEvent?.total_earnings}</Text>
+            <Text style={[styles.titleDes, {marginBottom: 10}]}>
+              {activeEvent?.attendeeCount}
+            </Text>
             <Image source={Icons.group} style={styles.usersIcon} />
             <TouchableOpacity
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
-              <Image source={Icons.starOutline} style={ImageStyle(20, 20)} />
+              <Image
+                source={activeEvent?.is_Saved ? Icons.star : Icons.starOutline}
+                style={ImageStyle(20, 20)}
+              />
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                onSharePress(activeEvent?.share_link);
+              }}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image source={Icons.share} style={ImageStyle(24, 24)} />
             </TouchableOpacity>
@@ -130,24 +157,28 @@ useEffect(()=>{
             text={activeEvent?.description}
           />
         </View>
-       {user?._id !== activeEvent?.createdBy&& <View style={[styles.blueView, {marginVertical: hp(30)}]}>
-          <CommonButton
-            onPress={() =>
-              navigation.navigate(screenName.AttendanceRequestScreen)
-            }
-            title={'Attend'}
-            extraStyle={{width: 110, height: 50}}
-          />
-        </View>}
-       {user?._id == activeEvent?.createdBy && <View style={[styles.blueView, {marginVertical: hp(30)}]}>
-          <CommonButton
-            onPress={() =>
-              navigation.navigate(screenName.ListParticipantsScreen)
-            }
-            title={'List of Participants'}
-            extraStyle={{width: 170, height: 50}}
-          />
-        </View>}
+        {user?._id !== activeEvent?.createdBy && (
+          <View style={[styles.blueView, {marginVertical: hp(30)}]}>
+            <CommonButton
+              onPress={() =>
+                navigation.navigate(screenName.AttendanceRequestScreen)
+              }
+              title={'Attend'}
+              extraStyle={{width: 110, height: 50}}
+            />
+          </View>
+        )}
+        {user?._id == activeEvent?.createdBy && (
+          <View style={[styles.blueView, {marginVertical: hp(30)}]}>
+            <CommonButton
+              onPress={() =>
+                navigation.navigate(screenName.ListParticipantsScreen)
+              }
+              title={'List of Participants'}
+              extraStyle={{width: 170, height: 50}}
+            />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -85,3 +85,20 @@ export const searchUserByName = (mainArray, field1, searchText) => {
   let arr = mergeJsonArraysByID(filtered, filter2, filter3);
   return arr
 }
+
+export const dateConvectTime=(inputDateStr)=>{
+// Parse the input string to extract date and time components
+const [day, month, year] = inputDateStr.split(' ')[0].split('-').map(Number);
+const [hours, minutes] = inputDateStr.split(' ')[1].split(':').map(Number);
+
+// Create a Date object in the local time zone
+const localDate = new Date(year, month - 1, day, hours, minutes);
+
+// Convert to UTC time
+const utcDate = new Date(localDate.toUTCString());
+
+// Format to ISO 8601 string
+const isoString = utcDate.toISOString();
+
+return isoString
+}

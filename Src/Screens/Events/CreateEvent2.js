@@ -11,7 +11,7 @@ import React, {useState} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {errorToast, FontStyle, ImageStyle} from '../../utils/commonFunction';
+import {dateConvectTime, errorToast, FontStyle, ImageStyle} from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {screenName} from '../../Navigation/ScreenConstants';
@@ -38,7 +38,9 @@ export default function CreateEvent2() {
   const [price, setprice] = useState('');
   const [available, setavailable] = useState('');
   const [address, setaddress] = useState('');
-console.log('currency ',currency);
+console.log('currency ',starts);
+
+
 
   const onNextPress = () => {
     if (starts.date == '') {
@@ -62,14 +64,16 @@ console.log('currency ',currency);
     } else if (available.trim() == '') {
       errorToast('Please enter your tickets available');
     } else {
+      let startTime=dateConvectTime(`${moment(starts.date).format('DD-MM-YYYY')} ${moment(starts.start).format('HH')}:${moment(starts.end).format('mm')}`)
+      let endTime=dateConvectTime(`${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format('HH')}:${moment(ends.end).format('mm')}`)
       let obj = {
         data: {
           step: 2,
           event_id: params?.createId,
           event_type: type,
           address: address,
-          start_time: '2024-08-05T14:30:00Z',
-          end_time: '2024-08-10T18:00:00Z',
+          start_time: startTime,
+          end_time: endTime,
           event_fee: price,
           no_of_tickets: available,
           currency:currency
@@ -146,23 +150,25 @@ console.log('currency ',currency);
             onChangeText={text => setstarts({...starts, date: text})}
             placeholder={'Choose Date'}
           />
+
           <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
             value={
-              starts.start !== '' ? moment(starts.start).format('HH:mm') : ''
+              starts.start !== '' ? moment(starts.start).format('HH') : ''
             }
             onChangeText={text => setstarts({...starts, start: text})}
             placeholder={'Time'}
           />
+          <Text style={{textAlign:'center'}}>:</Text>
           <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={starts.end !== '' ? moment(starts.end).format('HH:mm') : ''}
+            value={starts.end !== '' ? moment(starts.end).format('mm') : ''}
             onChangeText={text => setstarts({...starts, end: text})}
             placeholder={'Time'}
           />
@@ -184,16 +190,17 @@ console.log('currency ',currency);
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={ends.start !== '' ? moment(ends.start).format('HH:mm') : ''}
+            value={ends.start !== '' ? moment(ends.start).format('HH') : ''}
             onChangeText={text => setends({...ends, start: text})}
             placeholder={'Time'}
           />
+          <Text style={{textAlign:'center'}}>:</Text>
           <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={ends.end !== '' ? moment(ends.end).format('HH:mm') : ''}
+            value={ends.end !== '' ? moment(ends.end).format('mm') : ''}
             onChangeText={text => setends({...ends, end: text})}
             placeholder={'Time'}
           />
@@ -274,5 +281,6 @@ const styles = StyleSheet.create({
   rowViewDate: {
     flexDirection: 'row',
     gap: wp(10),
+    alignItems:'center'
   },
 });

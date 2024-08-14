@@ -468,12 +468,10 @@ export const getAttendeeCreateAction = request => async dispatch => {
   })
     .then(async response => {      
       handleSuccessRes(response, request, dispatch, () => {
-        successToast(response?.data?.msg);
+        // successToast(response?.data?.msg);
       });
     })
-    .catch(error => {
-      console.log('errorerror',error.response);
-      
+    .catch(error => {      
       handleErrorRes(error, request, dispatch);
     });
 };
@@ -484,6 +482,37 @@ export const getTransactionDashboardAction = request => async dispatch => {
     url: api.transactionDashboard,
   })
     .then(async response => {      
+      handleSuccessRes(response, request, dispatch, () => {});
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getAttendeePaymentAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.attendeePayment,
+    data: request?.data,
+  })
+    .then(async response => {      
+      handleSuccessRes(response, request, dispatch, () => {
+        successToast(response?.data?.msg);
+      });
+    })
+    .catch(error => {
+      console.log('errorerror',error.response);
+      
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getAttendeeGetByEventAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: GET,
+    url: `${api.attendeeGetByEvent}/${request?.data}`,
+  })
+    .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {

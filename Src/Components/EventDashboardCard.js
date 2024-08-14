@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Share,
+} from 'react-native';
 import React from 'react';
 import colors from '../Themes/Colors';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -6,8 +13,33 @@ import {Icons} from '../Themes/Icons';
 import {wp} from '../Themes/Fonts';
 import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import moment from 'moment';
+import {useSelector} from 'react-redux';
+import {screenName} from '../Navigation/ScreenConstants';
+import {useNavigation} from '@react-navigation/native';
 
 export default function EventDashboardCard({item, index}) {
+  const {user} = useSelector(e => e.common);
+  const navigation = useNavigation();
+
+  const onSharePress = async link => {
+    try {
+      const result = await Share.share({
+        message: link,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <View key={index} style={styles.cardView}>
       <View style={styles.innerCard}>
@@ -22,29 +54,38 @@ export default function EventDashboardCard({item, index}) {
         <View style={styles.footer}>
           <View style={ApplicationStyles.row}>
             <View style={ApplicationStyles.flex}>
-              <Text style={styles.title}>
-                {item?.title}
-              </Text>
+              <Text style={styles.title}>{item?.title}</Text>
               <Text style={styles.organizerText}>By {item?.page_owner}</Text>
             </View>
             <View style={ApplicationStyles.row}>
-              <Text style={FontStyle(14, colors.neutral_900)}>{item?.total_earnings}</Text>
+              <Text style={FontStyle(14, colors.neutral_900)}>
+                {item?.attendeeCount || 0}
+              </Text>
               <Image source={Icons.group} style={styles.usersIcon} />
             </View>
           </View>
           <View style={styles.bottomRow}>
             <Text style={styles.addressText}>
-              {item.address}, {moment(item.start_time).format("MM/DD/YYYY")}
+              {item?.address}, {moment(item?.start_time).format('MM/DD/YYYY')}
             </Text>
+            {user?._id !== item?.createdBy && (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate(screenName.AttendanceRequestScreen);
+                }}
+                style={{paddingHorizontal: 10, paddingBottom: 10}}>
+                <Image source={Icons.checkSquare} style={ImageStyle(20, 20)} />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
-              <Image source={Icons.checkSquare} style={ImageStyle(20, 20)} />
+              <Image
+                source={item?.is_Saved ? Icons.star : Icons.starOutline}
+                style={ImageStyle(20, 20)}
+              />
             </TouchableOpacity>
             <TouchableOpacity
-              style={{paddingHorizontal: 10, paddingBottom: 10}}>
-              <Image source={Icons.starOutline} style={ImageStyle(20, 20)} />
-            </TouchableOpacity>
-            <TouchableOpacity
+              onPress={() => onSharePress(item?.share_link)}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image source={Icons.share} style={ImageStyle(24, 24)} />
             </TouchableOpacity>

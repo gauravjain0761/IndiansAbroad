@@ -107,8 +107,8 @@ export default function HomeScreen() {
     let obj = {
       page: page,
       data: {
-        approve_status: 'Approved',
-        expiry_status: 'Pending',
+        approve_status: 'All',
+        expiry_status: 'All',
       },
       onSuccess: () => {
         setpage(page);
