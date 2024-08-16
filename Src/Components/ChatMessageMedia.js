@@ -1,13 +1,16 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import FastImage from 'react-native-fast-image'
 import { SCREEN_WIDTH, wp } from '../Themes/Fonts'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
+import { useNavigation } from '@react-navigation/native'
+import { screenName } from '../Navigation/ScreenConstants'
 
 export default function ChatMessageMedia({ data }) {
+    const navigation = useNavigation()
     return (
-        <View>
+        <TouchableOpacity onPress={() => navigation.navigate(screenName.MediaPreviewScreen, { url: data?.file[0] })} >
             <FastImage
                 source={data?.file[0]?.location == '' ? Icons.logo : { uri: data?.file[0]?.location }}
                 resizeMode={FastImage.resizeMode.cover}
@@ -18,7 +21,7 @@ export default function ChatMessageMedia({ data }) {
                     <Image source={Icons.playVideo} style={styles.playBtn} />
                 </View>
             </View>}
-        </View>
+        </TouchableOpacity>
     )
 }
 

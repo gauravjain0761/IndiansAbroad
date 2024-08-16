@@ -15,12 +15,12 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import {SCREEN_WIDTH, fontname, hp, wp} from '../../Themes/Fonts';
+import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
 import {
   FontStyle,
   ImageStyle,
@@ -29,12 +29,12 @@ import {
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import ConnectCard from '../../Components/ConnectCard';
-import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import {Icons} from '../../Themes/Icons';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
+import { Icons } from '../../Themes/Icons';
 import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import PostCard from '../../Components/PostCard';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { screenName } from '../../Navigation/ScreenConstants';
 import PostShareModal from '../../Components/PostShareModal';
 import PagePostCard from '../../Components/PagePostCard';
 import UpdateDeleteMenu from '../../Components/UpdateDeleteMenu';
@@ -53,23 +53,24 @@ import {
   SET_POST_PAGES_CONNECT,
   SET_POST_PAGES_DISCONNECT,
 } from '../../Redux/ActionTypes';
-import {dispatchAction} from '../../utils/apiGlobal';
+import { dispatchAction } from '../../utils/apiGlobal';
 import NoDataFound from '../../Components/NoDataFound';
 import PageConnectedIndians from '../../Components/PageConnectedIndians';
-import {onGetPageDetail} from '../../Services/PostServices';
+import { onGetPageDetail } from '../../Services/PostServices';
 import ImageModalShow from '../../Components/ImageModal';
+import { onOpenNewChatForUser } from '../../Services/ChatServices';
 
 export default function PagesDetails() {
   const navigation = useNavigation();
-  const {navigate, goBack} = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelection, setTabSelection] = useState('ABOUT');
   const [deletePop, setDeletePop] = useState(false);
   const dispatch = useDispatch();
   const ref = React.createRef(PagerView);
-  const {params} = useRoute();
+  const { params } = useRoute();
   const [pageDetail, setpageDetail] = useState(undefined);
-  const {user, allPagePostCount, allPagePost, allPageFollowerList} =
+  const { user, allPagePostCount, allPagePost, allPageFollowerList } =
     useSelector(e => e.common);
   const [loading, setloading] = useState(false);
   const [page, setpage] = useState(1);
@@ -133,10 +134,10 @@ export default function PagesDetails() {
   };
 
   useEffect(() => {
-    dispatch({type: 'PRE_LOADER', payload: {preLoader: true}});
+    dispatch({ type: 'PRE_LOADER', payload: { preLoader: true } });
   }, []);
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={item._id}
@@ -171,7 +172,7 @@ export default function PagesDetails() {
         pageDetailTemp.isfollowing = !pageDetailTemp.isfollowing;
         setpageDetail(pageDetailTemp);
       },
-      onFailure: () => {},
+      onFailure: () => { },
     };
     dispatch(
       pageDetail?.isfollowing
@@ -179,6 +180,28 @@ export default function PagesDetails() {
         : onPagesConnectRequest(obj),
     );
   };
+  const onPressMessage = () => {
+    if (pageDetail?.isfollowing) {
+      let obj = {
+        data: {
+          CpUserId: pageDetail?.createdBy?._id,
+          userId: user?._id,
+          communityPageId: pageDetail?._id
+        },
+        isPage: true,
+        onSuccess: () => {
+          navigate(screenName.PageMessaging)
+          // navigation.dispatch(
+          //   StackActions.replace(screenName.Messaging)
+          // );
+        }
+      }
+      dispatch(onOpenNewChatForUser(obj))
+
+    } else {
+      Alert.alert('You need to connect to this page to send a message.');
+    }
+  }
 
   const fetchMoreData = () => {
     // if (allPost) {
@@ -200,13 +223,13 @@ export default function PagesDetails() {
         />
       </SafeAreaView>
       <KeyboardAvoidingView
-        style={{flex: 1}}
-        {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
-        <ScrollView nestedScrollEnabled style={{flex: 1}}>
+        style={{ flex: 1 }}
+        {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+        <ScrollView nestedScrollEnabled style={{ flex: 1 }}>
           <View style={styles.userViewStyle}>
             {pageDetail?._id == user?._id && (
               <UpdateDeleteMenu
-                containerStyle={{position: 'absolute', right: 10}}
+                containerStyle={{ position: 'absolute', right: 10 }}
                 onDeletePress={() => {
                   setDeletePop(true);
                 }}
@@ -218,10 +241,10 @@ export default function PagesDetails() {
                 }
               />
             )}
-            <TouchableOpacity  onPress={() => {
-                  setSelectURI(pageDetail?.logo);
-                  setModalVisible(true);
-                }} style={styles.imageView}>
+            <TouchableOpacity onPress={() => {
+              setSelectURI(pageDetail?.logo);
+              setModalVisible(true);
+            }} style={styles.imageView}>
               <RenderUserIcon height={wp(100)} url={pageDetail?.logo} />
             </TouchableOpacity>
             <Text style={styles.userText}>{pageDetail?.title}</Text>
@@ -229,7 +252,7 @@ export default function PagesDetails() {
               <Text style={styles.userText1}>{pageDetail?.catchline}</Text>
             )}
           </View>
-          <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
+          <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
             {pageDetail?._id == user?._id ? (
               <TouchableOpacity style={styles.btnView}>
                 <Text style={styles.btnText}>My page Chatroom</Text>
@@ -243,8 +266,8 @@ export default function PagesDetails() {
                     {pageDetail?.isfollowing ? 'Disconnect' : 'Connect'}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.btnView, {marginLeft: 8, marginRight: 2}]}>
+                <TouchableOpacity onPress={() => onPressMessage()}
+                  style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
                   <Text style={styles.btnText}>Message</Text>
                 </TouchableOpacity>
               </>
@@ -343,7 +366,7 @@ export default function PagesDetails() {
           }}> */}
           {tabSelection == 'ABOUT' && (
             <View>
-              <View style={{marginHorizontal: wp(12)}}>
+              <View style={{ marginHorizontal: wp(12) }}>
                 <Text style={styles.textView}>{pageDetail?.about}</Text>
                 <View style={ApplicationStyles.row}>
                   <Text style={styles.text1}>Website</Text>
@@ -358,7 +381,7 @@ export default function PagesDetails() {
                   <Text style={styles.text2}>{pageDetail?.city}</Text>
                 </View>
                 <View
-                  style={[ApplicationStyles.row, {alignItems: 'flex-start'}]}>
+                  style={[ApplicationStyles.row, { alignItems: 'flex-start' }]}>
                   <Text style={styles.text1}>Country</Text>
                   <Text style={styles.text2}>
                     {pageDetail?.countryId?.countryName}
@@ -383,7 +406,7 @@ export default function PagesDetails() {
                             color={colors.black}
                           />
                         )}
-                        <View style={{height: 50}} />
+                        <View style={{ height: 50 }} />
                       </View>
                     );
                   }}
@@ -410,7 +433,7 @@ export default function PagesDetails() {
                 {followList && (
                   <FlatList
                     data={followList}
-                    renderItem={({item}) => {
+                    renderItem={({ item }) => {
                       return (
                         <PageConnectedIndians
                           cardPress={() => {

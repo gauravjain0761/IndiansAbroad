@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
+  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
@@ -22,6 +23,9 @@ import { sendData, socket } from '../../Socket/Socket';
 import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
 import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
+import ApplicationStyles from '../../Themes/ApplicationStyles';
+import { FontStyle } from '../../utils/commonFunction';
+import { hp, wp } from '../../Themes/Fonts';
 
 let data = [
   {
@@ -152,6 +156,25 @@ const Messaging = () => {
         subscribedMember={activeChatRoomUser?.currentUser?.subscribedMember}
         onPressName={() => { dispatchAction(dispatch, SET_CHAT_DETAIL, undefined), navigation.navigate(screenName.PersonalUserDetailScreen, { user: activeChatRoomUser?.currentUser }) }}
       />
+      {/* <View style={ApplicationStyles.flex}>
+        <View style={styles.requestView}>
+          <Text style={styles.title}>Message request to connect</Text>
+          <View style={styles.whiteView}>
+            <Text style={styles.des}>Hi Harshal,
+              I hope you're well. I'm Sagar, and I've been following your exceptional work in strategic business planning. I believe your expertise aligns perfectly with some of our challenges. I'd love to connect and discuss potential collaborations or exchange ideas. I hope you will consider accepting my request.</Text>
+          </View>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>{'Accept'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>{'Ignore'}</Text>
+          </TouchableOpacity>
+        </View>
+      </View> */}
+
+
       <FlatList
         inverted
         data={chatMessageList}
@@ -187,6 +210,50 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  requestView: {
+    backgroundColor: colors.info_700,
+    marginTop: 10,
+    borderRadius: 4
+  },
+  title: {
+    ...FontStyle(14, colors.white, '700'),
+    textAlign: 'center',
+    paddingVertical: 5
+  },
+  whiteView: {
+    backgroundColor: colors.white,
+    padding: 5,
+    marginHorizontal: wp(16),
+    marginBottom: 10,
+    borderRadius: 4
+  },
+  des: {
+    ...FontStyle(14, colors.neutral_700),
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(5),
+    alignSelf: 'center',
+    marginTop: 15
+  },
+  centerContainer: {
+    flex: 1
+  },
+  button: {
+    backgroundColor: colors.primary_500,
+    // paddingHorizontal: wp(15),
+    borderRadius: 3,
+    marginTop: hp(1),
+    height: 30,
+    justifyContent: 'center',
+    width: 80,
+    alignItems: 'center'
+  },
+  buttonText: {
+    ...FontStyle(13, colors.white, '400'),
+    // lineHeight: hp(20),
   },
 });
 export default Messaging;

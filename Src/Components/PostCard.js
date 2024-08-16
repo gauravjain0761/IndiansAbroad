@@ -37,6 +37,7 @@ import ConfirmationModal from './ConfirmationModal';
 import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
 import RenderText from './RenderText';
+import { onOpenNewChatForUser } from '../Services/ChatServices';
 
 export default function PostCard({ item, index, isDetailScreen = false }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -155,6 +156,20 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
     }
   };
 
+  const onOpenMessage = () => {
+    let obj = {
+      data: {
+        CpUserId: item?.createdBy?._id,
+        userId: user?._id,
+        communityPageId: 'NA'
+      },
+      onSuccess: () => {
+        navigation.navigate(screenName.Messaging)
+      }
+    }
+    dispatch(onOpenNewChatForUser(obj))
+  }
+
   if (item?.createdBy) {
     return (
       <View key={item?._id}>
@@ -235,7 +250,7 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
                   </TouchableOpacity>
                 :
                 item?.isFollowing ? (
-                  <TouchableOpacity style={styles.messageView}>
+                  <TouchableOpacity onPress={() => onOpenMessage()} style={styles.messageView}>
                     <Image
                       source={Icons.messageIcon}
                       style={ImageStyle(30, 30, 'cover')}

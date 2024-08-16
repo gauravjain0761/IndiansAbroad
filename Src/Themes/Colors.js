@@ -41,5 +41,7 @@ const colors = {
   red_EE5858: '#EE5858',
 
   whiteOpacity: '#FFFFFFB0',
+
+  info_700: '#125D95FF'
 };
 export default colors;

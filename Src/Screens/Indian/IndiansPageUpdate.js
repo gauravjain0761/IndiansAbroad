@@ -81,7 +81,7 @@ export default function IndiansPageUpdate() {
       setCatchLine(myPage[0]?.catchline)
       setwebsite(myPage[0]?.websitelink)
       setcity(myPage[0]?.city)
-      setregion(myPage[0]?.region)
+      // setregion(myPage[0]?.region)
       setcountry(myPage[0]?.countryId?._id)
       setimage(myPage[0]?.logoData?.location)
     }
@@ -161,9 +161,11 @@ export default function IndiansPageUpdate() {
       errorToast('Please enter about')
     } else if (!country) {
       errorToast('Please select country')
-    } else if (region.trim() == '') {
-      errorToast('Please enter region')
-    } else if (city.trim() == '') {
+    }
+    //  else if (region.trim() == '') {
+    //   errorToast('Please enter region')
+    // } 
+    else if (city.trim() == '') {
       errorToast('Please enter an city')
     } else {
       let data = {}
@@ -177,7 +179,7 @@ export default function IndiansPageUpdate() {
       }
       data.title = title.trim()
       data.countryId = country
-      data.region = region.trim()
+      // data.region = region.trim()
       data.city = city.trim()
       data.createdBy = user._id
       data.about = about.trim()
@@ -237,7 +239,7 @@ export default function IndiansPageUpdate() {
           {countries &&
             <DropView value={country} onChangeText={(text) => { setcountry(text?._id) }} label="India" placeholder={'City*'} />
           }
-          <TextInputView onChangeText={(text) => setregion(text)} value={region} placeholder={'Region*'} label="Region*" />
+          {/* <TextInputView onChangeText={(text) => setregion(text)} value={region} placeholder={'Region*'} label="Region*" /> */}
           <TextInputView onChangeText={(text) => setcity(text)} value={city} label="City" placeholder={'City*'} />
           {/* <TouchableOpacity style={[styles.btnView, {}]} onPress={() => { }}>
             <Text style={styles.btnText}>Update Page</Text>

@@ -18,11 +18,13 @@ import { resetNavigation } from '../utils/Global';
 import { onBlockUserApi, onUnFollowRequest } from '../Services/OtherUserServices';
 import { getFollowerList } from '../Services/AuthServices';
 import ReportModal from './ReportModal';
+import PageChatMoreMenu from './PageChatMoreMenu';
 
-const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false }) => {
+const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false, isPage = false }) => {
   const { goBack, navigate } = useNavigation();
   const [moreMenu, setmoreMenu] = useState(false)
   const [moreMenuGroup, setmoreMenuGroup] = useState(false)
+  const [moreMenuPage, setmoreMenuPage] = useState(false)
   const [clearChatModal, setclearChatModal] = useState(false)
   const dispatch = useDispatch()
   const { user, activeChatRoomUser, chatMessageList } = useSelector(e => e.common)
@@ -42,7 +44,6 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
       }
     ))
   }
-
   const onLeaveGroup = () => {
     setleaveGroupModal(false)
     dispatch(onLeaveFromGroup(
@@ -75,7 +76,6 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
     }
     dispatch(onUnFollowRequest(obj))
   }
-
   const onBlockuser = () => {
     setblockModal(false)
     setTimeout(() => {
@@ -110,9 +110,15 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false 
         <Text style={styles.headerTextStyle}>{name}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => { isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
+      <TouchableOpacity onPress={() => { isPage ? setmoreMenuPage(true) : isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
         <Image source={Icons.more} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
+
+      {moreMenuPage && <PageChatMoreMenu
+        onPressClear={() => { setmoreMenuPage(false), setTimeout(() => { setclearChatModal(true) }, 500) }}
+        visible={moreMenuPage}
+        onClose={() => setmoreMenu(false)} />}
+
       {moreMenu && <MessageScreenMoreMenu
         onPressClear={() => { setmoreMenu(false), setTimeout(() => { setclearChatModal(true) }, 500) }}
         visible={moreMenu}

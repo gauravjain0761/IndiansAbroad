@@ -49,6 +49,7 @@ import {
   SET_NOTIFICATION_LIST,
   SET_FCM_TOKEN,
   GET_SAVE_EVENT,
+  SET_MY_PAGE_CHAT_USERS,
 } from './ActionTypes';
 
 const initialState = {
@@ -97,7 +98,8 @@ const initialState = {
   groupCreateAllUsers: undefined,
   getCurrenciesList: undefined,
   notificationList: undefined,
-  fcmToken: null
+  fcmToken: null,
+  myPageChatUsers: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -131,7 +133,7 @@ export default function (state = initialState, action) {
           action.payload.current_page == 1
             ? action.payload.data
             : [...state.allSave, ...action.payload.data],
-           allSaveCount: action.payload.count,
+        allSaveCount: action.payload.count,
       };
     }
     case SET_ALL_INDIANS: {
@@ -520,6 +522,9 @@ export default function (state = initialState, action) {
     }
     case SET_FCM_TOKEN: {
       return { ...state, fcmToken: action.payload }
+    }
+    case SET_MY_PAGE_CHAT_USERS: {
+      return { ...state, myPageChatUsers: action.payload }
     }
     default:
       return state;

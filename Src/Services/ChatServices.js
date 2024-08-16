@@ -1,4 +1,4 @@
-import { DELETE_MESSAGE, GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_CHAT_DETAIL, SET_CHAT_MEDIA_LINK, SET_GROUP_CREATE_USERS, SET_UNREAD_MSG_COUNT } from '../Redux/ActionTypes';
+import { DELETE_MESSAGE, GET_CHAT_MESSAGES, GET_CHAT_ROOMS, GET_GROUP_ROOMS, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_CHAT_DETAIL, SET_CHAT_MEDIA_LINK, SET_GROUP_CREATE_USERS, SET_MY_PAGE_CHAT_USERS, SET_UNREAD_MSG_COUNT } from '../Redux/ActionTypes';
 import { GET, POST, api } from '../utils/apiConstants';
 import {
   dispatchAction,
@@ -150,7 +150,13 @@ export const onOpenNewChatForUser = request => async dispatch => {
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
-        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: response?.data?.data?.users?.filter(item => item._id !== request?.data?.userId)?.[0], chatId: response?.data?.data._id })
+        if (request?.isPage) {
+          dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: response?.data?.data, chatId: response?.data?.data._id })
+
+        } else {
+          dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: response?.data?.data?.users?.filter(item => item._id !== request?.data?.userId)?.[0], chatId: response?.data?.data._id })
+
+        }
       });
     })
     .catch(error => {
@@ -249,6 +255,23 @@ export const onDeleteMessageForUser = request => async dispatch => {
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, DELETE_MESSAGE, response?.data?.data)
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+
+export const onOpemMyChatRoom = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.openChatList,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, SET_MY_PAGE_CHAT_USERS, response?.data?.data)
       });
     })
     .catch(error => {

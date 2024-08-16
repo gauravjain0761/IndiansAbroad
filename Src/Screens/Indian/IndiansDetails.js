@@ -11,6 +11,7 @@ import {
   Image,
   Platform,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +55,8 @@ import NoDataFound from '../../Components/NoDataFound';
 import IndianDetailShareModal from '../../Components/IndianDetailShareModal';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import ImageModalShow from '../../Components/ImageModal';
+import { onOpenNewChatForUser } from '../../Services/ChatServices';
+import MessageRequestModal from '../../Components/MessageRequestModal';
 
 export default function IndiansDetails() {
   const navigation = useNavigation();
@@ -83,6 +86,7 @@ export default function IndiansDetails() {
   const [blockModal, setblockModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectURI, setSelectURI] = useState('');
+  const [messageRequestModal, setmessageRequestModal] = useState(false)
 
   const onSearchName = search => {
     let arr = searchUserByName(otherUserFollowList, 'followingId', search);
@@ -155,6 +159,28 @@ export default function IndiansDetails() {
     dispatch(onBlockUserApi(obj));
   };
 
+  const onOpenMessage = () => {
+    if (otherUserInfo?.isFollowing == 'following') {
+      let obj = {
+        data: {
+          CpUserId: otherUserInfo?._id,
+          userId: user?._id,
+          communityPageId: 'NA'
+        },
+        onSuccess: () => {
+          navigation.navigate(screenName.Messaging)
+        }
+      }
+      dispatch(onOpenNewChatForUser(obj))
+    } else if (otherUserInfo?.isFollowing == 'notfollowing') {
+      setmessageRequestModal(true)
+
+    } else if (otherUserInfo?.isFollowing == 'requested') {
+      Alert.alert('You already requested to this user')
+    }
+
+  }
+
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
@@ -202,7 +228,7 @@ export default function IndiansDetails() {
                     </Text>
                   </TouchableOpacity>
                 )}
-                <TouchableOpacity
+                <TouchableOpacity onPress={() => onOpenMessage()}
                   style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
                   <Text style={styles.btnText}>Message</Text>
                 </TouchableOpacity>
@@ -374,15 +400,15 @@ export default function IndiansDetails() {
         </KeyboardAvoidingView>
       )}
 
-      <IndianDetailShareModal
+      {menuModal && <IndianDetailShareModal
         item={otherUserInfo}
         onPressBlock={() => setblockModal(true)}
         shareView={true}
         menuModal={menuModal}
         setmenuModal={() => setmenuModal(false)}
-      />
+      />}
 
-      <ConfirmationModal
+      {blockModal && <ConfirmationModal
         visible={blockModal}
         onClose={() => setblockModal(false)}
         title={`Do you want to block ${otherUserInfo?.first_Name} ${otherUserInfo?.last_Name}?`}
@@ -390,7 +416,7 @@ export default function IndiansDetails() {
         canselBtn={'No'}
         onPressCancel={() => setblockModal(false)}
         onPressSuccess={() => onBlockuser()}
-      />
+      />}
       {modalVisible && (
         <ImageModalShow
           modalVisible={modalVisible}
@@ -400,6 +426,10 @@ export default function IndiansDetails() {
           }}
         />
       )}
+      {messageRequestModal &&
+        <MessageRequestModal visible={messageRequestModal}
+          onClose={() => setmessageRequestModal(false)} />
+      }
     </SafeAreaView>
   );
 }

@@ -1,14 +1,16 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Icons } from '../Themes/Icons'
 import { SCREEN_WIDTH, wp } from '../Themes/Fonts'
 import colors from '../Themes/Colors'
 import { createThumbnail } from 'react-native-create-thumbnail'
+import { useNavigation } from '@react-navigation/native'
+import { screenName } from '../Navigation/ScreenConstants'
 
 export default function RenderChatMedia({ item, index, noOfItem }) {
     let size = (SCREEN_WIDTH - wp(noOfItem ? 50 : 40)) / (noOfItem ? noOfItem : 3)
     const [thumbnail, setthumbnail] = useState(undefined)
-
+    const navigation = useNavigation()
     useEffect(() => {
         createThumbnail({
             url: item?.location,
@@ -19,7 +21,7 @@ export default function RenderChatMedia({ item, index, noOfItem }) {
     }, [])
 
     return (
-        <View key={index} style={{ width: size, height: size, }}>
+        <TouchableOpacity onPress={() => navigation.navigate(screenName.MediaPreviewScreen, { url: item })} key={index} style={{ width: size, height: size, }}>
             {item?.contentType?.includes('image') ?
                 <Image source={{ uri: item?.location }} style={[styles.userImage, { width: size, height: size }]} />
                 :
@@ -30,7 +32,7 @@ export default function RenderChatMedia({ item, index, noOfItem }) {
                     <Image source={Icons.playVideo} style={styles.playBtn} />
                 </View>
             </View>}
-        </View>
+        </TouchableOpacity>
     )
 }
 

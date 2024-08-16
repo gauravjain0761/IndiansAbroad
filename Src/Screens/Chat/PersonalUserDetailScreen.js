@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
@@ -22,7 +22,8 @@ export default function PersonalUserDetailScreen() {
     const [tabSelection, setTabSelection] = useState('media');
     const [modalVisible, setModalVisible] = useState(false);
     const [selectURI, setSelectURI] = useState('');
-
+    const { params } = useRoute()
+    console.log('activeChatRoomUser-----', activeChatRoomUser)
     useEffect(() => {
         let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
         dispatch(onGetChatDetail(obj))
@@ -56,17 +57,17 @@ export default function PersonalUserDetailScreen() {
             <ScrollView style={{ flex: 1 }} >
                 <View style={styles.userViewStyle}>
                     <TouchableOpacity onPress={() => {
-                        setSelectURI(activeChatRoomUser?.currentUser?.avtar);
+                        setSelectURI(params?.isPage ? activeChatRoomUser?.currentUser?.chatLogo[0]?.cdnlocation : activeChatRoomUser?.currentUser?.avtar);
                         setModalVisible(true);
                     }} style={styles.imageView}>
-                        <RenderUserIcon url={activeChatRoomUser?.currentUser?.avtar} height={100} isBorder={activeChatRoomUser?.currentUser?.subscribedMember} />
+                        <RenderUserIcon url={params?.isPage ? activeChatRoomUser?.currentUser?.chatLogo[0]?.cdnlocation : activeChatRoomUser?.currentUser?.avtar} height={100} isBorder={activeChatRoomUser?.currentUser?.subscribedMember} />
                     </TouchableOpacity>
-                    <Text style={styles.userText}>{activeChatRoomUser?.currentUser?.first_Name} {activeChatRoomUser?.currentUser?.last_Name}</Text>
-                    <TouchableOpacity
+                    <Text style={styles.userText}>{params?.isPage ? activeChatRoomUser?.currentUser?.chatName : activeChatRoomUser?.currentUser?.first_Name} {params?.isPage ? '' : activeChatRoomUser?.currentUser?.last_Name}</Text>
+                    {!params?.isPage && <TouchableOpacity
                         onPress={() => navigation.navigate(screenName.indiansDetails, { userId: activeChatRoomUser?.currentUser?._id })}
                         style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
                         <Text style={styles.btnText}>View Profile</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
                 <View style={styles.tabMainView}>
                     <TouchableOpacity onPress={() => { setTabSelection('media') }} style={[{ marginRight: wp(5), borderBottomColor: tabSelection == 'media' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>

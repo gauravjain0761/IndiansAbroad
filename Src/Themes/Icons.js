@@ -89,7 +89,7 @@ export const Icons = {
   report: require('../assets/Icons/report.png'),
   logout: require('../assets/Icons/logout.png'),
   pdf: require('../assets/Icons/pdf.png'),
-  // files: require('../assets/Icons/files.png'),
+  question: require('../assets/Icons/question.png'),
   // files: require('../assets/Icons/files.png'),
   // files: require('../assets/Icons/files.png'),
 

@@ -10,10 +10,10 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import colors from '../../Themes/Colors';
@@ -22,24 +22,24 @@ import {
   ImageStyle,
   searchUserByName,
 } from '../../utils/commonFunction';
-import {SCREEN_WIDTH, wp, hp} from '../../Themes/Fonts';
+import { SCREEN_WIDTH, wp, hp } from '../../Themes/Fonts';
 import CommonButton from '../../Components/CommonButton';
 import CreatePage from '../../Components/CreatePage';
 import CreatePageDescription from '../../Components/CreatePageDescription';
-import {onDeletePageApi, onGetMyPage} from '../../Services/AuthServices';
+import { onDeletePageApi, onGetMyPage } from '../../Services/AuthServices';
 import PagesDetails from '../Indian/PagesDetails';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import UpdateDeleteMenu from '../../Components/UpdateDeleteMenu';
 import Animated from 'react-native-reanimated';
-import {Icons} from '../../Themes/Icons';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { Icons } from '../../Themes/Icons';
+import { screenName } from '../../Navigation/ScreenConstants';
 import DeletePopModal from '../../Components/DeletePopModal';
 import NoDataFound from '../../Components/NoDataFound';
 import {
   getAllPageFollower,
   getAllPagePost,
 } from '../../Services/OtherUserServices';
-import {dispatchAction} from '../../utils/apiGlobal';
+import { dispatchAction } from '../../utils/apiGlobal';
 import {
   OTHER_USER_INFO,
   SET_ACTIVE_POST,
@@ -50,12 +50,13 @@ import SearchBar from '../../Components/SearchBar';
 import PageConnectedIndians from '../../Components/PageConnectedIndians';
 import CreatePost from '../../Components/CreatePost';
 import ImageModalShow from '../../Components/ImageModal';
+import { onOpemMyChatRoom, onOpenNewChatForUser } from '../../Services/ChatServices';
 
 export default function MyPageScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [showDetail, setshowDetail] = useState(true);
-  const {myPage, user, preLoader, allPagePost, allPageFollowerList} =
+  const { myPage, user, preLoader, allPagePost, allPageFollowerList } =
     useSelector(e => e.common);
   const [deletePop, setDeletePop] = useState(false);
   const [followList, setfollowList] = useState([]);
@@ -68,7 +69,7 @@ export default function MyPageScreen() {
   const [selectURI, setSelectURI] = useState('');
 
   useEffect(() => {
-    dispatch(onGetMyPage({id: user?._id}));
+    dispatch(onGetMyPage({ id: user?._id }));
   }, []);
   useEffect(() => {
     if (myPage && myPage.length !== 0 && isFocused) {
@@ -109,7 +110,7 @@ export default function MyPageScreen() {
     let arr = searchUserByName(allPageFollowerList, undefined, search);
     setfollowList(arr);
   };
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
         key={item._id}
@@ -148,6 +149,10 @@ export default function MyPageScreen() {
     setcreatePostModal(true);
   };
 
+  const openChatRoom = () => {
+    navigation.navigate(screenName.ChatRoomUsersScreen)
+  }
+
   return (
     <View style={ApplicationStyles.applicationView}>
       {!preLoader ? (
@@ -160,12 +165,12 @@ export default function MyPageScreen() {
               onLeftPress={() => goBack()}
             />
             <KeyboardAvoidingView
-              style={{flex: 1}}
-              {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
-              <ScrollView style={{flex: 1}}>
+              style={{ flex: 1 }}
+              {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+              <ScrollView style={{ flex: 1 }}>
                 <View style={styles.userViewStyle}>
                   <UpdateDeleteMenu
-                    containerStyle={{position: 'absolute', right: 10}}
+                    containerStyle={{ position: 'absolute', right: 10 }}
                     onDeletePress={() => {
                       setDeletePop(true);
                     }}
@@ -192,8 +197,8 @@ export default function MyPageScreen() {
                     <Text style={styles.userText1}>{myPage[0]?.catchline}</Text>
                   )}
                 </View>
-                <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
-                  <TouchableOpacity style={styles.btnView}>
+                <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
+                  <TouchableOpacity onPress={() => openChatRoom()} style={styles.btnView}>
                     <Text style={styles.btnText}>My page Chatroom</Text>
                   </TouchableOpacity>
                 </View>
@@ -282,7 +287,7 @@ export default function MyPageScreen() {
                 </View>
                 {tabSelection == 'ABOUT' && (
                   <View>
-                    <View style={{marginHorizontal: wp(12)}}>
+                    <View style={{ marginHorizontal: wp(12) }}>
                       <Text style={styles.textView}>{myPage[0]?.about}</Text>
                       <View style={ApplicationStyles.row}>
                         <Text style={styles.text1}>Website</Text>
@@ -299,7 +304,7 @@ export default function MyPageScreen() {
                       <View
                         style={[
                           ApplicationStyles.row,
-                          {alignItems: 'flex-start'},
+                          { alignItems: 'flex-start' },
                         ]}>
                         <Text style={styles.text1}>Country</Text>
                         <Text style={styles.text2}>
@@ -325,7 +330,7 @@ export default function MyPageScreen() {
                                   color={colors.black}
                                 />
                               )}
-                              <View style={{height: 50}} />
+                              <View style={{ height: 50 }} />
                             </View>
                           );
                         }}
@@ -354,7 +359,7 @@ export default function MyPageScreen() {
                       {followList && (
                         <FlatList
                           data={followList}
-                          renderItem={({item}) => {
+                          renderItem={({ item }) => {
                             return (
                               <PageConnectedIndians
                                 cardPress={() => {
@@ -383,10 +388,10 @@ export default function MyPageScreen() {
             </KeyboardAvoidingView>
             <TouchableOpacity
               onPress={() => onOpenPostModal()}
-              style={{position: 'absolute', bottom: wp(20), right: wp(20)}}>
+              style={{ position: 'absolute', bottom: wp(20), right: wp(20) }}>
               <Image
                 source={Icons.plusPost}
-                style={[ImageStyle(46, 46), {tintColor: '#5278D9FF'}]}
+                style={[ImageStyle(46, 46), { tintColor: '#5278D9FF' }]}
               />
             </TouchableOpacity>
           </SafeAreaView>

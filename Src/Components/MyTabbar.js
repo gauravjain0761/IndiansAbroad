@@ -14,9 +14,10 @@ import { Icons } from '../Themes/Icons';
 import { screenName } from '../Navigation/ScreenConstants';
 import { FontStyle } from '../utils/commonFunction';
 import { useSelector } from 'react-redux';
+import RenderUserIcon from './RenderUserIcon';
 
 export default function MyTabbar({ state, descriptors, navigation }) {
-  const { unreadMsgCount } = useSelector(e => e.common)
+  const { unreadMsgCount, user } = useSelector(e => e.common)
   return (
     <SafeAreaView style={{ backgroundColor: colors.white }}>
       <View style={styles.container}>
@@ -74,13 +75,15 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                 onPress={onPress}
                 onLongPress={onLongPress}
                 style={styles.itemContainer}>
-                <Image
-                  style={{
-                    ...styles.iconStyle,
-                    tintColor: isFocused ? colors.primary_4574ca : colors.neutral_900,
-                  }}
-                  source={iconName}
-                />
+                {route.name == screenName.profileScreen ?
+                  <RenderUserIcon url={user?.avtar} height={22} />
+                  : <Image
+                    style={{
+                      ...styles.iconStyle,
+                      tintColor: isFocused ? colors.primary_4574ca : colors.neutral_900,
+                    }}
+                    source={iconName}
+                  />}
                 {route.name == screenName.chatScreen && unreadMsgCount > 0 &&
                   <View style={{ position: 'absolute', zIndex: 1, top: 8, right: 0, width: 30 }}>
                     <Text style={FontStyle(14, colors.red_DE6161, '700')}>{unreadMsgCount}</Text>

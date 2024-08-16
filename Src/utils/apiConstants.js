@@ -1,6 +1,6 @@
 export const api = {
-  // BASE_URL: 'https://express.indiansabroad.online/api',
-  BASE_URL: 'http://ec2-3-95-222-146.compute-1.amazonaws.com/api',
+  BASE_URL: 'https://express.indiansabroad.online/api',
+  // BASE_URL: 'http://ec2-3-95-222-146.compute-1.amazonaws.com/api',
   IMAGE_URL: 'https://cdn.indiansabroad.online/',
 
   login: '/user/login',
@@ -116,7 +116,11 @@ export const api = {
   joinGroup: '/chat/join',
   addMessage: '/message/addmessage',
   deleteMessage: '/message/delete',
-  deleteMessageForMe: '/message/deletemessage'
+  deleteMessageForMe: '/message/deletemessage',
+  openChatList: '/cp/chat/list',
+
+
+  acceptRejectRequest: '/follow/request/action'
 };
 
 export const POST = 'POST';

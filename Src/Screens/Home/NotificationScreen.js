@@ -17,81 +17,50 @@ import { Icons } from '../../Themes/Icons';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { onGetNotification } from '../../Services/AuthServices';
+import { onAcceptRejectRequest, onGetNotification } from '../../Services/AuthServices';
 import NoDataFound from '../../Components/NoDataFound';
 import RenderUserIcon from '../../Components/RenderUserIcon';
-
-const Data = [
-  {
-    id: 1,
-    name: 'Rutu M',
-    content: 'has liked your post',
-    type: 'general',
-    image: Icons.userImage,
-    time: '1 hour ago',
-  },
-  {
-    id: 2,
-    name: 'Rutu M',
-    content: 'has accepted your request.',
-    type: 'general',
-    image: Icons.userImage,
-    time: '1 hour ago',
-  },
-  {
-    id: 3,
-    name: 'Sakshi Bagwari',
-    content: 'has sent you request',
-    type: 'Requests',
-    image: Icons.userImage,
-    time: '1 hour ago',
-  },
-  {
-    id: 4,
-    name: 'SOURABH CHOUGULE',
-    content: 'has accepted your request.',
-    type: 'general',
-    image: Icons.userImage,
-    time: '1 day ago',
-  },
-  {
-    id: 5,
-    name: 'Saurabh Ghode',
-    content: 'has liked your post.',
-    type: 'general',
-    image: Icons.userImage,
-    time: '3 days ago',
-  },
-  {
-    id: 6,
-    name: 'Sakshi Bagwari',
-    content: 'has liked your post.',
-    type: 'general',
-    image: Icons.userImage,
-    time: '5 days ago',
-  },
-];
+import { dispatchAction } from '../../utils/apiGlobal';
+import { IS_LOADING } from '../../Redux/ActionTypes';
 
 const NotificationScreen = () => {
   const [categories, setCategories] = useState('All');
   const { goBack } = useNavigation();
   const { user, notificationList } = useSelector(e => e.common)
   const dispatch = useDispatch()
+  const [notiArray, setnotiArray] = useState(undefined)
 
   useEffect(() => {
-    dispatch(onGetNotification({
-      data: {
-        loginUserId: user?._id
-      }
-    }))
+    if (!notificationList) { dispatchAction(dispatch, IS_LOADING, true) }
+    dispatch(onGetNotification({ data: { loginUserId: user?._id } }))
   }, [])
-  console.log('notificationList--', notificationList)
+
+  useEffect(() => {
+    // console.log(notificationList)
+  }, [notificationList])
+
 
   const onPressBack = () => {
     goBack();
   };
-  const renderItem = ({ item, index }) => {
+
+  const onPressReq = (item, type) => {
     console.log(item)
+    let obj = {
+      data: {
+        userId: user?._id,
+        requestedId: item?.createdBy?._id,
+        action: type,
+        notificationId: item?._id
+      },
+      onSuccess: () => {
+        dispatch(onGetNotification({ data: { loginUserId: user?._id } }))
+      },
+    }
+    dispatch(onAcceptRejectRequest(obj))
+  }
+
+  const renderItem = ({ item, index }) => {
     return (
       <>
         {item?.type !== 'follow-request' ? (
@@ -115,10 +84,10 @@ const NotificationScreen = () => {
                   {item?.createdBy?.first_Name} {item?.createdBy?.last_Name} {item?.title}
                 </Text>
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity onPress={() => onPressReq(item, 'accept')} style={styles.button}>
                     <Text style={styles.buttonText}>{'Accept'}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity onPress={() => onPressReq(item, 'reject')} style={styles.button}>
                     <Text style={styles.buttonText}>{'Ignore'}</Text>
                   </TouchableOpacity>
                 </View>
@@ -185,12 +154,12 @@ const NotificationScreen = () => {
                   <Text style={styles.HeaderTitle}>{'New'}</Text>
                 </View>
                 <View style={styles.notificationcontainer}>
-                  {/* <FlatList
-                data={Data}
-                renderItem={({ item, index }) =>
-                  item?.type == 'Requests' && renderItem({ item, index })
-                }
-              /> */}
+                  <FlatList
+                    data={notificationList?.data?.filter(obj => obj?.type == 'follow-request')}
+                    renderItem={({ item, index }) =>
+                      renderItem({ item, index })
+                    }
+                  />
                 </View>
                 <View style={styles.newHeader}>
                   <Text style={styles.HeaderTitle}>{'Older'}</Text>

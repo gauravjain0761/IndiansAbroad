@@ -91,6 +91,9 @@ import messaging from '@react-native-firebase/messaging';
 import { dispatchAction } from '../utils/apiGlobal';
 import { SET_FCM_TOKEN } from '../Redux/ActionTypes';
 import { useDispatch } from 'react-redux';
+import PageMessaging from '../Screens/Chat/PageMessaging';
+import ChatRoomUsersScreen from '../Screens/Chat/ChatRoomUsersScreen';
+import MediaPreviewScreen from '../Screens/Chat/MediaPreviewScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -345,6 +348,9 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.QRSuccessScreen} component={QRSuccessScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PersonalUserDetailScreen} component={PersonalUserDetailScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupMessaging} component={GroupMessaging} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PageMessaging} component={PageMessaging} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.ChatRoomUsersScreen} component={ChatRoomUsersScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MediaPreviewScreen} component={MediaPreviewScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupDetailScreen} component={GroupDetailScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupMediaScreen} component={GroupMediaScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.AddMemberScreen} component={AddMemberScreen} />

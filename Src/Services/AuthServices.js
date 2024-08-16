@@ -310,7 +310,7 @@ export const onDeleteAccount = (request) => async dispatch => {
 
 
 export const onGetNotification = (request) => async dispatch => {
-    dispatchAction(dispatch, IS_LOADING, true)
+
     return makeAPIRequest({
         method: POST,
         url: api.notificationList,
@@ -334,6 +334,24 @@ export const onUpdateFbToken = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, async () => {
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+
+export const onAcceptRejectRequest = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.acceptRejectRequest,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, async () => {
+                successToast(response?.data?.msg)
             });
         })
         .catch(error => {
