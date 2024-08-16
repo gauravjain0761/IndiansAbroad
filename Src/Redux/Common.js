@@ -48,6 +48,7 @@ import {
   DELETE_MESSAGE,
   SET_NOTIFICATION_LIST,
   SET_FCM_TOKEN,
+  GET_SAVE_EVENT,
 } from './ActionTypes';
 
 const initialState = {
@@ -55,10 +56,12 @@ const initialState = {
   preLoader: false,
   allPost: undefined,
   allEvent: undefined,
+  allSave: undefined,
   allIndian: undefined,
   allPages: undefined,
   allPostsCount: 0,
   allEventCount: 0,
+  allSaveCount: 0,
   allIndianCount: 0,
   allPagesCount: 0,
   likedUserList: undefined,
@@ -119,6 +122,16 @@ export default function (state = initialState, action) {
             ? action.payload.data
             : [...state.allEvent, ...action.payload.data],
         allEventCount: action.payload.count,
+      };
+    }
+    case GET_SAVE_EVENT: {
+      return {
+        ...state,
+        allSave:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.allSave, ...action.payload.data],
+           allSaveCount: action.payload.count,
       };
     }
     case SET_ALL_INDIANS: {

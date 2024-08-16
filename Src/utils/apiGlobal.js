@@ -45,6 +45,8 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
 
 export const setAuthorization = async authToken => {
   const token = await getAsyncToken();
+  console.log('token',token);
+  
   if (authToken == '') {
     axios.defaults.headers.common['Authorization'] = `${token}`;
   } else {

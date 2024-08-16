@@ -13,13 +13,16 @@ import {Icons} from '../Themes/Icons';
 import {wp} from '../Themes/Fonts';
 import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import moment from 'moment';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {screenName} from '../Navigation/ScreenConstants';
 import {useNavigation} from '@react-navigation/native';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_ACTIVE_EVENT } from '../Redux/ActionTypes';
 
 export default function EventDashboardCard({item, index}) {
   const {user} = useSelector(e => e.common);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const onSharePress = async link => {
     try {
@@ -71,6 +74,7 @@ export default function EventDashboardCard({item, index}) {
             {user?._id !== item?.createdBy && (
               <TouchableOpacity
                 onPress={() => {
+                  dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
                   navigation.navigate(screenName.AttendanceRequestScreen);
                 }}
                 style={{paddingHorizontal: 10, paddingBottom: 10}}>

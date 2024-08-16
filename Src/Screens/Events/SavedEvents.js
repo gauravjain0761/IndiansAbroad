@@ -12,7 +12,7 @@ import PostCard from '../../Components/PostCard';
 import CreatePost from '../../Components/CreatePost';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { screenName } from '../../Navigation/ScreenConstants';
-import { getalluserposts } from '../../Services/PostServices';
+import { getalluserposts, getSaveListAction } from '../../Services/PostServices';
 import { dispatchAction } from '../../utils/apiGlobal';
 import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_ALL_EVENTS, SET_GLOBAL_SEARCH, } from '../../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -33,7 +33,7 @@ export default function SavedEvents() {
     const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
     const [createPostModal, setcreatePostModal] = useState(false);
     const navigation = useNavigation();
-    const { allPost, allPostsCount, user } = useSelector(e => e.common);
+    const { allSave,allSaveCount ,allPost, allPostsCount, user } = useSelector(e => e.common);
     const isFocuse = useIsFocused();
     const [refreshing, setRefreshing] = React.useState(false);
     const [page, setpage] = useState(1);
@@ -46,6 +46,21 @@ export default function SavedEvents() {
             setRefreshing(false);
         }, 2000);
     }, []);
+
+    const getPostList = page => {
+        let obj = {
+          data: {
+            createdBy: user?._id,
+            page: page,
+            limit: 0,
+          },
+          onSuccess: () => {
+            setpage(page);
+            setloading(false);
+          },
+        };
+        dispatch(getSaveListAction(obj));
+      };
 
     const getData = () => {
         if (tabSelection == 'saved') {
@@ -83,7 +98,12 @@ export default function SavedEvents() {
 
     const fetchMoreData = () => {
         if (tabSelection == 'saved') {
-
+            if (allSave) {
+                if (allSave?.length < allSaveCount) {
+                  setloading(true);
+                //   getPostList(page + 1);
+                }
+              }
         } else {
 
         }
@@ -127,14 +147,14 @@ export default function SavedEvents() {
                         refreshControl={
                             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                         }
-                        data={allPost}
+                        data={allSave}
                         renderItem={renderEventItem}
                         onEndReached={fetchMoreData}
                         onEndReachedThreshold={0.3}
                         ListFooterComponent={() => {
                             return (
                                 <View>
-                                    {allPost && loading && (
+                                    {allSave && loading && (
                                         <ActivityIndicator size={'large'} color={colors.black} />
                                     )}
                                     <View style={{ height: 50 }} />

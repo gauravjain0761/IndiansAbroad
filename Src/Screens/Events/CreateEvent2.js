@@ -38,7 +38,6 @@ export default function CreateEvent2() {
   const [price, setprice] = useState('');
   const [available, setavailable] = useState('');
   const [address, setaddress] = useState('');
-console.log('currency ',starts);
 
 
 
@@ -132,9 +131,9 @@ console.log('currency ',starts);
         </View>
         <Input
           extraStyle={{marginTop: 5}}
-          value={link}
+          value={address}
           placeholder={'Venue / URL Link'}
-          onChangeText={text => setlink(text)}
+          onChangeText={text => setaddress(text)}
         />
         <Text style={styles.title}>Starts</Text>
         <View style={styles.rowViewDate}>
@@ -205,13 +204,6 @@ console.log('currency ',starts);
             placeholder={'Time'}
           />
         </View>
-        <Text style={styles.title}>Address</Text>
-        <Input
-          extraStyle={{marginTop: 5}}
-          value={address}
-          placeholder={'address'}
-          onChangeText={text => setaddress(text)}
-        />
         <Text style={styles.title}>Event fee</Text>
         <View style={styles.rowViewDate}>
           <Input

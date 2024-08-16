@@ -67,6 +67,7 @@ export const SET_FCM_TOKEN = 'SET_FCM_TOKEN';
 // event
 export const SET_ALL_EVENTS = 'SET_ALL_EVENTS';
 export const SET_ACTIVE_EVENT = 'SET_ACTIVE_EVENT';
+export const GET_SAVE_EVENT = 'GET_SAVE_EVENT';
 
 export const SET_PAGE_CONNECT_POST = 'SET_PAGE_CONNECT_POST'
 export const SET_PAGE_DETAIL = 'SET_PAGE_DETAIL';

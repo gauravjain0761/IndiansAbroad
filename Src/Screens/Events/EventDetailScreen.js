@@ -12,7 +12,7 @@ import React, {useEffect} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation} from '@react-navigation/native';
-import {FontStyle, ImageStyle} from '../../utils/commonFunction';
+import {currencyIcon, FontStyle, ImageStyle} from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {screenName} from '../../Navigation/ScreenConstants';
@@ -22,13 +22,17 @@ import CommonButton from '../../Components/CommonButton';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderText from '../../Components/RenderText';
 import moment from 'moment';
-import {getDetailsListAction} from '../../Services/PostServices';
+import {getCurrenciesListAction, getDetailsListAction} from '../../Services/PostServices';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
   const {activeEvent, user} = useSelector(e => e.common);
 
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getCurrenciesListAction())
+ },[])
 
   useEffect(() => {
     getEventList();
@@ -109,7 +113,7 @@ export default function EventDetailScreen() {
           <RenderRowList icon={Icons.map} title={activeEvent?.address} />
           <RenderRowList
             icon={Icons.tickets}
-            title={`£ ${activeEvent?.event_fee}`}
+            title={`${currencyIcon(activeEvent?.currency)}${activeEvent?.event_fee}`}
           />
           <RenderRowList
             icon={Icons.contacts}

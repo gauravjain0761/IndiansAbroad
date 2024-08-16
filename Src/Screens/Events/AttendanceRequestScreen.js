@@ -114,7 +114,7 @@ export default function AttendanceRequestScreen() {
       <KeyboardAwareScrollView extraScrollHeight={50}>
         <View style={styles.topView}>
           <Text style={styles.title}>
-            Indian Festival Guide for November 2024{' '}
+            {activeEvent?.title}
           </Text>
           <Input
             value={inputData?.firstName}

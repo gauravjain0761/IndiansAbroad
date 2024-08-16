@@ -1,6 +1,7 @@
 import Toast from 'react-native-toast-message';
 import { icons } from '../theme/icons';
 import { defaultFontStyle } from '../Themes/Fonts';
+import { currenciesArray } from './constants';
 
 export const infoToast = message => {
   Toast.show({ type: 'info', text1: message });
@@ -101,4 +102,9 @@ const utcDate = new Date(localDate.toUTCString());
 const isoString = utcDate.toISOString();
 
 return isoString
+}
+
+export const currencyIcon=(value)=>{
+    const selectValue=currenciesArray.filter((item)=>{return item.code == value})
+    return selectValue?.[0]?.symbol || "$"
 }

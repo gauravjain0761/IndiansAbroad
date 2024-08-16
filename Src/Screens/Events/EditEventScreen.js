@@ -11,7 +11,14 @@ import React, {useEffect, useState} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation} from '@react-navigation/native';
-import {dateConvectTime, FontStyle, successToast} from '../../utils/commonFunction';
+import {
+  dateConvectTime,
+  emailCheck,
+  errorToast,
+  FontStyle,
+  mobileNumberCheck,
+  successToast,
+} from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {screenName} from '../../Navigation/ScreenConstants';
@@ -29,9 +36,10 @@ import moment from 'moment';
 
 export default function EditEventScreen() {
   const navigation = useNavigation();
-  const {activeEvent, user} = useSelector(e => e.common);
+  const {activeEvent, user,getCurrenciesList} = useSelector(e => e.common);
+
   const dispatch = useDispatch();
-  const [image, setimage] = useState(undefined);
+  const [image, setimage] = useState(null);
   const [eventTitle, seteventTitle] = useState('');
   const [contact, setcontact] = useState('');
   const [discription, setdiscription] = useState('');
@@ -76,50 +84,77 @@ export default function EditEventScreen() {
   };
 
   const onNextPress = () => {
-    let startTime = dateConvectTime(
-      `${moment(starts.date).format('DD-MM-YYYY')} ${moment(
-        starts.start,
-      ).format('HH')}:${moment(starts.end).format('mm')}`,
-    );
-    let endTime = dateConvectTime(
-      `${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format(
-        'HH',
-      )}:${moment(ends.end).format('mm')}`,
-    );
-    let data = {};
-    // if (image) {
-    //   data['file'] = {
-    //     uri: image.path,
-    //     type: image.mime, // or photo.type image/jpg
-    //     name: 'image_' + moment().unix() + '_' + image.path.split('/').pop(),
-    //   };
-    // }
-    data.event_id = activeEvent?._id;
-    data.title = eventTitle;
-    data.description = discription;
-    data.mobile = contact;
-    data.address = link;
-    data.currency = currency;
-    data.event_fee = price;
-    data.no_of_tickets = available;
-    data.start_time = startTime;
-    data.end_time = endTime;
+    if (eventTitle.trim() == '') {
+      errorToast('Please enter your event title');
+    }else if (!mobileNumberCheck(contact.trim())) {
+      errorToast('Please enter a valid mobile number');
+    } else if (discription.trim() == '') {
+      errorToast('Please enter your Description');
+    } else  if (starts.date == '') {
+      errorToast('Please select starts date');
+    } else if (starts.start == '') {
+      errorToast('Please select start time');
+    } else if (starts.end == '') {
+      errorToast('Please select end time');
+    } else if (ends.date == '') {
+      errorToast('Please select ends date');
+    } else if (ends.start == '') {
+      errorToast('Please select start time');
+    } else if (ends.end == '') {
+      errorToast('Please select end time');
+    } else if (link.trim() == '') {
+      errorToast('Please enter your address');
+    } else if (currency == '') {
+      errorToast('Please enter select currency');
+    } else if (price == '') {
+      errorToast('Please enter your price');
+    } else if (available == '') {
+      errorToast('Please enter your tickets available');
+    } else {
+      let startTime = dateConvectTime(
+        `${moment(starts.date).format('DD-MM-YYYY')} ${moment(
+          starts.start,
+        ).format('HH')}:${moment(starts.end).format('mm')}`,
+      );
+      let endTime = dateConvectTime(
+        `${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format(
+          'HH',
+        )}:${moment(ends.end).format('mm')}`,
+      );
+      let data = {};
+      if (image) {
+        data['file'] = {
+          uri: image.path,
+          type: image.mime, // or photo.type image/jpg
+          name: 'image_' + moment().unix() + '_' + image.path.split('/').pop(),
+        };
+      }
+      data.event_id = activeEvent?._id;
+      data.title = eventTitle;
+      data.description = discription;
+      data.mobile = contact;
+      data.address = link;
+      data.currency = currency;
+      data.event_fee = price;
+      data.no_of_tickets = available;
+      data.start_time = startTime;
+      data.end_time = endTime;
 
-    dispatchAction(dispatch, IS_LOADING, true);
-    formDataApiCall(
-      api.eventUpdate,
-      data,
-      res => {
-        successToast(res?.msg)
-        dispatchAction(dispatch, SET_ACTIVE_EVENT, res?.data);
-        dispatchAction(dispatch, IS_LOADING, false);
-      },
-      () => {
-        dispatchAction(dispatch, IS_LOADING, false);
-      },
-    );
+      dispatchAction(dispatch, IS_LOADING, true);
+      formDataApiCall(
+        api.eventUpdate,
+        data,
+        res => {
+          successToast(res?.msg);
+          dispatchAction(dispatch, SET_ACTIVE_EVENT, res?.data);
+          dispatchAction(dispatch, IS_LOADING, false);
+        },
+        () => {
+          dispatchAction(dispatch, IS_LOADING, false);
+        },
+      );
+    }
   };
-
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -257,13 +292,13 @@ export default function EditEventScreen() {
             extraStyle={{width: '35%'}}
             value={currency ? currency : ''}
             onChangeText={text => {
-              setcurrency(text.code);
+              setcurrency(text.currencyCode);
             }}
             placeholder={'Currency'}
             type={'dropdown'}
-            data={currenciesArray}
-            labelField={'code'}
-            valueField={'code'}
+            data={getCurrenciesList}
+            labelField={'currencyCode'}
+            valueField={'currencyCode'}
           />
           <Input
             keyboardType="number-pad"

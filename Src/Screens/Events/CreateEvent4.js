@@ -75,6 +75,7 @@ export default function CreateEvent4() {
           navigation.navigate(screenName.homeScreen)
           setname('');
           setimage(null)
+          successToast(res.msg);
         },
         () => {
           dispatchAction(dispatch, IS_LOADING, false);

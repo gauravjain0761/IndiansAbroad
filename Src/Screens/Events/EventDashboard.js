@@ -27,18 +27,45 @@ export default function EventDashboard() {
   const navigation = useNavigation();
   const [dashBoard, setDashBoard] = useState({});
   const {user} = useSelector(e => e.common);
+  const [ongoingEventsData, setOngoingEventsData] = useState([]);
+  const [completedEventsData, setCompletedEventsData] = useState([]);
+  
 
+  console.log('user',user);
+  
   useEffect(() => {
     let obj = {
       onSuccess: res => {
         console.log('getTransactionDashboardAction', res);
         setDashBoard(res?.data);
+        getFilteredEvents(res?.data)
       },
     };
     dispatch(getTransactionDashboardAction(obj));
   }, []);
 
-  console.log('dashBoard', dashBoard);
+  const getFilteredEvents = (list) => {
+    const now = new Date();
+    // Filter ongoing events
+    const ongoingEvents = list?.events?.filter(event => {
+        if (event.start_time && event.end_time) {
+            const startTime = new Date(event.start_time);
+            const endTime = new Date(event.end_time);
+            return startTime <= now && now <= endTime;
+        }
+        return false;
+    });
+    setOngoingEventsData(ongoingEvents)
+    // Filter completed events
+    const completedEvents = list?.events?.filter(event => {
+        if (event.end_time) {
+            const endTime = new Date(event.end_time);
+            return now > endTime;
+        }
+        return false;
+    });
+    setCompletedEventsData(completedEvents)
+};
 
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -104,11 +131,11 @@ export default function EventDashboard() {
           <View style={styles.boxView}>
             <Text style={styles.title}>Ongoing Event</Text>
           </View>
-          <RenderOngoingEventTable />
+          <RenderOngoingEventTable data={ongoingEventsData} />
           <View style={styles.boxView}>
             <Text style={styles.title}>Completed Event</Text>
           </View>
-          <RenderOngoingEventTable showAction={false} />
+          <RenderOngoingEventTable showAction={false} data={completedEventsData}/>
           <View style={styles.boxView}>
             <Text style={styles.title}>Debited</Text>
           </View>

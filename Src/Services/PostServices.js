@@ -13,8 +13,9 @@ import {
   SET_ALL_EVENTS,
   GET_ALL_CURRENCIES,
   SET_ACTIVE_EVENT,
+  GET_SAVE_EVENT,
 } from '../Redux/ActionTypes';
-import { setAsyncUserInfo } from '../utils/AsyncStorage';
+import { getAsyncToken, setAsyncUserInfo } from '../utils/AsyncStorage';
 import { GET, POST, api } from '../utils/apiConstants';
 import {
   dispatchAction,
@@ -514,6 +515,27 @@ export const getAttendeeGetByEventAction = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {});
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+
+export const getSaveListAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: GET,
+    url: api.attendeeGetUserEvents,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        console.log('response?.data?.favoriteEvents',response?.data?.favoriteEvents);
+        
+        dispatchAction(dispatch, GET_SAVE_EVENT, {
+          ...response?.data?.favoriteEvents,
+          current_page: request?.data?.page,
+        });
+      });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);

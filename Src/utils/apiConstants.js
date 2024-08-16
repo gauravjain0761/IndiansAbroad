@@ -51,6 +51,7 @@ export const api = {
   attendeePayment: "/attendee/payment",
   attendeeGetByEvent: "/attendee/getByEvent",
   eventUpdate: "/event/update",
+  attendeeGetUserEvents:"/attendee/getUserEvents",
 
 
 
