@@ -393,8 +393,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.secondary_500,
-    paddingLeft:2,
-    paddingRight:5,
+    paddingLeft:6,
+    paddingRight:10,
     justifyContent: 'space-around',
   },
   iconSearch: {
