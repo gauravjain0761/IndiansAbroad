@@ -161,7 +161,7 @@ export default function SavedEvents() {
                                 </View>
                             );
                         }}
-                        ListEmptyComponent={<NoDataFound />}
+                        ListEmptyComponent={<NoDataFound text={"Your saved events will\nappear here."} />}
                     />
                 </View>
                 <View key={'2'}>

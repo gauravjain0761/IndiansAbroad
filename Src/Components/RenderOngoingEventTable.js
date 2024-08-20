@@ -11,12 +11,17 @@ import colors from '../Themes/Colors';
 import {currencyIcon, FontStyle, ImageStyle} from '../utils/commonFunction';
 import RenderUserIcon from './RenderUserIcon';
 import {Icons} from '../Themes/Icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { dispatchAction } from '../utils/apiGlobal';
+import { useNavigation } from '@react-navigation/native';
+import { screenName } from '../Navigation/ScreenConstants';
+import { SET_ACTIVE_EVENT } from '../Redux/ActionTypes';
 
 export default function RenderOngoingEventTable({showAction = true,data}) {
     const {user} = useSelector(e => e.common);
-
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
   return (
     <View style={styles.outerView}>
       <View style={styles.headerRow}>
@@ -81,6 +86,10 @@ export default function RenderOngoingEventTable({showAction = true,data}) {
               {showAction && (
                 <View style={{flex: 0.8, justifyContent: 'center'}}>
                   <TouchableOpacity
+                  onPress={()=>{
+                    dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
+                    navigation.navigate(screenName.EventDetailScreen);
+                  }}
                     style={{justifyContent: 'center', alignItems: 'center'}}>
                     <Image source={Icons.edit} style={ImageStyle(12, 12)} />
                   </TouchableOpacity>

@@ -21,6 +21,7 @@ import RenderDebitedTable from '../../Components/RenderDebitedTable';
 import RenderScanningTable from '../../Components/RenderScanningTable';
 import {screenName} from '../../Navigation/ScreenConstants';
 import {getTransactionDashboardAction} from '../../Services/PostServices';
+import NoDataFound from '../../Components/NoDataFound';
 
 export default function EventDashboard() {
   const dispatch = useDispatch();
@@ -29,14 +30,10 @@ export default function EventDashboard() {
   const {user} = useSelector(e => e.common);
   const [ongoingEventsData, setOngoingEventsData] = useState([]);
   const [completedEventsData, setCompletedEventsData] = useState([]);
-  
-
-  console.log('user',user);
-  
+    
   useEffect(() => {
     let obj = {
       onSuccess: res => {
-        console.log('getTransactionDashboardAction', res);
         setDashBoard(res?.data);
         getFilteredEvents(res?.data)
       },
@@ -128,6 +125,7 @@ export default function EventDashboard() {
               </Text>
             </View>
           </View>
+        {dashBoard && dashBoard?.events?.length !== 0 ?  <>
           <View style={styles.boxView}>
             <Text style={styles.title}>Ongoing Event</Text>
           </View>
@@ -144,8 +142,9 @@ export default function EventDashboard() {
             <Text style={styles.title}>Scanning Data</Text>
           </View>
           <RenderScanningTable />
+          </> : <NoDataFound text={"No local events at the moment.\nKeep an eye out!"} />}
         </ScrollView>
-        <View style={{paddingHorizontal: 10, marginTop: 10}}>
+        {dashBoard && dashBoard?.events?.length !== 0 &&<View style={{paddingHorizontal: 10, marginTop: 10}}>
           <Text style={styles.title}>Withdraw</Text>
           <View style={styles.withdrawView}>
             <View style={{flex: 1, marginVertical: 10, paddingLeft: 5}}>
@@ -166,7 +165,7 @@ export default function EventDashboard() {
               </View>
             </View>
           </View>
-        </View>
+        </View>}
       </SafeAreaView>
     </View>
   );
