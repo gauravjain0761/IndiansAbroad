@@ -30,39 +30,39 @@ export default function EventDashboard() {
   const {user} = useSelector(e => e.common);
   const [ongoingEventsData, setOngoingEventsData] = useState([]);
   const [completedEventsData, setCompletedEventsData] = useState([]);
-    
+
   useEffect(() => {
     let obj = {
       onSuccess: res => {
         setDashBoard(res?.data);
-        getFilteredEvents(res?.data)
+        getFilteredEvents(res?.data);
       },
     };
     dispatch(getTransactionDashboardAction(obj));
   }, []);
 
-  const getFilteredEvents = (list) => {
+  const getFilteredEvents = list => {
     const now = new Date();
     // Filter ongoing events
     const ongoingEvents = list?.events?.filter(event => {
-        if (event.start_time && event.end_time) {
-            const startTime = new Date(event.start_time);
-            const endTime = new Date(event.end_time);
-            return startTime <= now && now <= endTime;
-        }
-        return false;
+      if (event.start_time && event.end_time) {
+        const startTime = new Date(event.start_time);
+        const endTime = new Date(event.end_time);
+        return startTime <= now && now <= endTime;
+      }
+      return false;
     });
-    setOngoingEventsData(ongoingEvents)
+    setOngoingEventsData(ongoingEvents);
     // Filter completed events
     const completedEvents = list?.events?.filter(event => {
-        if (event.end_time) {
-            const endTime = new Date(event.end_time);
-            return now > endTime;
-        }
-        return false;
+      if (event.end_time) {
+        const endTime = new Date(event.end_time);
+        return now > endTime;
+      }
+      return false;
     });
-    setCompletedEventsData(completedEvents)
-};
+    setCompletedEventsData(completedEvents);
+  };
 
   return (
     <View style={ApplicationStyles.applicationView}>
@@ -70,10 +70,14 @@ export default function EventDashboard() {
         <Header title={'IndiansAbroad'} showLeft />
         <ScrollView style={styles.bottomView}>
           <View style={styles.mainNameView}>
-            <RenderUserIcon url={user?.avtar} height={40} isBorder={user?.subscribedMember} />
+            <RenderUserIcon
+              url={user?.avtar}
+              height={40}
+              isBorder={user?.subscribedMember}
+            />
             <View style={ApplicationStyles.flex}>
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
-              {user?.first_Name} {user?.last_Name}
+                {user?.first_Name} {user?.last_Name}
               </Text>
               <Text style={FontStyle(11, colors.neutral_900)}>
                 Community page,London
@@ -92,18 +96,16 @@ export default function EventDashboard() {
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
                 Balance
               </Text>
-              <Text
-                style={FontStyle(
-                  14,
-                  colors.neutral_900,
-                )}>{`£${dashBoard?.balance}`}</Text>
+              <Text style={FontStyle(14, colors.neutral_900)}>
+                {dashBoard?.balance ? `£${dashBoard?.balance}` : 0}
+              </Text>
             </View>
             <View style={styles.innerBox}>
               <Text style={FontStyle(16, colors.neutral_900, '700')}>
                 Events
               </Text>
               <Text style={FontStyle(14, colors.neutral_900)}>
-                {dashBoard?.totalEventCount}
+                {dashBoard?.totalEventCount || 0}
               </Text>
             </View>
           </View>
@@ -113,7 +115,7 @@ export default function EventDashboard() {
                 Total Bookings
               </Text>
               <Text style={FontStyle(14, colors.neutral_900)}>
-                {dashBoard?.totalBookingCount}
+                {dashBoard?.totalBookingCount || 0}
               </Text>
             </View>
             <View style={styles.innerBox}>
@@ -121,51 +123,68 @@ export default function EventDashboard() {
                 Total Transactions
               </Text>
               <Text style={FontStyle(14, colors.neutral_900)}>
-                {dashBoard?.totalTransactionCount}
+                {dashBoard?.totalTransactionCount || 0}
               </Text>
             </View>
           </View>
-        {dashBoard && dashBoard?.events?.length !== 0 ?  <>
-          <View style={styles.boxView}>
-            <Text style={styles.title}>Ongoing Event</Text>
-          </View>
-          <RenderOngoingEventTable data={ongoingEventsData} />
-          <View style={styles.boxView}>
-            <Text style={styles.title}>Completed Event</Text>
-          </View>
-          <RenderOngoingEventTable showAction={false} data={completedEventsData}/>
-          <View style={styles.boxView}>
-            <Text style={styles.title}>Debited</Text>
-          </View>
-          <RenderDebitedTable />
-          <View style={styles.boxView}>
-            <Text style={styles.title}>Scanning Data</Text>
-          </View>
-          <RenderScanningTable />
-          </> : <NoDataFound text={"No local events at the moment.\nKeep an eye out!"} />}
+          {dashBoard && dashBoard?.events?.length !== 0 ? (
+            <>
+              <View style={styles.boxView}>
+                <Text style={styles.title}>Ongoing Event</Text>
+              </View>
+              <RenderOngoingEventTable data={ongoingEventsData} />
+              <View style={styles.boxView}>
+                <Text style={styles.title}>Completed Event</Text>
+              </View>
+              <RenderOngoingEventTable
+                showAction={false}
+                data={completedEventsData}
+              />
+              <View style={styles.boxView}>
+                <Text style={styles.title}>Debited</Text>
+              </View>
+              <RenderDebitedTable />
+              <View style={styles.boxView}>
+                <Text style={styles.title}>Scanning Data</Text>
+              </View>
+              <RenderScanningTable />
+            </>
+          ) : (
+            <NoDataFound
+              text={'No local events at the moment.\nKeep an eye out!'}
+            />
+          )}
         </ScrollView>
-        {dashBoard && dashBoard?.events?.length !== 0 &&<View style={{paddingHorizontal: 10, marginTop: 10}}>
-          <Text style={styles.title}>Withdraw</Text>
-          <View style={styles.withdrawView}>
-            <View style={{flex: 1, marginVertical: 10, paddingLeft: 5}}>
-              <Text style={styles.totalText}>Total balance remaining</Text>
-            </View>
-            <View style={styles.line} />
-            <View
-              style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
-              <View style={styles.priceViewTotal}>
-                <Text style={FontStyle(12, colors.primary_500)}>{`£${dashBoard?.balance}`}</Text>
+        {dashBoard && dashBoard?.events?.length !== 0 && (
+          <View style={{paddingHorizontal: 10, marginTop: 10}}>
+            <Text style={styles.title}>Withdraw</Text>
+            <View style={styles.withdrawView}>
+              <View style={{flex: 1, marginVertical: 10, paddingLeft: 5}}>
+                <Text style={styles.totalText}>Total balance remaining</Text>
               </View>
-            </View>
-            <View style={styles.line} />
-            <View
-              style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
-              <View style={styles.btn}>
-                <Text style={FontStyle(11, colors.white)}>Request Payout</Text>
+              <View style={styles.line} />
+              <View
+                style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
+                <View style={styles.priceViewTotal}>
+                  <Text
+                    style={FontStyle(
+                      12,
+                      colors.primary_500,
+                    )}>{`£${dashBoard?.balance}`}</Text>
+                </View>
+              </View>
+              <View style={styles.line} />
+              <View
+                style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
+                <View style={styles.btn}>
+                  <Text style={FontStyle(11, colors.white)}>
+                    Request Payout
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>}
+        )}
       </SafeAreaView>
     </View>
   );

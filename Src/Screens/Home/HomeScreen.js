@@ -310,8 +310,8 @@ export default function HomeScreen() {
                 dispatchAction(dispatch, SET_GLOBAL_SEARCH, undefined);
                 navigation.navigate(screenName.SearchScreen);
               }}
-              inputViewStyle={{width: '70%'}}
-              containerStyles={{paddingHorizontal: 0}}
+              inputViewStyle={{width: '80%'}}
+              containerStyles={{paddingHorizontal: 3}}
             />
             <TouchableOpacity
               onPress={() => navigation.navigate(screenName.EventDashboard)}>
@@ -393,7 +393,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.secondary_500,
-    paddingHorizontal: 4,
+    paddingLeft:2,
+    paddingRight:5,
     justifyContent: 'space-around',
   },
   iconSearch: {
