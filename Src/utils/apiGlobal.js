@@ -11,18 +11,12 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
       baseURL: api.BASE_URL,
       url,
       data: data,
-      headers: headers
-        ? headers
-        : {
-          Accept: 'application/json',
-          ...headers,
-        },
+      headers: headers ? headers : { Accept: 'application/json', ...headers, },
       params: params,
     };
     axios(option)
       .then(response => {
         // console.log("res--->", api.BASE_URL + url, data, params);
-
         console.log("res--->", api.BASE_URL + url, data, params, response?.data);
         if (response.status === 200 || response.status === 201) {
           resolve(response);
@@ -45,8 +39,8 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
 
 export const setAuthorization = async authToken => {
   const token = await getAsyncToken();
-  console.log('token',token);
-  
+  console.log('token', token);
+
   if (authToken == '') {
     axios.defaults.headers.common['Authorization'] = `${token}`;
   } else {
@@ -80,7 +74,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
     body: formData,
   })
     .then(response => {
-      console.log('responsedasda',response);
+      console.log('responsedasda', response);
       return response.json().then(responseJson => {
         console.log("responseJson", responseJson);
         if (responseJson.err == 200 || responseJson.statusCode == 200) {

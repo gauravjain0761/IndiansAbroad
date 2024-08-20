@@ -85,8 +85,15 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                     source={iconName}
                   />}
                 {route.name == screenName.chatScreen && unreadMsgCount > 0 &&
-                  <View style={{ position: 'absolute', zIndex: 1, top: 8, right: 0, width: 30 }}>
-                    <Text style={FontStyle(14, colors.red_DE6161, '700')}>{unreadMsgCount}</Text>
+                  <View style={{
+                    position: 'absolute', zIndex: 1, top: !isFocused ? 8 : 2, right: 4,
+                    backgroundColor: colors.danger_500,
+                    borderRadius: 100,
+                    paddingHorizontal: 8,
+                    paddingVertical: 0,
+                    borderWidth: 0.5
+                  }}>
+                    <Text style={FontStyle(11, colors.white, '700')}>{unreadMsgCount}</Text>
                   </View>
                 }
                 {isFocused && (

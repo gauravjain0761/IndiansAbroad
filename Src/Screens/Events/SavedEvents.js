@@ -33,7 +33,7 @@ export default function SavedEvents() {
     const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
     const [createPostModal, setcreatePostModal] = useState(false);
     const navigation = useNavigation();
-    const { allSave,allSaveCount ,allPost, allPostsCount, user } = useSelector(e => e.common);
+    const { allSave, allSaveCount, allPost, allPostsCount, user } = useSelector(e => e.common);
     const isFocuse = useIsFocused();
     const [refreshing, setRefreshing] = React.useState(false);
     const [page, setpage] = useState(1);
@@ -49,18 +49,18 @@ export default function SavedEvents() {
 
     const getPostList = page => {
         let obj = {
-          data: {
-            createdBy: user?._id,
-            page: page,
-            limit: 0,
-          },
-          onSuccess: () => {
-            setpage(page);
-            setloading(false);
-          },
+            data: {
+                createdBy: user?._id,
+                page: page,
+                limit: 0,
+            },
+            onSuccess: () => {
+                setpage(page);
+                setloading(false);
+            },
         };
         dispatch(getSaveListAction(obj));
-      };
+    };
 
     const getData = () => {
         if (tabSelection == 'saved') {
@@ -100,10 +100,10 @@ export default function SavedEvents() {
         if (tabSelection == 'saved') {
             if (allSave) {
                 if (allSave?.length < allSaveCount) {
-                  setloading(true);
-                //   getPostList(page + 1);
+                    setloading(true);
+                    //   getPostList(page + 1);
                 }
-              }
+            }
         } else {
 
         }
@@ -161,7 +161,7 @@ export default function SavedEvents() {
                                 </View>
                             );
                         }}
-                        ListEmptyComponent={<NoDataFound text={"Your saved events will\nappear here."} />}
+                        ListEmptyComponent={<NoDataFound text={"Your saved events will appear here."} />}
                     />
                 </View>
                 <View key={'2'}>

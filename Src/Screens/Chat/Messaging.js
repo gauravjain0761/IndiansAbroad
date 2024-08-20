@@ -26,6 +26,8 @@ import { dispatchAction } from '../../utils/apiGlobal';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { FontStyle } from '../../utils/commonFunction';
 import { hp, wp } from '../../Themes/Fonts';
+import moment from 'moment';
+import MessageRequestModal from '../../Components/MessageRequestModal';
 
 let data = [
   {
@@ -94,6 +96,8 @@ const Messaging = () => {
   const isFocused = useIsFocused()
   const [loading, setloading] = useState(false)
   const [page, setpage] = useState(1)
+  const [messageRequestModal, setmessageRequestModal] = useState(false)
+
 
   useFocusEffect(
     React.useCallback(() => {
@@ -145,6 +149,35 @@ const Messaging = () => {
     }
   }
 
+  const checkDate = (item, index) => {
+    let dateFormat = 'DD MMMM YYYY';
+    let today = moment().format(dateFormat);
+    let yesterday = moment().subtract(1, 'days').format(dateFormat);
+    let currentDate = moment(item?.createdAt).format(dateFormat);
+    if (index == chatMessageList.length - 1) {
+      return (
+        <View style={styles.datesContainer}>
+          <View style={styles.textLine} />
+          <View>
+            <Text style={styles.dateText}>{today === currentDate ? 'Today' : yesterday === currentDate ? 'Yesterday' : currentDate}</Text>
+          </View>
+          <View style={styles.textLine} />
+        </View>
+      )
+    } else if (index + 1 <= chatMessageList.length - 1) {
+      let prevDate = moment(chatMessageList[index + 1].createdAt).format(dateFormat);
+      if (currentDate !== prevDate) {
+        return <View style={styles.datesContainer}>
+          <View style={styles.textLine} />
+          <View>
+            <Text style={styles.dateText}>{today === currentDate ? 'Today' : yesterday === currentDate ? 'Yesterday' : currentDate}</Text>
+          </View>
+          <View style={styles.textLine} />
+        </View>
+      }
+    }
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -180,11 +213,15 @@ const Messaging = () => {
         data={chatMessageList}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
-          if (item?.createdBy?._id !== user._id) {
-            return <ReciverMsg data={item} />;
-          } else {
-            return <SenderMsg data={item} />;
-          }
+          return (
+            <View>
+              {checkDate(item, index)}
+              {item?.createdBy?._id !== user._id ?
+                <ReciverMsg data={item} />
+                :
+                <SenderMsg data={item} />}
+            </View>
+          )
         }}
         onEndReached={fetchMoreData}
         onEndReachedThreshold={0.5}
@@ -199,9 +236,24 @@ const Messaging = () => {
           );
         }}
       />
-      {followerList.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 && <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
-        <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
-      </KeyboardAvoidingView>}
+      {followerList.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 ?
+
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
+          <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
+        </KeyboardAvoidingView>
+        :
+        <View>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
+            <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
+          </KeyboardAvoidingView>
+          <TouchableOpacity onPress={() => setmessageRequestModal(true)} style={{ position: 'absolute', zIndex: 1, left: 0, right: 0, bottom: 0, top: 0 }}>
+          </TouchableOpacity>
+        </View>
+      }
+
+      {messageRequestModal &&
+        <MessageRequestModal visible={messageRequestModal} onClose={() => setmessageRequestModal(false)} />
+      }
     </SafeAreaView>
   );
 };
@@ -254,6 +306,21 @@ const styles = StyleSheet.create({
   buttonText: {
     ...FontStyle(13, colors.white, '400'),
     // lineHeight: hp(20),
+  },
+
+  datesContainer: {
+    flexDirection: 'row', alignItems: 'center', marginVertical: hp(10),
+  },
+  textLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.neutral_400
+  },
+  dateText: {
+    textAlign: 'center',
+    marginHorizontal: hp(10),
+    ...FontStyle(11, colors.neutral_900),
+
   },
 });
 export default Messaging;

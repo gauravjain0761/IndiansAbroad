@@ -50,6 +50,7 @@ import {
   SET_FCM_TOKEN,
   GET_SAVE_EVENT,
   SET_MY_PAGE_CHAT_USERS,
+  ON_DELETE_CHAT,
 } from './ActionTypes';
 
 const initialState = {
@@ -518,13 +519,33 @@ export default function (state = initialState, action) {
       return { ...state, chatMessageList }
     }
     case SET_NOTIFICATION_LIST: {
-      return { ...state, notificationList: action.payload }
+      return { ...state, notificationList: action.payload.reverse() }
     }
     case SET_FCM_TOKEN: {
       return { ...state, fcmToken: action.payload }
     }
     case SET_MY_PAGE_CHAT_USERS: {
       return { ...state, myPageChatUsers: action.payload }
+    }
+    case ON_DELETE_CHAT: {
+      if (action.payload.isGroup) {
+        let groupRoomList = Object.assign([], state.groupRoomList)
+        groupRoomList = groupRoomList.filter(obj => obj?._id !== action.payload?._id)
+        return {
+          ...state,
+          groupRoomList,
+          allGroupRoomCount: state?.allGroupRoomCount - 1
+        }
+      } else {
+        let chatRoomList = Object.assign([], state.chatRoomList)
+        chatRoomList = chatRoomList.filter(obj => obj?._id !== action.payload?._id)
+        return {
+          ...state,
+          chatRoomList,
+          allChatRoomCount: state?.allChatRoomCount - 1
+        }
+      }
+
     }
     default:
       return state;

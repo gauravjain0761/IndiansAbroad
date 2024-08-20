@@ -159,7 +159,7 @@ const ReciverMsg = ({ data }) => {
                   data?.content_type == 'text/plain' ?
                     <View style={{ flexDirection: 'row' }}>
                       <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
-                      <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                      <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('hh:mm A')}</Text>
                     </View>
                     : data?.content_type == 'file/*' ?
                       <View>
@@ -183,18 +183,17 @@ const ReciverMsg = ({ data }) => {
                 {!data?.shareContentType &&
                   <View style={{ flexDirection: 'row' }}>
                     <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
-                    <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text>
+                    <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('hh:mm A')}</Text>
                   </View>
                 }
-                {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text></Text> */}
+                {/* <Text style={styles.msgTextStyle}>{data?.content}<Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('hh:mm A')}</Text></Text> */}
                 <Text style={[styles.timeTextStyle, {
                   marginTop: -13,
                 }]}>
-                  {moment(data?.createdAt).format('HH:mm')}
+                  {moment(data?.createdAt).format('hh:mm A')}
                 </Text>
               </TouchableOpacity>
             }
-
             onRequestClose={hideMenu}>
             <View style={styles.menuChildrenContainer}>
               {/* <TouchableOpacity onPress={hideMenu}>

@@ -51,7 +51,7 @@ export const api = {
   attendeePayment: "/attendee/payment",
   attendeeGetByEvent: "/attendee/getByEvent",
   eventUpdate: "/event/update",
-  attendeeGetUserEvents:"/attendee/getUserEvents",
+  attendeeGetUserEvents: "/attendee/getUserEvents",
 
 
 
@@ -118,6 +118,7 @@ export const api = {
   deleteMessage: '/message/delete',
   deleteMessageForMe: '/message/deletemessage',
   openChatList: '/cp/chat/list',
+  deleteChat: '/chat/delete',
 
 
   acceptRejectRequest: '/follow/request/action'

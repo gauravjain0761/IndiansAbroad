@@ -318,7 +318,7 @@ export const onGetNotification = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, async () => {
-                dispatchAction(dispatch, SET_NOTIFICATION_LIST, response?.data)
+                dispatchAction(dispatch, SET_NOTIFICATION_LIST, response?.data?.data)
             });
         })
         .catch(error => {

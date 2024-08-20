@@ -80,7 +80,7 @@ export default function EditProfile() {
       university: user?.universityORcompany,
       profession: user?.profession,
       link: user?.websitelink,
-      catchLine: user?.catchLine
+      catchLine: user?.catchLine.length > 0 ? user?.catchLine : 'I am proud to be a member of IndiansAbroad community.'
     })
   }, [user])
 
@@ -153,7 +153,7 @@ export default function EditProfile() {
       if (user.first_Name !== inputData.firstName) { data.first_Name = inputData.firstName.trim() }
       if (user.last_Name !== inputData.lastName) { data.last_Name = inputData.lastName.trim() }
       if (user.catchLine !== inputData.catchLine) { data.catchLine = inputData.catchLine.trim() }
-      if (moment(user?.birthDate, 'DD MMMM YYYY').format('DD/MM/YYYY') !== moment(inputData.dob).format('DD/MM/YYYY')) { data.birthDate = moment(inputData.dob).format('DD/MM/YYYY') }
+      if (moment(user?.birthDate, 'DD MMMM YYYY').format('DD/MM/YYYY') !== moment(inputData.dob).format('DD/MM/YYYY')) { data.birthDate = moment(inputData.dob).format('DD MMMM YYYY') }
       if (user.city !== inputData.city) { data.city = inputData.city }
       if (user.district !== inputData.district) { data.district = inputData.district }
       if (user.state !== inputData.state) { data.state = inputData.state }
@@ -178,6 +178,8 @@ export default function EditProfile() {
       }
     }
   }
+
+  console.log('user?.birthDate-------------', user?.birthDate)
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>

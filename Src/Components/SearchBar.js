@@ -36,7 +36,7 @@ export default function SearchBar({
           <TextInput
             placeholder={placeholder}
             placeholderTextColor={colors.neutral_500}
-            style={[styles.inputStyle,inputViewStyle]}
+            style={[styles.inputStyle, inputViewStyle]}
             value={value}
             onChangeText={onChangeText}
             onPress={() => onPressIn ? onPressIn() : {}}

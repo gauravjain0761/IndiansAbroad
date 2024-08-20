@@ -1,27 +1,12 @@
-import {
-  ScrollView,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ActivityIndicator,
-  Platform,
-} from 'react-native';
+import { ScrollView, StyleSheet, KeyboardAvoidingView, Text, View, TouchableOpacity, Image, FlatList, ActivityIndicator, Platform, } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import colors from '../../Themes/Colors';
-import {
-  FontStyle,
-  ImageStyle,
-  searchUserByName,
-} from '../../utils/commonFunction';
+import { FontStyle, ImageStyle, searchUserByName, } from '../../utils/commonFunction';
 import { SCREEN_WIDTH, wp, hp } from '../../Themes/Fonts';
 import CommonButton from '../../Components/CommonButton';
 import CreatePage from '../../Components/CreatePage';
@@ -67,6 +52,7 @@ export default function MyPageScreen() {
   const [createPostModal, setcreatePostModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectURI, setSelectURI] = useState('');
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     dispatch(onGetMyPage({ id: user?._id }));
@@ -386,33 +372,18 @@ export default function MyPageScreen() {
                 )}
               </ScrollView>
             </KeyboardAvoidingView>
-            <TouchableOpacity
-              onPress={() => onOpenPostModal()}
-              style={{ position: 'absolute', bottom: wp(20), right: wp(20) }}>
-              <Image
-                source={Icons.plusPost}
-                style={[ImageStyle(46, 46), { tintColor: '#5278D9FF' }]}
-              />
+            <TouchableOpacity onPress={() => onOpenPostModal()} style={{ position: 'absolute', bottom: insets.bottom + wp(20), right: wp(20) }}>
+              <Image source={Icons.plusPost} style={[ImageStyle(46, 46), { tintColor: '#5278D9FF' }]} />
             </TouchableOpacity>
           </SafeAreaView>
         ) : !showDetail ? (
           <SafeAreaView style={ApplicationStyles.applicationView}>
-            <Header
-              title={''}
-              showLeft={true}
-              showRight={false}
-              onLeftPress={() => goBack()}
-            />
+            <Header title={''} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
             <CreatePage />
           </SafeAreaView>
         ) : (
           <SafeAreaView>
-            <Header
-              showLeft={true}
-              title={''}
-              showRight={false}
-              onLeftPress={() => goBack()}
-            />
+            <Header showLeft={true} title={''} showRight={false} onLeftPress={() => goBack()} />
             <View>
               <CreatePageDescription onPress={() => setshowDetail(false)} />
             </View>
@@ -420,19 +391,10 @@ export default function MyPageScreen() {
         )
       ) : null}
       {deletePop && (
-        <DeletePopModal
-          isVisible={deletePop}
-          onClose={() => setDeletePop(false)}
-          onPressYes={() => onDeletePage()}
-        />
+        <DeletePopModal isVisible={deletePop} onClose={() => setDeletePop(false)} onPressYes={() => onDeletePage()} />
       )}
       {createPostModal && (
-        <CreatePost
-          createPostModal={createPostModal}
-          setcreatePostModal={setcreatePostModal}
-          isMyPage={true}
-          page={myPage[0]}
-        />
+        <CreatePost createPostModal={createPostModal} setcreatePostModal={setcreatePostModal} isMyPage={true} page={myPage[0]} />
       )}
       {modalVisible && (
         <ImageModalShow

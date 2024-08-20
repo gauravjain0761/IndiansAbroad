@@ -17,7 +17,8 @@ export default ApplicationStyles = StyleSheet.create({
   noDataFound: {
     ...FontStyle(20, colors.neutral_500, '700',),
     textAlign: 'center',
-    marginTop: 100
+    marginTop: 100,
+    marginHorizontal: 20
   },
   titleText: {
     ...FontStyle(27, colors.white, '700',),
