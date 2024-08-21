@@ -63,8 +63,8 @@ export default function CreateEvent2() {
     } else if (available.trim() == '') {
       errorToast('Please enter your tickets available');
     } else {
-      let startTime=dateConvectTime(`${moment(starts.date).format('DD-MM-YYYY')} ${moment(starts.start).format('HH')}:${moment(starts.end).format('mm')}`)
-      let endTime=dateConvectTime(`${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format('HH')}:${moment(ends.end).format('mm')}`)
+      let startTime=dateConvectTime(`${moment(starts.date).format('DD-MM-YYYY')} ${moment(starts.start).format('hh')}:${moment(starts.end).format('mm a')}`)
+      let endTime=dateConvectTime(`${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format('hh')}:${moment(ends.end).format('mm a')}`)
       let obj = {
         data: {
           step: 2,
@@ -156,7 +156,7 @@ export default function CreateEvent2() {
             mode={'time'}
             type={'dob'}
             value={
-              starts.start !== '' ? moment(starts.start).format('HH') : ''
+              starts.start !== '' ? moment(starts.start).format('hh') : ''
             }
             onChangeText={text => setstarts({...starts, start: text})}
             placeholder={'Time'}
@@ -167,7 +167,7 @@ export default function CreateEvent2() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={starts.end !== '' ? moment(starts.end).format('mm') : ''}
+            value={starts.end !== '' ? moment(starts.end).format('mm A') : ''}
             onChangeText={text => setstarts({...starts, end: text})}
             placeholder={'Time'}
           />
@@ -189,7 +189,7 @@ export default function CreateEvent2() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={ends.start !== '' ? moment(ends.start).format('HH') : ''}
+            value={ends.start !== '' ? moment(ends.start).format('hh') : ''}
             onChangeText={text => setends({...ends, start: text})}
             placeholder={'Time'}
           />
@@ -199,7 +199,7 @@ export default function CreateEvent2() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={ends.end !== '' ? moment(ends.end).format('mm') : ''}
+            value={ends.end !== '' ? moment(ends.end).format('mm A') : ''}
             onChangeText={text => setends({...ends, end: text})}
             placeholder={'Time'}
           />

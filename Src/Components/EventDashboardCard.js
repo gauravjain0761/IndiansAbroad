@@ -16,8 +16,9 @@ import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import {screenName} from '../Navigation/ScreenConstants';
 import {useNavigation} from '@react-navigation/native';
-import { dispatchAction } from '../utils/apiGlobal';
-import { SET_ACTIVE_EVENT } from '../Redux/ActionTypes';
+import {dispatchAction} from '../utils/apiGlobal';
+import {SET_ACTIVE_EVENT} from '../Redux/ActionTypes';
+import { getSaveListAction, getToggleFavoriteAction } from '../Services/PostServices';
 
 export default function EventDashboardCard({item, index}) {
   const {user} = useSelector(e => e.common);
@@ -41,6 +42,16 @@ export default function EventDashboardCard({item, index}) {
     } catch (error) {
       alert(error.message);
     }
+  };
+
+  const onStarPres = () => {
+    let obj = {
+      data: {
+        eventId:item?._id
+      },
+      onSuccess: () => {},
+    };
+    dispatch(getToggleFavoriteAction(obj));
   };
 
   return (
@@ -82,6 +93,7 @@ export default function EventDashboardCard({item, index}) {
               </TouchableOpacity>
             )}
             <TouchableOpacity
+              onPress={onStarPres}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image
                 source={item?.is_Saved ? Icons.star : Icons.starOutline}

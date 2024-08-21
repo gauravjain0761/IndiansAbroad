@@ -22,7 +22,7 @@ import CommonButton from '../../Components/CommonButton';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderText from '../../Components/RenderText';
 import moment from 'moment';
-import {getCurrenciesListAction, getDetailsListAction} from '../../Services/PostServices';
+import {getCurrenciesListAction, getDetailsListAction, getToggleFavoriteAction} from '../../Services/PostServices';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
@@ -34,6 +34,7 @@ export default function EventDetailScreen() {
     dispatch(getCurrenciesListAction())
  },[])
 
+ 
   useEffect(() => {
     getEventList();
   }, [activeEvent?._id]);
@@ -45,6 +46,17 @@ export default function EventDetailScreen() {
     };
     dispatch(getDetailsListAction(obj));
   };
+
+  const onStarPress = () => {
+    let obj = {
+      data: {
+        eventId:activeEvent?._id
+      },
+      onSuccess: () => {},
+    };
+    dispatch(getToggleFavoriteAction(obj));
+  };
+
 
   const RenderRowList = ({icon, title}) => {
     return (
@@ -125,7 +137,7 @@ export default function EventDetailScreen() {
               {activeEvent?.attendeeCount}
             </Text>
             <Image source={Icons.group} style={styles.usersIcon} />
-            <TouchableOpacity
+            <TouchableOpacity onPress={()=>onStarPress()}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image
                 source={activeEvent?.is_Saved ? Icons.star : Icons.starOutline}

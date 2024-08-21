@@ -60,8 +60,10 @@ export default function Input({ value, onChangeText, multiline = false, label, m
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode={mode}
+          is24Hour={false}
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
+          
         />
       </View>
       :

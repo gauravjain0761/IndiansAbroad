@@ -15,15 +15,15 @@ import {
   SET_ACTIVE_EVENT,
   GET_SAVE_EVENT,
 } from '../Redux/ActionTypes';
-import { getAsyncToken, setAsyncUserInfo } from '../utils/AsyncStorage';
-import { GET, POST, api } from '../utils/apiConstants';
+import {getAsyncToken, setAsyncUserInfo} from '../utils/AsyncStorage';
+import {GET, POST, api} from '../utils/apiConstants';
 import {
   dispatchAction,
   handleErrorRes,
   handleSuccessRes,
   makeAPIRequest,
 } from '../utils/apiGlobal';
-import { successToast } from '../utils/commonFunction';
+import {successToast} from '../utils/commonFunction';
 
 export const getalluserposts = request => async dispatch => {
   return makeAPIRequest({
@@ -51,7 +51,7 @@ export const onLikePost = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => { });
+      handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);
@@ -187,7 +187,7 @@ export const onCommentLike = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => { });
+      handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);
@@ -372,7 +372,7 @@ export const onDeletePostMedia = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => { });
+      handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);
@@ -467,12 +467,12 @@ export const getAttendeeCreateAction = request => async dispatch => {
     url: api.attendeeCreate,
     data: request?.data,
   })
-    .then(async response => {      
+    .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         // successToast(response?.data?.msg);
       });
     })
-    .catch(error => {      
+    .catch(error => {
       handleErrorRes(error, request, dispatch);
     });
 };
@@ -482,7 +482,7 @@ export const getTransactionDashboardAction = request => async dispatch => {
     method: GET,
     url: api.transactionDashboard,
   })
-    .then(async response => {      
+    .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {
@@ -496,14 +496,14 @@ export const getAttendeePaymentAction = request => async dispatch => {
     url: api.attendeePayment,
     data: request?.data,
   })
-    .then(async response => {      
+    .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         successToast(response?.data?.msg);
       });
     })
     .catch(error => {
-      console.log('errorerror',error.response);
-      
+      console.log('errorerror', error.response);
+
       handleErrorRes(error, request, dispatch);
     });
 };
@@ -521,7 +521,6 @@ export const getAttendeeGetByEventAction = request => async dispatch => {
     });
 };
 
-
 export const getSaveListAction = request => async dispatch => {
   return makeAPIRequest({
     method: GET,
@@ -529,12 +528,27 @@ export const getSaveListAction = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
-        console.log('response?.data?.favoriteEvents',response?.data?.favoriteEvents);
-        
-        dispatchAction(dispatch, GET_SAVE_EVENT, {
-          ...response?.data?.favoriteEvents,
-          current_page: request?.data?.page,
-        });
+        dispatchAction(
+          dispatch,
+          GET_SAVE_EVENT,
+          response?.data?.data?.favoriteEvents,
+        );
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getToggleFavoriteAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.attendeeToggleFavorite,
+    data:request?.data
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+       
       });
     })
     .catch(error => {

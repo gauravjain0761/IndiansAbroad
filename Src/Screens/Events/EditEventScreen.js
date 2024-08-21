@@ -36,7 +36,7 @@ import moment from 'moment';
 
 export default function EditEventScreen() {
   const navigation = useNavigation();
-  const {activeEvent, user,getCurrenciesList} = useSelector(e => e.common);
+  const {activeEvent, user, getCurrenciesList} = useSelector(e => e.common);
 
   const dispatch = useDispatch();
   const [image, setimage] = useState(null);
@@ -86,11 +86,11 @@ export default function EditEventScreen() {
   const onNextPress = () => {
     if (eventTitle.trim() == '') {
       errorToast('Please enter your event title');
-    }else if (!mobileNumberCheck(contact.trim())) {
+    } else if (!mobileNumberCheck(contact.trim())) {
       errorToast('Please enter a valid mobile number');
     } else if (discription.trim() == '') {
       errorToast('Please enter your Description');
-    } else  if (starts.date == '') {
+    } else if (starts.date == '') {
       errorToast('Please select starts date');
     } else if (starts.start == '') {
       errorToast('Please select start time');
@@ -114,12 +114,12 @@ export default function EditEventScreen() {
       let startTime = dateConvectTime(
         `${moment(starts.date).format('DD-MM-YYYY')} ${moment(
           starts.start,
-        ).format('HH')}:${moment(starts.end).format('mm')}`,
+        ).format('hh')}:${moment(starts.end).format('mm a')}`,
       );
       let endTime = dateConvectTime(
         `${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format(
-          'HH',
-        )}:${moment(ends.end).format('mm')}`,
+          'hh',
+        )}:${moment(ends.end).format('mm a')}`,
       );
       let data = {};
       if (image) {
@@ -239,7 +239,7 @@ export default function EditEventScreen() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={starts.start !== '' ? moment(starts.start).format('HH') : ''}
+            value={starts.start !== '' ? moment(starts.start).format('hh') : ''}
             onChangeText={text => setstarts({...starts, start: text})}
             placeholder={'Time'}
           />
@@ -249,7 +249,7 @@ export default function EditEventScreen() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={starts.end !== '' ? moment(starts.end).format('mm') : ''}
+            value={starts.end !== '' ? moment(starts.end).format('mm A') : ''}
             onChangeText={text => setstarts({...starts, end: text})}
             placeholder={'Time'}
           />
@@ -271,7 +271,7 @@ export default function EditEventScreen() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={ends.start !== '' ? moment(ends.start).format('HH') : ''}
+            value={ends.start !== '' ? moment(ends.start).format('hh') : ''}
             onChangeText={text => setends({...ends, start: text})}
             placeholder={'Time'}
           />
@@ -281,7 +281,7 @@ export default function EditEventScreen() {
             showCalenderIcon={false}
             mode={'time'}
             type={'dob'}
-            value={ends.end !== '' ? moment(ends.end).format('mm') : ''}
+            value={ends.end !== '' ? moment(ends.end).format('mm A') : ''}
             onChangeText={text => setends({...ends, end: text})}
             placeholder={'Time'}
           />

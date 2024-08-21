@@ -64,7 +64,7 @@ export default function SavedEvents() {
 
     const getData = () => {
         if (tabSelection == 'saved') {
-            //   getPostList(1);
+              getPostList(1);
         } else {
 
         }
@@ -149,7 +149,7 @@ export default function SavedEvents() {
                         }
                         data={allSave}
                         renderItem={renderEventItem}
-                        onEndReached={fetchMoreData}
+                        // onEndReached={fetchMoreData}
                         onEndReachedThreshold={0.3}
                         ListFooterComponent={() => {
                             return (
