@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import colors from '../Themes/Colors';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import {Icons} from '../Themes/Icons';
@@ -20,10 +20,11 @@ import {dispatchAction} from '../utils/apiGlobal';
 import {SET_ACTIVE_EVENT} from '../Redux/ActionTypes';
 import { getSaveListAction, getToggleFavoriteAction } from '../Services/PostServices';
 
-export default function EventDashboardCard({item, index}) {
+export default function EventDashboardCard({item, index,onRefresh}) {
   const {user} = useSelector(e => e.common);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [isSelect,setIsSelect]=useState(item?.is_favorite)
 
   const onSharePress = async link => {
     try {
@@ -49,7 +50,10 @@ export default function EventDashboardCard({item, index}) {
       data: {
         eventId:item?._id
       },
-      onSuccess: () => {},
+      onSuccess: () => {
+        onRefresh && onRefresh()
+        setIsSelect(!isSelect)
+      },
     };
     dispatch(getToggleFavoriteAction(obj));
   };
@@ -92,14 +96,14 @@ export default function EventDashboardCard({item, index}) {
                 <Image source={Icons.checkSquare} style={ImageStyle(20, 20)} />
               </TouchableOpacity>
             )}
-            <TouchableOpacity
+           {user?._id !== item?.createdBy && <TouchableOpacity
               onPress={onStarPres}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image
-                source={item?.is_Saved ? Icons.star : Icons.starOutline}
+                source={isSelect ? Icons.star : Icons.starOutline}
                 style={ImageStyle(20, 20)}
               />
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <TouchableOpacity
               onPress={() => onSharePress(item?.share_link)}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>

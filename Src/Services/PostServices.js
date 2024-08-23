@@ -529,7 +529,7 @@ export const getSaveListAction = request => async dispatch => {
         dispatchAction(
           dispatch,
           GET_SAVE_EVENT,
-          response?.data?.data?.favoriteEvents,
+          response?.data?.data,
         );
       });
     })
@@ -539,6 +539,9 @@ export const getSaveListAction = request => async dispatch => {
 };
 
 export const getToggleFavoriteAction = request => async dispatch => {
+  const token = await getAsyncToken();
+  console.log('token',token);
+  
   return makeAPIRequest({
     method: POST,
     url: api.attendeeToggleFavorite,
@@ -546,7 +549,43 @@ export const getToggleFavoriteAction = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
+       successToast(response?.data?.msg)
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
 
+export const organizerVerifyTicketAction = request => async dispatch => {
+  const token = await getAsyncToken();
+  console.log('token',token);
+  
+  return makeAPIRequest({
+    method: POST,
+    url: api.organizerVerifyTicket,
+    data:request?.data
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+       successToast(response?.data?.msg)
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const transactionDownloadTransAction = request => async dispatch => {
+  const token = await getAsyncToken();
+  console.log('token',token);
+  
+  return makeAPIRequest({
+    method: GET,
+    url: api.transactionDownloadTrans,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
       });
     })
     .catch(error => {

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation} from '@react-navigation/native';
@@ -27,6 +27,7 @@ import {getCurrenciesListAction, getDetailsListAction, getToggleFavoriteAction} 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
   const {activeEvent, user} = useSelector(e => e.common);
+  const [isSelect,setIsSelect]=useState(activeEvent?.is_favorite)
 
   const dispatch = useDispatch();
 
@@ -42,7 +43,9 @@ export default function EventDetailScreen() {
   const getEventList = page => {
     let obj = {
       data: activeEvent?._id,
-      onSuccess: () => {},
+      onSuccess: (res) => {
+        setIsSelect(res?.data?.is_favorite)        
+      },
     };
     dispatch(getDetailsListAction(obj));
   };
@@ -52,7 +55,9 @@ export default function EventDetailScreen() {
       data: {
         eventId:activeEvent?._id
       },
-      onSuccess: () => {},
+      onSuccess: () => {
+        setIsSelect(!isSelect)
+      },
     };
     dispatch(getToggleFavoriteAction(obj));
   };
@@ -137,13 +142,13 @@ export default function EventDetailScreen() {
               {activeEvent?.attendeeCount}
             </Text>
             <Image source={Icons.group} style={styles.usersIcon} />
-            <TouchableOpacity onPress={()=>onStarPress()}
+           {user?._id !== activeEvent?.createdBy && <TouchableOpacity onPress={()=>onStarPress()}
               style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image
-                source={activeEvent?.is_Saved ? Icons.star : Icons.starOutline}
+                source={isSelect ? Icons.star : Icons.starOutline}
                 style={ImageStyle(20, 20)}
               />
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <TouchableOpacity
               onPress={() => {
                 onSharePress(activeEvent?.share_link);
@@ -153,17 +158,17 @@ export default function EventDetailScreen() {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.blueView}>
+       {user?._id !== activeEvent?.createdBy && <View style={styles.blueView}>
           <RenderUserIcon url={''} height={40} />
           <View style={ApplicationStyles.flex}>
             <Text style={styles.name}>By {activeEvent?.page_owner}</Text>
             <Text style={styles.address}>Community page,London</Text>
           </View>
-          <CommonButton
+          {/* <CommonButton
             title={'Connect'}
             extraStyle={{width: 110, height: 50}}
-          />
-        </View>
+          /> */}
+        </View>}
         <View style={styles.postDescriptionView}>
           <Text style={FontStyle(14, colors.neutral_900, '700')}>
             Description

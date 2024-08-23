@@ -91,6 +91,7 @@ export const Icons = {
   pdf: require('../assets/Icons/pdf.png'),
   question: require('../assets/Icons/question.png'),
   cancelRequest: require('../assets/Icons/cancelRequest.png'),
+  gallery: require('../assets/Icons/gallery.png'),
   // files: require('../assets/Icons/files.png'),
 
 

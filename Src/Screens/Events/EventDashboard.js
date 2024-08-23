@@ -20,13 +20,14 @@ import RenderOngoingEventTable from '../../Components/RenderOngoingEventTable';
 import RenderDebitedTable from '../../Components/RenderDebitedTable';
 import RenderScanningTable from '../../Components/RenderScanningTable';
 import { screenName } from '../../Navigation/ScreenConstants';
-import { getTransactionDashboardAction } from '../../Services/PostServices';
+import { getTransactionDashboardAction, transactionDownloadTransAction } from '../../Services/PostServices';
 import NoDataFound from '../../Components/NoDataFound';
 
 export default function EventDashboard() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [dashBoard, setDashBoard] = useState({});
+  const [scanningData, setScanningData] = useState(undefined);
   const { user } = useSelector(e => e.common);
   const [ongoingEventsData, setOngoingEventsData] = useState([]);
   const [completedEventsData, setCompletedEventsData] = useState([]);
@@ -39,6 +40,12 @@ export default function EventDashboard() {
       },
     };
     dispatch(getTransactionDashboardAction(obj));
+    let obj1 = {
+      onSuccess: res => {
+        setScanningData(res?.data);
+      },
+    };
+    dispatch(transactionDownloadTransAction(obj1));
   }, []);
 
   const getFilteredEvents = list => {
@@ -147,7 +154,7 @@ export default function EventDashboard() {
               <View style={styles.boxView}>
                 <Text style={styles.title}>Scanning Data</Text>
               </View>
-              <RenderScanningTable />
+              <RenderScanningTable data={scanningData} />
             </>
           ) : (
             <NoDataFound

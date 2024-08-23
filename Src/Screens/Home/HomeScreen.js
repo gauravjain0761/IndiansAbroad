@@ -11,21 +11,21 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { fontname, screen_width, wp } from '../../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import {fontname, SCREEN_HEIGHT, screen_width, wp} from '../../Themes/Fonts';
+import {FontStyle, ImageStyle} from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import PostCard from '../../Components/PostCard';
 import CreatePost from '../../Components/CreatePost';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import { screenName } from '../../Navigation/ScreenConstants';
-import { getalluserEvent, getalluserposts } from '../../Services/PostServices';
-import { dispatchAction } from '../../utils/apiGlobal';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {screenName} from '../../Navigation/ScreenConstants';
+import {getalluserEvent, getalluserposts} from '../../Services/PostServices';
+import {dispatchAction} from '../../utils/apiGlobal';
 import {
   IS_LOADING,
   SET_ACTIVE_EVENT,
@@ -34,15 +34,15 @@ import {
   SET_ALL_EVENTS,
   SET_GLOBAL_SEARCH,
 } from '../../Redux/ActionTypes';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
-import { getFollowerList, onUpdateFbToken } from '../../Services/AuthServices';
-import { getDiscussionCountry } from '../../Services/DiscussionServices';
-import { io } from 'socket.io-client';
+import {getFollowerList, onUpdateFbToken} from '../../Services/AuthServices';
+import {getDiscussionCountry} from '../../Services/DiscussionServices';
+import {io} from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
-import { Icons } from '../../Themes/Icons';
-import { socket, socketConnect } from '../../Socket/Socket';
-import { onGetUnreadMsgCount } from '../../Services/ChatServices';
+import {Icons} from '../../Themes/Icons';
+import {socket, socketConnect} from '../../Socket/Socket';
+import {onGetUnreadMsgCount} from '../../Services/ChatServices';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const { allPost, allPostsCount, user, allEvent, allEventCount, fcmToken } =
+  const {allPost, allPostsCount, user, allEvent, allEventCount, fcmToken} =
     useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
@@ -62,7 +62,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (isFocuse) {
-      dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }));
+      dispatch(onGetUnreadMsgCount({data: {userId: user?._id}}));
     }
   }, [isFocuse]);
 
@@ -84,7 +84,7 @@ export default function HomeScreen() {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getData();
-    dispatch(getFollowerList({ data: { userId: user?._id, search: '' } }));
+    dispatch(getFollowerList({data: {userId: user?._id, search: ''}}));
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -112,10 +112,10 @@ export default function HomeScreen() {
     console.log('fcmToken---', fcmToken);
     if (fcmToken) {
       dispatch(
-        onUpdateFbToken({ data: { userId: user?._id, firebaseToken: fcmToken } }),
+        onUpdateFbToken({data: {userId: user?._id, firebaseToken: fcmToken}}),
       );
     }
-    dispatch(getFollowerList({ data: { userId: user?._id, search: '' } }));
+    dispatch(getFollowerList({data: {userId: user?._id, search: ''}}));
   }, []);
 
   const getData = () => {
@@ -151,7 +151,7 @@ export default function HomeScreen() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         activeOpacity={1}
@@ -165,18 +165,20 @@ export default function HomeScreen() {
     );
   };
 
-  const renderEventItem = ({ item, index }) => {
-    return (
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => {
-          dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
-          // dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
-          navigation.navigate(screenName.EventDetailScreen);
-        }}>
-        <EventDashboardCard item={item} index={index} />
-      </TouchableOpacity>
-    );
+  const renderEventItem = ({item, index}) => {
+    if(item?.is_Saved){
+      return (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
+            // dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+            navigation.navigate(screenName.EventDetailScreen);
+          }}>
+          <EventDashboardCard item={item} index={index} />
+        </TouchableOpacity>
+      );
+    }
   };
   const fetchMoreData = () => {
     if (tabSelection == 'Activity') {
@@ -252,7 +254,7 @@ export default function HomeScreen() {
       </View>
 
       <PagerView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         initialPage={tabSelectionIndex}
         ref={ref}
         onPageSelected={e => {
@@ -271,7 +273,7 @@ export default function HomeScreen() {
               dispatchAction(dispatch, SET_GLOBAL_SEARCH, undefined);
               navigation.navigate(screenName.SearchScreen);
             }}
-          // containerStyles={{top:-14}}
+            // containerStyles={{top:-14}}
           />
           {allPost && (
             <FlatList
@@ -288,7 +290,7 @@ export default function HomeScreen() {
                     {allPost && loading && (
                       <ActivityIndicator size={'large'} color={colors.black} />
                     )}
-                    <View style={{ height: 50 }} />
+                    <View style={{height: 50}} />
                   </View>
                 );
               }}
@@ -296,12 +298,19 @@ export default function HomeScreen() {
             />
           )}
         </View>
-        <View key={'2'} style={{ flex: 1 }}>
+        <View key={'2'} style={{flex: 1}}>
           <View style={styles.rowSearchView}>
-            <TouchableOpacity style={{ height: 43, width: 43, alignItems: 'center', justifyContent: 'center' }} onPress={() => navigation.navigate(screenName.SavedEvents)}>
+            <TouchableOpacity
+              style={{
+                height: 43,
+                width: 43,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onPress={() => navigation.navigate(screenName.SavedEvents)}>
               <Image style={styles.iconSearch} source={Icons.favorite} />
             </TouchableOpacity>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               <SearchBar
                 value={searchText}
                 onChangeText={text => setSearchText(text)}
@@ -311,39 +320,65 @@ export default function HomeScreen() {
                   navigation.navigate(screenName.SearchScreen);
                 }}
                 // inputViewStyle={{}}
-                containerStyles={{ paddingHorizontal: 0 }}
+                containerStyles={{paddingHorizontal: 0}}
               />
             </View>
-            <TouchableOpacity style={{ height: 43, width: 43, alignItems: 'center', justifyContent: 'center' }} onPress={() => navigation.navigate(screenName.EventDashboard)}>
+            <TouchableOpacity
+              style={{
+                height: 43,
+                width: 43,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              onPress={() => navigation.navigate(screenName.EventDashboard)}>
               <Image style={styles.iconSearch} source={Icons.calender} />
             </TouchableOpacity>
           </View>
-          {allEvent ? (
-            <FlatList
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-              data={allEvent}
-              renderItem={renderEventItem}
-              onEndReached={fetchMoreData}
-              onEndReachedThreshold={0.3}
-              ListFooterComponent={() => {
-                return (
-                  <View>
-                    {allEvent && loading && (
-                      <ActivityIndicator size={'large'} color={colors.black} />
-                    )}
-                    <View style={{ height: 50 }} />
-                  </View>
-                );
-              }}
-              ListEmptyComponent={
-                <NoDataFound text={'No local events at the moment. Keep an eye out!'} />
-              }
-            />
-          ) : (
-            <NoDataFound text={'No local events at the moment. Keep an eye out!'} />
-          )}
+          <View style={{flex: 1}}>
+            {allEvent ? (
+              <FlatList
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                data={allEvent}
+                contentContainerStyle={{flex: allEvent?.length !== 0 ? 0 : 1}}
+                renderItem={renderEventItem}
+                onEndReached={fetchMoreData}
+                onEndReachedThreshold={0.3}
+                ListFooterComponent={() => {
+                  return (
+                    <View>
+                      {allEvent && loading && (
+                        <ActivityIndicator
+                          size={'large'}
+                          color={colors.black}
+                        />
+                      )}
+                      <View style={{height: 50}} />
+                    </View>
+                  );
+                }}
+                ListEmptyComponent={
+                  <NoDataFound
+                    containerStyle={{
+                      top: SCREEN_HEIGHT * 0.15,
+                    }}
+                    text={'No local events at the moment.\nKeep an eye out!'}
+                  />
+                }
+              />
+            ) : (
+              <NoDataFound
+                containerStyle={{
+                  top: SCREEN_HEIGHT * 0.15,
+                }}
+                text={'No local events at the moment. Keep an eye out!'}
+              />
+            )}
+          </View>
           <TouchableOpacity
             onPress={() => onCreateEvent()}
             style={{
@@ -356,7 +391,7 @@ export default function HomeScreen() {
             }}>
             <Image
               source={Icons.plusPost}
-              style={[ImageStyle(46, 46), { tintColor: '#5278D9FF' }]}
+              style={[ImageStyle(46, 46), {tintColor: '#5278D9FF'}]}
             />
           </TouchableOpacity>
         </View>

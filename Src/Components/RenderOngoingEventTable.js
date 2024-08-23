@@ -138,6 +138,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 10,
     margin: 3,
+    width: 30,
+    height:30
   },
   btn: {
     backgroundColor: colors.primary_500,
