@@ -263,8 +263,8 @@ export default function IndiansDetails() {
               <Text style={styles.text1}>
                 {otherUserInfo?.universityORcompany}
               </Text>
-              {/* <Text style={styles.text2}>At</Text>
-          <Text style={styles.text1}>{otherUserInfo?.universityORcompany}</Text> */}
+              {otherUserInfo?.profession && <Text style={styles.text2}>As</Text>}
+              {otherUserInfo?.profession && <Text style={styles.text1}>{otherUserInfo?.profession}</Text>}
               {/* <Text style={styles.text2}>Link</Text>
           <Text style={styles.text1}>app.visily.ai</Text> */}
             </View>

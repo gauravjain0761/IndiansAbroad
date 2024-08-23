@@ -52,7 +52,7 @@ export const api = {
   attendeeGetByEvent: "/attendee/getByEvent",
   eventUpdate: "/event/update",
   attendeeGetUserEvents: "/attendee/getUserEvents",
-  attendeeToggleFavorite:"/attendee/toggleFavorite",
+  attendeeToggleFavorite: "/attendee/toggleFavorite",
 
 
 

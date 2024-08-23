@@ -32,7 +32,6 @@ const NotificationScreen = () => {
   };
 
   const onPressReq = (item, type) => {
-    console.log(item)
     let obj = {
       data: {
         userId: user?._id,

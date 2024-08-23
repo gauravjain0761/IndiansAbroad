@@ -46,32 +46,6 @@ export default function DiscussionForumDetail() {
         })
     }
 
-    const RenderReply = ({ item, index, isLastIndex }) => {
-        return (
-            <View style={styles.replyCommentView}>
-                <View style={[styles.replyCommnt, { alignItems: isLastIndex ? 'flex-start' : 'center' }]}>
-                    <View style={[styles.verticalLine, { height: isLastIndex ? '50%' : '100%' }]} />
-                    <View style={styles.horizontalLine} />
-                    <View style={styles.innerCommentRow}>
-                        <RenderUserIcon height={38} isBorder />
-                        <View style={styles.commentBg}>
-                            <View style={ApplicationStyles.flex}>
-                                <Text style={[styles.username, { fontSize: 15 }]}>Nikita Khairnar</Text>
-                                <Text style={[styles.degreeText, { fontSize: 12 }]}>PhD Student, Seoul</Text>
-                                <Text style={styles.commentText}>Nice</Text>
-                            </View>
-                            <View style={styles.innerRow}>
-                                <TouchableOpacity style={styles.likesRow}>
-                                    <Image source={Icons.heart} style={ImageStyle(15, 15)} />
-                                    <Text style={styles.likesText}>1 Likes</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </View>
-        )
-    }
 
     const RenderItem = ({ item, itemIndex }) => {
         return <RenderComment isThread={true} item={item} onOpenReplies={() => onOpenReplies(item)} onDelete={() => {

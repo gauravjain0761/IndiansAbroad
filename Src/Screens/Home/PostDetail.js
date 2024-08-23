@@ -93,37 +93,6 @@ export default function PostDetail() {
             setselectedComment(item)
             setdeleteModal(true)
         }} />
-
-        // return <View style={{ marginBottom: 10 }}>
-        //     <View style={styles.headerView}>
-        //         <RenderUserIcon url={item?.user?.avtar} height={53} isBorder />
-        //         <View style={styles.commentBg}>
-        //             <View style={ApplicationStyles.flex}>
-        //                 <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
-        //                 <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-        //                 <Text style={styles.commentText2}>{item?.comment}</Text>
-        //             </View>
-        //             <View style={styles.innerRow}>
-        //                 <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
-        //                     <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
-        //                     <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
-        //                 </TouchableOpacity>
-        //                 <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
-        //                     <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-        //                     <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
-        //                 </TouchableOpacity>
-        //             </View>
-        //             {item?.user?._id == user._id &&
-        //                 <TouchableOpacity onPress={() => {
-        //                     setselectedComment(item)
-        //                     setdeleteModal(true)
-        //                 }} style={{ position: 'absolute', bottom: 0, right: 0, padding: 10 }}>
-        //                     <Image source={Icons.trash} style={ImageStyle(20, 20)} />
-        //                 </TouchableOpacity>
-        //             }
-        //         </View>
-        //     </View>
-        // </View >
     }
 
     const onComment = () => {

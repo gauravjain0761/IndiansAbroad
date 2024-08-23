@@ -179,8 +179,6 @@ export default function EditProfile() {
     }
   }
 
-  console.log('user?.birthDate-------------', user?.birthDate)
-
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={'Update Profile'} showLeft onLeftPress={() => navigation.goBack()} logoShow={false} />

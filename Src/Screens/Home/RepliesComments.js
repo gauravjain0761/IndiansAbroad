@@ -87,7 +87,7 @@ export default function RepliesComments() {
                         <TouchableOpacity activeOpacity={0.8} onPress={() => onOpenOtherUserDetails()} style={styles.commentBg}>
                             <View style={ApplicationStyles.flex}>
                                 <Text numberOfLines={1} style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
-                                <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+                                <Text style={styles.degreeText}>{item?.createdBy?.profession}, {item?.createdBy?.region}</Text>
                                 <RenderText style={styles.commentText2} text={item?.reply}></RenderText>
                                 {/* <Text style={styles.commentText2}>{item?.reply}</Text> */}
                             </View>
@@ -160,7 +160,7 @@ export default function RepliesComments() {
                             <View style={styles.commentBg}>
                                 <View style={ApplicationStyles.flex}>
                                     <Text numberOfLines={1} style={styles.username}>{activeComment?.user ? activeComment?.user?.first_Name : activeComment?.createdBy?.first_Name} {activeComment?.user ? activeComment?.user?.last_Name : activeComment?.createdBy?.last_Name}</Text>
-                                    <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+                                    <Text style={styles.degreeText}>{activeComment?.user?.profession}, {activeComment?.user?.region}</Text>
                                     <Text style={styles.commentText2}>{activeComment?.comment}</Text>
                                 </View>
                             </View>

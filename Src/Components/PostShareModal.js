@@ -15,9 +15,9 @@ import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { onConnectRequest, onGetOtherUserInfo, onPagesConnectRequest, onPagesDisConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
+import { onCancelRequest, onConnectRequest, onGetOtherUserInfo, onPagesConnectRequest, onPagesDisConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, UPDATE_POST_LIST } from '../Redux/ActionTypes';
+import { SET_CONNECT_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, UPDATE_POST_LIST } from '../Redux/ActionTypes';
 
 export default function PostShareModal({
   shareView,
@@ -45,21 +45,30 @@ export default function PostShareModal({
           if (otherUserInfo) {
             dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo?._id, } }))
           }
-          if (item?.isFollowing) {
+          if (item?.isFollowing == 'following') {
             dispatchAction(dispatch, UPDATE_POST_LIST, {
               postId: item?._id,
               type: 'unfollow',
             });
+          } else if (item?.isFollowing == 'notfollowing') {
+            dispatchAction(dispatch, UPDATE_POST_LIST, {
+              postId: item?._id,
+              type: 'follow',
+            });
+          } else {
+            dispatchAction(dispatch, SET_CONNECT_REQUEST, { postId: item._id, type: 'remove' })
           }
         }
       }
-      if (item?.isFollowing) {
-        dispatch(onUnFollowRequest(obj))
+
+      if (item?.isFollowing == 'notfollowing') {
+        dispatch(onConnectRequest(obj));
+      } else if (item?.isFollowing == 'requested') {
+        dispatch(onCancelRequest(obj));
       } else {
-        dispatch(onConnectRequest(obj))
+        dispatch(onUnFollowRequest(obj));
       }
     }
-
   }
 
   const onBlock = () => {
@@ -92,6 +101,7 @@ export default function PostShareModal({
     dispatch(item?.isfollowing ? onPagesDisConnectRequest(obj) : onPagesConnectRequest(obj));
   };
 
+
   return (
     <ModalContainer
       isVisible={menuModal}
@@ -110,8 +120,12 @@ export default function PostShareModal({
             />
           </>
         )}
-        {!isPage && <TouchableOpacity onPress={() => isPage ? onPressPagesConnect() : onPressConnect()}>
-          <Text style={styles.modalText}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</Text>
+        {!isPage && <TouchableOpacity onPress={() => onPressConnect()}>
+          <Text style={styles.modalText}>{item?.isFollowing == 'notfollowing'
+            ? 'Connect'
+            : item?.isFollowing == 'requested'
+              ? 'Cancel Request'
+              : 'Disconnect'}</Text>
         </TouchableOpacity>}
         {!isPage && <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />}
         {!isPage && <TouchableOpacity onPress={() => onBlock()}>

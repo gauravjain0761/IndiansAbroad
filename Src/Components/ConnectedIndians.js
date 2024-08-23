@@ -15,7 +15,7 @@ import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { onBlockUserApi, onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
+import { onBlockUserApi, onCancelRequest, onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 
 
@@ -38,7 +38,13 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
         if (onUpdate) onUpdate()
       }
     }
-    dispatch(!item?.isFollowing ? onConnectRequest(obj) : onUnFollowRequest(obj))
+    if (item?.isFollowing == 'notfollowing') {
+      dispatch(onConnectRequest(obj));
+    } else if (item?.isFollowing == 'requested') {
+      dispatch(onCancelRequest(obj));
+    } else {
+      dispatch(onUnFollowRequest(obj));
+    }
   }
 
   const onBlockuser = () => {
@@ -58,6 +64,7 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
   }
 
 
+
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -74,7 +81,11 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
         onRequestClose={hideMenu}
         style={styles.menu}
       >
-        <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isFollowing ? 'Disconnect' : 'Connect'}</MenuItem>
+        <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isFollowing == 'notfollowing'
+          ? 'Connect'
+          : item?.isFollowing == 'requested'
+            ? 'Cancel Request'
+            : 'Disconnect'}</MenuItem>
         <MenuDivider color={colors.primary_500} />
         <MenuItem textStyle={styles.itemText} onPress={() => {
           hideMenu(), setTimeout(() => {

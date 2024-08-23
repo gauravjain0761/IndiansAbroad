@@ -15,7 +15,7 @@ import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { onBlockUserApi, onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
+import { onBlockUserApi, onCancelRequest, onConnectRequest, onUnFollowRequest } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 import { useNavigation } from '@react-navigation/native';
 
@@ -39,7 +39,14 @@ export default function PageConnectedIndians({ indians, cardPress, item, onUpdat
         if (onUpdate) onUpdate()
       }
     }
-    dispatch(!item?.isfollowing == 'following' ? onConnectRequest(obj) : onUnFollowRequest(obj))
+    if (item?.isfollowing == 'notfollowing') {
+      dispatch(onConnectRequest(obj));
+    } else if (item?.isfollowing == 'requested') {
+      dispatch(onCancelRequest(obj));
+    } else {
+      dispatch(onUnFollowRequest(obj));
+    }
+
   }
 
   const onBlockuser = () => {
@@ -58,7 +65,6 @@ export default function PageConnectedIndians({ indians, cardPress, item, onUpdat
     }, 500);
 
   }
-
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
@@ -75,7 +81,11 @@ export default function PageConnectedIndians({ indians, cardPress, item, onUpdat
         onRequestClose={hideMenu}
         style={styles.menu}
       >
-        <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isfollowing == 'following' ? 'Disconnect' : 'Connect'}</MenuItem>
+        <MenuItem textStyle={styles.itemText} onPress={() => onConnect()}>{item?.isfollowing == 'notfollowing'
+          ? 'Connect'
+          : item?.isfollowing == 'requested'
+            ? 'Cancel Request'
+            : 'Disconnect'}</MenuItem>
         <MenuDivider color={colors.primary_500} />
         <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setblockModal(true) }}>Block</MenuItem>
       </Menu>

@@ -102,6 +102,7 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         let arr = searchUserByName(mainFollowerList, 'followingId', search)
         setlist(arr)
     }
+
     return (
         <ModalContainer statusBarTranslucent={true} avoidKeyboard={false} isVisible={visible} onClose={() => onClose()} transparent={true} >
             <View style={styles.modalView}>
@@ -117,16 +118,16 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
                     placeholder={'Search'}
                     containerStyles={{ marginVertical: 5 }}
                 />
-                {list && <FlatList
+                {followerList && <FlatList
                     data={list}
                     renderItem={renderItem}
                     style={{ maxHeight: SCREEN_HEIGHT / 1.5 }}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<NoDataFound />}
                 />}
-                <TouchableOpacity onPress={() => onPressShare()} style={styles.blueButton}>
+                {list && list.length > 0 && <TouchableOpacity onPress={() => onPressShare()} style={styles.blueButton}>
                     <Text style={styles.publishText}>Share</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
                 <View style={{ paddingBottom: insets.bottom }} />
             </View>
         </ModalContainer>

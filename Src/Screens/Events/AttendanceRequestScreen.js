@@ -71,7 +71,6 @@ export default function AttendanceRequestScreen() {
           event_id: activeEvent?._id,
         },
         onSuccess: res => {
-          console.log('res?._id', res?.data?._id);
 
           // navigation.navigate(screenName.EventPaymentScreen);
           let obj = {
@@ -188,9 +187,8 @@ export default function AttendanceRequestScreen() {
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Platform fee</Text>
-            <Text style={styles.ticketText}>{`£${
-              activeEvent?.platformFees || 0
-            }`}</Text>
+            <Text style={styles.ticketText}>{`£${activeEvent?.platformFees || 0
+              }`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Total (Price+Tax)</Text>

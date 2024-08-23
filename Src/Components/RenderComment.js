@@ -39,7 +39,7 @@ export default function RenderComment({
                             onOpenOtherUserDetails()
                         }} activeOpacity={0.8} style={ApplicationStyles.flex}>
                             <Text numberOfLines={1} style={styles.username}>{item?.user ? item?.user?.first_Name : item?.createdBy?.first_Name} {item?.user ? item?.user?.last_Name : item?.createdBy?.last_Name}</Text>
-                            <Text style={styles.degreeText}>PhD Student, Seoul</Text>
+                            <Text style={styles.degreeText}>{item?.user?.profession}, {item?.user?.region}</Text>
                             {/* <Text style={styles.commentText2}>{item?.comment}</Text> */}
                         </TouchableOpacity>
                         <View style={styles.innerRow}>
@@ -62,35 +62,6 @@ export default function RenderComment({
                         }
                     </View>
                 </View>
-
-                {/* <View style={styles.commentBg}>
-
-
-
-
-
-
-                    <View style={ApplicationStyles.flex}>
-                        <Text numberOfLines={1} style={styles.username}>{item?.user?.first_Name} {item?.user?.last_Name}</Text>
-                        <Text style={styles.degreeText}>PhD Student, Seoul</Text>
-                        <Text style={styles.commentText2}>{item?.comment}</Text>
-                    </View>
-                    <View style={styles.innerRow}>
-                        <TouchableOpacity onPress={() => onLikeComment(item)} style={styles.likesRow}>
-                            <Image source={item?.isCommentLiked ? Icons.heartFilled : Icons.heart} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>{item?.commentlikeCount} Likes</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => onOpenReplies(item)} style={styles.likesRow}>
-                            <Image source={Icons.replyIcon} style={ImageStyle(15, 15)} />
-                            <Text style={styles.likesText}>{item?.replyCount} Reply</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {item?.user?._id == user._id &&
-                        <TouchableOpacity onPress={() => onDelete()} style={{ position: 'absolute', bottom: 0, right: 0, padding: 10 }}>
-                            <Image source={Icons.trash} style={ImageStyle(20, 20)} />
-                        </TouchableOpacity>
-                    }
-                </View> */}
             </View>
         </View >
     )

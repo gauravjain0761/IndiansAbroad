@@ -34,7 +34,6 @@ export default function ChatRoomUsersScreen() {
     const dispatch = useDispatch();
     const { navigate } = useNavigation();
     const { myPageChatUsers, myPage } = useSelector(e => e.common)
-    console.log('myPageChatUsers---', myPageChatUsers)
     const isFocuse = useIsFocused();
     const [refreshing, setRefreshing] = React.useState(false);
 

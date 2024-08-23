@@ -23,7 +23,6 @@ export default function PersonalUserDetailScreen() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectURI, setSelectURI] = useState('');
     const { params } = useRoute()
-    console.log('activeChatRoomUser-----', activeChatRoomUser)
     useEffect(() => {
         let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
         dispatch(onGetChatDetail(obj))

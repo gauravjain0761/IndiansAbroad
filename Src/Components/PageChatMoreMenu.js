@@ -12,7 +12,6 @@ export default function PageChatMoreMenu({ onReport, onPressDisconnect, visible,
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch()
     const { user, activeChatRoomUser, followerList, chatMessageList } = useSelector(e => e.common)
-    console.log(chatMessageList.length)
     return (
         <ModalContainer isVisible={visible} onClose={() => onClose()} >
             <View style={styles.modalView}>

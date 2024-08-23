@@ -23,7 +23,6 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
       // copyTo: DocumentPicker.
       type: [DocumentPicker.types.images, DocumentPicker.types.video, DocumentPicker.types.pdf]
     })
-    console.log(result)
 
     if (result.type !== DocumentPicker.types.pdf) {
       navigation.navigate(screenName.MediaWithInputScreen, { result: result })
