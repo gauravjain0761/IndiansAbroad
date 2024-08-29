@@ -42,11 +42,11 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
       data.content_type = result.type == DocumentPicker.types.pdf ? 'file/*' : result.type == DocumentPicker.types.images ? 'image/*' : ''
       data.chatId = activeChatRoomUser?.chatId
       data.readBy = user?._id
-      data['file[0]'] = [{
+      data['file'] = {
         uri: result.uri,
         type: result.type, // or photo.type image/jpg
         name: result.name
-      }]
+      }
       formDataApiCall(api.addMessage, data, (res) => {
         console.log('red-----', res)
         dispatchAction(dispatch, ADD_ONE_MESSAGE, res?.data)

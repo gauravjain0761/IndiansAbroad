@@ -27,7 +27,6 @@ const SenderMsg = ({ data }) => {
   const showMenu = () => setVisible(true);
   const [deletePostModal, setdeletePostModal] = useState(false)
   const [deleteFor, setdeleteFor] = useState(undefined)
-
   const onOpenPostDetail = () => {
     dispatchAction(dispatch, IS_LOADING, true);
 

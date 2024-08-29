@@ -46,11 +46,11 @@ export default function MediaWithInputScreen() {
         data.content_type = params?.result?.type?.includes('image') ? 'image/*' : 'video/*'
         data.chatId = activeChatRoomUser?.chatId
         data.readBy = user?._id
-        data['file'] = [{
+        data['file'] = {
             uri: params?.result.uri,
             type: params?.result.type, // or photo.type image/jpg
             name: params?.result.name
-        }]
+        }
         formDataApiCall(api.addMessage, data, (res) => {
             console.log('red-----', res)
             navigation.goBack()

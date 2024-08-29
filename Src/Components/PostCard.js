@@ -176,11 +176,11 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
                   {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}
                 </Text>
               </View>
-              {!isUser && (
-                <View>
-                  <Text style={styles.degreeText1}>{item?.createdBy?.profession}{item?.createdBy?.profession ? ', ' : ''}{item?.createdBy?.region}</Text>
-                </View>
-              )}
+              {/* {!isUser && ( */}
+              <View>
+                <Text style={styles.degreeText1}>{item?.createdBy?.profession}{item?.createdBy?.profession ? ', ' : ''}{item?.createdBy?.region}</Text>
+              </View>
+              {/* )} */}
               <Text style={styles.degreeText}>{item?.timeElapsed}</Text>
             </TouchableOpacity>
           }

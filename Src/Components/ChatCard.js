@@ -81,7 +81,7 @@ export default function ChatCard({ data, cardPress, isGroup }) {
               }, 500);
             }} style={styles.row}>
               <Image style={styles.image} source={Icons.trash} />
-              <Text style={styles.text}>Delete for everyone</Text>
+              <Text style={styles.text}>{'Delete chat'}</Text>
             </TouchableOpacity>
 
             <View style={{ paddingBottom: insets.bottom }} />

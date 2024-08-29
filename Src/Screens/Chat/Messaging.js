@@ -178,7 +178,6 @@ const Messaging = () => {
     }
   }
 
-
   return (
     <SafeAreaView style={styles.container}>
       <ChatHeader

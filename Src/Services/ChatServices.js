@@ -31,8 +31,6 @@ export const getChatMessage = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      console.log('getChatMessage',response);
-      
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, GET_CHAT_MESSAGES, { ...response?.data, current_page: request?.data?.page });
       });
@@ -66,8 +64,8 @@ export const onGetUnreadMsgCount = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      console.log('onGetUnreadMsgCount',response?.data);
-      
+      console.log('onGetUnreadMsgCount', response?.data);
+
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, SET_UNREAD_MSG_COUNT, response.data.data);
       });
