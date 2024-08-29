@@ -6,10 +6,10 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {
   emailCheck,
   errorToast,
@@ -18,12 +18,12 @@ import {
   mobileNumberCheck,
 } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { screenName } from '../../Navigation/ScreenConstants';
-import { wp } from '../../Themes/Fonts';
-import { Icons } from '../../Themes/Icons';
+import {useDispatch, useSelector} from 'react-redux';
+import {screenName} from '../../Navigation/ScreenConstants';
+import {wp} from '../../Themes/Fonts';
+import {Icons} from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
 import {
   getAttendeeCreateAction,
@@ -32,9 +32,11 @@ import {
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
-  const { user } = useSelector(e => e.common);
+  const {user} = useSelector(e => e.common);
   const dispatch = useDispatch();
-  const { activeEvent } = useSelector(e => e.common);
+  const {activeEvent} = useSelector(e => e.common);
+  const [show, setShow] = useState(false);
+  const [code, setcode] = useState('+1');
 
   const [inputData, setInputData] = useState({
     firstName: '',
@@ -46,7 +48,6 @@ export default function AttendanceRequestScreen() {
   const totalAmount =
     Number(activeEvent?.platformFees || 0) +
     Number(activeEvent?.event_fee) * inputData.numberOfTickets;
-
 
   const onNextPress = () => {
     if (inputData.firstName.trim() == '') {
@@ -62,7 +63,7 @@ export default function AttendanceRequestScreen() {
         data: {
           first_name: inputData.firstName,
           last_name: inputData.lastName,
-          phone_no: inputData.phone,
+          phone_no: `${inputData.phone}`,
           email: inputData.email,
           no_of_tickets: inputData.numberOfTickets,
           event_fees: activeEvent?.event_fee,
@@ -71,7 +72,6 @@ export default function AttendanceRequestScreen() {
           event_id: activeEvent?._id,
         },
         onSuccess: res => {
-
           // navigation.navigate(screenName.EventPaymentScreen);
           let obj = {
             data: {
@@ -112,33 +112,51 @@ export default function AttendanceRequestScreen() {
       />
       <KeyboardAwareScrollView extraScrollHeight={50}>
         <View style={styles.topView}>
-          <Text style={styles.title}>
-            {activeEvent?.title}
-          </Text>
+          <Text style={styles.title}>{activeEvent?.title}</Text>
           <Input
             value={inputData?.firstName}
             label={'Your first name *'}
             placeholder={''}
-            onChangeText={text => setInputData({ ...inputData, firstName: text })}
+            onChangeText={text => setInputData({...inputData, firstName: text})}
           />
           <Input
             value={inputData?.lastName}
             label={'Your last name *'}
             placeholder={''}
-            onChangeText={text => setInputData({ ...inputData, lastName: text })}
+            onChangeText={text => setInputData({...inputData, lastName: text})}
           />
-          <Input
+          <View style={[styles.inputrow, {marginBottom: 0, marginTop: wp(0)}]}>
+            <View>
+            <Text style={styles.labelText1}>{"Country *"}</Text>
+            <TouchableOpacity
+              style={styles.inputContainer}
+              onPress={() => setShow(true)}>
+              <Text style={styles.inputText1}>{code}</Text>
+              <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
+            </TouchableOpacity>
+            </View>
+            <Input
+              extraStyle={[{flex: 1, marginTop: wp(0)}]}
+              keyboardType={'phone-pad'}
+              label={'Phone No *'}
+              value={inputData?.phone}
+              placeholder={'Mobile Number'}
+              maxLength={10}
+              onChangeText={text => setInputData({...inputData, phone: text})}
+            />
+          </View>
+          {/* <Input
             value={inputData?.phone}
             label={'Phone No *'}
             placeholder={''}
             maxLength={10}
             onChangeText={text => setInputData({ ...inputData, phone: text })}
-          />
+          /> */}
           <Input
             value={inputData?.email}
             label={'Your email *'}
             placeholder={''}
-            onChangeText={text => setInputData({ ...inputData, email: text })}
+            onChangeText={text => setInputData({...inputData, email: text})}
           />
           <View style={styles.ticketView}>
             <Text style={styles.labelText}>No of tickets *</Text>
@@ -154,7 +172,7 @@ export default function AttendanceRequestScreen() {
                   style={styles.numberBtn}>
                   <Image
                     source={Icons.minus}
-                    style={[ImageStyle(10, 10), { tintColor: colors.white }]}
+                    style={[ImageStyle(10, 10), {tintColor: colors.white}]}
                   />
                 </TouchableOpacity>
               )}
@@ -173,7 +191,7 @@ export default function AttendanceRequestScreen() {
                 style={styles.numberBtn}>
                 <Image
                   source={Icons.add}
-                  style={[ImageStyle(12, 12), { tintColor: colors.white }]}
+                  style={[ImageStyle(12, 12), {tintColor: colors.white}]}
                 />
               </TouchableOpacity>
             </View>
@@ -187,8 +205,9 @@ export default function AttendanceRequestScreen() {
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Platform fee</Text>
-            <Text style={styles.ticketText}>{`£${activeEvent?.platformFees || 0
-              }`}</Text>
+            <Text style={styles.ticketText}>{`£${
+              activeEvent?.platformFees || 0
+            }`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Total (Price+Tax)</Text>
@@ -199,25 +218,25 @@ export default function AttendanceRequestScreen() {
           <CommonButton
             onPress={() => onNextPress()}
             title={'Checkout'}
-            extraStyle={{ width: 140, height: 45 }}
+            extraStyle={{width: 140, height: 45}}
           />
         </View>
-        <Text style={[styles.ticketText, { textAlign: 'center' }]}>
+        <Text style={[styles.ticketText, {textAlign: 'center'}]}>
           {'\n'}IndiansAbroad{'\n'}
         </Text>
-        <Text style={[styles.leftText, { textAlign: 'center' }]}>
+        <Text style={[styles.leftText, {textAlign: 'center'}]}>
           Secure payments via
         </Text>
-        <Text style={[styles.leftText, { textAlign: 'center' }]}>
+        <Text style={[styles.leftText, {textAlign: 'center'}]}>
           We accept Visa
         </Text>
-        <Text style={[styles.leftText, { textAlign: 'center' }]}>
+        <Text style={[styles.leftText, {textAlign: 'center'}]}>
           We accept Mastercard
         </Text>
-        <Text style={[styles.leftText, { textAlign: 'center' }]}>
+        <Text style={[styles.leftText, {textAlign: 'center'}]}>
           We accept Maestro
         </Text>
-        <View style={{ marginBottom: 100 }} />
+        <View style={{marginBottom: 100}} />
       </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -228,6 +247,12 @@ const styles = StyleSheet.create({
     ...FontStyle(20, colors.neutral_900, '700'),
     textAlign: 'center',
     marginBottom: 10,
+  },
+  labelText1: {
+    ...FontStyle(15, colors.neutral_900),
+    // marginHorizontal: wp(20),
+    marginBottom: 4,
+    marginTop: 8,
   },
   topView: {
     paddingHorizontal: wp(16),
@@ -288,4 +313,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title2: {},
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: colors.neutral_500,
+    backgroundColor: colors.inputBg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    height: 56,
+  },
+  inputText1: {
+    ...FontStyle(15, colors.neutral_900),
+    // flex: 1,
+    // paddingVertical: 4,
+    borderRadius: 5,
+    paddingRight: 10,
+    // paddingVertical: Platform.OS == 'ios' ? 19 : 6,
+
+    // marginTop:12
+  },
+  inputrow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+    marginBottom: 20,
+  },
 });

@@ -92,17 +92,9 @@ export default function EditEventScreen() {
       errorToast('Please enter your Description');
     } else if (starts.date == '') {
       errorToast('Please select starts date');
-    } else if (starts.start == '') {
-      errorToast('Please select start time');
-    } else if (starts.end == '') {
-      errorToast('Please select end time');
-    } else if (ends.date == '') {
+    }  else if (ends.date == '') {
       errorToast('Please select ends date');
-    } else if (ends.start == '') {
-      errorToast('Please select start time');
-    } else if (ends.end == '') {
-      errorToast('Please select end time');
-    } else if (link.trim() == '') {
+    }  else if (link.trim() == '') {
       errorToast('Please enter your address');
     } else if (currency == '') {
       errorToast('Please enter select currency');
@@ -226,15 +218,17 @@ export default function EditEventScreen() {
             extraStyle={{flex: 1}}
             showCalenderIcon={false}
             type={'dob'}
+            mode='datetime'
+            date={starts.date}
             value={
               starts.date !== ''
-                ? moment(starts.date).format('MMM,DD YYYY')
+                ? moment(starts.date).format('MMM,DD YYYY hh:mm A')
                 : ''
             }
             onChangeText={text => setstarts({...starts, date: text})}
             placeholder={'Choose Date'}
           />
-          <Input
+          {/* <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
@@ -252,7 +246,7 @@ export default function EditEventScreen() {
             value={starts.end !== '' ? moment(starts.end).format('mm A') : ''}
             onChangeText={text => setstarts({...starts, end: text})}
             placeholder={'Time'}
-          />
+          /> */}
         </View>
         <Text style={[styles.labelText]}>Ends</Text>
         <View style={styles.rowViewDate}>
@@ -260,13 +254,15 @@ export default function EditEventScreen() {
             extraStyle={{flex: 1}}
             showCalenderIcon={false}
             type={'dob'}
+            mode='datetime'
+            date={ends.date}
             value={
-              ends.date !== '' ? moment(ends.date).format('MMM,DD YYYY') : ''
+              ends.date !== '' ?  moment(ends.date).format('MMM,DD YYYY hh:mm A') : ''
             }
             onChangeText={text => setends({...ends, date: text})}
             placeholder={'Choose Date'}
           />
-          <Input
+          {/* <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
@@ -284,7 +280,7 @@ export default function EditEventScreen() {
             value={ends.end !== '' ? moment(ends.end).format('mm A') : ''}
             onChangeText={text => setends({...ends, end: text})}
             placeholder={'Time'}
-          />
+          /> */}
         </View>
         <Text style={styles.labelText}>Event fee</Text>
         <View style={styles.rowViewDate}>

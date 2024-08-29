@@ -36,7 +36,7 @@ import {
 } from '../../Redux/ActionTypes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
-import { onUpdateFbToken} from '../../Services/AuthServices';
+import {onUpdateFbToken} from '../../Services/AuthServices';
 import {getDiscussionCountry} from '../../Services/DiscussionServices';
 import {io} from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
@@ -115,7 +115,6 @@ export default function HomeScreen() {
         onUpdateFbToken({data: {userId: user?._id, firebaseToken: fcmToken}}),
       );
     }
-
     dispatch(getFollowerList({data: {userId: user?._id, search: ''}}));
   }, []);
 

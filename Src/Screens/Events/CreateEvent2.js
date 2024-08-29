@@ -40,21 +40,12 @@ export default function CreateEvent2() {
   const [address, setaddress] = useState('');
 
 
-
   const onNextPress = () => {
     if (starts.date == '') {
       errorToast('Please select starts date');
-    } else if (starts.start == '') {
-      errorToast('Please select start time');
-    } else if (starts.end == '') {
-      errorToast('Please select end time');
     } else if (ends.date == '') {
       errorToast('Please select ends date');
-    } else if (ends.start == '') {
-      errorToast('Please select start time');
-    } else if (ends.end == '') {
-      errorToast('Please select end time');
-    } else if (address.trim() == '') {
+    }  else if (address.trim() == '') {
       errorToast('Please enter your address');
     } else if (currency.trim() == '') {
       errorToast('Please enter select currency');
@@ -63,16 +54,16 @@ export default function CreateEvent2() {
     } else if (available.trim() == '') {
       errorToast('Please enter your tickets available');
     } else {
-      let startTime=dateConvectTime(`${moment(starts.date).format('DD-MM-YYYY')} ${moment(starts.start).format('hh')}:${moment(starts.end).format('mm a')}`)
-      let endTime=dateConvectTime(`${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format('hh')}:${moment(ends.end).format('mm a')}`)
+      // let startTime=dateConvectTime(`${moment(starts.date).format('DD-MM-YYYY')} ${moment(starts.start).format('hh')}:${moment(starts.end).format('mm a')}`)
+      // let endTime=dateConvectTime(`${moment(ends.date).format('DD-MM-YYYY')} ${moment(ends.start).format('hh')}:${moment(ends.end).format('mm a')}`)
       let obj = {
         data: {
           step: 2,
           event_id: params?.createId,
           event_type: type,
           address: address,
-          start_time: startTime,
-          end_time: endTime,
+          start_time: starts.date,
+          end_time: ends.date,
           event_fee: price,
           no_of_tickets: available,
           currency:currency
@@ -141,16 +132,17 @@ export default function CreateEvent2() {
             extraStyle={{flex: 1}}
             showCalenderIcon={false}
             type={'dob'}
+            mode='datetime'
             value={
               starts.date !== ''
-                ? moment(starts.date).format('MMM,DD YYYY')
+                ? moment(starts.date).format('MMM,DD YYYY hh:mm A')
                 : ''
             }
             onChangeText={text => setstarts({...starts, date: text})}
-            placeholder={'Choose Date'}
+            placeholder={'Choose Date and Time'}
           />
 
-          <Input
+          {/* <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
@@ -170,7 +162,7 @@ export default function CreateEvent2() {
             value={starts.end !== '' ? moment(starts.end).format('mm A') : ''}
             onChangeText={text => setstarts({...starts, end: text})}
             placeholder={'Time'}
-          />
+          /> */}
         </View>
         <Text style={[styles.title, {marginTop: 20}]}>Ends</Text>
         <View style={styles.rowViewDate}>
@@ -178,13 +170,14 @@ export default function CreateEvent2() {
             extraStyle={{flex: 1}}
             showCalenderIcon={false}
             type={'dob'}
+            mode='datetime'
             value={
-              ends.date !== '' ? moment(ends.date).format('MMM,DD YYYY') : ''
+              ends.date !== '' ? moment(ends.date).format('MMM,DD YYYY hh:mm A') : ''
             }
             onChangeText={text => setends({...ends, date: text})}
-            placeholder={'Choose Date'}
+            placeholder={'Choose Date and Time'}
           />
-          <Input
+          {/* <Input
             extraStyle={{width: '25%'}}
             showCalenderIcon={false}
             mode={'time'}
@@ -202,7 +195,7 @@ export default function CreateEvent2() {
             value={ends.end !== '' ? moment(ends.end).format('mm A') : ''}
             onChangeText={text => setends({...ends, end: text})}
             placeholder={'Time'}
-          />
+          /> */}
         </View>
         <Text style={styles.title}>Event fee</Text>
         <View style={styles.rowViewDate}>
