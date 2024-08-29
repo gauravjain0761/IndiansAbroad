@@ -25,8 +25,8 @@ import RenderUserIcon from '../../Components/RenderUserIcon';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IS_LOADING } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
-import { getFollowerList } from '../../Services/AuthServices';
 import { onOpenNewChatForUser } from '../../Services/ChatServices';
+import { getFollowerList } from '../../Services/PostServices';
 
 export default function MyConnections() {
   const { navigate, goBack } = useNavigation();

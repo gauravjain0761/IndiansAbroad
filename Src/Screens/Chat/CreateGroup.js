@@ -19,7 +19,6 @@ import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../../Redux/ActionTypes';
 import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import NoDataFound from '../../Components/NoDataFound';
 import CommonButton from '../../Components/CommonButton';
-import { getFollowerList } from '../../Services/AuthServices';
 import { onGetGroupCreateUser } from '../../Services/ChatServices';
 import { api } from '../../utils/apiConstants';
 

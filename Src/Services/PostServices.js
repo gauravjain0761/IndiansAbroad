@@ -14,6 +14,7 @@ import {
   GET_ALL_CURRENCIES,
   SET_ACTIVE_EVENT,
   GET_SAVE_EVENT,
+  SET_FOLLOWER_LIST,
 } from '../Redux/ActionTypes';
 import { getAsyncToken, setAsyncUserInfo } from '../utils/AsyncStorage';
 import { GET, POST, api } from '../utils/apiConstants';
@@ -24,6 +25,23 @@ import {
   makeAPIRequest,
 } from '../utils/apiGlobal';
 import { successToast } from '../utils/commonFunction';
+
+export const getFollowerList = (request) => async dispatch => {
+    return makeAPIRequest({
+        method: POST,
+        url: api.otherUserFollowList,
+        data: request?.data
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                dispatchAction(dispatch, SET_FOLLOWER_LIST, response?.data?.data)
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
 
 export const getalluserposts = request => async dispatch => {
   return makeAPIRequest({
@@ -85,6 +103,7 @@ export const getallIndianUser = request => async dispatch => {
       if (response?.status === 200 || response?.status === 201) {
         dispatchAction(dispatch, IS_LOADING, false);
         if (response?.data && response?.data?.err == 200) {
+          if (request?.onSuccess) request?.onSuccess(response?.data);
           dispatchAction(dispatch, SET_ALL_INDIANS, {
             ...response?.data,
             current_page: request?.data?.page,
@@ -115,10 +134,12 @@ export const getallPagesUser = request => async dispatch => {
       if (response?.status === 200 || response?.status === 201) {
         dispatchAction(dispatch, IS_LOADING, false);
         if (response?.data && response?.data?.err == 200) {
+         
           dispatchAction(dispatch, SET_ALL_PAGES, {
             ...response?.data,
             current_page: request?.params?.page,
           });
+          if (request?.onSuccess) request?.onSuccess(response?.data);
         } else {
           if (response?.data && response?.data?.err == 300) {
             dispatchAction(dispatch, SET_ALL_PAGES, {

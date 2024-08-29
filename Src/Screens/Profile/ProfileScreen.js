@@ -40,9 +40,9 @@ import {
   SET_ACTIVE_POST_COMMENTS,
 } from '../../Redux/ActionTypes';
 import NoDataFound from '../../Components/NoDataFound';
-import { getFollowerList } from '../../Services/AuthServices';
 import ImageModalShow from '../../Components/ImageModal';
 import { api } from '../../utils/apiConstants';
+import { getFollowerList } from '../../Services/PostServices';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();

@@ -3,14 +3,13 @@ import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, Image } fro
 import ModalContainer from './ModalContainer';
 import colors from '../Themes/Colors';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFollowerList } from '../Services/AuthServices';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { SCREEN_HEIGHT, fontname, hp, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 import { FontStyle, ImageStyle, errorToast, searchUserByName } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { onShareApi } from '../Services/PostServices';
+import { getFollowerList, onShareApi } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
 import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../Redux/ActionTypes';
 import SearchBar from './SearchBar';

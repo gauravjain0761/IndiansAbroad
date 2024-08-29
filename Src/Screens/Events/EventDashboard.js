@@ -6,21 +6,24 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
-import { wp } from '../../Themes/Fonts';
-import { FontStyle } from '../../utils/commonFunction';
+import {wp} from '../../Themes/Fonts';
+import {FontStyle} from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderOngoingEventTable from '../../Components/RenderOngoingEventTable';
 import RenderDebitedTable from '../../Components/RenderDebitedTable';
 import RenderScanningTable from '../../Components/RenderScanningTable';
-import { screenName } from '../../Navigation/ScreenConstants';
-import { getTransactionDashboardAction, transactionDownloadTransAction } from '../../Services/PostServices';
+import {screenName} from '../../Navigation/ScreenConstants';
+import {
+  getTransactionDashboardAction,
+  transactionDownloadTransAction,
+} from '../../Services/PostServices';
 import NoDataFound from '../../Components/NoDataFound';
 
 export default function EventDashboard() {
@@ -28,7 +31,7 @@ export default function EventDashboard() {
   const navigation = useNavigation();
   const [dashBoard, setDashBoard] = useState({});
   const [scanningData, setScanningData] = useState(undefined);
-  const { user } = useSelector(e => e.common);
+  const {user} = useSelector(e => e.common);
   const [ongoingEventsData, setOngoingEventsData] = useState([]);
   const [completedEventsData, setCompletedEventsData] = useState([]);
 
@@ -163,32 +166,35 @@ export default function EventDashboard() {
           )}
         </ScrollView>
         {dashBoard && dashBoard?.events?.length !== 0 && (
-          <View style={{ paddingHorizontal: 10, marginTop: 10 }}>
+          <View style={{paddingHorizontal: 10, marginTop: 10}}>
             <Text style={styles.title}>Withdraw</Text>
             <View style={styles.withdrawView}>
-              <View style={{ flex: 1, marginVertical: 10, paddingLeft: 5 }}>
+              <View style={{flex: 1, marginVertical: 10, paddingLeft: 5}}>
                 <Text style={styles.totalText}>Total balance remaining</Text>
               </View>
               <View style={styles.line} />
               <View
-                style={{ flex: 1, marginVertical: 10, justifyContent: 'center' }}>
+                style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
                 <View style={styles.priceViewTotal}>
-                  <Text
-                    style={FontStyle(
-                      12,
-                      colors.primary_500,
-                    )}>{`£${dashBoard?.balance}`}</Text>
+                  <Text style={FontStyle(12, colors.primary_500)}>
+                    {dashBoard?.balance ? `£${dashBoard?.balance}` : 0}
+                  </Text>
                 </View>
               </View>
               <View style={styles.line} />
-              <View
-                style={{ flex: 1, marginVertical: 10, justifyContent: 'center' }}>
-                <View style={styles.btn}>
+              <TouchableOpacity
+                disabled={dashBoard?.balance == 0}
+                style={{flex: 1, marginVertical: 10, justifyContent: 'center'}}>
+                <View
+                  style={[
+                    styles.btn,
+                    {opacity: dashBoard?.balance == 0 ? 0.9 : 1},
+                  ]}>
                   <Text style={FontStyle(11, colors.white)}>
                     Request Payout
                   </Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         )}

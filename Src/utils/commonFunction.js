@@ -60,8 +60,8 @@ export const mergeJsonArraysByID = (...jsonArrays) => {
   const mergedObj = {};
 
   // Iterate over each JSON array
-  jsonArrays.forEach(array => {
-    array.forEach(item => {
+  jsonArrays?.forEach(array => {
+    array?.forEach(item => {
       // Use the unique key (id) to manage entries
       mergedObj[item._id] = { ...mergedObj[item._id], ...item };
     });
@@ -73,14 +73,14 @@ export const mergeJsonArraysByID = (...jsonArrays) => {
 
 export const searchUserByName = (mainArray, field1, searchText) => {
   let list = mainArray
-  const filtered = list.filter((val) =>
+  const filtered = list?.filter((val) =>
     field1 ? val[field1]['first_Name'].toLowerCase().includes(searchText.toLowerCase()) : val['first_Name'].toLowerCase().includes(searchText.toLowerCase())
   );
-  const filter2 = list.filter((val) =>
+  const filter2 = list?.filter((val) =>
     field1 ? val[field1]['last_Name'].toLowerCase().includes(searchText.toLowerCase()) : val['last_Name'].toLowerCase().includes(searchText.toLowerCase())
 
   );
-  const filter3 = list.filter((val) =>
+  const filter3 = list?.filter((val) =>
     field1 ? (val[field1]['first_Name'] + ' ' + val[field1]['last_Name']).toLowerCase().includes(searchText.toLowerCase()) : (val['first_Name'] + ' ' + val['last_Name']).toLowerCase().includes(searchText.toLowerCase())
   );
   let arr = mergeJsonArraysByID(filtered, filter2, filter3);

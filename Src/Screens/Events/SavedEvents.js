@@ -36,7 +36,6 @@ import {
 } from '../../Redux/ActionTypes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
-import {getFollowerList} from '../../Services/AuthServices';
 import {getDiscussionCountry} from '../../Services/DiscussionServices';
 import {io} from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';

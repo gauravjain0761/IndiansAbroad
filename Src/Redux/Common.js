@@ -134,7 +134,7 @@ export default function (state = initialState, action) {
         allSave: action.payload,
       };
     }
-    case SET_ALL_INDIANS: {
+    case SET_ALL_INDIANS: {      
       return {
         ...state,
         allIndian:
@@ -254,7 +254,19 @@ export default function (state = initialState, action) {
       return { ...state, blockUserList };
     }
     case SET_ACTIVE_POST: {
-      return { ...state, activePost: action.payload };
+      const updateData=state.allPost.map((list)=>{
+            if(list?._id==action.payload?._id){
+              return {
+                ...list,
+                commentCount:action.payload?.commentCount
+              }
+            }else{
+              return {
+                ...list
+              }
+            }
+      })
+      return { ...state, activePost: action.payload,allPost:updateData };
     }
     case SET_ACTIVE_EVENT: {
       return { ...state, activeEvent: action.payload };

@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { hp, wp } from '../../Themes/Fonts';
 import { FontStyle, ImageStyle, searchUserByName } from '../../utils/commonFunction';
-import { getFollowerList } from '../../Services/AuthServices';
 import { dispatchAction } from '../../utils/apiGlobal';
 import { SET_MAIN_FOLLOWER_LIST } from '../../Redux/ActionTypes';
 import SearchBar from '../../Components/SearchBar';

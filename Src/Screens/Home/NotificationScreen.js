@@ -1,31 +1,43 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
-import { FontStyle } from '../../utils/commonFunction';
-import { hp, wp } from '../../Themes/Fonts';
+import {FontStyle} from '../../utils/commonFunction';
+import {hp, wp} from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
-import { onAcceptRejectRequest, onGetNotification } from '../../Services/AuthServices';
+import {useNavigation} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  onAcceptRejectRequest,
+  onGetNotification,
+} from '../../Services/AuthServices';
 import NoDataFound from '../../Components/NoDataFound';
 import RenderUserIcon from '../../Components/RenderUserIcon';
-import { dispatchAction } from '../../utils/apiGlobal';
-import { IS_LOADING } from '../../Redux/ActionTypes';
+import {dispatchAction} from '../../utils/apiGlobal';
+import {IS_LOADING} from '../../Redux/ActionTypes';
 import moment from 'moment';
 
 const NotificationScreen = () => {
   const [categories, setCategories] = useState('All');
-  const { goBack } = useNavigation();
-  const { user, notificationList } = useSelector(e => e.common)
-  const dispatch = useDispatch()
-  const [notiArray, setnotiArray] = useState(undefined)
+  const {goBack} = useNavigation();
+  const {user, notificationList} = useSelector(e => e.common);
+  const dispatch = useDispatch();
+  const [notiArray, setnotiArray] = useState(undefined);
 
   useEffect(() => {
-    if (!notificationList) { dispatchAction(dispatch, IS_LOADING, true) }
-    dispatch(onGetNotification({ data: { loginUserId: user?._id } }))
-  }, [])
+    if (!notificationList) {
+      dispatchAction(dispatch, IS_LOADING, true);
+    }
+    dispatch(onGetNotification({data: {loginUserId: user?._id}}));
+  }, []);
 
   const onPressBack = () => {
     goBack();
@@ -37,16 +49,16 @@ const NotificationScreen = () => {
         userId: user?._id,
         requestedId: item?.createdBy?._id,
         action: type,
-        notificationId: item?._id
+        notificationId: item?._id,
       },
       onSuccess: () => {
-        dispatch(onGetNotification({ data: { loginUserId: user?._id } }))
+        dispatch(onGetNotification({data: {loginUserId: user?._id}}));
       },
-    }
-    dispatch(onAcceptRejectRequest(obj))
-  }
+    };
+    dispatch(onAcceptRejectRequest(obj));
+  };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <>
         {item?.type !== 'follow-request' ? (
@@ -55,7 +67,10 @@ const NotificationScreen = () => {
               <RenderUserIcon url={item?.createdBy?.avtar} height={45} />
               <View style={styles.nameContainer}>
                 <Text style={styles.name}>
-                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name} {item?.type == 'message' ? 'has sent you a message' : item?.title.trim()}
+                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
+                  {item?.type == 'message'
+                    ? 'has sent you a message'
+                    : item?.title.trim()}
                 </Text>
               </View>
               <Text style={styles.time}>{item?.createdAt}</Text>
@@ -67,13 +82,18 @@ const NotificationScreen = () => {
               <RenderUserIcon url={item?.createdBy?.avtar} height={45} />
               <View style={styles.centerContainer}>
                 <Text style={styles.name}>
-                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name} {item?.title.trim()}
+                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
+                  {item?.title.trim()}
                 </Text>
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity onPress={() => onPressReq(item, 'accept')} style={styles.button}>
+                  <TouchableOpacity
+                    onPress={() => onPressReq(item, 'accept')}
+                    style={styles.button}>
                     <Text style={styles.buttonText}>{'Accept'}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => onPressReq(item, 'reject')} style={styles.button}>
+                  <TouchableOpacity
+                    onPress={() => onPressReq(item, 'reject')}
+                    style={styles.button}>
                     <Text style={styles.buttonText}>{'Ignore'}</Text>
                   </TouchableOpacity>
                 </View>
@@ -90,32 +110,111 @@ const NotificationScreen = () => {
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header logoShow={false} onLeftPress={onPressBack} showLeft />
       <Text style={styles.title}>{'Notifications'}</Text>
-      {notificationList && <View style={styles.categoriesContainer}>
-        <TouchableOpacity onPress={() => setCategories('All')}>
-          <Text style={[styles.categoriesTitle, { color: categories == 'All' ? colors?.tertiary1_500 : colors?.black, },]}>
-            {`All`}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setCategories('Requests')}>
-          <Text style={[styles.categoriesTitle, { color: categories == 'Requests' ? colors?.tertiary1_500 : colors?.black, },]}>
-            {`Connection Invite(${notificationList.filter(obj => obj?.type == 'follow-request').length})`}
-          </Text>
-        </TouchableOpacity>
-      </View>}
-      {notificationList && <ScrollView>
-        {notificationList?.length > 0 ?
-          <View style={ApplicationStyles.flex}>
-            {categories == 'All' ? (
-              notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')).legth > 0 ?
+      {notificationList && (
+        <View style={styles.categoriesContainer}>
+          <TouchableOpacity style={styles.btnView} onPress={() => setCategories('All')}>
+            <Text
+              style={[
+                styles.categoriesTitle,
+                {
+                  color:
+                    categories == 'All' ? colors?.tertiary1_500 : colors?.black,
+                },
+              ]}>
+              {`All`}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnView}  onPress={() => setCategories('Requests')}>
+            <Text
+              style={[
+                styles.categoriesTitle,
+                {
+                  color:
+                    categories == 'Requests'
+                      ? colors?.tertiary1_500
+                      : colors?.black,
+                },
+              ]}>
+              {`Connection Invite(${
+                notificationList.filter(obj => obj?.type == 'follow-request')
+                  .length
+              })`}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {notificationList && (
+        <ScrollView style={{marginTop:20}}>
+          {notificationList?.length > 0 ? (
+            <View style={ApplicationStyles.flex}>
+              {categories == 'All' ? (
+                notificationList?.filter(
+                  obj =>
+                    moment(obj?.createdDate).format('DD/MM/YYYY') ==
+                    moment().format('DD/MM/YYYY'),
+                ).legth > 0 ? (
+                  <>
+                    <View style={styles.newHeader}>
+                      <Text style={styles.HeaderTitle}>{'New'}</Text>
+                    </View>
+                    <View style={styles.notificationcontainer}>
+                      <FlatList
+                        data={notificationList?.filter(
+                          obj =>
+                            moment(obj?.createdDate).format('DD/MM/YYYY') ==
+                            moment().format('DD/MM/YYYY'),
+                        )}
+                        ItemSeparatorComponent={() => (
+                          <View style={styles.separator}></View>
+                        )}
+                        renderItem={renderItem}
+                      />
+                    </View>
+                    <View style={styles.newHeader}>
+                      <Text style={styles.HeaderTitle}>{'Older'}</Text>
+                    </View>
+                    <View style={styles.notificationcontainer}>
+                      <FlatList
+                        data={notificationList?.filter(
+                          obj =>
+                            moment(obj?.createdDate).format('DD/MM/YYYY') !==
+                            moment().format('DD/MM/YYYY'),
+                        )}
+                        ItemSeparatorComponent={() => (
+                          <View style={styles.separator}></View>
+                        )}
+                        renderItem={renderItem}
+                      />
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.notificationcontainer}>
+                    <FlatList
+                      data={notificationList}
+                      ItemSeparatorComponent={() => (
+                        <View style={styles.separator}></View>
+                      )}
+                      renderItem={renderItem}
+                    />
+                  </View>
+                )
+              ) : notificationList?.filter(
+                  obj =>
+                    obj?.type == 'follow-request' &&
+                    moment(obj?.createdDate).format('DD/MM/YYYY') ==
+                      moment().format('DD/MM/YYYY'),
+                ).length > 0 ? (
                 <>
                   <View style={styles.newHeader}>
                     <Text style={styles.HeaderTitle}>{'New'}</Text>
                   </View>
                   <View style={styles.notificationcontainer}>
                     <FlatList
-                      data={notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY'))}
-                      ItemSeparatorComponent={() => (
-                        <View style={styles.separator}></View>
+                      data={notificationList?.filter(
+                        obj =>
+                          obj?.type == 'follow-request' &&
+                          moment(obj?.createdDate).format('DD/MM/YYYY') ==
+                            moment().format('DD/MM/YYYY'),
                       )}
                       renderItem={renderItem}
                     />
@@ -125,62 +224,39 @@ const NotificationScreen = () => {
                   </View>
                   <View style={styles.notificationcontainer}>
                     <FlatList
-                      data={notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') !== moment().format('DD/MM/YYYY'))}
-                      ItemSeparatorComponent={() => (
-                        <View style={styles.separator}></View>
+                      data={notificationList?.filter(
+                        obj =>
+                          obj?.type == 'follow-request' &&
+                          moment(obj?.createdDate).format('DD/MM/YYYY') !==
+                            moment().format('DD/MM/YYYY'),
                       )}
                       renderItem={renderItem}
                     />
                   </View>
                 </>
-                :
+              ) : (
                 <View style={styles.notificationcontainer}>
                   <FlatList
-                    data={notificationList}
-                    ItemSeparatorComponent={() => (
-                      <View style={styles.separator}></View>
+                    data={notificationList?.filter(
+                      obj => obj?.type == 'follow-request',
                     )}
                     renderItem={renderItem}
                   />
                 </View>
-            ) : (
-              notificationList?.filter(obj => obj?.type == 'follow-request' && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')).length > 0 ?
-                <>
-                  <View style={styles.newHeader}>
-                    <Text style={styles.HeaderTitle}>{'New'}</Text>
-                  </View>
-                  <View style={styles.notificationcontainer}>
-                    <FlatList
-                      data={notificationList?.filter(obj => obj?.type == 'follow-request' && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY'))}
-                      renderItem={renderItem}
-                    />
-                  </View>
-                  <View style={styles.newHeader}>
-                    <Text style={styles.HeaderTitle}>{'Older'}</Text>
-                  </View>
-                  <View style={styles.notificationcontainer}>
-                    <FlatList
-                      data={notificationList?.filter(obj => obj?.type == 'follow-request' && moment(obj?.createdDate).format('DD/MM/YYYY') !== moment().format('DD/MM/YYYY'))}
-                      renderItem={renderItem}
-                    />
-                  </View>
-                </>
-                :
-                <View style={styles.notificationcontainer}>
-                  <FlatList
-                    data={notificationList?.filter(obj => obj?.type == 'follow-request')}
-                    renderItem={renderItem}
-                  />
-                </View>
-            )}
-          </View>
-          :
-          <NoDataFound text={'No notifications yet – exciting updates coming soon!'} />
-        }
-      </ScrollView>}
-      {categories !== 'All' &&
-        <Text style={styles.bottomText}>Go to Indians page to connect more people</Text>
-      }
+              )}
+            </View>
+          ) : (
+            <NoDataFound
+              text={'No notifications yet – exciting updates coming soon!'}
+            />
+          )}
+        </ScrollView>
+      )}
+      {categories !== 'All' && (
+        <Text style={styles.bottomText}>
+          Go to Indians page to connect more people
+        </Text>
+      )}
     </SafeAreaView>
   );
 };
@@ -192,18 +268,25 @@ const styles = StyleSheet.create({
     ...FontStyle(18, colors.black, '700'),
     paddingLeft: wp(14),
     lineHeight: hp(26),
-    marginTop: -5
+    marginTop: -5,
   },
   categoriesTitle: {
     ...FontStyle(14, colors.black, '700'),
-    lineHeight: hp(22),
+    // lineHeight: hp(22),
   },
   categoriesContainer: {
     flexDirection: 'row',
-    gap: wp(14),
-    marginLeft: wp(17),
-    marginTop: hp(12),
+    // marginHorizontal: wp(17),
+    marginVertical: hp(12),
     backgroundColor: colors.white,
+    justifyContent:'space-evenly',
+  },
+  btnView:{
+    borderWidth:1,
+    flex:1,
+    paddingVertical:6,
+    alignItems:'center',
+    borderColor:colors.borderColor
   },
   newHeader: {
     backgroundColor: colors.secondary_500,
@@ -223,18 +306,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 10,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   name: {
     ...FontStyle(14, colors.black, '400'),
   },
   nameContainer: {
-    flex: 1
+    flex: 1,
   },
   leftSide: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10
+    gap: 10,
   },
   time: {
     ...FontStyle(11, colors.neutral_500, '400'),
@@ -258,7 +341,7 @@ const styles = StyleSheet.create({
     gap: wp(5),
   },
   centerContainer: {
-    flex: 1
+    flex: 1,
   },
   button: {
     backgroundColor: colors.primary_500,
@@ -267,7 +350,7 @@ const styles = StyleSheet.create({
     height: 30,
     justifyContent: 'center',
     width: 80,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
     ...FontStyle(13, colors.white, '400'),
@@ -279,6 +362,6 @@ const styles = StyleSheet.create({
   bottomText: {
     ...FontStyle(14, colors.neutral_900),
     textAlign: 'center',
-    margin: wp(14)
-  }
+    margin: wp(14),
+  },
 });

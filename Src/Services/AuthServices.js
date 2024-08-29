@@ -60,21 +60,7 @@ export const onGetUserInfoApi = (request) => async dispatch => {
         });
 };
 
-export const getFollowerList = (request) => async dispatch => {
-    return makeAPIRequest({
-        method: POST,
-        url: api.otherUserFollowList,
-        data: request?.data
-    })
-        .then(async (response) => {
-            handleSuccessRes(response, request, dispatch, () => {
-                dispatchAction(dispatch, SET_FOLLOWER_LIST, response?.data?.data)
-            });
-        })
-        .catch(error => {
-            handleErrorRes(error, request, dispatch);
-        });
-};
+
 
 export const onGetOtp = (request) => async dispatch => {
     dispatchAction(dispatch, IS_LOADING, true)

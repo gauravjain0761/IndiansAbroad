@@ -16,9 +16,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { onClearAllChat, onLeaveFromGroup } from '../Services/ChatServices';
 import { resetNavigation } from '../utils/Global';
 import { onBlockUserApi, onUnFollowRequest } from '../Services/OtherUserServices';
-import { getFollowerList } from '../Services/AuthServices';
 import ReportModal from './ReportModal';
 import PageChatMoreMenu from './PageChatMoreMenu';
+import { getFollowerList } from '../Services/PostServices';
 
 const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false, isPage = false }) => {
   const { goBack, navigate } = useNavigation();
