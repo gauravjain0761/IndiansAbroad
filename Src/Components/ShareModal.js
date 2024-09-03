@@ -85,7 +85,7 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
         return (
             <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
                 <View style={[ApplicationStyles.row, styles.listView]}>
-                    <RenderUserIcon url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
+                    <RenderUserIcon type='user' url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
                     <Text style={styles.listText}>{item?.followingId?.first_Name} {item?.followingId?.last_Name}</Text>
                 </View>
                 <TouchableOpacity onPress={() => setSelect(item._id)}>

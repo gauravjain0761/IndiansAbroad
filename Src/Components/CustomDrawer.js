@@ -97,7 +97,7 @@ ${user?.first_Name} ${user?.last_Name}`
                     <TouchableOpacity
                         style={{ flexDirection: 'row' }}
                         onPress={() => navigation.navigate(screenName.profileScreen)}>
-                        <RenderUserIcon url={user?.avtar} height={63} isBorder={user?.subscribedMember} />
+                        <RenderUserIcon url={user?.avtar} type='user' height={63} isBorder={user?.subscribedMember} />
                         {/* <Image source={Icons.userImage} style={styles.userImage} /> */}
                     </TouchableOpacity>
                     <View style={[ApplicationStyles.flex, { marginHorizontal: 5 }]}>

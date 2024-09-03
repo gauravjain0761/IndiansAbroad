@@ -15,6 +15,7 @@ import {
   SET_ACTIVE_EVENT,
   GET_SAVE_EVENT,
   SET_FOLLOWER_LIST,
+  SET_ALL_INDIANS_REGION,
 } from '../Redux/ActionTypes';
 import { getAsyncToken, setAsyncUserInfo } from '../utils/AsyncStorage';
 import { GET, POST, api } from '../utils/apiConstants';
@@ -27,19 +28,19 @@ import {
 import { successToast } from '../utils/commonFunction';
 
 export const getFollowerList = (request) => async dispatch => {
-    return makeAPIRequest({
-        method: POST,
-        url: api.otherUserFollowList,
-        data: request?.data
+  return makeAPIRequest({
+    method: POST,
+    url: api.otherUserFollowList,
+    data: request?.data
+  })
+    .then(async (response) => {
+      handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(dispatch, SET_FOLLOWER_LIST, response?.data?.data)
+      });
     })
-        .then(async (response) => {
-            handleSuccessRes(response, request, dispatch, () => {
-                dispatchAction(dispatch, SET_FOLLOWER_LIST, response?.data?.data)
-            });
-        })
-        .catch(error => {
-            handleErrorRes(error, request, dispatch);
-        });
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
 };
 
 
@@ -124,6 +125,61 @@ export const getallIndianUser = request => async dispatch => {
     });
 };
 
+export const getallIndianListApi = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.indiansList,
+    data: request?.data,
+  })
+    .then(async response => {
+      if (response?.status === 200 || response?.status === 201) {
+        dispatchAction(dispatch, IS_LOADING, false);
+        if (response?.data && response?.data?.err == 200) {
+          if (request?.onSuccess) request?.onSuccess(response?.data);
+        } else {
+          if (response?.data && response?.data?.err == 300) {
+            if (request?.onSuccess) request?.onSuccess([]);
+          }
+          if (request?.onFailure) request.onFailure(response?.data);
+        }
+      }
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getallIndianRegionListApi = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.regionIndianList,
+    data: request?.data,
+  })
+    .then(async response => {
+      if (response?.status === 200 || response?.status === 201) {
+        dispatchAction(dispatch, IS_LOADING, false);
+        if (response?.data && response?.data?.err == 200) {
+          if (request?.onSuccess) request?.onSuccess(response?.data);
+          dispatchAction(dispatch, SET_ALL_INDIANS_REGION, {
+            ...response?.data,
+            current_page: request?.data?.page,
+          });
+        } else {
+          if (response?.data && response?.data?.err == 300) {
+            dispatchAction(dispatch, SET_ALL_INDIANS_REGION, {
+              data: [],
+              current_page: 1,
+            });
+          }
+          if (request?.onFailure) request.onFailure(response?.data);
+        }
+      }
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
 export const getallPagesUser = request => async dispatch => {
   return makeAPIRequest({
     method: GET,
@@ -134,7 +190,7 @@ export const getallPagesUser = request => async dispatch => {
       if (response?.status === 200 || response?.status === 201) {
         dispatchAction(dispatch, IS_LOADING, false);
         if (response?.data && response?.data?.err == 200) {
-         
+
           dispatchAction(dispatch, SET_ALL_PAGES, {
             ...response?.data,
             current_page: request?.params?.page,
@@ -146,6 +202,30 @@ export const getallPagesUser = request => async dispatch => {
               data: [],
               current_page: 1,
             });
+          }
+          if (request?.onFailure) request.onFailure(response?.data);
+        }
+      }
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const getAllPageListApi = request => async dispatch => {
+  return makeAPIRequest({
+    method: GET,
+    url: api.pageList,
+    params: request?.params,
+  })
+    .then(async response => {
+      if (response?.status === 200 || response?.status === 201) {
+        dispatchAction(dispatch, IS_LOADING, false);
+        if (response?.data && response?.data?.err == 200) {
+          if (request?.onSuccess) request?.onSuccess(response?.data);
+        } else {
+          if (response?.data && response?.data?.err == 300) {
+            if (request?.onSuccess) request?.onSuccess([]);
           }
           if (request?.onFailure) request.onFailure(response?.data);
         }
@@ -561,8 +641,8 @@ export const getSaveListAction = request => async dispatch => {
 
 export const getToggleFavoriteAction = request => async dispatch => {
   const token = await getAsyncToken();
-  console.log('token',token);
-  
+  console.log('token', token);
+
   return makeAPIRequest({
     method: POST,
     url: api.attendeeToggleFavorite,
@@ -570,7 +650,7 @@ export const getToggleFavoriteAction = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
-       successToast(response?.data?.msg)
+        successToast(response?.data?.msg)
       });
     })
     .catch(error => {
@@ -580,16 +660,16 @@ export const getToggleFavoriteAction = request => async dispatch => {
 
 export const organizerVerifyTicketAction = request => async dispatch => {
   const token = await getAsyncToken();
-  console.log('token',token);
-  
+  console.log('token', token);
+
   return makeAPIRequest({
     method: POST,
     url: api.organizerVerifyTicket,
-    data:request?.data
+    data: request?.data
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
-       successToast(response?.data?.msg)
+        successToast(response?.data?.msg)
       });
     })
     .catch(error => {
@@ -599,8 +679,8 @@ export const organizerVerifyTicketAction = request => async dispatch => {
 
 export const transactionDownloadTransAction = request => async dispatch => {
   const token = await getAsyncToken();
-  console.log('token',token);
-  
+  console.log('token', token);
+
   return makeAPIRequest({
     method: GET,
     url: api.transactionDownloadTrans,

@@ -76,7 +76,7 @@ export default function MyTabbar({ state, descriptors, navigation }) {
                 onLongPress={onLongPress}
                 style={styles.itemContainer}>
                 {route.name == screenName.profileScreen ?
-                  <RenderUserIcon url={user?.avtar} height={22} />
+                  <RenderUserIcon type='user' url={user?.avtar} height={22} />
                   : <Image
                     style={{
                       ...styles.iconStyle,

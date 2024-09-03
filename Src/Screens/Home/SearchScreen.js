@@ -96,7 +96,7 @@ export default function SearchScreen() {
                             {globalSearchData?.users?.records.map((item, index) => {
                                 return (
                                     <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
-                                        <RenderUserIcon url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                        <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
                                         <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.first_Name} {item?.last_Name}</Text>
                                     </TouchableOpacity>
                                 )

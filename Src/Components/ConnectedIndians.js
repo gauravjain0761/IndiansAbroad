@@ -68,7 +68,7 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
   return (
     <TouchableOpacity onPress={cardPress} style={[styles.header]}>
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-        <RenderUserIcon url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
+        <RenderUserIcon type='user' url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
         <Text numberOfLines={1} style={styles.text1}>
           {item?.followingId.first_Name} {item?.followingId.last_Name}
         </Text>

@@ -55,7 +55,7 @@ export default function GroupMemberItem({ item, index, }) {
         <View key={index}>
             <TouchableOpacity onPress={() => onOpenUserDetail()} style={[styles.header]}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                    <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
+                    <RenderUserIcon url={item?.avtar} type='user' height={45} isBorder={item?.subscribedMember} />
                     <Text numberOfLines={1} style={styles.text1}>
                         {item.first_Name} {item.last_Name}
                     </Text>

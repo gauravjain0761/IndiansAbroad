@@ -205,8 +205,6 @@ const Messaging = () => {
           </TouchableOpacity>
         </View>
       </View> */}
-
-
       <FlatList
         inverted
         data={chatMessageList}
@@ -236,7 +234,6 @@ const Messaging = () => {
         }}
       />
       {followerList?.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 ?
-
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
           <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
         </KeyboardAvoidingView>
@@ -249,7 +246,6 @@ const Messaging = () => {
           </TouchableOpacity>
         </View>
       }
-
       {messageRequestModal &&
         <MessageRequestModal visible={messageRequestModal} onClose={() => setmessageRequestModal(false)} />
       }

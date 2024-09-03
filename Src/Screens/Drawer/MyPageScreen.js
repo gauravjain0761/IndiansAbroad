@@ -176,7 +176,7 @@ export default function MyPageScreen() {
                       setModalVisible(true);
                     }}
                     style={styles.imageView}>
-                    <RenderUserIcon height={wp(100)} url={myPage[0]?.logo} />
+                    <RenderUserIcon type='page' height={wp(100)} url={myPage[0]?.logo} />
                   </TouchableOpacity>
                   <Text style={styles.userText}>{myPage[0]?.title}</Text>
                   {myPage[0]?.catchline && (

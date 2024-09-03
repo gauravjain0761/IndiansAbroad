@@ -31,7 +31,7 @@ export default function RenderComment({
         <View style={{ marginBottom: 10 }}>
             <View style={styles.headerView}>
                 <View style={{ paddingTop: 8, }}>
-                    <RenderUserIcon userId={item?.user ? item?.user?._id : item?.createdBy?._id} url={item?.user ? item?.user?.avtar : item?.createdBy?.avtar} height={53} isBorder />
+                    <RenderUserIcon type='user' userId={item?.user ? item?.user?._id : item?.createdBy?._id} url={item?.user ? item?.user?.avtar : item?.createdBy?.avtar} height={53} isBorder />
                 </View>
                 <View style={styles.commentView}>
                     <View style={styles.commentBg}>

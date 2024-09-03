@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { onDeleteChat } from '../Services/ChatServices';
+import { onDeleteChat, onLeaveFromGroup } from '../Services/ChatServices';
 import ConfirmationModal from './ConfirmationModal';
 
 
@@ -31,15 +31,40 @@ export default function ChatCard({ data, cardPress, isGroup }) {
 
   const onPressDelete = () => {
     setdeleteChatModal(false)
-    let obj = {
-      data: {
-        chatId: data?._id,
-      },
-      isGroup: isGroup,
-      onSuccess: () => {
+
+    if (isGroup) {
+      dispatch(onLeaveFromGroup(
+        {
+          data: {
+            curruntUser: user._id,
+            groupId: data?._id,
+          },
+          onSuccess: () => {
+            let obj = {
+              data: {
+                chatId: data?._id,
+              },
+              isGroup: isGroup,
+              onSuccess: () => {
+              }
+            }
+            dispatch(onDeleteChat(obj))
+          }
+        }
+      ))
+    } else {
+      let obj = {
+        data: {
+          chatId: data?._id,
+        },
+        isGroup: isGroup,
+        onSuccess: () => {
+        }
       }
+      dispatch(onDeleteChat(obj))
     }
-    dispatch(onDeleteChat(obj))
+
+
   }
 
   return (
@@ -51,6 +76,7 @@ export default function ChatCard({ data, cardPress, isGroup }) {
         <RenderUserIcon
           url={isGroup ? data?.chatLogo[0]?.cdnlocation : currentUser?.avtar}
           height={78}
+          type={isGroup ? 'group' : 'user'}
         // isBorder={currentUser?.subscribedMember}
         />
         {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
@@ -89,20 +115,17 @@ export default function ChatCard({ data, cardPress, isGroup }) {
         </ModalContainer>
       }
 
-
       {deleteChatModal && (
         <ConfirmationModal
           visible={deleteChatModal}
           onClose={() => setdeleteChatModal(false)}
-          title={`Are you sure you want to delete chat?`}
+          title={isGroup ? `Are you sure you want to delete this group chat?${'\n'}${'\n'}By deleting, you will automatically leave the group, and the entire group chat history will be permanently removed from your Group Room.` : `Are you sure you want to delete chat?`}
           successBtn={'Delete'}
-          canselBtn={'No'}
+          canselBtn={'Cancel'}
           onPressCancel={() => setdeleteChatModal(false)}
           onPressSuccess={() => onPressDelete()}
         />
       )}
-
-
     </TouchableOpacity>
   );
 }

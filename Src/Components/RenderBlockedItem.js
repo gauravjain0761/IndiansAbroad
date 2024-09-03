@@ -63,7 +63,7 @@ export default function RenderBlockedItem({ item, index }) {
         <View key={item._id}>
             <View style={[ApplicationStyles.row, styles.listView]}>
                 <View style={[ApplicationStyles.row]}>
-                    <RenderUserIcon url={item?.avtar} height={45} isBorder={item?.subscribedMember} />
+                    <RenderUserIcon url={item?.avtar} type='user' height={45} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
                 </View>
                 <Menu

@@ -9,7 +9,7 @@ import colors from '../Themes/Colors'
 export default function RenderLinkChat({ item, index, name, profileImage }) {
     return (
         <View key={index} style={styles.mainView} >
-            <RenderUserIcon height={36} url={item?.avtar} isBorder={item?.subscribedMember} />
+            <RenderUserIcon type='user' height={36} url={item?.avtar} isBorder={item?.subscribedMember} />
             <View style={ApplicationStyles.flex}>
                 <Text style={styles.nameText}>{item?.first_Name + ' ' + item?.last_Name}</Text>
                 <Text onPress={() => Linking.openURL(item?.content.match(/https?:\/\/[^\s]+/)[0])} style={styles.linkText}>{item?.content}</Text>

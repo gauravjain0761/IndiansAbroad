@@ -106,7 +106,7 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false,
       </TouchableOpacity>
       <TouchableOpacity activeOpacity={0.5} onPress={() => onPressName ? onPressName() : {}} style={[ApplicationStyles.row, ApplicationStyles.flex]}>
 
-        <RenderUserIcon isBorder={subscribedMember} url={url} height={50} />
+        <RenderUserIcon isBorder={subscribedMember} type={isGroup ? 'group' : 'user'} url={url} height={50} />
         <Text style={styles.headerTextStyle}>{name}</Text>
       </TouchableOpacity>
 

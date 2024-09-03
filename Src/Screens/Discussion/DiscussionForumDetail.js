@@ -118,7 +118,6 @@ export default function DiscussionForumDetail() {
                 </ScrollView>
                 <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
                     <View style={styles.commnetInput}>
-                        {/* <RenderUserIcon height={46} isBorder /> */}
                         <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} multiline={true} style={styles.input} placeholder='Add Response' placeholderTextColor={colors.neutral_500} />
                         <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                             <Image source={Icons.send} style={ImageStyle(24, 24)} />

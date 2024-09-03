@@ -115,7 +115,7 @@ export default function CreateGroup() {
     return (
       <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
         <View style={[ApplicationStyles.row, styles.listView]}>
-          <RenderUserIcon url={item?.avtar} height={48} isBorder={item?.subscribedMember} />
+          <RenderUserIcon type='user' url={item?.avtar} height={48} isBorder={item?.subscribedMember} />
           <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
         </View>
         <TouchableOpacity onPress={() => setSelect(item._id)}>

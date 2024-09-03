@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
-import {FontStyle, ImageStyle} from '../../utils/commonFunction';
+import { useNavigation } from '@react-navigation/native';
+import { FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import {
   getAttendeeGetByEventAction,
@@ -24,7 +24,7 @@ import {
 } from '../../Services/PostServices';
 export default function ListParticipantsScreen() {
   const navigation = useNavigation();
-  const {activeEvent, user} = useSelector(e => e.common);
+  const { activeEvent, user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [particpantsList, setParticpantsList] = useState([]);
 
@@ -42,9 +42,9 @@ export default function ListParticipantsScreen() {
     dispatch(getAttendeeGetByEventAction(obj));
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <View style={styles.rowItem}>
-      <RenderUserIcon height={45} isBorder={true} />
+      <RenderUserIcon type='user' height={45} isBorder={true} />
       <View style={ApplicationStyles.flex}>
         <Text
           style={
@@ -57,7 +57,7 @@ export default function ListParticipantsScreen() {
           source={Icons.checkRound}
           style={[
             ImageStyle(26, 26),
-            {tintColor: colors.primary_500, marginHorizontal: 10},
+            { tintColor: colors.primary_500, marginHorizontal: 10 },
           ]}
         />
       )}
@@ -76,7 +76,7 @@ export default function ListParticipantsScreen() {
       <View style={styles.row}>
         <Image
           source={Icons.group}
-          style={[ImageStyle(26, 26), {tintColor: colors.primary_500}]}
+          style={[ImageStyle(26, 26), { tintColor: colors.primary_500 }]}
         />
         <Text
           style={

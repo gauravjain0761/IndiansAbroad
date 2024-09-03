@@ -52,6 +52,7 @@ import {
   SET_MY_PAGE_CHAT_USERS,
   ON_DELETE_CHAT,
   SET_CONNECT_REQUEST,
+  SET_ALL_INDIANS_REGION,
 } from './ActionTypes';
 
 const initialState = {
@@ -102,6 +103,8 @@ const initialState = {
   notificationList: undefined,
   fcmToken: null,
   myPageChatUsers: undefined,
+  allIndianRegion: undefined,
+  allIndianRegionCount: 0
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -134,7 +137,7 @@ export default function (state = initialState, action) {
         allSave: action.payload,
       };
     }
-    case SET_ALL_INDIANS: {      
+    case SET_ALL_INDIANS: {
       return {
         ...state,
         allIndian:
@@ -142,6 +145,16 @@ export default function (state = initialState, action) {
             ? action.payload.data
             : [...state.allIndian, ...action.payload.data],
         allIndianCount: action.payload.total,
+      };
+    }
+    case SET_ALL_INDIANS_REGION: {
+      return {
+        ...state,
+        allIndianRegion:
+          action.payload.current_page == 1
+            ? action.payload.data
+            : [...state.allIndianRegion, ...action.payload.data],
+        allIndianRegionCount: action.payload.total,
       };
     }
     case SET_ALL_PAGES: {
@@ -254,19 +267,19 @@ export default function (state = initialState, action) {
       return { ...state, blockUserList };
     }
     case SET_ACTIVE_POST: {
-      const updateData=state.allPost.map((list)=>{
-            if(list?._id==action.payload?._id){
-              return {
-                ...list,
-                commentCount:action.payload?.commentCount
-              }
-            }else{
-              return {
-                ...list
-              }
-            }
+      const updateData = state.allPost.map((list) => {
+        if (list?._id == action.payload?._id) {
+          return {
+            ...list,
+            commentCount: action.payload?.commentCount
+          }
+        } else {
+          return {
+            ...list
+          }
+        }
       })
-      return { ...state, activePost: action.payload,allPost:updateData };
+      return { ...state, activePost: action.payload, allPost: updateData };
     }
     case SET_ACTIVE_EVENT: {
       return { ...state, activeEvent: action.payload };
@@ -306,14 +319,24 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
-      return { ...state, allIndian: update };
-    }
-    case SET_CONNECT_REQUEST: {
-      const update = state.allPost.map(item => {
+      const update2 = state.allIndianRegion.map(item => {
         if (item._id == action.payload.postId) {
           return {
             ...item,
-            isFollowing: action?.payload?.type && action?.payload?.type == 'remove' ? 'notfollowing' : 'requested',
+            isFollowingRequested: action.payload.action,
+          };
+        } else {
+          return { ...item };
+        }
+      });
+      return { ...state, allIndian: update, allIndianRegion: update2 };
+    }
+    case SET_CONNECT_REQUEST: {
+      const update = state.allPost.map(item => {
+        if (item.createdBy._id == action.payload.followingId) {
+          return {
+            ...item,
+            isFollowing: action?.payload?.type && action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested',
           };
         } else {
           return { ...item };
@@ -332,7 +355,17 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
-      return { ...state, allIndian: updates };
+      const updates2 = state.allIndianRegion.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isFollowingRequested: action.payload.action,
+          };
+        } else {
+          return { ...item };
+        }
+      });
+      return { ...state, allIndian: updates, allIndianRegion: updates2 };
     }
     case SET_POST_DISCONNECT: {
       const updates = state.allIndian.map(item => {
@@ -345,7 +378,17 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
-      return { ...state, allIndian: updates };
+      const updates2 = state.allIndianRegion.map(item => {
+        if (item._id == action.payload.postId) {
+          return {
+            ...item,
+            isFollowing: action.payload.action,
+          };
+        } else {
+          return { ...item };
+        }
+      });
+      return { ...state, allIndian: updates, allIndianRegion: updates2 };
     }
     case SET_PAGE_CONNECT_POST: {
       let allPost = Object.assign([], state.allPost);

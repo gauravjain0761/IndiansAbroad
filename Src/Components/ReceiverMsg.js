@@ -94,7 +94,7 @@ const ReciverMsg = ({ data }) => {
     <View>
       <View style={styles.conatiner}>
         <View style={{ marginTop: 3 }}>
-          <RenderUserIcon url={data?.createdBy?.avtar} height={31} isBorder={data?.createdBy?.subscribedMember} />
+          <RenderUserIcon type='user' url={data?.createdBy?.avtar} height={31} isBorder={data?.createdBy?.subscribedMember} />
         </View>
         {/* <Image
           resizeMode="cover"
@@ -127,7 +127,7 @@ const ReciverMsg = ({ data }) => {
                 {data?.shareContentType == 'group-invitation' &&
                   <View style={{ marginBottom: 15, }}>
                     <View style={styles.groupView}>
-                      <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
+                      <RenderUserIcon type='user' url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
                       <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
                     </View>
                     {!data?.joinedGroup && <TouchableOpacity onPress={() => onPressJoinNowBtn()} style={styles.joinNowBtn}>

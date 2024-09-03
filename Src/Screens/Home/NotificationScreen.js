@@ -6,29 +6,29 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
-import {FontStyle} from '../../utils/commonFunction';
-import {hp, wp} from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
+import { hp, wp } from '../../Themes/Fonts';
 import colors from '../../Themes/Colors';
-import {useNavigation} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   onAcceptRejectRequest,
   onGetNotification,
 } from '../../Services/AuthServices';
 import NoDataFound from '../../Components/NoDataFound';
 import RenderUserIcon from '../../Components/RenderUserIcon';
-import {dispatchAction} from '../../utils/apiGlobal';
-import {IS_LOADING} from '../../Redux/ActionTypes';
+import { dispatchAction } from '../../utils/apiGlobal';
+import { IS_LOADING } from '../../Redux/ActionTypes';
 import moment from 'moment';
 
 const NotificationScreen = () => {
   const [categories, setCategories] = useState('All');
-  const {goBack} = useNavigation();
-  const {user, notificationList} = useSelector(e => e.common);
+  const { goBack } = useNavigation();
+  const { user, notificationList } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [notiArray, setnotiArray] = useState(undefined);
 
@@ -36,7 +36,7 @@ const NotificationScreen = () => {
     if (!notificationList) {
       dispatchAction(dispatch, IS_LOADING, true);
     }
-    dispatch(onGetNotification({data: {loginUserId: user?._id}}));
+    dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
   }, []);
 
   const onPressBack = () => {
@@ -52,19 +52,19 @@ const NotificationScreen = () => {
         notificationId: item?._id,
       },
       onSuccess: () => {
-        dispatch(onGetNotification({data: {loginUserId: user?._id}}));
+        dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
       },
     };
     dispatch(onAcceptRejectRequest(obj));
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <>
         {item?.type !== 'follow-request' ? (
           <View key={item?._id} style={styles.Container}>
             <View style={styles.leftSide}>
-              <RenderUserIcon url={item?.createdBy?.avtar} height={45} />
+              <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
               <View style={styles.nameContainer}>
                 <Text style={styles.name}>
                   {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
@@ -79,7 +79,7 @@ const NotificationScreen = () => {
         ) : (
           <View key={item?._id} style={styles.requestContainer}>
             <View style={styles.leftSide}>
-              <RenderUserIcon url={item?.createdBy?.avtar} height={45} />
+              <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
               <View style={styles.centerContainer}>
                 <Text style={styles.name}>
                   {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
@@ -124,7 +124,7 @@ const NotificationScreen = () => {
               {`All`}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnView}  onPress={() => setCategories('Requests')}>
+          <TouchableOpacity style={styles.btnView} onPress={() => setCategories('Requests')}>
             <Text
               style={[
                 styles.categoriesTitle,
@@ -135,16 +135,15 @@ const NotificationScreen = () => {
                       : colors?.black,
                 },
               ]}>
-              {`Connection Invite(${
-                notificationList.filter(obj => obj?.type == 'follow-request')
-                  .length
-              })`}
+              {`Connection Invite(${notificationList.filter(obj => obj?.type == 'follow-request')
+                .length
+                })`}
             </Text>
           </TouchableOpacity>
         </View>
       )}
       {notificationList && (
-        <ScrollView style={{marginTop:20}}>
+        <ScrollView style={{ marginTop: 0 }}>
           {notificationList?.length > 0 ? (
             <View style={ApplicationStyles.flex}>
               {categories == 'All' ? (
@@ -152,7 +151,7 @@ const NotificationScreen = () => {
                   obj =>
                     moment(obj?.createdDate).format('DD/MM/YYYY') ==
                     moment().format('DD/MM/YYYY'),
-                ).legth > 0 ? (
+                ).length > 0 ? (
                   <>
                     <View style={styles.newHeader}>
                       <Text style={styles.HeaderTitle}>{'New'}</Text>
@@ -199,11 +198,11 @@ const NotificationScreen = () => {
                   </View>
                 )
               ) : notificationList?.filter(
-                  obj =>
-                    obj?.type == 'follow-request' &&
-                    moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                      moment().format('DD/MM/YYYY'),
-                ).length > 0 ? (
+                obj =>
+                  obj?.type == 'follow-request' &&
+                  moment(obj?.createdDate).format('DD/MM/YYYY') ==
+                  moment().format('DD/MM/YYYY'),
+              ).length > 0 ? (
                 <>
                   <View style={styles.newHeader}>
                     <Text style={styles.HeaderTitle}>{'New'}</Text>
@@ -214,7 +213,7 @@ const NotificationScreen = () => {
                         obj =>
                           obj?.type == 'follow-request' &&
                           moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                            moment().format('DD/MM/YYYY'),
+                          moment().format('DD/MM/YYYY'),
                       )}
                       renderItem={renderItem}
                     />
@@ -228,7 +227,7 @@ const NotificationScreen = () => {
                         obj =>
                           obj?.type == 'follow-request' &&
                           moment(obj?.createdDate).format('DD/MM/YYYY') !==
-                            moment().format('DD/MM/YYYY'),
+                          moment().format('DD/MM/YYYY'),
                       )}
                       renderItem={renderItem}
                     />
@@ -279,14 +278,14 @@ const styles = StyleSheet.create({
     // marginHorizontal: wp(17),
     marginVertical: hp(12),
     backgroundColor: colors.white,
-    justifyContent:'space-evenly',
+    justifyContent: 'space-evenly',
   },
-  btnView:{
-    borderWidth:1,
-    flex:1,
-    paddingVertical:6,
-    alignItems:'center',
-    borderColor:colors.borderColor
+  btnView: {
+    borderWidth: 1,
+    flex: 1,
+    paddingVertical: 6,
+    alignItems: 'center',
+    borderColor: colors.borderColor
   },
   newHeader: {
     backgroundColor: colors.secondary_500,

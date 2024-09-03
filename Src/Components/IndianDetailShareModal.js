@@ -15,9 +15,9 @@ import { fontname, screen_width, wp } from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
-import { onCancelRequest, onConnectRequest, onGetOtherUserInfo, onUnFollowRequest } from '../Services/OtherUserServices';
+import { getallpostsOfUser, onCancelRequest, onConnectRequest, onGetOtherUserInfo, onUnFollowRequest } from '../Services/OtherUserServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { UPDATE_POST_LIST } from '../Redux/ActionTypes';
+import { SET_CONNECT_REQUEST, UPDATE_POST_LIST } from '../Redux/ActionTypes';
 
 
 export default function IndianDetailShareModal({ shareView,
@@ -33,7 +33,12 @@ export default function IndianDetailShareModal({ shareView,
         setmenuModal(false)
         let obj = {
             data: { userId: user._id, followingId: otherUserInfo._id },
-            onSuccess: () => { dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo._id, } })) }
+            onSuccess: () => {
+                dispatchAction(dispatch, SET_CONNECT_REQUEST, { followingId: otherUserInfo._id, type: otherUserInfo?.isFollowing == 'requested' ? 'remove' : otherUserInfo?.isFollowing == 'following' ? 'disconnect' : undefined })
+
+                dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo._id, } }))
+                dispatch(getallpostsOfUser({ data: { createdBy: otherUserInfo._id } }));
+            }
         }
         if (otherUserInfo?.isFollowing == 'notfollowing') {
             dispatch(onConnectRequest(obj))

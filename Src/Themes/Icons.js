@@ -92,7 +92,9 @@ export const Icons = {
   question: require('../assets/Icons/question.png'),
   cancelRequest: require('../assets/Icons/cancelRequest.png'),
   gallery: require('../assets/Icons/gallery.png'),
-  // files: require('../assets/Icons/files.png'),
+  userPlaceholder: require('../assets/Icons/userPlaceholder.png'),
+  groupPlaceholder: require('../assets/Icons/groupPlaceholder.png'),
+  pagePlaceholder: require('../assets/Icons/pagePlaceholder.png'),
 
 
 

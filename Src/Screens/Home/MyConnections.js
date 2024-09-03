@@ -75,7 +75,7 @@ export default function MyConnections() {
     return (
       <View key={index}>
         <TouchableOpacity onPress={() => openChatScreen(item)} style={[ApplicationStyles.row, styles.listView]}>
-          <RenderUserIcon url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
+          <RenderUserIcon url={item?.followingId?.avtar} type='user' height={45} isBorder={item?.followingId?.subscribedMember} />
           <Text numberOfLines={1} style={styles.listText}>
             {item?.followingId.first_Name} {item?.followingId.last_Name}
           </Text>

@@ -56,7 +56,7 @@ export default function PostShareModal({
               type: 'follow',
             });
           } else {
-            dispatchAction(dispatch, SET_CONNECT_REQUEST, { postId: item._id, type: 'remove' })
+            dispatchAction(dispatch, SET_CONNECT_REQUEST, { followingId: item?.createdBy?._id, type: 'remove' })
           }
         }
       }

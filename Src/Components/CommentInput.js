@@ -22,7 +22,7 @@ export default function CommentInput({ onComment, commentText, onChangeText, pla
     return (
         <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
             <View style={styles.commnetInput}>
-                <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
+                <RenderUserIcon url={user?.avtar} type='user' height={46} isBorder={user?.subscribedMember} />
                 <TextInput multiline={true} value={commentText} onChangeText={(text) => onChangeText(text)} style={styles.input} placeholder={placeholder} placeholderTextColor={colors.neutral_500} />
                 <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                     <Image source={Icons.send} style={ImageStyle(24, 24)} />

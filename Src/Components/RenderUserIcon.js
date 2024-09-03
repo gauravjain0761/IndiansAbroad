@@ -14,15 +14,16 @@ export default function RenderUserIcon({
   url,
   activeOpacity,
   userId = undefined,
+  type = 'user'
 }) {
   const navigation = useNavigation();
   const { user } = useSelector(e => e.common);
   let isUrl = url !== undefined && url !== '';
   let styles = StyleSheet.create({
     userImage: {
-      height: (isUrl ? height : height / 1.8) - (isBorder ? 6 : 0),
-      width: (isUrl ? height : height / 1.8) - (isBorder ? 6 : 0),
-      borderRadius: isUrl ? height / 2 : 0,
+      height: (height) - (isBorder ? 6 : 0),
+      width: (height) - (isBorder ? 6 : 0),
+      borderRadius: height / 2
     },
   });
 
@@ -57,7 +58,7 @@ export default function RenderUserIcon({
         source={
           isUrl
             ? { uri: api.IMAGE_URL + url, priority: FastImage.priority.normal }
-            : Icons.logo
+            : type == 'user' ? Icons.userPlaceholder : type == 'group' ? Icons.groupPlaceholder : Icons.pagePlaceholder
         }
         style={styles.userImage}
       />

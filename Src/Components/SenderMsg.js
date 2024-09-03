@@ -95,7 +95,7 @@ const SenderMsg = ({ data }) => {
                 </View>}
               {data?.shareContentType == 'group-invitation' &&
                 <View style={styles.groupView}>
-                  <RenderUserIcon url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
+                  <RenderUserIcon type='user' url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
                   <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
                 </View>
               }

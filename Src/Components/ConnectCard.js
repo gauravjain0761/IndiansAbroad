@@ -137,7 +137,7 @@ export default function ConnectCard({
 
   return (
     <TouchableOpacity
-      key={followingId}
+      key={index}
       activeOpacity={0.9}
       onPress={cardPress}
       style={[styles.header]}>
@@ -148,6 +148,7 @@ export default function ConnectCard({
           height={78}
           activeOpacity={1}
           isBorder={subscribedMember}
+          type={!indians ? 'page' : 'user'}
         />
         {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
       </View>

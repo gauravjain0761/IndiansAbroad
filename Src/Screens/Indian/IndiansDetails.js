@@ -206,6 +206,7 @@ export default function IndiansDetails() {
                   url={otherUserInfo?.avtar}
                   height={100}
                   isBorder={otherUserInfo?.subscribedMember}
+                  type='user'
                 />
               </TouchableOpacity>
               <Text style={styles.userText}>
@@ -427,7 +428,7 @@ export default function IndiansDetails() {
         />
       )}
       {messageRequestModal &&
-        <MessageRequestModal visible={messageRequestModal}
+        <MessageRequestModal visible={messageRequestModal} userId={otherUserInfo?._id}
           onClose={() => setmessageRequestModal(false)} />
       }
     </SafeAreaView>

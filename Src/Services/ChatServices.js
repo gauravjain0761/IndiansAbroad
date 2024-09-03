@@ -64,7 +64,6 @@ export const onGetUnreadMsgCount = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      console.log('onGetUnreadMsgCount', response?.data);
 
       handleSuccessRes(response, request, dispatch, () => {
         dispatchAction(dispatch, SET_UNREAD_MSG_COUNT, response.data.data);
@@ -290,11 +289,23 @@ export const onDeleteChat = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
-
         dispatchAction(dispatch, ON_DELETE_CHAT, { _id: request?.data?.chatId, isGroup: request?.isGroup })
-
-
       });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const onSendMessageRequest = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
+  return makeAPIRequest({
+    method: POST,
+    url: api.sendMessageRequest,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => { });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);

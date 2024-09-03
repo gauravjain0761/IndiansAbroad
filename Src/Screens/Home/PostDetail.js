@@ -5,14 +5,14 @@ import {
   View,
   SafeAreaView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import PostCard from '../../Components/PostCard';
-import {FontStyle, errorToast} from '../../utils/commonFunction';
+import { FontStyle, errorToast } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   onAddComment,
   onCommentLike,
@@ -20,9 +20,9 @@ import {
   onGetAllComments,
   onGetSinglePost,
 } from '../../Services/PostServices';
-import {dispatchAction} from '../../utils/apiGlobal';
-import {SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS} from '../../Redux/ActionTypes';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { dispatchAction } from '../../utils/apiGlobal';
+import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../../Redux/ActionTypes';
+import { screenName } from '../../Navigation/ScreenConstants';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import CommentInput from '../../Components/CommentInput';
 import RenderComment from '../../Components/RenderComment';
@@ -30,7 +30,7 @@ import RenderComment from '../../Components/RenderComment';
 export default function PostDetail() {
   const navigation = useNavigation();
   const [commentText, setcommentText] = useState('');
-  const {activePost, user, activePostAllComments} = useSelector(e => e.common);
+  const { activePost, user, activePostAllComments } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [deleteModal, setdeleteModal] = useState(false);
   const [selectedComment, setselectedComment] = useState(undefined);
@@ -114,7 +114,7 @@ export default function PostDetail() {
     dispatch(onDeleteComment(obj));
   };
 
-  const RenderItem = ({item, itemIndex}) => {
+  const RenderItem = ({ item, itemIndex }) => {
     return (
       <RenderComment
         item={item}
@@ -173,13 +173,13 @@ export default function PostDetail() {
       />
 
       <ScrollView>
-        <View style={{marginBottom: 10}}>
+        <View style={{ marginBottom: 10 }}>
           <PostCard isDetailScreen={true} item={activePost} />
         </View>
         {activePostAllComments && activePostAllComments.length > 0 && (
           <FlatList
             data={activePostAllComments}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return <RenderItem itemIndex={index} item={item} />;
             }}
           />
@@ -191,15 +191,6 @@ export default function PostDetail() {
         commentText={commentText}
         placeholder={'Add Comment'}
       />
-      {/* <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
-                <View style={styles.commnetInput}>
-                    <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
-                    <TextInput multiline={true} value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
-                    <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
-                        <Image source={Icons.send} style={ImageStyle(24, 24)} />
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView> */}
       {deleteModal && (
         <ConfirmationModal
           visible={deleteModal}

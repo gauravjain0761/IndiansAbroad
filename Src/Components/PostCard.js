@@ -65,7 +65,7 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
         if (otherUserInfo) {
           dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo?._id } }));
         } else {
-          dispatchAction(dispatch, SET_CONNECT_REQUEST, { postId: item._id })
+          dispatchAction(dispatch, SET_CONNECT_REQUEST, { followingId: item?.createdBy?._id })
         }
       },
     };
@@ -129,7 +129,7 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
     let obj = {
       data: { userId: user._id, followingId: item?.createdBy?._id },
       onSuccess: () => {
-        dispatchAction(dispatch, SET_CONNECT_REQUEST, { postId: item._id, type: 'remove' })
+        dispatchAction(dispatch, SET_CONNECT_REQUEST, { followingId: item?.createdBy?._id, type: 'remove' })
       },
     };
     dispatch(onCancelRequest(obj));
@@ -145,11 +145,12 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
                   // userId={isDetailScreen ? undefined : item?.createdBy?._id}
                   url={item?.cpId?.logo}
                   height={57}
+                  type='page'
                 // isBorder={item?.createdBy?.subscribedMember}
                 />
               </TouchableOpacity>
               :
-              <RenderUserIcon userId={isDetailScreen ? undefined : item?.createdBy?._id} url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
+              <RenderUserIcon type='user' userId={isDetailScreen ? undefined : item?.createdBy?._id} url={item?.createdBy?.avtar} height={57} isBorder={item?.createdBy?.subscribedMember} />
             }
 
           </View>

@@ -62,6 +62,7 @@ export const api = {
   //Indians
   indiansList: '/user/suggestion/filter',
   pageList: '/cp/tab/list',
+  regionIndianList: 'user/suggestion/regionFilter',
 
   // other user
   followRequest: '/follow/request',
@@ -125,7 +126,9 @@ export const api = {
   deleteChat: '/chat/delete',
 
 
-  acceptRejectRequest: '/follow/request/action'
+  acceptRejectRequest: '/follow/request/action',
+  sendMessageRequest: '/OneTimeMessage/send'
+
 };
 
 export const POST = 'POST';

@@ -245,7 +245,7 @@ export default function PagesDetails() {
               setSelectURI(pageDetail?.logo);
               setModalVisible(true);
             }} style={styles.imageView}>
-              <RenderUserIcon height={wp(100)} url={pageDetail?.logo} />
+              <RenderUserIcon height={wp(100)} type='page' url={pageDetail?.logo} />
             </TouchableOpacity>
             <Text style={styles.userText}>{pageDetail?.title}</Text>
             {pageDetail?.catchline && (

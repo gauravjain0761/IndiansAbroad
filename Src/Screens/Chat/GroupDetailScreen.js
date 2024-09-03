@@ -103,7 +103,7 @@ export default function GroupDetailScreen() {
                         setSelectURI(activeChatDetails?.chatLogo[0]?.cdnlocation);
                         setModalVisible(true);
                     }} style={styles.imageView}>
-                        <RenderUserIcon url={activeChatDetails?.chatLogo[0]?.cdnlocation} height={100} isBorder={false} />
+                        <RenderUserIcon type='group' url={activeChatDetails?.chatLogo[0]?.cdnlocation} height={100} isBorder={false} />
                     </TouchableOpacity>
                     <Text style={styles.userText}>{activeChatDetails?.chatName}</Text>
 

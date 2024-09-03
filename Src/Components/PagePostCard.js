@@ -85,7 +85,7 @@ export default function PagePostCard({ item, index, }) {
     <View key={item._id}>
       <View style={styles.headerView}>
         <View style={styles.userImage}>
-          <RenderUserIcon url={item?.cpId?.logo} height={57} />
+          <RenderUserIcon type='page' url={item?.cpId?.logo} height={57} />
         </View>
         <View style={ApplicationStyles.flex}>
           <View>

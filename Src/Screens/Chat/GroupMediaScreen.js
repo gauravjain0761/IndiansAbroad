@@ -45,17 +45,7 @@ export default function GroupMediaScreen() {
                 }}
             />
             <ScrollView style={{ flex: 1 }} >
-                {/* <View style={styles.userViewStyle}>
-                    <View style={styles.imageView}>
-                        <RenderUserIcon url={activeChatRoomUser?.currentUser?.avtar} height={100} isBorder={activeChatRoomUser?.currentUser?.subscribedMember} />
-                    </View>
-                    <Text style={styles.userText}>{activeChatRoomUser?.currentUser?.first_Name} {activeChatRoomUser?.currentUser?.last_Name}</Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate(screenName.indiansDetails, { userId: activeChatRoomUser?.currentUser?._id })}
-                        style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
-                        <Text style={styles.btnText}>View Profile</Text>
-                    </TouchableOpacity>
-                </View> */}
+
                 <View style={styles.tabMainView}>
                     <TouchableOpacity onPress={() => { setTabSelection('media') }} style={[{ marginRight: wp(5), borderBottomColor: tabSelection == 'media' ? colors.primary_4574ca : 'transparent' }, styles.tabItemView,]}>
                         <Text style={tabSelection == 'media' ? styles.tabText : styles.tabText1}>{'Media'}</Text>

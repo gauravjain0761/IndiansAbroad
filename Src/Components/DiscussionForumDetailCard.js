@@ -51,23 +51,13 @@ export default function DiscussionForumDetailCard({ item, index }) {
   return (
     <View key={index}>
       <View style={styles.headerView}>
-        <RenderUserIcon height={57} userId={item?.createdBy?._id} url={item?.createdBy?.avtar} isBorder={item?.createdBy?.subscribedMember} />
+        <RenderUserIcon type='user' height={57} userId={item?.createdBy?._id} url={item?.createdBy?.avtar} isBorder={item?.createdBy?.subscribedMember} />
         <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id })} style={ApplicationStyles.flex}>
           <Text style={styles.username}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}</Text>
-          {!isUser && <Text style={styles.degreeText1}>Founder</Text>}
+          {!isUser && <Text style={styles.degreeText1}>{item?.createdBy?.profession}</Text>}
           <Text style={styles.degreeText}>{item?.createdDate ? item?.createdDate : item?.createdAt}</Text>
         </TouchableOpacity>
-        {!isUser ? (
-          <View>
-            <TouchableOpacity style={styles.messageView}>
-              <Image
-                source={Icons.connect}
-                style={ImageStyle(30, 30, 'cover')}
-              />
-              <Text style={[styles.degreeText, { lineHeight: 16 }]}>Connect</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
+        {isUser && (
           <TouchableOpacity onPress={() => setDeletePostModal(true)} style={styles.messageView}>
             <Image source={Icons.trash} style={ImageStyle(30, 30, 'cover')} />
           </TouchableOpacity>

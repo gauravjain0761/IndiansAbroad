@@ -148,6 +148,7 @@ export default function ProfileScreen() {
                 url={user?.avtar}
                 height={100}
                 isBorder={user?.subscribedMember}
+                type='user'
               />
             </TouchableOpacity>
             <Text style={styles.userText}>

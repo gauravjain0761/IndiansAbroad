@@ -59,7 +59,7 @@ export default function PersonalUserDetailScreen() {
                         setSelectURI(params?.isPage ? activeChatRoomUser?.currentUser?.chatLogo[0]?.cdnlocation : activeChatRoomUser?.currentUser?.avtar);
                         setModalVisible(true);
                     }} style={styles.imageView}>
-                        <RenderUserIcon url={params?.isPage ? activeChatRoomUser?.currentUser?.chatLogo[0]?.cdnlocation : activeChatRoomUser?.currentUser?.avtar} height={100} isBorder={activeChatRoomUser?.currentUser?.subscribedMember} />
+                        <RenderUserIcon type={params?.isPage ? 'page' : 'user'} url={params?.isPage ? activeChatRoomUser?.currentUser?.chatLogo[0]?.cdnlocation : activeChatRoomUser?.currentUser?.avtar} height={100} isBorder={activeChatRoomUser?.currentUser?.subscribedMember} />
                     </TouchableOpacity>
                     <Text style={styles.userText}>{params?.isPage ? activeChatRoomUser?.currentUser?.chatName : activeChatRoomUser?.currentUser?.first_Name} {params?.isPage ? '' : activeChatRoomUser?.currentUser?.last_Name}</Text>
                     {!params?.isPage && <TouchableOpacity

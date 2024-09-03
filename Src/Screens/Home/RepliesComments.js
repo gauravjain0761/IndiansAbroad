@@ -8,14 +8,14 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {FontStyle, ImageStyle, errorToast} from '../../utils/commonFunction';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { FontStyle, ImageStyle, errorToast } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import RenderUserIcon from '../../Components/RenderUserIcon';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   onAddCommentReply,
   onDeleteCommentReply,
@@ -23,11 +23,11 @@ import {
   onGetRepliesComment,
   onGetSinglePost,
 } from '../../Services/PostServices';
-import {Icons} from '../../Themes/Icons';
+import { Icons } from '../../Themes/Icons';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import CommentInput from '../../Components/CommentInput';
 import RenderText from '../../Components/RenderText';
-import {screenName} from '../../Navigation/ScreenConstants';
+import { screenName } from '../../Navigation/ScreenConstants';
 import {
   onAddCommentReplyThread,
   onDeleteCommentReplyThread,
@@ -35,13 +35,13 @@ import {
 } from '../../Services/DiscussionServices';
 
 export default function RepliesComments() {
-  const {goBack} = useNavigation();
+  const { goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const {repliesComments, activePostAllComments, user,activePost} = useSelector(
+  const { repliesComments, activePostAllComments, user, activePost } = useSelector(
     e => e.common,
   );
   const dispatch = useDispatch();
-  const {params} = useRoute();
+  const { params } = useRoute();
   const [activeComment, setactiveComment] = useState(undefined);
   const [commentText, setcommentText] = useState('');
   const [deleteModal, setdeleteModal] = useState(false);
@@ -63,7 +63,7 @@ export default function RepliesComments() {
     } else {
       dispatch(
         onGetRepliesComment({
-          data: {postId: params?.postId, commentId: params?.commentId},
+          data: { postId: params?.postId, commentId: params?.commentId },
         }),
       );
     }
@@ -85,7 +85,7 @@ export default function RepliesComments() {
         } else {
           dispatch(
             onGetRepliesComment({
-              data: {postId: params?.postId, commentId: params?.commentId},
+              data: { postId: params?.postId, commentId: params?.commentId },
             }),
           );
         }
@@ -99,7 +99,7 @@ export default function RepliesComments() {
     );
   };
 
-  const RenderReply = ({item, index, isLastIndex}) => {
+  const RenderReply = ({ item, index, isLastIndex }) => {
     let isUser = item?.createdBy?._id == user?._id;
 
     const onOpenOtherUserDetails = () => {
@@ -112,21 +112,22 @@ export default function RepliesComments() {
 
     return (
       <View style={styles.replyCommentView}>
-        <View style={[styles.replyCommnt, {alignItems: 'flex-start'}]}>
+        <View style={[styles.replyCommnt, { alignItems: 'flex-start' }]}>
           <View
             style={[
               styles.verticalLine,
-              {height: isLastIndex ? '15%' : '100%'},
+              { height: isLastIndex ? '15%' : '100%' },
             ]}
           />
-          <View style={[styles.horizontalLine, {marginTop: '8%'}]} />
+          <View style={[styles.horizontalLine, { marginTop: '8%' }]} />
           <View style={styles.innerCommentRow}>
-            <View style={{marginTop: 5}}>
+            <View style={{ marginTop: 5 }}>
               <RenderUserIcon
                 userId={item?.createdBy?._id}
                 url={item?.createdBy?.avtar}
                 height={38}
-                isBorder
+                isBorder={item?.createdBy?.subscribedMember}
+                type='user'
               />
             </View>
             <TouchableOpacity
@@ -150,7 +151,7 @@ export default function RepliesComments() {
                   onPress={() => {
                     setselectedComment(item), setdeleteModal(true);
                   }}
-                  style={{padding: 5}}>
+                  style={{ padding: 5 }}>
                   <Image source={Icons.trash} style={ImageStyle(20, 20)} />
                 </TouchableOpacity>
               )}
@@ -194,7 +195,7 @@ export default function RepliesComments() {
             setcommentText('');
             dispatch(
               onGetRepliesComment({
-                data: {postId: params?.postId, commentId: params?.commentId},
+                data: { postId: params?.postId, commentId: params?.commentId },
               }),
             );
             onGetAllCommentCall()
@@ -207,7 +208,7 @@ export default function RepliesComments() {
     }
   };
 
-  const  onGetAllCommentCall= () => {
+  const onGetAllCommentCall = () => {
     dispatch(
       onGetSinglePost({
         data: {
@@ -235,23 +236,27 @@ export default function RepliesComments() {
         showRight={false}
         onLeftPress={() => goBack()}
       />
-      <View style={{borderTopWidth: 1, borderTopColor: colors.secondary_500}}>
+      <View style={{ borderTopWidth: 1, borderTopColor: colors.secondary_500 }}>
         <Text style={styles.chatText}>Replies</Text>
       </View>
       <ScrollView>
-        <View style={{paddingHorizontal: 0, marginTop: 8, flex: 1}}>
+        <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
           {activeComment && (
-            <View style={{marginBottom: 10}}>
+            <View style={{ marginBottom: 10 }}>
               <View style={styles.headerView}>
-                <View style={{paddingTop: 8}}>
+                <View style={{ paddingTop: 8 }}>
                   <RenderUserIcon
                     url={
                       activeComment?.user
                         ? activeComment?.user?.avtar
                         : activeComment?.createdBy?.avtar
                     }
+                    type='user'
                     height={53}
-                    isBorder
+                    isBorder={activeComment?.user
+                      ? activeComment?.user?.subscribedMember
+                      : activeComment?.createdBy?.subscribedMember}
+
                   />
                 </View>
                 <View style={styles.commentBg}>
@@ -277,7 +282,7 @@ export default function RepliesComments() {
               {repliesComments && repliesComments.length > 0 && (
                 <FlatList
                   data={repliesComments}
-                  renderItem={({item, index}) => {
+                  renderItem={({ item, index }) => {
                     return (
                       <RenderReply
                         item={item}
@@ -298,17 +303,6 @@ export default function RepliesComments() {
         commentText={commentText}
         placeholder={'Add Comment'}
       />
-
-      {/* <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
-                <View style={styles.commnetInput}>
-                    <RenderUserIcon url={user?.avtar} height={46} isBorder={user?.subscribedMember} />
-                    <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} style={styles.input} placeholder='Add Comment' placeholderTextColor={colors.neutral_500} />
-                    <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
-                        <Image source={Icons.send} style={ImageStyle(24, 24)} />
-                    </TouchableOpacity>
-
-                </View>
-            </KeyboardAvoidingView> */}
       {deleteModal && (
         <ConfirmationModal
           visible={deleteModal}

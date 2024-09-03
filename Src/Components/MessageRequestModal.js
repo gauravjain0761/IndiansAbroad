@@ -4,18 +4,30 @@ import ModalContainer from './ModalContainer'
 import colors from '../Themes/Colors'
 import { hp, wp } from '../Themes/Fonts'
 import { Icons } from '../Themes/Icons'
-import { FontStyle, ImageStyle } from '../utils/commonFunction'
+import { errorToast, FontStyle, ImageStyle } from '../utils/commonFunction'
 import ReactNativeModal from 'react-native-modal'
+import { useDispatch } from 'react-redux'
+import { onSendMessageRequest } from '../Services/ChatServices'
 
 export default function MessageRequestModal({
     visible,
-    onClose
+    onClose,
+    userId
 }) {
     const [postText, setpostText] = useState('')
+    const dispatch = useDispatch()
 
     const onPressPublish = () => {
-
+        onClose()
+        let obj = {
+            data: {
+                content: postText.trim(),
+                receiverId: userId
+            }
+        }
+        dispatch(onSendMessageRequest(obj))
     }
+
     return (
         <ReactNativeModal onBackButtonPress={() => Keyboard.dismiss()} onBackdropPress={() => Keyboard.dismiss()} avoidKeyboard isVisible={visible}
             style={{ justifyContent: 'flex-end', margin: 0 }} >
@@ -23,7 +35,7 @@ export default function MessageRequestModal({
                 <View style={styles.modalView}>
                     <View style={styles.row}>
                         <View>
-                            <Image source={Icons.question} style={ImageStyle(30, 30)} />
+                            <Image source={Icons.question} style={[ImageStyle(30, 30), { marginTop: 4 }]} />
                         </View>
                         <Text style={styles.title}>Message request to connect</Text>
                         <TouchableOpacity onPress={() => onClose()} style={styles.backView}>
@@ -62,7 +74,7 @@ const styles = StyleSheet.create({
     backView: {
         padding: wp(10),
     },
-    row: { flexDirection: 'row', alignItems: 'center', marginLeft: wp(10), paddingTop: wp(10), gap: 10 },
+    row: { flexDirection: 'row', marginLeft: wp(10), paddingTop: wp(10), gap: 10 },
     des: {
         marginHorizontal: 30,
         ...FontStyle(14, colors.neutral_900),
