@@ -3,6 +3,7 @@ export const api = {
   BASE_URL: 'https://expresstest.indiansabroad.online/api',
   // BASE_URL: 'http://ec2-3-95-222-146.compute-1.amazonaws.com/api',
   IMAGE_URL: 'https://cdn.indiansabroad.online/',
+  WEB_CLIENT_ID: '773513820699-40j4fti3hv3hhrqk80l5jicl755capoo.apps.googleusercontent.com',
 
   login: '/user/login',
   checkSession: '/user/check-session',

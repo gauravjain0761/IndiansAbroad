@@ -138,7 +138,7 @@ export default function RenderIndians() {
     return (
         <View style={ApplicationStyles.flex} >
             <SearchBar value={searchText} onChangeText={text => onSearchIndians(text, 1)} placeholder={'Search Indians here'} />
-            {/* {searchText !== '' ?
+            {searchText !== '' ?
                 <FlatList
                     style={styles.flatList}
                     columnWrapperStyle={styles.column}
@@ -199,7 +199,7 @@ export default function RenderIndians() {
                             }} />
                     }
                 </View>
-            } */}
+            }
 
         </View>
     )

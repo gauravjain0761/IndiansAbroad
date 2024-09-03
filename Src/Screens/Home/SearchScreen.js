@@ -22,13 +22,16 @@ export default function SearchScreen() {
     const [searchText, setSearchText] = useState('');
     const { likedUserList, user, globalSearchData } = useSelector(e => e.common)
     const dispatch = useDispatch()
+    let searchData = ['All', 'Indians', 'Pages', 'Location', 'University', 'Company', 'Profession']
+    const [selectedTab, setselectedTab] = useState('All')
 
-    const onGlobalSearch = (text) => {
+    const onGlobalSearch = (text, tab) => {
         setSearchText(text)
         const obj = {
             data: {
-                loginUserId: user._id,
-                searchText: text.trim()
+                // loginUserId: user._id,
+                searchText: text.trim(),
+                searchKey: tab == 'Indians' ? 'Person' : tab == 'Pages' ? 'Page' : tab == 'Location' ? 'Region' : tab
             }
         }
         dispatch(onGlobalSearchApi(obj))
@@ -45,65 +48,152 @@ export default function SearchScreen() {
             <View style={{ borderTopWidth: 1, borderTopColor: colors.secondary_500, }}>
                 <SearchBar
                     value={searchText}
-                    onChangeText={text => onGlobalSearch(text)}
+                    onChangeText={text => onGlobalSearch(text, selectedTab)}
                     placeholder={'Search users, posts, forums'}
                 />
             </View>
             <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
-                {globalSearchData?.posts?.records?.length == 0 && globalSearchData?.threads?.records?.length == 0 && globalSearchData?.users?.records?.length == 0 &&
-                    <NoDataFound />
+                <View>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                        <View style={styles.searchTab}>
+                            {searchData.map((element, index) => {
+                                return (
+                                    <TouchableOpacity onPress={() => { setselectedTab(element), onGlobalSearch(searchText, element) }} style={[styles.tabItem, { backgroundColor: element == selectedTab ? colors.primary_500 : colors.neutral_300 }]}>
+                                        <Text style={[styles.tabText, { color: element == selectedTab ? colors.white : colors.neutral_900 }]}>{element}</Text>
+                                    </TouchableOpacity>
+                                )
+                            })}
+                        </View>
+                    </ScrollView>
+                </View>
+                {selectedTab == 'All' ?
+                    <View style={{ flex: 1 }}>
+                        {globalSearchData?.posts?.records?.length == 0 && globalSearchData?.threads?.records?.length == 0 && globalSearchData?.users?.records?.length == 0 && globalSearchData?.cps?.records?.length == 0 &&
+                            <NoDataFound />
+                        }
+                        <ScrollView style={{ flex: 1, paddingHorizontal: hp(20) }}>
+                            {globalSearchData?.posts?.records?.length > 0 &&
+                                <View>
+                                    <Text style={styles.title}>Posts</Text>
+                                    {globalSearchData?.posts?.records.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity onPress={() => {
+                                                dispatchAction(dispatch, SET_ACTIVE_POST, item)
+                                                dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
+                                                navigate(screenName.PostDetail)
+                                            }} style={styles.row} key={index}>
+                                                <FastImage resizeMode={FastImage.resizeMode.stretch} source={{ uri: api.IMAGE_URL + item.avtar }} style={styles.imageAvtar} />
+                                                <View style={ApplicationStyles.flex}>
+                                                    <Text numberOfLines={1} style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}>{item.title}</Text>
+                                                    <Text numberOfLines={1} style={styles.name}>- {item.first_Name} {item.last_Name}</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                            }
+                            {globalSearchData?.threads?.records?.length > 0 &&
+                                <View>
+                                    <Text style={styles.title}>Threads</Text>
+                                    {globalSearchData?.threads?.records.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity style={styles.row} key={index}>
+                                                <FastImage resizeMode={FastImage.resizeMode.stretch} source={{ uri: api.IMAGE_URL + item.avtar }} style={styles.imageAvtar} />
+                                                <View style={ApplicationStyles.flex}>
+                                                    <Text numberOfLines={1} style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}>{item.title}</Text>
+                                                    <Text numberOfLines={1} style={styles.name}>- {item.first_Name} {item.last_Name}</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                            }
+                            {globalSearchData?.users?.records?.length > 0 &&
+                                <View>
+                                    <Text style={styles.title}>Users</Text>
+                                    {globalSearchData?.users?.records.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
+                                                <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                                <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.first_Name} {item?.last_Name}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                            }
+                            {globalSearchData?.cps?.records?.length > 0 &&
+                                <View>
+                                    <Text style={styles.title}>Pages</Text>
+                                    {globalSearchData?.cps?.records.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
+                                                <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                                <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.title}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                            }
+                            {/* {globalSearchData?.pages?.records?.length > 0 &&
+                                <View>
+                                    <Text style={styles.title}>Pages</Text>
+                                    {globalSearchData?.pages?.records.map((item, index) => {
+                                        return (
+                                            <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
+                                                <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                                <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.title}</Text>
+                                            </TouchableOpacity>
+                                        )
+                                    })}
+                                </View>
+                            } */}
+                        </ScrollView>
+                    </View>
+                    : selectedTab == 'Pages' ?
+                        <View style={{ flex: 1 }}>
+                            {globalSearchData?.pages?.records?.length == 0 &&
+                                <NoDataFound />
+                            }
+                            <ScrollView style={{ flex: 1, paddingHorizontal: hp(20) }}>
+                                {globalSearchData?.pages?.records?.length > 0 &&
+                                    <View>
+                                        <Text style={styles.title}>Pages</Text>
+                                        {globalSearchData?.pages?.records.map((item, index) => {
+                                            return (
+                                                <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
+                                                    <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                                    <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.title}</Text>
+                                                </TouchableOpacity>
+                                            )
+                                        })}
+                                    </View>
+                                }
+                            </ScrollView>
+                        </View>
+                        :
+                        <View style={{ flex: 1 }}>
+                            {globalSearchData?.users?.records?.length == 0 &&
+                                <NoDataFound />
+                            }
+                            <ScrollView style={{ flex: 1, paddingHorizontal: hp(20) }}>
+                                {globalSearchData?.users?.records?.length > 0 &&
+                                    <View>
+                                        <Text style={styles.title}>Users</Text>
+                                        {globalSearchData?.users?.records.map((item, index) => {
+                                            return (
+                                                <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
+                                                    <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                                    <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.first_Name} {item?.last_Name}</Text>
+                                                </TouchableOpacity>
+                                            )
+                                        })}
+                                    </View>
+                                }
+                            </ScrollView>
+                        </View>
                 }
-                <ScrollView style={{ flex: 1, paddingHorizontal: hp(20) }}>
-                    {globalSearchData?.posts?.records?.length > 0 &&
-                        <View>
-                            <Text style={styles.title}>Posts</Text>
-                            {globalSearchData?.posts?.records.map((item, index) => {
-                                return (
-                                    <TouchableOpacity onPress={() => {
-                                        dispatchAction(dispatch, SET_ACTIVE_POST, item)
-                                        dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined)
-                                        navigate(screenName.PostDetail)
-                                    }} style={styles.row} key={index}>
-                                        <FastImage resizeMode={FastImage.resizeMode.stretch} source={{ uri: api.IMAGE_URL + item.avtar }} style={styles.imageAvtar} />
-                                        <View style={ApplicationStyles.flex}>
-                                            <Text numberOfLines={1} style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}>{item.title}</Text>
-                                            <Text numberOfLines={1} style={styles.name}>- {item.first_Name} {item.last_Name}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </View>
-                    }
-                    {globalSearchData?.threads?.records?.length > 0 &&
-                        <View>
-                            <Text style={styles.title}>Threads</Text>
-                            {globalSearchData?.threads?.records.map((item, index) => {
-                                return (
-                                    <TouchableOpacity style={styles.row} key={index}>
-                                        <FastImage resizeMode={FastImage.resizeMode.stretch} source={{ uri: api.IMAGE_URL + item.avtar }} style={styles.imageAvtar} />
-                                        <View style={ApplicationStyles.flex}>
-                                            <Text numberOfLines={1} style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}>{item.title}</Text>
-                                            <Text numberOfLines={1} style={styles.name}>- {item.first_Name} {item.last_Name}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </View>
-                    }
-                    {globalSearchData?.users?.records?.length > 0 &&
-                        <View>
-                            <Text style={styles.title}>Users</Text>
-                            {globalSearchData?.users?.records.map((item, index) => {
-                                return (
-                                    <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
-                                        <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
-                                        <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.first_Name} {item?.last_Name}</Text>
-                                    </TouchableOpacity>
-                                )
-                            })}
-                        </View>
-                    }
-                </ScrollView>
+
+
             </View >
         </SafeAreaView >
     )
@@ -153,5 +243,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginVertical: hp(10),
         gap: 10
+    },
+    flatList: {
+        paddingLeft: 10
+    },
+    tabItem: {
+        backgroundColor: colors.neutral_300,
+        marginRight: 10,
+        paddingHorizontal: 10,
+        borderRadius: 4,
+        paddingVertical: 5
+    },
+    tabText: {
+        ...FontStyle(14, colors.neutral_900)
+    },
+    searchTab: {
+        paddingLeft: 10,
+        flexDirection: 'row'
     }
 })

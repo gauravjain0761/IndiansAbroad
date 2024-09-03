@@ -340,6 +340,7 @@ export const onGlobalSearchApi = request => async dispatch => {
       });
     })
     .catch(error => {
+      console.log(error)
       handleErrorRes(error, request, dispatch);
     });
 };

@@ -13,6 +13,9 @@ import CountryPicker from 'react-native-country-picker-modal'
 import { onGetOtp } from '../../Services/AuthServices'
 import { useDispatch } from 'react-redux'
 import Header from '../../Components/Header'
+import { GoogleSignin, } from '@react-native-google-signin/google-signin';
+import { api } from '../../utils/apiConstants'
+import axios from 'axios'
 
 export default function SignupScreen() {
     const [firstName, setfirstName] = useState('')
@@ -55,9 +58,49 @@ export default function SignupScreen() {
         }
         // navigation.navigate(screenName.OTPScreen)
     }
-    const onPressGoogle = () => {
+    const onPressGoogle = async () => {
+        GoogleSignin.configure({
+            webClientId: api.WEB_CLIENT_ID, scopes: [
+                "https://www.googleapis.com/auth/userinfo.profile",
+                "https://www.googleapis.com/auth/userinfo.email"
+            ]
+        });
+        try {
+            await GoogleSignin.hasPlayServices();
+            const currentUser = GoogleSignin.getCurrentUser()
+            if (currentUser !== null) {
+                await GoogleSignin.revokeAccess();
+                await GoogleSignin.signOut();
+            }
+            const userInfo = await GoogleSignin.signIn();
+            console.log(userInfo.data.user)
+            if (userInfo) {
+                const { accessToken } = await GoogleSignin.getTokens();
+                axios({
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                    url: `https://people.googleapis.com/v1/people/${userInfo.data.user.id}?personFields=genders,phoneNumbers,birthdays`
+                })
+                    .then(function (response) {
+                        // handle success
+                        console.log(response.data);
+                        console.log(response.data.genders[0])
+                        console.log(response.data.birthdays[0]);
+                        console.log(response.data.phoneNumbers[0]);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    });
+            }
 
-    }
+
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     return (
         <View style={ApplicationStyles.applicationView}>

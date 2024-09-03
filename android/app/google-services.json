@@ -12,7 +12,12 @@
           "package_name": "com.indianabroad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "773513820699-40j4fti3hv3hhrqk80l5jicl755capoo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA2I-MFf1LPoSg8MJCBH9bIWC9I8JJ-gkg"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773513820699-40j4fti3hv3hhrqk80l5jicl755capoo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "773513820699-9susi118qk84s81dr04rf4ckj453l58o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "online.indiansabroad"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,28 @@
           "package_name": "com.indiansabroad"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "773513820699-ed6e3ao65v92osbb7ofras8h763f2hr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.indiansabroad",
+            "certificate_hash": "df66c3110d2acd92c4a66b8c990fab2df23a417d"
+          }
+        },
+        {
+          "client_id": "773513820699-hbtnj30o4o54fv1btioknepdmv2p6hje.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.indiansabroad",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "773513820699-40j4fti3hv3hhrqk80l5jicl755capoo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA2I-MFf1LPoSg8MJCBH9bIWC9I8JJ-gkg"
@@ -39,7 +77,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773513820699-40j4fti3hv3hhrqk80l5jicl755capoo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "773513820699-9susi118qk84s81dr04rf4ckj453l58o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "online.indiansabroad"
+              }
+            }
+          ]
         }
       }
     }

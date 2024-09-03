@@ -140,7 +140,7 @@ export default function IndiansDetails() {
           dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
           navigation.navigate(screenName.PostDetail);
         }}>
-        <PostCard item={item} index={index} />
+        <PostCard showRequestBtns={false} item={item} index={index} />
       </TouchableOpacity>
     );
   };

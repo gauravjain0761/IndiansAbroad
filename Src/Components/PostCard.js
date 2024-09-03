@@ -22,7 +22,7 @@ import ShareModal from './ShareModal';
 import RenderText from './RenderText';
 import { onOpenNewChatForUser } from '../Services/ChatServices';
 
-export default function PostCard({ item, index, isDetailScreen = false }) {
+export default function PostCard({ item, index, isDetailScreen = false, showRequestBtns = true }) {
   const [menuModal, setmenuModal] = useState(false);
   const navigation = useNavigation();
   const { user } = useSelector(e => e.common);
@@ -134,7 +134,10 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
     };
     dispatch(onCancelRequest(obj));
   }
-  if (item?.createdBy) {
+  // if (index == 1) {
+  //   console.log(item)
+  // }
+  if (item) {
     return (
       <View key={item?._id}>
         <View style={styles.headerView}>
@@ -186,7 +189,7 @@ export default function PostCard({ item, index, isDetailScreen = false }) {
             </TouchableOpacity>
           }
 
-          {!isUser && (
+          {!isUser && showRequestBtns && (
             <View>
               {item.type == 'cppost' ?
                 item?.followingCommunityPage == 'not_following' ?

@@ -32,6 +32,7 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
           params,
           error,
           error?.response?.status,
+          error?.response
         );
         reject(error);
       });

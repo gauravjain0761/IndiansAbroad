@@ -102,6 +102,7 @@
 		13B07FAE1A68108700A75B9A /* IndiansAbroad */ = {
 			isa = PBXGroup;
 			children = (
+				1F601A622C3EB3E8000828AD /* GoogleService-Info.plist */,
 				1FE98C712C3EBCA500C07533 /* IndiansAbroad.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -147,7 +148,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				1F601A622C3EB3E8000828AD /* GoogleService-Info.plist */,
 				1FDE23592C3C1F2A00C3E751 /* fonts */,
 				13B07FAE1A68108700A75B9A /* IndiansAbroad */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
