@@ -101,6 +101,7 @@ export default function ChatRoomUsersScreen() {
                             />
                         );
                     }}
+                    keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<NoDataFound />}
                 />}

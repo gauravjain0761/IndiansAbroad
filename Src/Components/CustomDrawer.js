@@ -12,17 +12,18 @@ import { SCREEN_HEIGHT, defaultFontStyle, fontname, hp } from '../Themes/Fonts';
 import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearAsync } from '../utils/AsyncStorage';
 import { resetNavigation } from '../utils/Global';
 import ConfirmationModal from './ConfirmationModal';
 import RenderUserIcon from './RenderUserIcon';
-import { removeAuthorization } from '../utils/apiGlobal';
+import { dispatchAction, removeAuthorization } from '../utils/apiGlobal';
 
 export default function CustomDrawer() {
     const navigation = useNavigation();
     const { user } = useSelector(e => e.common)
     const [logoutModal, setlogoutModal] = useState(false)
+    const dispatch = useDispatch()
     let data = [
         // { name: 'Live tracking', screen: screenName.LiveTrackingScreen, image: Icons.liveTracking },
         {
@@ -85,8 +86,7 @@ ${user?.first_Name} ${user?.last_Name}`
 
     const onPressLogout = async () => {
         setlogoutModal(false)
-        removeAuthorization()
-        await clearAsync()
+        removeAuthorization(dispatch)
         resetNavigation(screenName.LoginScreen)
     }
 

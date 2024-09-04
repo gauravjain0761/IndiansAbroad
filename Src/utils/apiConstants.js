@@ -63,7 +63,7 @@ export const api = {
   //Indians
   indiansList: '/user/suggestion/filter',
   pageList: '/cp/tab/list',
-  regionIndianList: 'user/suggestion/regionFilter',
+  regionIndianList: '/user/suggestion/regionFilter',
 
   // other user
   followRequest: '/follow/request',

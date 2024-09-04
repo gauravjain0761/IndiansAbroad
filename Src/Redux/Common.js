@@ -53,10 +53,13 @@ import {
   ON_DELETE_CHAT,
   SET_CONNECT_REQUEST,
   SET_ALL_INDIANS_REGION,
+  SET_GOOGLE_USER,
+  LOG_OUT,
 } from './ActionTypes';
 
 const initialState = {
   user: undefined,
+  googleUser: undefined,
   preLoader: false,
   allPost: undefined,
   allEvent: undefined,
@@ -329,6 +332,7 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
+
       return { ...state, allIndian: update, allIndianRegion: update2 };
     }
     case SET_CONNECT_REQUEST: {
@@ -342,7 +346,13 @@ export default function (state = initialState, action) {
           return { ...item };
         }
       });
-      return { ...state, allPost: update }
+      let activePost = Object.assign({}, state.activePost)
+      if (Object.keys(activePost).length > 0) {
+        if (activePost.createdBy._id == action.payload.followingId) {
+          activePost.isFollowing = action?.payload?.type && action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested'
+        }
+      }
+      return { ...state, allPost: update, activePost: activePost }
     }
     case SET_POST_CANCEL_REQUEST: {
       const updates = state.allIndian.map(item => {
@@ -640,6 +650,13 @@ export default function (state = initialState, action) {
           allChatRoomCount: state?.allChatRoomCount - 1,
         };
       }
+    }
+    case SET_GOOGLE_USER: {
+      console.log('action.payload----', action.payload)
+      return { ...state, googleUser: action.payload };
+    }
+    case LOG_OUT: {
+      return initialState
     }
     default:
       return state;

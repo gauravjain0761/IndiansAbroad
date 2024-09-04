@@ -82,6 +82,7 @@ export default function BlockedUsers() {
       </View>
       {blockUserList && <View style={{ paddingHorizontal: 0, marginTop: 8, flex: 1 }}>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           data={blockUserList}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}

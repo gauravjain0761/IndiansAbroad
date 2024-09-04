@@ -27,6 +27,9 @@ const SenderMsg = ({ data }) => {
   const showMenu = () => setVisible(true);
   const [deletePostModal, setdeletePostModal] = useState(false)
   const [deleteFor, setdeleteFor] = useState(undefined)
+
+  console.log(data)
+
   const onOpenPostDetail = () => {
     dispatchAction(dispatch, IS_LOADING, true);
 
@@ -101,21 +104,21 @@ const SenderMsg = ({ data }) => {
               }
               {data?.shareContentType == 'post' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                  {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'thread' &&
                 <TouchableOpacity onPress={() => onOpenThreadDetail()} >
-                  {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'cppost' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                  {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>

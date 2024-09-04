@@ -1,38 +1,14 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 import React from 'react';
-import ApplicationStyles from '../Themes/ApplicationStyles';
-import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
+import { hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
-import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
-import { api } from '../utils/apiConstants';
-import {
-  onCancelRequest,
-  onConnectRequest,
-  onDisConnect,
-  onPagesConnectRequest,
-  onPagesDisConnectRequest,
-  onUnFollowRequest,
-} from '../Services/OtherUserServices';
+import { onCancelRequest, onConnectRequest, onPagesConnectRequest, onPagesDisConnectRequest, onUnFollowRequest, } from '../Services/OtherUserServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatchAction } from '../utils/apiGlobal';
-import {
-  SET_POST_CANCEL_REQUEST,
-  SET_POST_CONNECT,
-  SET_POST_DISCONNECT,
-  SET_POST_PAGES_CONNECT,
-  SET_POST_PAGES_DISCONNECT,
-} from '../Redux/ActionTypes';
+import { SET_POST_CANCEL_REQUEST, SET_POST_CONNECT, SET_POST_DISCONNECT, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, } from '../Redux/ActionTypes';
 
 export default function ConnectCard({
   indians,
@@ -47,6 +23,7 @@ export default function ConnectCard({
   index,
   isfollowing,
   followingId,
+  city
 }) {
   const navigation = useNavigation();
   const { user } = useSelector(e => e.common);
@@ -157,7 +134,7 @@ export default function ConnectCard({
       </Text>
       {!indians && (
         <Text numberOfLines={1} style={styles.text2}>
-          MS Student
+          {city}
         </Text>
       )}
       {indians && (
@@ -249,7 +226,7 @@ const styles = StyleSheet.create({
     // lineHeight: 16,
     // top: -2,
     textAlign: 'center',
-    height: 32,
+    // height: 32,
     ...FontStyle(12, colors.neutral_900, '400'),
   },
   btnView: {

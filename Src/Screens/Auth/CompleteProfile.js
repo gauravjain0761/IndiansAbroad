@@ -44,13 +44,14 @@ export default function CompleteProfile() {
     const [image, setimage] = useState(undefined)
     const [gender, setgender] = useState('')
     const [dob, setdob] = useState('')
-    const { user } = useSelector(e => e.common)
+    const { user, googleUser } = useSelector(e => e.common)
     const dispatch = useDispatch()
     let data = [
         { title: 'Male', icon: Icons.maleGender },
         { title: 'Female', icon: Icons.femenine },
         { title: 'Other', icon: Icons.star }
     ]
+    console.log(googleUser)
     const openPicker = () => {
         closeActionSheet();
         setTimeout(() => {

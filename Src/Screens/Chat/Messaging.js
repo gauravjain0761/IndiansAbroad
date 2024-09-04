@@ -29,65 +29,6 @@ import { hp, wp } from '../../Themes/Fonts';
 import moment from 'moment';
 import MessageRequestModal from '../../Components/MessageRequestModal';
 
-let data = [
-  {
-    id: 1,
-    name: 'Sager khot',
-    message: 'Welcome Nikita',
-    time: '02:51',
-    type: 'receiver',
-  },
-  {
-    id: 2,
-    name: 'Kalyani Kadam',
-    message: 'Hi',
-    time: '02:51',
-    type: 'receiver',
-  },
-  {
-    id: 3,
-    name: 'Sager khot',
-    message: 'Welcome',
-    time: '02:51',
-    type: 'receiver',
-  },
-  {
-    id: 4,
-    name: 'Kalyani Kadam',
-    message: 'Thank u',
-    time: '02:51',
-    type: 'receiver',
-  },
-  {
-    id: 5,
-    name: 'You',
-    message: 'Hello',
-    time: '02:51',
-    type: 'sender',
-  },
-  {
-    id: 6,
-    name: 'Sager khot',
-    message: 'Tula nhi welcome',
-    time: '02:51',
-    type: 'receiver',
-  },
-  {
-    id: 7,
-    name: 'You',
-    message: 'jato mg',
-    time: '02:51',
-    type: 'sender',
-  },
-  {
-    id: 8,
-    name: 'Sager khot',
-    message: 'Hahaha',
-    time: '02:51',
-    type: 'receiver',
-  },
-];
-
 const Messaging = () => {
   const { chatMessageList, user, followerList, activeChatRoomUser, allChatMessageCount } = useSelector(e => e.common);
   const navigation = useNavigation()

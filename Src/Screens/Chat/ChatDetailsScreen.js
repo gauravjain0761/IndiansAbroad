@@ -55,6 +55,7 @@ export default function ChatDetailsScreen() {
         numColumns={2}
         bounces={false}
         data={[1, 2, 3, 2]}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => {
           return (
             <ChatCard

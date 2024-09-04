@@ -193,6 +193,7 @@ export default function SavedEvents() {
         }}>
         <View key={'1'} style={{ flex: 1 }}>
           <FlatList
+            keyExtractor={(item, index) => index.toString()}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
@@ -220,7 +221,7 @@ export default function SavedEvents() {
             renderItem={renderBookedTicketsItem}
             contentContainerStyle={{ flex: allSave?.bookedTickets?.length !== 0 ? 0 : 1 }}
             onEndReachedThreshold={0.3}
-
+            keyExtractor={(item, index) => index.toString()}
             ListEmptyComponent={
               <NoDataFound
                 containerStyle={{

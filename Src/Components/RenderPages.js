@@ -72,6 +72,7 @@ export default function RenderPages() {
                 userAvtar={item?.logo}
                 isfollowing={item?.isfollowing}
                 indians={false}
+                city={item?.city}
             />
         )
     }
@@ -121,6 +122,7 @@ export default function RenderPages() {
                     numColumns={2}
                     bounces={false}
                     data={allPages}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={RenderItem}
                     showsVerticalScrollIndicator={false}
                     onEndReached={fetchMoreData}
@@ -133,6 +135,7 @@ export default function RenderPages() {
                             </View>
                         )
                     }}
+                    ListEmptyComponent={<NoDataFound />}
                 />
                 :
                 <View style={ApplicationStyles.flex}>
@@ -161,6 +164,7 @@ export default function RenderPages() {
                             columnWrapperStyle={styles.column}
                             numColumns={2}
                             data={allPages}
+                            keyExtractor={(item, index) => index.toString()}
                             renderItem={RenderItem}
                             showsVerticalScrollIndicator={false}
                             onEndReached={fetchMoreData}

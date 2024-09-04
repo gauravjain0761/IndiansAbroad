@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { api } from './apiConstants';
-import { IS_LOADING, actions } from '../Redux/ActionTypes';
+import { IS_LOADING, LOG_OUT, actions } from '../Redux/ActionTypes';
 import { errorToast } from './commonFunction';
-import { getAsyncToken } from './AsyncStorage';
+import { clearAsync, getAsyncToken } from './AsyncStorage';
 
 export const makeAPIRequest = ({ method, url, data, params, headers }) =>
   new Promise((resolve, reject) => {
@@ -49,7 +49,8 @@ export const setAuthorization = async authToken => {
   }
 };
 
-export const removeAuthorization = async () => {
+export const removeAuthorization = async (dispatch) => {
+  dispatchAction(dispatch, LOG_OUT, {})
   await clearAsync();
   delete axios.defaults.headers.common.Authorization;
 };
@@ -126,7 +127,7 @@ export const handleSuccessRes = (res, req, dispatch, fun) => {
 export const handleErrorRes = (err, req, dispatch, fun) => {
   if (err?.response?.status == 401) {
     dispatchAction(dispatch, IS_LOADING, false);
-    removeAuthorization();
+    removeAuthorization(dispatch);
     errorToast('Please login again');
   } else {
     dispatchAction(dispatch, IS_LOADING, false);

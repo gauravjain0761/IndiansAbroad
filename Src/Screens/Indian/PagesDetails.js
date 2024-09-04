@@ -394,6 +394,7 @@ export default function PagesDetails() {
             <View>
               {allPagePost && (
                 <FlatList
+                  keyExtractor={(item, index) => index.toString()}
                   data={allPagePost}
                   onEndReachedThreshold={0.5}
                   onEndReached={fetchMoreData}
@@ -432,6 +433,7 @@ export default function PagesDetails() {
                 />
                 {followList && (
                   <FlatList
+                    keyExtractor={(item, index) => index.toString()}
                     data={followList}
                     renderItem={({ item }) => {
                       return (

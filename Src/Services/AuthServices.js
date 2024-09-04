@@ -5,6 +5,7 @@ import { resetNavigation } from "../utils/Global";
 import { GET, POST, api } from "../utils/apiConstants";
 import { dispatchAction, handleErrorRes, handleSuccessRes, makeAPIRequest, removeAuthorization, setAuthorization } from "../utils/apiGlobal";
 import { successToast } from "../utils/commonFunction";
+import { getFollowerList } from "./PostServices";
 
 export const oncheckSession = (request) => async dispatch => {
     return makeAPIRequest({
@@ -284,7 +285,7 @@ export const onDeleteAccount = (request) => async dispatch => {
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, async () => {
                 successToast(response?.data?.msg);
-                removeAuthorization()
+                removeAuthorization(dispatch)
                 await clearAsync()
                 resetNavigation(screenName.LoginScreen)
             });
@@ -337,6 +338,7 @@ export const onAcceptRejectRequest = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, async () => {
+                dispatch(getFollowerList({ data: { userId: request?.data?.userId, search: '' } }));
                 successToast(response?.data?.msg)
             });
         })

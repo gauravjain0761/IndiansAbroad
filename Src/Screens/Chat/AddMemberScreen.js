@@ -56,11 +56,11 @@ export default function AddMemberScreen() {
     const renderItem = ({ item, index }) => {
         return (
             <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
-                <View style={[ApplicationStyles.row, styles.listView]}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => setSelect(item._id)} style={[ApplicationStyles.row, styles.listView]}>
                     <RenderUserIcon type='user' url={item?.avtar} height={48} isBorder={item?.subscribedMember} />
                     <Text style={styles.listText}>{item?.first_Name} {item?.last_Name}</Text>
-                </View>
-                <TouchableOpacity onPress={() => setSelect(item._id)}>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => setSelect(item._id)}>
                     <Image source={selectedUsers.includes(item?._id) ? Icons.checkbox1 : Icons.checkbox} style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]} />
                 </TouchableOpacity>
             </View>
@@ -90,7 +90,7 @@ export default function AddMemberScreen() {
         <SafeAreaView style={ApplicationStyles.applicationView}>
             <Header title={''} showLeft={true} onLeftPress={() => { navigation.goBack() }} onlyLabel={'Send Group Invitation'} />
             <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search users'} containerStyles={{ marginVertical: 5 }} />
-            {list && <FlatList data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />}
+            {list && <FlatList keyExtractor={(item, index) => index.toString()} data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />}
             <CommonButton onPress={() => onPressAdd()} title={'Add'} extraStyle={{ margin: wp(20) }} />
         </SafeAreaView>
     )

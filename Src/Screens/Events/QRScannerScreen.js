@@ -11,23 +11,23 @@ import {
 import React, { useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
-import {errorToast, FontStyle, ImageStyle} from '../../utils/commonFunction';
+import { useNavigation } from '@react-navigation/native';
+import { errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {SCREEN_HEIGHT, SCREEN_WIDTH, wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {RNCamera} from 'react-native-camera';
-import {organizerVerifyTicketAction} from '../../Services/PostServices';
+import { RNCamera } from 'react-native-camera';
+import { organizerVerifyTicketAction } from '../../Services/PostServices';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNQRGenerator from 'rn-qr-generator';
 
 export default function QRScannerScreen() {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [image, setimage] = useState(null);
 
@@ -37,9 +37,9 @@ export default function QRScannerScreen() {
         ticketId: item,
       },
       onSuccess: (res) => {
-        console.log('res',res);
-        
-         navigation.navigate(screenName.QRSuccessScreen,{data:res})
+        console.log('res', res);
+
+        navigation.navigate(screenName.QRSuccessScreen, { data: res })
       },
     };
     dispatch(organizerVerifyTicketAction(obj));
@@ -53,21 +53,21 @@ export default function QRScannerScreen() {
         let imageUri = image.path;
 
         if (!imageUri.startsWith('file://')) {
-            imageUri = `file://${imageUri}`;
-          }
-          RNQRGenerator.detect({uri: imageUri})
-            .then(res => {
-              if (res?.values?.length === 0) {
-                errorToast("We couldn't detect a valid QR code")
-              } else {
-                console.log('res',res);
-                const url = res?.values[0];
-                const parts = url.split('/');
-                const ticketId = parts[parts.length - 1];
-                console.log(ticketId); 
-                onStarPres(ticketId)
-              }
-            })
+          imageUri = `file://${imageUri}`;
+        }
+        RNQRGenerator.detect({ uri: imageUri })
+          .then(res => {
+            if (res?.values?.length === 0) {
+              errorToast("We couldn't detect a valid QR code")
+            } else {
+              console.log('res', res);
+              const url = res?.values[0];
+              const parts = url.split('/');
+              const ticketId = parts[parts.length - 1];
+              console.log(ticketId);
+              onStarPres(ticketId)
+            }
+          })
       })
       .catch(error => {
         console.log('err---', error);
@@ -78,12 +78,12 @@ export default function QRScannerScreen() {
 
   const onSuccess = e => {
     Alert.alert('QR Code Scanned!', e.data);
-    if(e.data){
-        const url = e.data;
-        const parts = url.split('/');
-        const ticketId = parts[parts.length - 1];
-        console.log(ticketId); 
-        onStarPres(ticketId)
+    if (e.data) {
+      const url = e.data;
+      const parts = url.split('/');
+      const ticketId = parts[parts.length - 1];
+      console.log(ticketId);
+      onStarPres(ticketId)
     }
   };
 
@@ -96,15 +96,15 @@ export default function QRScannerScreen() {
           style={styles.title}>
           Scan
         </Text>
-        <View style={[styles.camera, {marginTop: 0}]}>
+        <View style={[styles.camera, { marginTop: 0 }]}>
           <QRCodeScanner
-            flashMode={RNCamera.Constants.FlashMode.torch}
+            flashMode={RNCamera.Constants.FlashMode.off}
             onRead={onSuccess}
             // showMarker
             cameraProps={{
               barCodeScanner: true,
             }}
-            
+
             cameraContainerStyle={{
               backgroundColor: 'red',
               height: SCREEN_WIDTH / 1.5,
@@ -119,7 +119,7 @@ export default function QRScannerScreen() {
         </View>
       </View>
       <TouchableOpacity style={styles.scanView} onPress={() => onSelectImage()}>
-        <Image source={Icons.gallery} style={styles.gallery}/>
+        <Image source={Icons.gallery} style={styles.gallery} />
         <Text style={styles.scanText}>Scan from gallery</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -155,19 +155,19 @@ const styles = StyleSheet.create({
   scanText: {
     ...FontStyle(16, colors.neutral_900, '700'),
   },
-  scanView:{
+  scanView: {
     marginTop: 20,
     position: 'absolute',
-    bottom: SCREEN_HEIGHT*0.16,
+    bottom: SCREEN_HEIGHT * 0.16,
     width: '100%',
-    flexDirection:'row',
-    alignItems:'center',
-    alignSelf:'center',
-    justifyContent:'center'
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center'
   },
-  gallery:{
+  gallery: {
     width: 18,
     height: 18,
-    marginRight:10
+    marginRight: 10
   }
 });

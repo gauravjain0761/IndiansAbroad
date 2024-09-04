@@ -144,6 +144,7 @@ export default function GroupDetailScreen() {
                         renderItem={({ item, index }) => {
                             return <GroupMemberItem item={item} index={index} />
                         }}
+                        keyExtractor={(item, index) => index.toString()}
                         ListEmptyComponent={<NoDataFound />}
                         showsVerticalScrollIndicator={false}
                     />

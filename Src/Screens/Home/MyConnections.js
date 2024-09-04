@@ -106,6 +106,7 @@ export default function MyConnections() {
         {followList && <FlatList
           data={followList}
           renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
         />}
       </View>

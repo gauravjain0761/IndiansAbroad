@@ -231,6 +231,7 @@ export default function ProfileScreen() {
             <View style={{ flex: 1 }}>
               {otherUserAllPost && (
                 <FlatList
+                  keyExtractor={(item, index) => index.toString()}
                   ListFooterComponent={() => {
                     return (
                       <View>
@@ -258,6 +259,7 @@ export default function ProfileScreen() {
               />
               {followList && (
                 <FlatList
+                  keyExtractor={(item, index) => index.toString()}
                   data={followList}
                   ListFooterComponent={() => {
                     return (

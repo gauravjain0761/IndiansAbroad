@@ -161,7 +161,7 @@ export default function EventDetailScreen() {
           <RenderUserIcon type='user' url={''} height={40} />
           <View style={ApplicationStyles.flex}>
             <Text style={styles.name}>By {activeEvent?.page_owner}</Text>
-            <Text style={styles.address}>Community page,London</Text>
+            <Text style={styles.address}>{activeEvent?.createdBy?.profession},{activeEvent?.createdBy?.region}</Text>
           </View>
           {/* <CommonButton
             title={'Connect'}

@@ -7,10 +7,10 @@ import colors from '../Themes/Colors'
 import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
 
-export default function ChatMessageMedia({ data }) {
+export default function ChatMessageMedia({ data, onPress }) {
     const navigation = useNavigation()
     return (
-        <TouchableOpacity onPress={() => navigation.navigate(screenName.MediaPreviewScreen, { url: data?.file[0] })} >
+        <TouchableOpacity onPress={() => onPress ? onPress() : {}} onLongPress={() => navigation.navigate(screenName.MediaPreviewScreen, { url: data?.file[0] })} >
             <FastImage
                 source={data?.file[0]?.location == '' ? Icons.logo : { uri: data?.file[0]?.location }}
                 resizeMode={FastImage.resizeMode.cover}

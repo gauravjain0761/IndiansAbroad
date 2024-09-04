@@ -139,6 +139,7 @@ export default function PagesPostDetail() {
         </View>
         {activePostAllComments && activePostAllComments.length > 0 && <FlatList
           data={activePostAllComments}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => {
             return <RenderItem itemIndex={index} item={item} />
           }}

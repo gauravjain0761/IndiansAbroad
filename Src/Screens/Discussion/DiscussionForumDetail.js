@@ -110,6 +110,7 @@ export default function DiscussionForumDetail() {
                     </View>
                     <Text style={styles.commentText1}>{activePost?.commentCount} Responses</Text>
                     {activePostAllComments && activePostAllComments.length > 0 && <FlatList
+                        keyExtractor={(item, index) => index.toString()}
                         data={activePostAllComments}
                         renderItem={({ item, index }) => {
                             return <RenderItem itemIndex={index} item={item} />

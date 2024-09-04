@@ -304,6 +304,7 @@ export default function MyPageScreen() {
                   <View>
                     {allPagePost ? (
                       <FlatList
+                        keyExtractor={(item, index) => index.toString()}
                         data={allPagePost}
                         onEndReachedThreshold={0.5}
                         onEndReached={fetchMoreData}
@@ -344,6 +345,7 @@ export default function MyPageScreen() {
                       />
                       {followList && (
                         <FlatList
+                          keyExtractor={(item, index) => index.toString()}
                           data={followList}
                           renderItem={({ item }) => {
                             return (

@@ -138,19 +138,19 @@ const ReciverMsg = ({ data }) => {
                 }
                 {data?.shareContentType == 'post' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                    {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
                 {data?.shareContentType == 'thread' &&
                   <TouchableOpacity onPress={() => onOpenThreadDetail()} >
-                    {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
                 {data?.shareContentType == 'cppost' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                    {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }

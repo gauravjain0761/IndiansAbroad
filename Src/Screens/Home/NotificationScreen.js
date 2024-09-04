@@ -158,6 +158,7 @@ const NotificationScreen = () => {
                     </View>
                     <View style={styles.notificationcontainer}>
                       <FlatList
+                        keyExtractor={(item, index) => index.toString()}
                         data={notificationList?.filter(
                           obj =>
                             moment(obj?.createdDate).format('DD/MM/YYYY') ==
@@ -174,6 +175,7 @@ const NotificationScreen = () => {
                     </View>
                     <View style={styles.notificationcontainer}>
                       <FlatList
+                        keyExtractor={(item, index) => index.toString()}
                         data={notificationList?.filter(
                           obj =>
                             moment(obj?.createdDate).format('DD/MM/YYYY') !==
@@ -189,6 +191,7 @@ const NotificationScreen = () => {
                 ) : (
                   <View style={styles.notificationcontainer}>
                     <FlatList
+                      keyExtractor={(item, index) => index.toString()}
                       data={notificationList}
                       ItemSeparatorComponent={() => (
                         <View style={styles.separator}></View>
@@ -209,6 +212,7 @@ const NotificationScreen = () => {
                   </View>
                   <View style={styles.notificationcontainer}>
                     <FlatList
+                      keyExtractor={(item, index) => index.toString()}
                       data={notificationList?.filter(
                         obj =>
                           obj?.type == 'follow-request' &&
@@ -223,6 +227,7 @@ const NotificationScreen = () => {
                   </View>
                   <View style={styles.notificationcontainer}>
                     <FlatList
+                      keyExtractor={(item, index) => index.toString()}
                       data={notificationList?.filter(
                         obj =>
                           obj?.type == 'follow-request' &&
@@ -236,6 +241,7 @@ const NotificationScreen = () => {
               ) : (
                 <View style={styles.notificationcontainer}>
                   <FlatList
+                    keyExtractor={(item, index) => index.toString()}
                     data={notificationList?.filter(
                       obj => obj?.type == 'follow-request',
                     )}

@@ -122,6 +122,7 @@ export default function IndiansPageMore() {
       isFollower={item?.isFollower}
       subscribedMember={item?.subscribedMember}
       indians={true}
+      city={item?.city}
     />)
   }
 
@@ -143,6 +144,7 @@ export default function IndiansPageMore() {
             bounces={false}
             data={allIndianRegion}
             renderItem={RenderItem}
+            keyExtractor={(item, index) => index.toString()}
             showsVerticalScrollIndicator={false}
             onEndReached={fetchMoreData}
             onEndReachedThreshold={0.1}
@@ -163,6 +165,7 @@ export default function IndiansPageMore() {
                 style={styles.flatList}
                 columnWrapperStyle={styles.column}
                 numColumns={2}
+                keyExtractor={(item, index) => index.toString()}
                 data={allIndianRegion?.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0)}
                 renderItem={RenderItem}
                 showsVerticalScrollIndicator={false}

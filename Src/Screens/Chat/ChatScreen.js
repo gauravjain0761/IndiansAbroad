@@ -193,6 +193,7 @@ export default function ChatScreen() {
             numColumns={2}
             bounces={false}
             data={chatRoomList}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
               return (
                 <ChatCard
@@ -229,6 +230,7 @@ export default function ChatScreen() {
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
+              keyExtractor={(item, index) => index.toString()}
               style={styles.flatlist}
               columnWrapperStyle={styles.column}
               numColumns={2}

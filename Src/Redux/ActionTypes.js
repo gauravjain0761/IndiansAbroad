@@ -1,5 +1,9 @@
 export const IS_LOADING = 'IS_LOADING';
 export const SET_USER = 'SET_USER';
+export const SET_GOOGLE_USER = 'SET_GOOGLE_USER'
+export const LOG_OUT = 'LOG_OUT'
+
+
 
 // post
 export const SET_ALL_POST = 'SET_ALL_POST';
@@ -46,7 +50,6 @@ export const SET_THREAD_LIST = 'SET_THREAD_LIST';
 export const UPDATE_COUNTRY_DISCUSSION_LIST = 'UPDATE_COUNTRY_DISCUSSION_LIST';
 export const SET_COUNTRIES = 'SET_COUNTRIES';
 export const SET_MAIN_FOLLOWER_LIST = 'SET_MAIN_FOLLOWER_LIST';
-// export const SET_FOLLOWER_LIST = 'SET_FOLLOWER_LIST'
 // export const SET_FOLLOWER_LIST = 'SET_FOLLOWER_LIST'
 
 // chat

@@ -348,6 +348,7 @@ export default function IndiansDetails() {
               <View>
                 {otherUserAllPost && (
                   <FlatList
+                    keyExtractor={(item, index) => index.toString()}
                     initialNumToRender={5}
                     data={otherUserAllPost.data}
                     renderItem={renderItem}
@@ -390,6 +391,7 @@ export default function IndiansDetails() {
                         />
                       );
                     }}
+                    keyExtractor={(item, index) => index.toString()}
                     ListEmptyComponent={<NoDataFound />}
                     showsVerticalScrollIndicator={false}
                   />

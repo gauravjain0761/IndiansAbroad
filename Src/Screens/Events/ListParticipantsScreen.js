@@ -92,6 +92,7 @@ export default function ListParticipantsScreen() {
       </View>
       <View style={ApplicationStyles.flex}>
         <FlatList
+          keyExtractor={(item, index) => index.toString()}
           data={particpantsList}
           renderItem={renderItem}
           ItemSeparatorComponent={() => <View style={styles.line} />}

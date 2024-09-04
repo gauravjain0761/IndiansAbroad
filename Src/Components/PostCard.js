@@ -134,7 +134,7 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
     };
     dispatch(onCancelRequest(obj));
   }
-  // if (index == 1) {
+  // if (index == 0) {
   //   console.log(item)
   // }
   if (item) {
@@ -255,7 +255,7 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
               }`}</Text>
           </TouchableOpacity>
         ) : null} */}
-        {item?.mediaFiles.length > 0 && (
+        {item?.mediaFiles?.length > 0 && (
           <PostCarousal poster={item?.thumbNail} isDetailScreen={isDetailScreen} images={item?.mediaFiles} />
         )}
         <View style={styles.bottomRow}>

@@ -281,6 +281,7 @@ export default function RepliesComments() {
               </View>
               {repliesComments && repliesComments.length > 0 && (
                 <FlatList
+                  keyExtractor={(item, index) => index.toString()}
                   data={repliesComments}
                   renderItem={({ item, index }) => {
                     return (

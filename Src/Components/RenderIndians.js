@@ -36,7 +36,6 @@ export default function RenderIndians() {
     }, [])
 
 
-
     useEffect(() => {
         getIndianList(1)
     }, [])
@@ -134,30 +133,34 @@ export default function RenderIndians() {
         };
         dispatch(getallIndianUser(obj));
     }
-    console.log('allIndian.length--', allIndian?.length)
     return (
         <View style={ApplicationStyles.flex} >
             <SearchBar value={searchText} onChangeText={text => onSearchIndians(text, 1)} placeholder={'Search Indians here'} />
             {searchText !== '' ?
-                <FlatList
-                    style={styles.flatList}
-                    columnWrapperStyle={styles.column}
-                    numColumns={2}
-                    bounces={false}
-                    data={allIndian}
-                    renderItem={RenderItem}
-                    showsVerticalScrollIndicator={false}
-                    onEndReached={fetchMoreData}
-                    onEndReachedThreshold={0.1}
-                    ListFooterComponent={() => {
-                        return (
-                            <View>
-                                {(allIndian && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
-                                <View style={{ height: 200 }} />
-                            </View>
-                        )
-                    }}
-                />
+                <View>
+                    <FlatList
+                        style={styles.flatList}
+                        columnWrapperStyle={styles.column}
+                        numColumns={2}
+                        // bounces={false}
+                        keyExtractor={(item, index) => index.toString()}
+                        extraData={this.state}
+                        data={allIndian}
+                        renderItem={RenderItem}
+                        showsVerticalScrollIndicator={false}
+                        onEndReached={fetchMoreData}
+                        onEndReachedThreshold={0.1}
+                        ListFooterComponent={() => {
+                            return (
+                                <View>
+                                    {(allIndian && loading) && <ActivityIndicator size={'large'} color={colors.black} />}
+                                    <View style={{ height: 200 }} />
+                                </View>
+                            )
+                        }}
+                        ListEmptyComponent={<NoDataFound />}
+                    />
+                </View>
                 :
                 <View style={ApplicationStyles.flex}>
                     {allIndian &&
@@ -167,13 +170,14 @@ export default function RenderIndians() {
                                 return (
                                     allIndianRegion?.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0).slice(0, 2).length > 0 ?
                                         <View>
-                                            <Text style={[FontStyle(14, colors.neutral_900, '700'), { marginVertical: 8 },]}> {'People you may know'}</Text>
+                                            <Text style={[FontStyle(14, colors.neutral_900, '700'), { marginBottom: 8 },]}> {'People you may know'}</Text>
                                             <FlatList
                                                 columnWrapperStyle={styles.column}
                                                 numColumns={2}
                                                 bounces={false}
                                                 data={allIndianRegion?.filter(obj => obj?.isFollowing == 0 && obj?.isFollowingRequested == 0).slice(0, 2)}
                                                 renderItem={RenderItem}
+                                                keyExtractor={(item, index) => index.toString()}
                                                 showsVerticalScrollIndicator={false}
                                             />
                                             <RenderSeeMoreView onPressSeeMore={() => navigation.navigate(screenName.IndiansPageMore, { dataList: 'INDIANS', })} />
@@ -181,6 +185,7 @@ export default function RenderIndians() {
                                         : <View />
                                 )
                             }}
+                            keyExtractor={(item, index) => index.toString()}
                             style={styles.flatList}
                             columnWrapperStyle={styles.column}
                             numColumns={2}
@@ -212,6 +217,7 @@ const styles = StyleSheet.create({
     ],
     flatList: {
         paddingHorizontal: wp(16),
+        marginTop: 8
         // flex: 1,
     },
     column: {

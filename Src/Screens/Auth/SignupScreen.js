@@ -16,6 +16,8 @@ import Header from '../../Components/Header'
 import { GoogleSignin, } from '@react-native-google-signin/google-signin';
 import { api } from '../../utils/apiConstants'
 import axios from 'axios'
+import { dispatchAction } from '../../utils/apiGlobal'
+import { IS_LOADING, SET_GOOGLE_USER } from '../../Redux/ActionTypes'
 
 export default function SignupScreen() {
     const [firstName, setfirstName] = useState('')
@@ -75,6 +77,11 @@ export default function SignupScreen() {
             const userInfo = await GoogleSignin.signIn();
             console.log(userInfo.data.user)
             if (userInfo) {
+                setfirstName(userInfo?.data?.user?.givenName)
+                setlastName(userInfo?.data?.user?.familyName)
+                setemail(userInfo?.data?.user?.email)
+
+                dispatchAction(dispatch, IS_LOADING, true)
                 const { accessToken } = await GoogleSignin.getTokens();
                 axios({
                     method: 'GET',
@@ -84,15 +91,23 @@ export default function SignupScreen() {
                     url: `https://people.googleapis.com/v1/people/${userInfo.data.user.id}?personFields=genders,phoneNumbers,birthdays`
                 })
                     .then(function (response) {
-                        // handle success
                         console.log(response.data);
-                        console.log(response.data.genders[0])
+                        console.log(response.data.genders[0].formattedValue)
                         console.log(response.data.birthdays[0]);
-                        console.log(response.data.phoneNumbers[0]);
+                        console.log('-----', {
+                            gender: response.data.genders[0].formattedValue,
+                            birthday: response.data.birthdays[0].date,
+                            ...userInfo?.data?.user
+                        })
+                        dispatchAction(dispatch, SET_GOOGLE_USER, {
+                            gender: response.data.genders[0].formattedValue,
+                            birthday: response.data.birthdays[0].date,
+                            ...userInfo?.data?.user
+                        })
+                        dispatchAction(dispatch, IS_LOADING, false)
                     })
                     .catch(function (error) {
-                        // handle error
-                        console.log(error);
+                        dispatchAction(dispatch, IS_LOADING, false)
                     });
             }
 

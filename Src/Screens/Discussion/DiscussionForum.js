@@ -108,6 +108,7 @@ export default function DiscussionForum() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={() => {
           return (
             <View>

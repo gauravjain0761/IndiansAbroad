@@ -48,7 +48,6 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
         name: result.name
       }
       formDataApiCall(api.addMessage, data, (res) => {
-        console.log('red-----', res)
         dispatchAction(dispatch, ADD_ONE_MESSAGE, res?.data)
       }, (err) => {
         console.log(err)

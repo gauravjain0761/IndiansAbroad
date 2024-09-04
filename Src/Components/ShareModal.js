@@ -84,11 +84,11 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
     const renderItem = ({ item, index }) => {
         return (
             <View key={index} style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
-                <View style={[ApplicationStyles.row, styles.listView]}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => setSelect(item._id)} style={[ApplicationStyles.row, styles.listView]}>
                     <RenderUserIcon type='user' url={item?.followingId?.avtar} height={48} isBorder={item?.followingId?.subscribedMember} />
                     <Text style={styles.listText}>{item?.followingId?.first_Name} {item?.followingId?.last_Name}</Text>
-                </View>
-                <TouchableOpacity onPress={() => setSelect(item._id)}>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => setSelect(item._id)}>
                     <Image
                         source={item?.isSelected ? Icons.checkbox1 : Icons.checkbox}
                         style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
@@ -120,6 +120,7 @@ export default function ShareModal({ visible, onClose, postId, isThread }) {
                 {followerList && <FlatList
                     data={list}
                     renderItem={renderItem}
+                    keyExtractor={(item, index) => index.toString()}
                     style={{ maxHeight: SCREEN_HEIGHT / 1.5 }}
                     showsVerticalScrollIndicator={false}
                     ListEmptyComponent={<NoDataFound />}
