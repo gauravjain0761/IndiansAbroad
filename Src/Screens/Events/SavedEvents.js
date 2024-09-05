@@ -102,6 +102,8 @@ export default function SavedEvents() {
   const ref = React.createRef(PagerView);
 
   const renderEventItem = ({ item, index }) => {
+    console.log('item',item);
+    
     if (item?.is_Saved) {
       return (
         <TouchableOpacity

@@ -16,6 +16,7 @@ import {
   GET_SAVE_EVENT,
   SET_FOLLOWER_LIST,
   SET_ALL_INDIANS_REGION,
+  SET_EVENT_FAVORITE,
 } from '../Redux/ActionTypes';
 import { getAsyncToken, setAsyncUserInfo } from '../utils/AsyncStorage';
 import { GET, POST, api } from '../utils/apiConstants';
@@ -651,6 +652,11 @@ export const getToggleFavoriteAction = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
+        dispatchAction(
+          dispatch,
+          SET_EVENT_FAVORITE,
+          request?.data?.eventId,
+        );
         successToast(response?.data?.msg)
       });
     })
@@ -688,6 +694,22 @@ export const transactionDownloadTransAction = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
+export const withdrawalCreateAction = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.withdrawalCreate,
+    data: request?.data
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        successToast(response?.data?.msg)
       });
     })
     .catch(error => {

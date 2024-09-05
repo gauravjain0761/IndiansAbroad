@@ -8,33 +8,37 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import { useNavigation } from '@react-navigation/native';
-import { currencyIcon, FontStyle, ImageStyle } from '../../utils/commonFunction';
+import {useNavigation} from '@react-navigation/native';
+import {currencyIcon, FontStyle, ImageStyle} from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import { useDispatch, useSelector } from 'react-redux';
-import { screenName } from '../../Navigation/ScreenConstants';
-import { hp, wp } from '../../Themes/Fonts';
-import { Icons } from '../../Themes/Icons';
+import {useDispatch, useSelector} from 'react-redux';
+import {screenName} from '../../Navigation/ScreenConstants';
+import {hp, wp} from '../../Themes/Fonts';
+import {Icons} from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderText from '../../Components/RenderText';
 import moment from 'moment';
-import { getCurrenciesListAction, getDetailsListAction, getToggleFavoriteAction } from '../../Services/PostServices';
+import {
+  getCurrenciesListAction,
+  getDetailsListAction,
+  getToggleFavoriteAction,
+} from '../../Services/PostServices';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
-  const { activeEvent, user } = useSelector(e => e.common);
-  const [isSelect, setIsSelect] = useState(activeEvent?.is_favorite)
+  const {activeEvent, user} = useSelector(e => e.common);
+  const [isSelect, setIsSelect] = useState(activeEvent?.is_favorite);
+  const [lastTap, setLastTap] = useState(0);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCurrenciesListAction())
-  }, [])
-
+    dispatch(getCurrenciesListAction());
+  }, []);
 
   useEffect(() => {
     getEventList();
@@ -43,29 +47,38 @@ export default function EventDetailScreen() {
   const getEventList = page => {
     let obj = {
       data: activeEvent?._id,
-      onSuccess: (res) => {
-        setIsSelect(res?.data?.is_favorite)
+      onSuccess: res => {
+        setIsSelect(res?.data?.is_favorite);
       },
     };
     dispatch(getDetailsListAction(obj));
   };
 
   const onStarPress = () => {
-    let obj = {
-      data: {
-        eventId: activeEvent?._id
-      },
-      onSuccess: () => {
-        setIsSelect(!isSelect)
-      },
-    };
-    dispatch(getToggleFavoriteAction(obj));
+    const timeNow = Date.now();
+    if (lastTap && timeNow - lastTap < 500) {
+      console.log('Handle double press');
+    } else {
+      setLastTap(timeNow);
+      setTimeout(() => {
+        setLastTap(0);
+        console.log('Handle single press');
+      }, 1000);
+      let obj = {
+        data: {
+          eventId: activeEvent?._id,
+        },
+        onSuccess: () => {
+          setIsSelect(!isSelect);
+        },
+      };
+      dispatch(getToggleFavoriteAction(obj));
+    }
   };
 
-
-  const RenderRowList = ({ icon, title }) => {
+  const RenderRowList = ({icon, title}) => {
     return (
-      <View style={[ApplicationStyles.row, { marginTop: 10 }]}>
+      <View style={[ApplicationStyles.row, {marginTop: 10}]}>
         <Image source={icon} style={styles.iconRow} />
         <Text style={styles.titleDes}>{title}</Text>
       </View>
@@ -93,7 +106,7 @@ export default function EventDetailScreen() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header
-        showRight={user?._id == activeEvent?.createdBy ? true : false}
+        showRight={user?._id == activeEvent?.createdBy?._id ? true : false}
         icon={Icons.editEvent}
         onRightPress={() => navigation.navigate(screenName.EditEventScreen)}
         title={''}
@@ -108,7 +121,7 @@ export default function EventDetailScreen() {
           <Image
             source={
               activeEvent?.event_image?.location
-                ? { uri: activeEvent?.event_image?.location }
+                ? {uri: activeEvent?.event_image?.location}
                 : require('../../assets/Icons/eventImage.jpg')
             }
             style={styles.image}
@@ -129,7 +142,9 @@ export default function EventDetailScreen() {
           <RenderRowList icon={Icons.map} title={activeEvent?.address} />
           <RenderRowList
             icon={Icons.tickets}
-            title={`${currencyIcon(activeEvent?.currency)}${activeEvent?.event_fee}`}
+            title={`${currencyIcon(activeEvent?.currency)}${
+              activeEvent?.event_fee
+            }`}
           />
           <RenderRowList
             icon={Icons.contacts}
@@ -137,65 +152,73 @@ export default function EventDetailScreen() {
           />
           {/* <RenderRowList icon={Icons.contacts} title={'+44 7899653486'} /> */}
           <View style={styles.bottomRow}>
-            <Text style={[styles.titleDes, { marginBottom: 10 }]}>
+            <Text style={[styles.titleDes, {marginBottom: 10}]}>
               {activeEvent?.attendeeCount}
             </Text>
             <Image source={Icons.group} style={styles.usersIcon} />
-            {user?._id !== activeEvent?.createdBy && <TouchableOpacity onPress={() => onStarPress()}
-              style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
-              <Image
-                source={isSelect ? Icons.star : Icons.starOutline}
-                style={ImageStyle(20, 20)}
-              />
-            </TouchableOpacity>}
+            {user?._id !== activeEvent?.createdBy?._id && (
+              <TouchableOpacity
+                onPress={() => onStarPress()}
+                style={{paddingHorizontal: 10, paddingBottom: 10}}>
+                <Image
+                  source={isSelect ? Icons.star : Icons.starOutline}
+                  style={ImageStyle(20, 20)}
+                />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => {
                 onSharePress(activeEvent?.share_link);
               }}
-              style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
+              style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image source={Icons.share} style={ImageStyle(24, 24)} />
             </TouchableOpacity>
           </View>
         </View>
-        {user?._id !== activeEvent?.createdBy && <View style={styles.blueView}>
-          <RenderUserIcon type='user' url={''} height={40} />
-          <View style={ApplicationStyles.flex}>
-            <Text style={styles.name}>By {activeEvent?.page_owner}</Text>
-            <Text style={styles.address}>{activeEvent?.createdBy?.profession},{activeEvent?.createdBy?.region}</Text>
-          </View>
-          {/* <CommonButton
+        {user?._id !== activeEvent?.createdBy?._id && (
+          <View style={styles.blueView}>
+            <RenderUserIcon type="user" url={''} height={40} />
+            <View style={ApplicationStyles.flex}>
+              <Text style={styles.name}>By {activeEvent?.page_owner}</Text>
+              <Text style={styles.address}>
+                {activeEvent?.createdBy?.profession},
+                {activeEvent?.createdBy?.region}
+              </Text>
+            </View>
+            {/* <CommonButton
             title={'Connect'}
             extraStyle={{width: 110, height: 50}}
           /> */}
-        </View>}
+          </View>
+        )}
         <View style={styles.postDescriptionView}>
           <Text style={FontStyle(14, colors.neutral_900, '700')}>
             Description
           </Text>
           <RenderText
-            style={[FontStyle(12, colors.neutral_900), { marginVertical: hp(8) }]}
+            style={[FontStyle(12, colors.neutral_900), {marginVertical: hp(8)}]}
             text={activeEvent?.description}
           />
         </View>
-        {user?._id !== activeEvent?.createdBy && (
-          <View style={[styles.blueView, { marginVertical: hp(30) }]}>
+        {user?._id !== activeEvent?.createdBy?._id && (
+          <View style={[styles.blueView, {marginVertical: hp(30)}]}>
             <CommonButton
               onPress={() =>
                 navigation.navigate(screenName.AttendanceRequestScreen)
               }
               title={'Attend'}
-              extraStyle={{ width: 110, height: 50 }}
+              extraStyle={{width: 110, height: 50}}
             />
           </View>
         )}
-        {user?._id == activeEvent?.createdBy && (
-          <View style={[styles.blueView, { marginVertical: hp(30) }]}>
+        {user?._id == activeEvent?.createdBy?._id && (
+          <View style={[styles.blueView, {marginVertical: hp(30)}]}>
             <CommonButton
               onPress={() =>
                 navigation.navigate(screenName.ListParticipantsScreen)
               }
               title={'List of Participants'}
-              extraStyle={{ width: 170, height: 50 }}
+              extraStyle={{width: 170, height: 50}}
             />
           </View>
         )}

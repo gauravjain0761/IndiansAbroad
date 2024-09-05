@@ -6,25 +6,29 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import colors from '../Themes/Colors';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { Icons } from '../Themes/Icons';
-import { wp } from '../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {Icons} from '../Themes/Icons';
+import {wp} from '../Themes/Fonts';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import moment from 'moment';
-import { useDispatch, useSelector } from 'react-redux';
-import { screenName } from '../Navigation/ScreenConstants';
-import { useNavigation } from '@react-navigation/native';
-import { dispatchAction } from '../utils/apiGlobal';
-import { SET_ACTIVE_EVENT } from '../Redux/ActionTypes';
-import { getSaveListAction, getToggleFavoriteAction } from '../Services/PostServices';
+import {useDispatch, useSelector} from 'react-redux';
+import {screenName} from '../Navigation/ScreenConstants';
+import {useNavigation} from '@react-navigation/native';
+import {dispatchAction} from '../utils/apiGlobal';
+import {SET_ACTIVE_EVENT} from '../Redux/ActionTypes';
+import {
+  getSaveListAction,
+  getToggleFavoriteAction,
+} from '../Services/PostServices';
 
-export default function EventDashboardCard({ item, index, onRefresh }) {
-  const { user } = useSelector(e => e.common);
+export default function EventDashboardCard({item, index, onRefresh}) {
+  const {user} = useSelector(e => e.common);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [isSelect, setIsSelect] = useState(item?.is_favorite)
+  const [isSelect, setIsSelect] = useState(item?.is_favorite);
+  const [lastTap, setLastTap] = useState(0);
 
   const onSharePress = async link => {
     try {
@@ -46,16 +50,25 @@ export default function EventDashboardCard({ item, index, onRefresh }) {
   };
 
   const onStarPres = () => {
-    let obj = {
-      data: {
-        eventId: item?._id
-      },
-      onSuccess: () => {
-        onRefresh && onRefresh()
-        setIsSelect(!isSelect)
-      },
-    };
-    dispatch(getToggleFavoriteAction(obj));
+    const timeNow = Date.now();
+    if (lastTap && timeNow - lastTap < 500) {
+      console.log('Handle double press');
+    } else {
+      setLastTap(timeNow);
+      setTimeout(() => {
+        setLastTap(0);
+        console.log('Handle single press');
+      }, 1000);
+      let obj = {
+        data: {
+          eventId: item?._id,
+        },
+        onSuccess: () => {
+          onRefresh && onRefresh();
+        },
+      };
+      dispatch(getToggleFavoriteAction(obj));
+    }
   };
 
   return (
@@ -65,7 +78,7 @@ export default function EventDashboardCard({ item, index, onRefresh }) {
           style={styles.cardImage}
           source={
             item?.event_image?.location
-              ? { uri: item?.event_image?.location }
+              ? {uri: item?.event_image?.location}
               : require('../assets/Icons/eventImage.jpg')
           }
         />
@@ -92,21 +105,23 @@ export default function EventDashboardCard({ item, index, onRefresh }) {
                   dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
                   navigation.navigate(screenName.AttendanceRequestScreen);
                 }}
-                style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
+                style={{paddingHorizontal: 10, paddingBottom: 10}}>
                 <Image source={Icons.checkSquare} style={ImageStyle(20, 20)} />
               </TouchableOpacity>
             )}
-            {user?._id !== item?.createdBy && <TouchableOpacity
-              onPress={onStarPres}
-              style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
-              <Image
-                source={isSelect ? Icons.star : Icons.starOutline}
-                style={ImageStyle(20, 20)}
-              />
-            </TouchableOpacity>}
+            {user?._id !== item?.createdBy && (
+              <TouchableOpacity
+                onPress={onStarPres}
+                style={{paddingHorizontal: 10, paddingBottom: 10}}>
+                <Image
+                  source={item?.is_favorite ? Icons.star : Icons.starOutline}
+                  style={ImageStyle(20, 20)}
+                />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               onPress={() => onSharePress(item?.share_link)}
-              style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
+              style={{paddingHorizontal: 10, paddingBottom: 10}}>
               <Image source={Icons.share} style={ImageStyle(24, 24)} />
             </TouchableOpacity>
           </View>

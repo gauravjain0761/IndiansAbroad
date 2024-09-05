@@ -139,6 +139,7 @@ export default function HomeScreen() {
     };
     dispatch(getalluserEvent(obj));
   };
+  
   useEffect(() => {
     getData();
   }, [tabSelection]);
@@ -171,7 +172,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-            dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
+            dispatchAction(dispatch, SET_ACTIVE_EVENT, {...item,createdBy:{_id:item?.createdBy}});
             // dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
             navigation.navigate(screenName.EventDetailScreen);
           }}>

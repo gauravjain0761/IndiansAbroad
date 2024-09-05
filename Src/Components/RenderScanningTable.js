@@ -25,7 +25,7 @@ export default function RenderScanningTable({ data }) {
         </View>
         <View style={styles.line} />
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text style={[styles.headerText]}>Download file</Text>
+          <Text style={[styles.headerText]}>View Only</Text>
         </View>
       </View>
       <FlatList
@@ -62,7 +62,7 @@ export default function RenderScanningTable({ data }) {
               <View style={styles.line} />
               <View style={{ flex: 1, justifyContent: 'center' }}>
                 <TouchableOpacity style={styles.btn}>
-                  <Text style={FontStyle(10, colors.white)}>Download</Text>
+                  <Text style={FontStyle(10, colors.black)}>View Only</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     height: 30
   },
   btn: {
-    backgroundColor: colors.primary_500,
+    backgroundColor: colors.white,
     justifyContent: 'center',
     borderRadius: 4,
     // paddingHorizontal: 10,

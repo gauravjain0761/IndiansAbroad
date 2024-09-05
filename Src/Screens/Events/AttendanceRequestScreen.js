@@ -29,6 +29,7 @@ import {
   getAttendeeCreateAction,
   getAttendeePaymentAction,
 } from '../../Services/PostServices';
+import CountryPicker from 'react-native-country-picker-modal'
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
@@ -238,6 +239,21 @@ export default function AttendanceRequestScreen() {
         </Text>
         <View style={{marginBottom: 100}} />
       </KeyboardAwareScrollView>
+      <CountryPicker
+          // countryCode={code.replace('+', '')}
+          visible={show}
+          onClose={() => setShow(false)}
+          withCallingCode
+          onSelect={item => {
+            setcode('+' + item?.callingCode[0]);
+            setShow(false);
+          }}
+          withCallingCodeButton
+          withFilter
+          placeholder={''}
+          withEmoji={false}
+          // withFlag
+        />
     </SafeAreaView>
   );
 }

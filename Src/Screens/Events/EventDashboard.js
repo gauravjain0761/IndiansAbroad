@@ -23,6 +23,7 @@ import { screenName } from '../../Navigation/ScreenConstants';
 import {
   getTransactionDashboardAction,
   transactionDownloadTransAction,
+  withdrawalCreateAction,
 } from '../../Services/PostServices';
 import NoDataFound from '../../Components/NoDataFound';
 
@@ -50,6 +51,20 @@ export default function EventDashboard() {
     };
     dispatch(transactionDownloadTransAction(obj1));
   }, []);
+
+  const onRequestPayoutPress=()=>{
+    let obj = {
+      data: {
+        "organizer_id": "65f03d6cae1ff52ecfc45d07",
+        "amount": dashBoard?.balance,
+        "currency":"USD"
+      },
+      onSuccess: (res) => {
+      
+      },
+    };
+    dispatch(withdrawalCreateAction(obj));
+  }
 
   const getFilteredEvents = list => {
     const now = new Date();
@@ -184,6 +199,7 @@ export default function EventDashboard() {
               </View>
               <View style={styles.line} />
               <TouchableOpacity
+                onPress={()=>onRequestPayoutPress()}
                 disabled={dashBoard?.balance == 0}
                 style={{ flex: 1, marginVertical: 10, justifyContent: 'center' }}>
                 <View

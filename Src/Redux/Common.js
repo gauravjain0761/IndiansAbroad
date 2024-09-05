@@ -55,6 +55,7 @@ import {
   SET_ALL_INDIANS_REGION,
   SET_GOOGLE_USER,
   LOG_OUT,
+  SET_EVENT_FAVORITE,
 } from './ActionTypes';
 
 const initialState = {
@@ -652,8 +653,22 @@ export default function (state = initialState, action) {
       }
     }
     case SET_GOOGLE_USER: {
-      console.log('action.payload----', action.payload)
       return { ...state, googleUser: action.payload };
+    }
+    case SET_EVENT_FAVORITE: {
+      const updateData=state.allEvent.map((item)=>{
+        if(item._id == action.payload){
+          return {
+            ...item,
+            is_favorite:!item.is_favorite
+          }
+        }else{
+          return {
+            ...item
+          }
+        }
+      })
+      return { ...state, allEvent: updateData };
     }
     case LOG_OUT: {
       return initialState

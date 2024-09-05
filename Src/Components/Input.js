@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Platform,
+  Alert,
 } from 'react-native';
 import React, {useState} from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
@@ -59,7 +60,8 @@ export default function Input({
         onPress={showDatePicker}
         activeOpacity={1}
         style={styles.inputContainer}>
-        <TextInput
+        <Text style={[styles.inputText,{color:value?colors.neutral_900: colors.neutral_500}]}>{value ? value:placeholder}</Text>
+        {/* <TextInput
           placeholder={placeholder}
           style={styles.inputText}
           value={value}
@@ -69,7 +71,7 @@ export default function Input({
           secureTextEntry={isPassword ? passwordHide : false}
           keyboardType={keyboardType ? keyboardType : 'default'}
           editable={false}
-        />
+        /> */}
         {showCalenderIcon && (
           <View>
             <Image source={Icons.calender} style={styles.imageView} />
