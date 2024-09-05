@@ -157,6 +157,7 @@ export default function GroupDetailScreen() {
                     onClose={() => {
                         setModalVisible(false);
                     }}
+                    type='group'
                 />
             )}
             {leaveGroupModal && (

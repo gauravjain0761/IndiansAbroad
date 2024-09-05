@@ -129,8 +129,8 @@ export const api = {
 
 
   acceptRejectRequest: '/follow/request/action',
-  sendMessageRequest: '/OneTimeMessage/send'
-
+  sendMessageRequest: '/OneTimeMessage/send',
+  checkMessageRequest: '/OneTimeMessage/msgCount'
 };
 
 export const POST = 'POST';

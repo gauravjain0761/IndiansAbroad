@@ -474,6 +474,7 @@ export default function PagesDetails() {
           onClose={() => {
             setModalVisible(false);
           }}
+          type='page'
         />
       )}
     </View>

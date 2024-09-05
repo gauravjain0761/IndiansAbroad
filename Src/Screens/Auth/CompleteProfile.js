@@ -1,5 +1,5 @@
 import { Image, ImageBackground, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
 import colors from '../../Themes/Colors'
@@ -20,6 +20,7 @@ import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal'
 import { IS_LOADING, SET_USER } from '../../Redux/ActionTypes'
 import { api } from '../../utils/apiConstants'
 import { setAsyncUserInfo } from '../../utils/AsyncStorage'
+import RNFS from 'react-native-fs';
 
 export default function CompleteProfile() {
     const navigation = useNavigation()
@@ -45,6 +46,7 @@ export default function CompleteProfile() {
     const [gender, setgender] = useState('')
     const [dob, setdob] = useState('')
     const { user, googleUser } = useSelector(e => e.common)
+    const [googleUrlImage, setgoogleUrlImage] = useState('')
     const dispatch = useDispatch()
     let data = [
         { title: 'Male', icon: Icons.maleGender },
@@ -52,6 +54,36 @@ export default function CompleteProfile() {
         { title: 'Other', icon: Icons.star }
     ]
     console.log(googleUser)
+
+    useEffect(() => {
+        if (googleUser) {
+            setgender(googleUser?.gender ? googleUser?.gender : '')
+            // setimage({ path: googleUser?.photo })
+            // getImage()
+        }
+    }, [])
+
+    const getImage = async () => {
+
+        const newPath = `${RNFS.DocumentDirectoryPath}/google_user_${moment().unix()}.png`;
+        setgoogleUrlImage(newPath)
+        const downloadResult = await RNFS.downloadFile({
+            fromUrl: googleUser?.photo,
+            toFile: newPath,
+        }).promise;
+
+        // Check if the download was successful
+        if (downloadResult.statusCode !== 200) {
+            throw new Error('Failed to download image');
+        }
+
+        setimage({
+            path: `file://${newPath}`,
+            mime: 'image/png',
+        })
+
+
+    }
     const openPicker = () => {
         closeActionSheet();
         setTimeout(() => {
@@ -66,6 +98,7 @@ export default function CompleteProfile() {
             }).catch(error => { console.log('err---', error); });
         }, 500);
     };
+
     const openGallery = () => {
         closeActionSheet()
         setTimeout(() => {
@@ -111,6 +144,18 @@ export default function CompleteProfile() {
                 dispatchAction(dispatch, SET_USER, res?.data)
                 navigation.navigate(screenName.CompleteProfile2)
                 successToast(res.msg)
+                if (googleUser) {
+                    var path = googleUrlImage
+
+                    return RNFS.unlink(path)
+                        .then(() => {
+                            console.log('FILE DELETED');
+                        })
+                        // `unlink` will throw an error, if the item to unlink does not exist
+                        .catch((err) => {
+                            console.log(err.message);
+                        });
+                }
             }, () => {
                 dispatchAction(dispatch, IS_LOADING, false)
             })

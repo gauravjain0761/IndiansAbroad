@@ -28,11 +28,9 @@ const SenderMsg = ({ data }) => {
   const [deletePostModal, setdeletePostModal] = useState(false)
   const [deleteFor, setdeleteFor] = useState(undefined)
 
-  console.log(data)
 
   const onOpenPostDetail = () => {
     dispatchAction(dispatch, IS_LOADING, true);
-
     dispatch(onGetSinglePost({
       data: {
         postId: data?.sharePostId,

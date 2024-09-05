@@ -92,16 +92,16 @@ export default function SignupScreen() {
                 })
                     .then(function (response) {
                         console.log(response.data);
-                        console.log(response.data.genders[0].formattedValue)
-                        console.log(response.data.birthdays[0]);
+                        // console.log(response.data.genders[0].formattedValue)
+                        // console.log(response.data.birthdays[0]);
                         console.log('-----', {
-                            gender: response.data.genders[0].formattedValue,
-                            birthday: response.data.birthdays[0].date,
+                            gender: response.data.genders ? response.data.genders[0].formattedValue : undefined,
+                            // birthday: response.data.birthdays[0].date,
                             ...userInfo?.data?.user
                         })
                         dispatchAction(dispatch, SET_GOOGLE_USER, {
                             gender: response.data.genders[0].formattedValue,
-                            birthday: response.data.birthdays[0].date,
+                            // birthday: response.data.birthdays[0].date,
                             ...userInfo?.data?.user
                         })
                         dispatchAction(dispatch, IS_LOADING, false)

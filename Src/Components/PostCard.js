@@ -134,9 +134,12 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
     };
     dispatch(onCancelRequest(obj));
   }
-  // if (index == 0) {
-  //   console.log(item)
-  // }
+
+  // console.log(item?.isFollowing + ' ' + item?.createdBy?.first_Name)
+  if (index == 1) {
+    console.log(item?.isFollowing)
+  }
+
   if (item) {
     return (
       <View key={item?._id}>
@@ -225,10 +228,14 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
                       <Text style={styles.degreeText3}>Connect</Text>
                     </TouchableOpacity>
                   ) :
-                    <TouchableOpacity onPress={() => onCancelRequestPress()} style={styles.messageView}>
-                      <Image source={Icons.cancelRequest} style={ImageStyle(28, 28, 'cover')} />
-                      <Text style={[styles.degreeText3, { textAlign: 'center', lineHeight: 16 }]}>Cancel{'\n'}Request</Text>
-                    </TouchableOpacity>
+                    item?.isFollowing == 'requested' ?
+
+                      <TouchableOpacity onPress={() => onCancelRequestPress()} style={styles.messageView}>
+                        <Image source={Icons.cancelRequest} style={ImageStyle(28, 28, 'cover')} />
+                        <Text style={[styles.degreeText3, { textAlign: 'center', lineHeight: 16 }]}>Cancel{'\n'}Request</Text>
+                      </TouchableOpacity>
+
+                      : null
               }
             </View>
           )

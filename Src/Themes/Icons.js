@@ -95,7 +95,7 @@ export const Icons = {
   userPlaceholder: require('../assets/Icons/userPlaceholder.png'),
   groupPlaceholder: require('../assets/Icons/groupPlaceholder.png'),
   pagePlaceholder: require('../assets/Icons/pagePlaceholder.png'),
-
+  accept: require('../assets/Icons/accept.png'),
 
 
   w_1: require('../assets/Icons/w_1.png'),

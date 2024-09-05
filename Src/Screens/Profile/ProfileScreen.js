@@ -298,6 +298,7 @@ export default function ProfileScreen() {
           onClose={() => {
             setModalVisible(false);
           }}
+          type='user'
         />
       )}
     </SafeAreaView>

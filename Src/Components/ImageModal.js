@@ -19,9 +19,11 @@ import {
 import ReactNativeModal from 'react-native-modal';
 import { Icons } from '../Themes/Icons';
 import { api } from '../utils/apiConstants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const ImageModalShow = ({ modalVisible, onClose, url }) => {
+const ImageModalShow = ({ modalVisible, onClose, url, type = 'user' }) => {
   let isUrl = url !== undefined && url !== '';
+  const insets = useSafeAreaInsets();
   return (
     <ReactNativeModal
       backdropOpacity={0.5}
@@ -29,7 +31,7 @@ const ImageModalShow = ({ modalVisible, onClose, url }) => {
       style={{ margin: 0, backgroundColor: colors.white }}
       onBackButtonPress={() => onClose()}
       onBackdropPress={() => onClose()}>
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
         <TouchableOpacity style={styles.closeView} onPress={onClose}>
           <Image source={Icons.close} style={styles.closeStyle} />
         </TouchableOpacity>
@@ -38,7 +40,7 @@ const ImageModalShow = ({ modalVisible, onClose, url }) => {
             source={
               isUrl
                 ? { uri: api.IMAGE_URL + url }
-                : Icons.logo
+                : type == 'user' ? Icons.userPlaceholder : type == 'group' ? Icons.groupPlaceholder : Icons.pagePlaceholder
             }
             style={styles.imageStyle}
           />
@@ -62,6 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     marginHorizontal: wp(20),
+    flex: 1
   },
   headerView: {
     flexDirection: 'row',
@@ -78,6 +81,6 @@ const styles = StyleSheet.create({
   },
   closeView: {
     alignSelf: 'flex-end',
-    marginRight: 20,
+    padding: 20,
   }
 });

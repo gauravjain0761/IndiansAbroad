@@ -405,6 +405,7 @@ export default function MyPageScreen() {
           onClose={() => {
             setModalVisible(false);
           }}
+          type='page'
         />
       )}
     </View>

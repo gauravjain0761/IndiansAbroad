@@ -113,6 +113,7 @@ export default function PersonalUserDetailScreen() {
                     onClose={() => {
                         setModalVisible(false);
                     }}
+                    type='user'
                 />
             )}
         </SafeAreaView>

@@ -427,6 +427,7 @@ export default function IndiansDetails() {
           onClose={() => {
             setModalVisible(false);
           }}
+          type='user'
         />
       )}
       {messageRequestModal &&
