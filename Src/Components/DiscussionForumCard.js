@@ -8,7 +8,7 @@ import colors from '../Themes/Colors';
 import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
-import PostShareModal from './PostShareModal';
+import PostMoreModal from './PostMoreModal';
 import { api } from '../utils/apiConstants';
 import FastImage from 'react-native-fast-image';
 import ShareModal from './ShareModal';

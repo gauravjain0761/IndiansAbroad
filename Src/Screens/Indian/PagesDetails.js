@@ -35,7 +35,7 @@ import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import PostCard from '../../Components/PostCard';
 import { screenName } from '../../Navigation/ScreenConstants';
-import PostShareModal from '../../Components/PostShareModal';
+import PostMoreModal from '../../Components/PostMoreModal';
 import PagePostCard from '../../Components/PagePostCard';
 import UpdateDeleteMenu from '../../Components/UpdateDeleteMenu';
 import DeletePopModal from '../../Components/DeletePopModal';

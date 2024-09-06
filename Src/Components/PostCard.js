@@ -6,7 +6,7 @@ import ApplicationStyles from '../Themes/ApplicationStyles';
 import { SCREEN_WIDTH } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from './RenderUserIcon';
-import PostShareModal from './PostShareModal';
+import PostMoreModal from './PostMoreModal';
 import UpdateDeleteMenu from './UpdateDeleteMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCarousal from './PostCarousal';
@@ -301,7 +301,7 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
           )}
         </View>
         {menuModal && (
-          <PostShareModal
+          <PostMoreModal
             item={item}
             menuModal={menuModal}
             setmenuModal={() => setmenuModal(false)}

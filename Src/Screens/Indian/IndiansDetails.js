@@ -33,7 +33,7 @@ import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import PostCard from '../../Components/PostCard';
 import { screenName } from '../../Navigation/ScreenConstants';
-import PostShareModal from '../../Components/PostShareModal';
+import PostMoreModal from '../../Components/PostMoreModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   getOtherUserFollowList,

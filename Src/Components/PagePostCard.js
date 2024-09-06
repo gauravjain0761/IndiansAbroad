@@ -8,7 +8,7 @@ import colors from '../Themes/Colors';
 import ReactNativeModal from 'react-native-modal';
 import ModalContainer from './ModalContainer';
 import RenderUserIcon from './RenderUserIcon';
-import PostShareModal from './PostShareModal';
+import PostMoreModal from './PostMoreModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import PostCarousal from './PostCarousal';
@@ -160,7 +160,7 @@ export default function PagePostCard({ item, index, }) {
           </TouchableOpacity>
         )}
       </View>
-      {menuModal && <PostShareModal
+      {menuModal && <PostMoreModal
         item={item}
         menuModal={menuModal}
         setmenuModal={() => setmenuModal(false)}

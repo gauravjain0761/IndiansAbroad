@@ -6,7 +6,7 @@ import ApplicationStyles from '../Themes/ApplicationStyles';
 import { SCREEN_WIDTH, fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from './RenderUserIcon';
-import PostShareModal from './PostShareModal';
+import PostMoreModal from './PostMoreModal';
 import { useDispatch, useSelector } from 'react-redux';
 import RenderText from './RenderText';
 import PostCarousal from './PostCarousal';

@@ -19,7 +19,7 @@ import { onCancelRequest, onConnectRequest, onGetOtherUserInfo, onPagesConnectRe
 import { dispatchAction } from '../utils/apiGlobal';
 import { SET_CONNECT_REQUEST, SET_POST_PAGES_CONNECT, SET_POST_PAGES_DISCONNECT, UPDATE_POST_LIST } from '../Redux/ActionTypes';
 
-export default function PostShareModal({
+export default function PostMoreModal({
   shareView,
   menuModal,
   setmenuModal,
