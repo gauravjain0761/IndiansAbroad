@@ -22,6 +22,7 @@ import {
   getSaveListAction,
   getToggleFavoriteAction,
 } from '../Services/PostServices';
+import ShareProfileModal from './ShareProfileModal';
 
 export default function EventDashboardCard({item, index, onRefresh}) {
   const {user} = useSelector(e => e.common);
@@ -29,24 +30,28 @@ export default function EventDashboardCard({item, index, onRefresh}) {
   const dispatch = useDispatch();
   const [isSelect, setIsSelect] = useState(item?.is_favorite);
   const [lastTap, setLastTap] = useState(0);
+  const [shareModal, setshareModal] = useState(false);
+  const [selectData, setSelectData] = useState("");
 
   const onSharePress = async link => {
-    try {
-      const result = await Share.share({
-        message: link,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
+    setshareModal(true)
+    setSelectData(link)
+    // try {
+    //   const result = await Share.share({
+    //     message: link,
+    //   });
+    //   if (result.action === Share.sharedAction) {
+    //     if (result.activityType) {
+    //       // shared with activity type of result.activityType
+    //     } else {
+    //       // shared
+    //     }
+    //   } else if (result.action === Share.dismissedAction) {
+    //     // dismissed
+    //   }
+    // } catch (error) {
+    //   alert(error.message);
+    // }
   };
 
   const onStarPres = () => {
@@ -127,6 +132,16 @@ export default function EventDashboardCard({item, index, onRefresh}) {
           </View>
         </View>
       </View>
+      {shareModal && (
+        <ShareProfileModal 
+          visible={shareModal}
+          postId={"item._id"}
+          onClose={() => setshareModal(false)}
+          item={selectData}
+          eventShare={true}
+        />
+      )}
+
     </View>
   );
 }

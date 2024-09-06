@@ -27,13 +27,15 @@ import {
   getDetailsListAction,
   getToggleFavoriteAction,
 } from '../../Services/PostServices';
+import ShareProfileModal from '../../Components/ShareProfileModal';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
   const {activeEvent, user} = useSelector(e => e.common);
   const [isSelect, setIsSelect] = useState(activeEvent?.is_favorite);
   const [lastTap, setLastTap] = useState(0);
-
+  const [shareModal, setshareModal] = useState(false);
+  const [selectData, setSelectData] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -86,22 +88,24 @@ export default function EventDetailScreen() {
   };
 
   const onSharePress = async link => {
-    try {
-      const result = await Share.share({
-        message: link,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
+    setshareModal(true)
+    setSelectData(link)
+    // try {
+    //   const result = await Share.share({
+    //     message: link,
+    //   });
+    //   if (result.action === Share.sharedAction) {
+    //     if (result.activityType) {
+    //       // shared with activity type of result.activityType
+    //     } else {
+    //       // shared
+    //     }
+    //   } else if (result.action === Share.dismissedAction) {
+    //     // dismissed
+    //   }
+    // } catch (error) {
+    //   alert(error.message);
+    // }
   };
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -221,6 +225,15 @@ export default function EventDetailScreen() {
               extraStyle={{width: 170, height: 50}}
             />
           </View>
+        )}
+        {shareModal && (
+          <ShareProfileModal
+            visible={shareModal}
+            postId={'item._id'}
+            onClose={() => setshareModal(false)}
+            item={selectData}
+            eventShare={true}
+          />
         )}
       </ScrollView>
     </SafeAreaView>

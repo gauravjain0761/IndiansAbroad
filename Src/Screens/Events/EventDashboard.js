@@ -170,10 +170,10 @@ export default function EventDashboard() {
                 <Text style={styles.title}>Debited</Text>
               </View>
               <RenderDebitedTable />
-              <View style={styles.boxView}>
+              {/* <View style={styles.boxView}>
                 <Text style={styles.title}>Scanning Data</Text>
               </View>
-              <RenderScanningTable data={scanningData} />
+              <RenderScanningTable data={scanningData} /> */}
             </>
           ) : (
             <NoDataFound

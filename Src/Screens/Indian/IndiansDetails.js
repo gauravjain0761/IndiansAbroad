@@ -13,12 +13,12 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
+import {SCREEN_WIDTH, fontname, hp, wp} from '../../Themes/Fonts';
 import {
   FontStyle,
   ImageStyle,
@@ -27,14 +27,14 @@ import {
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import ConnectCard from '../../Components/ConnectCard';
-import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { Icons } from '../../Themes/Icons';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
+import {Icons} from '../../Themes/Icons';
 import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import PostCard from '../../Components/PostCard';
-import { screenName } from '../../Navigation/ScreenConstants';
+import {screenName} from '../../Navigation/ScreenConstants';
 import PostMoreModal from '../../Components/PostMoreModal';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {
   getOtherUserFollowList,
   getallpostsOfUser,
@@ -44,7 +44,7 @@ import {
   onGetOtherUserInfo,
   onUnFollowRequest,
 } from '../../Services/OtherUserServices';
-import { dispatchAction } from '../../utils/apiGlobal';
+import {dispatchAction} from '../../utils/apiGlobal';
 import {
   IS_LOADING,
   OTHER_USER_INFO,
@@ -55,20 +55,23 @@ import NoDataFound from '../../Components/NoDataFound';
 import IndianDetailShareModal from '../../Components/IndianDetailShareModal';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import ImageModalShow from '../../Components/ImageModal';
-import { onOpenNewChatForUser } from '../../Services/ChatServices';
+import {onOpenNewChatForUser} from '../../Services/ChatServices';
 import MessageRequestModal from '../../Components/MessageRequestModal';
+import ShareProfileModal from '../../Components/ShareProfileModal';
 
 export default function IndiansDetails() {
   const navigation = useNavigation();
   const [menuModal, setmenuModal] = useState(false);
-  const { navigate, goBack } = useNavigation();
+  const {navigate, goBack} = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelection, setTabSelection] = useState('POST');
   const buttonTranslateX = useRef(new Animated.Value(0)).current;
   // const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
-  const { params } = useRoute();
+  const {params} = useRoute();
   const [followList, setfollowList] = useState([]);
-  const { otherUserInfo, user, otherUserAllPost, otherUserFollowList } =
+  const [shareModal, setshareModal] = useState(false);
+
+  const {otherUserInfo, user, otherUserAllPost, otherUserFollowList} =
     useSelector(e => e.common);
   const handleTabPress = (id, index) => {
     Animated.spring(buttonTranslateX, {
@@ -86,7 +89,7 @@ export default function IndiansDetails() {
   const [blockModal, setblockModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectURI, setSelectURI] = useState('');
-  const [messageRequestModal, setmessageRequestModal] = useState(false)
+  const [messageRequestModal, setmessageRequestModal] = useState(false);
 
   const onSearchName = search => {
     let arr = searchUserByName(otherUserFollowList, 'followingId', search);
@@ -103,22 +106,22 @@ export default function IndiansDetails() {
     } else {
       dispatchAction(dispatch, OTHER_USER_INFO, undefined);
       dispatchAction(dispatch, IS_LOADING, true);
-      dispatch(onGetOtherUserInfo({ params: { userId: params?.userId } }));
-      dispatch(getallpostsOfUser({ data: { createdBy: params?.userId } }));
+      dispatch(onGetOtherUserInfo({params: {userId: params?.userId}}));
+      dispatch(getallpostsOfUser({data: {createdBy: params?.userId}}));
       onGetOtherUserFollower();
     }
   }, [isFocused]);
 
   const onGetOtherUserFollower = () => {
     dispatch(
-      getOtherUserFollowList({ data: { userId: params?.userId, search: '' } }),
+      getOtherUserFollowList({data: {userId: params?.userId, search: ''}}),
     );
   };
   const onPressConnect = () => {
     let obj = {
-      data: { userId: user._id, followingId: otherUserInfo._id },
+      data: {userId: user._id, followingId: otherUserInfo._id},
       onSuccess: () => {
-        dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo._id } }));
+        dispatch(onGetOtherUserInfo({params: {userId: otherUserInfo._id}}));
       },
     };
     if (otherUserInfo?.isFollowing == 'notfollowing') {
@@ -130,7 +133,7 @@ export default function IndiansDetails() {
     }
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
         key={item._id}
@@ -165,21 +168,19 @@ export default function IndiansDetails() {
         data: {
           CpUserId: otherUserInfo?._id,
           userId: user?._id,
-          communityPageId: 'NA'
+          communityPageId: 'NA',
         },
         onSuccess: () => {
-          navigation.navigate(screenName.Messaging)
-        }
-      }
-      dispatch(onOpenNewChatForUser(obj))
+          navigation.navigate(screenName.Messaging);
+        },
+      };
+      dispatch(onOpenNewChatForUser(obj));
     } else if (otherUserInfo?.isFollowing == 'notfollowing') {
-      setmessageRequestModal(true)
-
+      setmessageRequestModal(true);
     } else if (otherUserInfo?.isFollowing == 'requested') {
-      Alert.alert('You already requested to this user')
+      Alert.alert('You already requested to this user');
     }
-
-  }
+  };
 
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -192,9 +193,9 @@ export default function IndiansDetails() {
       />
       {otherUserInfo && (
         <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
-          <ScrollView style={{ flex: 1 }}>
+          style={{flex: 1}}
+          {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
+          <ScrollView style={{flex: 1}}>
             <View style={styles.userViewStyle}>
               <TouchableOpacity
                 onPress={() => {
@@ -206,7 +207,7 @@ export default function IndiansDetails() {
                   url={otherUserInfo?.avtar}
                   height={100}
                   isBorder={otherUserInfo?.subscribedMember}
-                  type='user'
+                  type="user"
                 />
               </TouchableOpacity>
               <Text style={styles.userText}>
@@ -215,7 +216,7 @@ export default function IndiansDetails() {
               {otherUserInfo?.catchLine !== '' && (
                 <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>
               )}
-              <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
+              <View style={[ApplicationStyles.row, {alignSelf: 'center'}]}>
                 {otherUserInfo?.isFollowing == 'notfollowing' && (
                   <TouchableOpacity
                     onPress={() => onPressConnect()}
@@ -224,17 +225,18 @@ export default function IndiansDetails() {
                       {otherUserInfo?.isFollowing == 'notfollowing'
                         ? 'Connect'
                         : otherUserInfo?.isFollowing == 'requested'
-                          ? 'Cancel Request'
-                          : 'Disconnect'}
+                        ? 'Cancel Request'
+                        : 'Disconnect'}
                     </Text>
                   </TouchableOpacity>
                 )}
-                <TouchableOpacity onPress={() => onOpenMessage()}
-                  style={[styles.btnView, { marginLeft: 8, marginRight: 2 }]}>
+                <TouchableOpacity
+                  onPress={() => onOpenMessage()}
+                  style={[styles.btnView, {marginLeft: 8, marginRight: 2}]}>
                   <Text style={styles.btnText}>Message</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={{ position: 'absolute', right: -22 }}
+                  style={{position: 'absolute', right: -22}}
                   onPress={() => setmenuModal(true)}>
                   <Image
                     source={Icons.more}
@@ -248,7 +250,7 @@ export default function IndiansDetails() {
               <Text
                 style={[
                   styles.text1,
-                  { ...FontStyle(14, colors.neutral_900, '700') },
+                  {...FontStyle(14, colors.neutral_900, '700')},
                 ]}>
                 About
               </Text>
@@ -264,8 +266,12 @@ export default function IndiansDetails() {
               <Text style={styles.text1}>
                 {otherUserInfo?.universityORcompany}
               </Text>
-              {otherUserInfo?.profession && <Text style={styles.text2}>As</Text>}
-              {otherUserInfo?.profession && <Text style={styles.text1}>{otherUserInfo?.profession}</Text>}
+              {otherUserInfo?.profession && (
+                <Text style={styles.text2}>As</Text>
+              )}
+              {otherUserInfo?.profession && (
+                <Text style={styles.text1}>{otherUserInfo?.profession}</Text>
+              )}
               {/* <Text style={styles.text2}>Link</Text>
           <Text style={styles.text1}>app.visily.ai</Text> */}
             </View>
@@ -336,7 +342,7 @@ export default function IndiansDetails() {
                   styles.animationView,
                   {
                     left: tabSelection == 'POST' ? 0 : 0,
-                    transform: [{ translateX: buttonTranslateX }],
+                    transform: [{translateX: buttonTranslateX}],
                     width: (SCREEN_WIDTH - 20) / 2,
                     borderWidth: 0.9,
                     borderColor: colors.primary_4574ca,
@@ -373,7 +379,7 @@ export default function IndiansDetails() {
                 {followList && (
                   <FlatList
                     data={followList}
-                    renderItem={({ item }) => {
+                    renderItem={({item}) => {
                       return (
                         <ConnectedIndians
                           cardPress={() => {
@@ -403,23 +409,37 @@ export default function IndiansDetails() {
         </KeyboardAvoidingView>
       )}
 
-      {menuModal && <IndianDetailShareModal
-        item={otherUserInfo}
-        onPressBlock={() => setblockModal(true)}
-        shareView={true}
-        menuModal={menuModal}
-        setmenuModal={() => setmenuModal(false)}
-      />}
+      {menuModal && (
+        <IndianDetailShareModal
+          item={otherUserInfo}
+          onPressBlock={() => setblockModal(true)}
+          onShareProfile={() => setshareModal(true)}
+          shareView={true}
+          menuModal={menuModal}
+          setmenuModal={() => setmenuModal(false)}
+        />
+      )}
 
-      {blockModal && <ConfirmationModal
-        visible={blockModal}
-        onClose={() => setblockModal(false)}
-        title={`Do you want to block ${otherUserInfo?.first_Name} ${otherUserInfo?.last_Name}?`}
-        successBtn={'Yes'}
-        canselBtn={'No'}
-        onPressCancel={() => setblockModal(false)}
-        onPressSuccess={() => onBlockuser()}
-      />}
+      {shareModal && (
+        <ShareProfileModal 
+          visible={shareModal}
+          postId={"item._id"}
+          onClose={() => setshareModal(false)}
+          item={otherUserInfo}
+        />
+      )}
+
+      {blockModal && (
+        <ConfirmationModal
+          visible={blockModal}
+          onClose={() => setblockModal(false)}
+          title={`Do you want to block ${otherUserInfo?.first_Name} ${otherUserInfo?.last_Name}?`}
+          successBtn={'Yes'}
+          canselBtn={'No'}
+          onPressCancel={() => setblockModal(false)}
+          onPressSuccess={() => onBlockuser()}
+        />
+      )}
       {modalVisible && (
         <ImageModalShow
           modalVisible={modalVisible}
@@ -427,13 +447,16 @@ export default function IndiansDetails() {
           onClose={() => {
             setModalVisible(false);
           }}
-          type='user'
+          type="user"
         />
       )}
-      {messageRequestModal &&
-        <MessageRequestModal visible={messageRequestModal} userId={otherUserInfo?._id}
-          onClose={() => setmessageRequestModal(false)} />
-      }
+      {messageRequestModal && (
+        <MessageRequestModal
+          visible={messageRequestModal}
+          userId={otherUserInfo?._id}
+          onClose={() => setmessageRequestModal(false)}
+        />
+      )}
     </SafeAreaView>
   );
 }

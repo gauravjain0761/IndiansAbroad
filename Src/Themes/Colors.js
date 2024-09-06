@@ -16,6 +16,7 @@ const colors = {
   secondary_600: '#6A7DACFF',
   secondary_700: '#F3F2F7FF',
   secondary_800: '#6276AEFF',
+  secondary_900: '#8A8B8FFF',
   secondary_d9e2: '#D9E2F3FF',
   primary_6a7e: '#6A7EB0FF',
   neutral_600: '#565D6DFF',

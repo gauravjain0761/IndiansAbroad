@@ -1,116 +1,146 @@
 import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    TextInput,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import React from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import {Icons} from '../Themes/Icons';
+import {FontStyle, ImageStyle} from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import { fontname, screen_width, wp } from '../Themes/Fonts';
+import {fontname, screen_width, wp} from '../Themes/Fonts';
 import ModalContainer from './ModalContainer';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useDispatch, useSelector } from 'react-redux';
-import { getallpostsOfUser, onCancelRequest, onConnectRequest, onGetOtherUserInfo, onUnFollowRequest } from '../Services/OtherUserServices';
-import { dispatchAction } from '../utils/apiGlobal';
-import { SET_CONNECT_REQUEST, UPDATE_POST_LIST } from '../Redux/ActionTypes';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getallpostsOfUser,
+  onCancelRequest,
+  onConnectRequest,
+  onGetOtherUserInfo,
+  onUnFollowRequest,
+} from '../Services/OtherUserServices';
+import {dispatchAction} from '../utils/apiGlobal';
+import {SET_CONNECT_REQUEST, UPDATE_POST_LIST} from '../Redux/ActionTypes';
 
+export default function IndianDetailShareModal({
+  shareView,
+  menuModal,
+  setmenuModal,
+  item,
+  onPressBlock,
+  onShareProfile
+}) {
+  const insets = useSafeAreaInsets();
+  const {user, otherUserInfo} = useSelector(state => state.common);
+  const dispatch = useDispatch();
 
-export default function IndianDetailShareModal({ shareView,
-    menuModal,
-    setmenuModal,
-    item,
-    onPressBlock }) {
-    const insets = useSafeAreaInsets();
-    const { user, otherUserInfo } = useSelector((state) => state.common);
-    const dispatch = useDispatch()
+  const onPressConnect = () => {
+    setmenuModal(false);
+    let obj = {
+      data: {userId: user._id, followingId: otherUserInfo._id},
+      onSuccess: () => {
+        dispatchAction(dispatch, SET_CONNECT_REQUEST, {
+          followingId: otherUserInfo._id,
+          type:
+            otherUserInfo?.isFollowing == 'requested'
+              ? 'remove'
+              : otherUserInfo?.isFollowing == 'following'
+              ? 'disconnect'
+              : undefined,
+        });
 
-    const onPressConnect = () => {
-        setmenuModal(false)
-        let obj = {
-            data: { userId: user._id, followingId: otherUserInfo._id },
-            onSuccess: () => {
-                dispatchAction(dispatch, SET_CONNECT_REQUEST, { followingId: otherUserInfo._id, type: otherUserInfo?.isFollowing == 'requested' ? 'remove' : otherUserInfo?.isFollowing == 'following' ? 'disconnect' : undefined })
-
-                dispatch(onGetOtherUserInfo({ params: { userId: otherUserInfo._id, } }))
-                dispatch(getallpostsOfUser({ data: { createdBy: otherUserInfo._id } }));
-            }
-        }
-        if (otherUserInfo?.isFollowing == 'notfollowing') {
-            dispatch(onConnectRequest(obj))
-        } else if (otherUserInfo?.isFollowing == 'requested') {
-            dispatch(onCancelRequest(obj))
-        } else {
-            dispatch(onUnFollowRequest(obj))
-        }
+        dispatch(onGetOtherUserInfo({params: {userId: otherUserInfo._id}}));
+        dispatch(getallpostsOfUser({data: {createdBy: otherUserInfo._id}}));
+      },
+    };
+    if (otherUserInfo?.isFollowing == 'notfollowing') {
+      dispatch(onConnectRequest(obj));
+    } else if (otherUserInfo?.isFollowing == 'requested') {
+      dispatch(onCancelRequest(obj));
+    } else {
+      dispatch(onUnFollowRequest(obj));
     }
+  };
 
-    const onBlock = () => {
-        setmenuModal(false)
-        setTimeout(() => {
-            onPressBlock()
-        }, 500);
-    }
+  const onBlock = () => {
+    setmenuModal(false);
+    setTimeout(() => {
+      onPressBlock();
+    }, 500);
+  };
 
+  const onShare = () => {
+    setmenuModal(false);
+    setTimeout(() => {
+      onShareProfile();
+    }, 500);
+  };
 
-    return (
-        <ModalContainer
-            isVisible={menuModal}
-            onClose={() => setmenuModal(false)}
-            transparent={true}>
-            <View style={styles.modalView}>
-                <Text style={styles.modalUserName}>{item ? `${item?.first_Name} ${item?.last_Name}` : 'Nikita Khairnar'}</Text>
-                <View style={styles.line} />
-                {shareView && (
-                    <>
-                        <TouchableOpacity>
-                            <Text style={styles.modalText}>Share Profile</Text>
-                        </TouchableOpacity>
-                        <View
-                            style={[styles.line, { borderBottomColor: colors.neutral_500 }]}
-                        />
-                    </>
-                )}
-                <TouchableOpacity onPress={() => onPressConnect()}>
-                    <Text style={styles.modalText}>{otherUserInfo?.isFollowing == 'notfollowing' ? 'Connect' : otherUserInfo?.isFollowing == 'requested' ? 'Cancel Request' : 'Disconnect'}</Text>
-                </TouchableOpacity>
-                <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-                <TouchableOpacity onPress={() => onBlock()}>
-                    <Text style={styles.modalText}>{'Block'}</Text>
-                </TouchableOpacity>
-                <View style={[styles.line, { borderBottomColor: colors.neutral_500 }]} />
-                {/* {!item?.isReported ? <TouchableOpacity>
+  return (
+    <ModalContainer
+      isVisible={menuModal}
+      onClose={() => setmenuModal(false)}
+      transparent={true}>
+      <View style={styles.modalView}>
+        <Text style={styles.modalUserName}>
+          {item ? `${item?.first_Name} ${item?.last_Name}` : 'Nikita Khairnar'}
+        </Text>
+        <View style={styles.line} />
+        {shareView && (
+          <>
+            <TouchableOpacity onPress={()=>{onShare()}}>
+              <Text style={styles.modalText}>Share Profile</Text>
+            </TouchableOpacity>
+            <View
+              style={[styles.line, {borderBottomColor: colors.neutral_500}]}
+            />
+          </>
+        )}
+        <TouchableOpacity onPress={() => onPressConnect()}>
+          <Text style={styles.modalText}>
+            {otherUserInfo?.isFollowing == 'notfollowing'
+              ? 'Connect'
+              : otherUserInfo?.isFollowing == 'requested'
+              ? 'Cancel Request'
+              : 'Disconnect'}
+          </Text>
+        </TouchableOpacity>
+        <View style={[styles.line, {borderBottomColor: colors.neutral_500}]} />
+        <TouchableOpacity onPress={() => onBlock()}>
+          <Text style={styles.modalText}>{'Block'}</Text>
+        </TouchableOpacity>
+        <View style={[styles.line, {borderBottomColor: colors.neutral_500}]} />
+        {/* {!item?.isReported ? <TouchableOpacity>
                     <Text style={styles.modalText}>Report</Text>
                 </TouchableOpacity> : null} */}
-                <View style={styles.line} />
-                <View style={{ paddingBottom: insets.bottom }} />
-            </View>
-        </ModalContainer>
-    )
+        <View style={styles.line} />
+        <View style={{paddingBottom: insets.bottom}} />
+      </View>
+    </ModalContainer>
+  );
 }
 
 const styles = StyleSheet.create({
-    modalView: {
-        backgroundColor: colors.neutral_300,
-        paddingHorizontal: 3,
-    },
-    modalUserName: {
-        ...FontStyle(16, colors.neutral_900, '700'),
-        paddingVertical: 15,
-        textAlign: 'center',
-        textTransform: 'capitalize'
-    },
-    line: {
-        borderBottomWidth: 1,
-        borderBottomColor: colors.neutral_800,
-    },
-    modalText: {
-        ...FontStyle(18, colors.neutral_900),
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-    },
+  modalView: {
+    backgroundColor: colors.neutral_300,
+    paddingHorizontal: 3,
+  },
+  modalUserName: {
+    ...FontStyle(16, colors.neutral_900, '700'),
+    paddingVertical: 15,
+    textAlign: 'center',
+    textTransform: 'capitalize',
+  },
+  line: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.neutral_800,
+  },
+  modalText: {
+    ...FontStyle(18, colors.neutral_900),
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+  },
 });

@@ -97,6 +97,13 @@ export const Icons = {
   pagePlaceholder: require('../assets/Icons/pagePlaceholder.png'),
   accept: require('../assets/Icons/accept.png'),
 
+  ic_whatapp: require('../assets/Icons/ic_whatapp.jpg'),
+  ic_w_b: require('../assets/Icons/ic_w_b.jpg'),
+  ic_sahre: require('../assets/Icons/ic_sahre.jpg'),
+  ic_message: require('../assets/Icons/ic_message.jpg'),
+  ic_mail: require('../assets/Icons/ic_mail.jpg'),
+
+
 
   w_1: require('../assets/Icons/w_1.png'),
   w_2: require('../assets/Icons/w_2.png'),

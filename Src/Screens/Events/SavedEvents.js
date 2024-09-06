@@ -93,6 +93,9 @@ export default function SavedEvents() {
     getData();
   }, [tabSelection]);
 
+  console.log('allSave?.bookedTickets',allSave?.bookedTickets);
+  
+
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
       toValue: isLeftButtonActive ? 0 : Dimensions.get('screen').width * 0.5,
@@ -101,9 +104,7 @@ export default function SavedEvents() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const renderEventItem = ({ item, index }) => {
-    console.log('item',item);
-    
+  const renderEventItem = ({ item, index }) => {    
     if (item?.is_Saved) {
       return (
         <TouchableOpacity
@@ -126,7 +127,7 @@ export default function SavedEvents() {
   };
 
   const renderBookedTicketsItem = ({ item, index }) => {
-    return <RenderEventTicket />;
+    return <RenderEventTicket item={item} />;
   };
 
 
