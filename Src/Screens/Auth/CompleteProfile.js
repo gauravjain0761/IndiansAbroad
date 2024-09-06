@@ -59,7 +59,7 @@ export default function CompleteProfile() {
         if (googleUser) {
             setgender(googleUser?.gender ? googleUser?.gender : '')
             // setimage({ path: googleUser?.photo })
-            // getImage()
+            getImage()
         }
     }, [])
 
@@ -76,6 +76,8 @@ export default function CompleteProfile() {
         if (downloadResult.statusCode !== 200) {
             throw new Error('Failed to download image');
         }
+
+        console.log(downloadResult)
 
         setimage({
             path: `file://${newPath}`,
@@ -137,6 +139,7 @@ export default function CompleteProfile() {
             data.phonenumber = user?.phonenumber
             data.email = user?.email
             data.gender = gender.toLowerCase()
+            console.log(data)
             dispatchAction(dispatch, IS_LOADING, true)
             formDataApiCall(api.registerstepone, data, (res) => {
                 dispatchAction(dispatch, IS_LOADING, false)

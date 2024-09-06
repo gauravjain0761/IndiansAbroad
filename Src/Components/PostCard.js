@@ -135,11 +135,23 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
     dispatch(onCancelRequest(obj));
   }
 
-  // console.log(item?.isFollowing + ' ' + item?.createdBy?.first_Name)
-  if (index == 1) {
-    console.log(item?.isFollowing)
+  const onPressAccept = () => {
+    // let obj = {
+    //   data: {
+    //     userId: user?._id,
+    //     requestedId: item?.createdBy?._id,
+    //     action: type,
+    //     notificationId: item?._id,
+    //   },
+    //   onSuccess: () => {
+    //     dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
+    //   },
+    // };
+    // dispatch(onAcceptRejectRequest(obj));
   }
-
+  // if (index == 1) {
+  //   console.log(item)
+  // }
   if (item) {
     return (
       <View key={item?._id}>
@@ -215,27 +227,35 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
                     <Text style={styles.degreeText3}>Message</Text>
                   </TouchableOpacity>
                 :
-                item?.isFollowing == 'following' ? (
-                  <TouchableOpacity onPress={() => onOpenMessage()} style={styles.messageView}>
-                    <Image source={Icons.messageIcon} style={ImageStyle(30, 30, 'cover')} />
-                    <Text style={styles.degreeText3}>Message</Text>
-                  </TouchableOpacity>
-                ) :
 
-                  item?.isFollowing == 'notfollowing' ? (
-                    <TouchableOpacity onPress={() => onPressConnect()} style={styles.messageView}>
-                      <Image source={Icons.personAdd} style={ImageStyle(30, 30, 'cover')} />
-                      <Text style={styles.degreeText3}>Connect</Text>
+                item?.requestSent == true ?
+                  <TouchableOpacity onPress={() => onPressAccept()} style={styles.messageView}>
+                    <Image source={Icons.accept} style={ImageStyle(30, 30, 'cover')} />
+                    <Text style={styles.degreeText3}>Accept</Text>
+                  </TouchableOpacity>
+                  :
+
+                  item?.isFollowing == 'following' ? (
+                    <TouchableOpacity onPress={() => onOpenMessage()} style={styles.messageView}>
+                      <Image source={Icons.messageIcon} style={ImageStyle(30, 30, 'cover')} />
+                      <Text style={styles.degreeText3}>Message</Text>
                     </TouchableOpacity>
                   ) :
-                    item?.isFollowing == 'requested' ?
 
-                      <TouchableOpacity onPress={() => onCancelRequestPress()} style={styles.messageView}>
-                        <Image source={Icons.cancelRequest} style={ImageStyle(28, 28, 'cover')} />
-                        <Text style={[styles.degreeText3, { textAlign: 'center', lineHeight: 16 }]}>Cancel{'\n'}Request</Text>
+                    item?.isFollowing == 'notfollowing' ? (
+                      <TouchableOpacity onPress={() => onPressConnect()} style={styles.messageView}>
+                        <Image source={Icons.personAdd} style={ImageStyle(30, 30, 'cover')} />
+                        <Text style={styles.degreeText3}>Connect</Text>
                       </TouchableOpacity>
+                    ) :
+                      item?.isFollowing == 'requested' ?
 
-                      : null
+                        <TouchableOpacity onPress={() => onCancelRequestPress()} style={styles.messageView}>
+                          <Image source={Icons.cancelRequest} style={ImageStyle(28, 28, 'cover')} />
+                          <Text style={[styles.degreeText3, { textAlign: 'center', lineHeight: 16 }]}>Cancel{'\n'}Request</Text>
+                        </TouchableOpacity>
+
+                        : null
               }
             </View>
           )

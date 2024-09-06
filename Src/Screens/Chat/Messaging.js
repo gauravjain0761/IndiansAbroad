@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import ChatHeader from '../../Components/ChatHeader';
 import ReciverMsg from '../../Components/ReceiverMsg';
@@ -20,7 +21,7 @@ import { useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-na
 import { io } from 'socket.io-client';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { sendData, socket } from '../../Socket/Socket';
-import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
+import { getChatMessage, onCheckMessageRequest, onGetUnreadMsgCount } from '../../Services/ChatServices';
 import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -119,6 +120,22 @@ const Messaging = () => {
     }
   }
 
+  const checkRequest = () => {
+    let obj = {
+      data: {
+        receiverId: activeChatRoomUser?.currentUser?._id
+      },
+      onSuccess: (res) => {
+        if (res?.msgCount == 0) {
+          setmessageRequestModal(true);
+        } else {
+          Alert.alert('You already requested to this user');
+        }
+      },
+    };
+    dispatch(onCheckMessageRequest(obj));
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ChatHeader
@@ -183,12 +200,12 @@ const Messaging = () => {
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
             <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
           </KeyboardAvoidingView>
-          <TouchableOpacity onPress={() => setmessageRequestModal(true)} style={{ position: 'absolute', zIndex: 1, left: 0, right: 0, bottom: 0, top: 0 }}>
+          <TouchableOpacity onPress={() => checkRequest()} style={{ position: 'absolute', zIndex: 1, left: 0, right: 0, bottom: 0, top: 0 }}>
           </TouchableOpacity>
         </View>
       }
       {messageRequestModal &&
-        <MessageRequestModal visible={messageRequestModal} onClose={() => setmessageRequestModal(false)} />
+        <MessageRequestModal userId={activeChatRoomUser?.currentUser?._id} visible={messageRequestModal} onClose={() => setmessageRequestModal(false)} />
       }
     </SafeAreaView>
   );

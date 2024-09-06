@@ -40,17 +40,18 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CommonButton from './CommonButton';
 import { getAllPagePost } from '../Services/OtherUserServices';
+import TagUserModal from './TagUserModal';
 
 
 export default function CreatePost({ createPostModal, setcreatePostModal, isMyPage = false, page }) {
   const [postText, setpostText] = useState('');
   const [imageArray, setimageArray] = useState([])
-  const { user } = useSelector(e => e.common)
   const dispatch = useDispatch()
   const [previewModal, setpreviewModal] = useState(false)
   const insets = useSafeAreaInsets();
   const [selectedImage, setselectedImage] = useState(undefined)
   const [selectedImageIndex, setselectedImageIndex] = useState(undefined)
+  const { user, groupCreateAllUsers } = useSelector(e => e.common)
 
   useEffect(() => {
     setpreviewModal(false)
@@ -191,7 +192,9 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
               <Text style={styles.title}>Create Post</Text>
             </View>
           </View>
+
           <View style={styles.inputBox}>
+            <TagUserModal />
             <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
             <View style={styles.rowView}>
               <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>

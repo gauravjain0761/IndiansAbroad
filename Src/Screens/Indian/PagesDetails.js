@@ -2,9 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Pressable,
-  Animated,
-  Dimensions,
   TouchableOpacity,
   FlatList,
   ScrollView,
@@ -15,12 +12,12 @@ import {
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts';
+import { SCREEN_WIDTH, hp, wp } from '../../Themes/Fonts';
 import {
   FontStyle,
   ImageStyle,
@@ -28,14 +25,10 @@ import {
 } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
-import ConnectCard from '../../Components/ConnectCard';
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { Icons } from '../../Themes/Icons';
-import ConnectedIndians from '../../Components/ConnectedIndians';
 import RenderUserIcon from '../../Components/RenderUserIcon';
-import PostCard from '../../Components/PostCard';
 import { screenName } from '../../Navigation/ScreenConstants';
-import PostMoreModal from '../../Components/PostMoreModal';
 import PagePostCard from '../../Components/PagePostCard';
 import UpdateDeleteMenu from '../../Components/UpdateDeleteMenu';
 import DeletePopModal from '../../Components/DeletePopModal';
@@ -56,7 +49,6 @@ import {
 import { dispatchAction } from '../../utils/apiGlobal';
 import NoDataFound from '../../Components/NoDataFound';
 import PageConnectedIndians from '../../Components/PageConnectedIndians';
-import { onGetPageDetail } from '../../Services/PostServices';
 import ImageModalShow from '../../Components/ImageModal';
 import { onOpenNewChatForUser } from '../../Services/ChatServices';
 

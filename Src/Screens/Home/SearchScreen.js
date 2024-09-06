@@ -9,7 +9,7 @@ import colors from '../../Themes/Colors'
 import SearchBar from '../../Components/SearchBar'
 import RenderUserIcon from '../../Components/RenderUserIcon'
 import { useDispatch, useSelector } from 'react-redux'
-import { onGetLikedUserList, onGlobalSearchApi } from '../../Services/PostServices'
+import { onGetLikedUserList, onGetPageDetail, onGlobalSearchApi } from '../../Services/PostServices'
 import { api } from '../../utils/apiConstants'
 import NoDataFound from '../../Components/NoDataFound'
 import FastImage from 'react-native-fast-image'
@@ -96,8 +96,13 @@ export default function SearchScreen() {
                                 <View>
                                     <Text style={styles.title}>Threads</Text>
                                     {globalSearchData?.threads?.records.map((item, index) => {
+                                        console.log(item)
                                         return (
-                                            <TouchableOpacity style={styles.row} key={index}>
+                                            <TouchableOpacity onPress={() => {
+                                                dispatchAction(dispatch, SET_ACTIVE_POST, item);
+                                                dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+                                                navigate(screenName.DiscussionForumDetail)
+                                            }} style={styles.row} key={index}>
                                                 <FastImage resizeMode={FastImage.resizeMode.stretch} source={{ uri: api.IMAGE_URL + item.avtar }} style={styles.imageAvtar} />
                                                 <View style={ApplicationStyles.flex}>
                                                     <Text numberOfLines={1} style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}>{item.title}</Text>
@@ -126,8 +131,17 @@ export default function SearchScreen() {
                                     <Text style={styles.title}>Pages</Text>
                                     {globalSearchData?.cps?.records.map((item, index) => {
                                         return (
-                                            <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
-                                                <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                            <TouchableOpacity onPress={() => {
+                                                let obj = {
+                                                    id: item?._id,
+                                                    onSuccess: (res) => {
+                                                        navigate(screenName.pagesDetails, { pageDetail: res?.data })
+
+                                                    }
+                                                }
+                                                dispatch(onGetPageDetail(obj))
+                                            }} key={index} style={[styles.row]}>
+                                                <RenderUserIcon type='page' url={item?.logo} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
                                                 <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.title}</Text>
                                             </TouchableOpacity>
                                         )
@@ -160,8 +174,20 @@ export default function SearchScreen() {
                                         <Text style={styles.title}>Pages</Text>
                                         {globalSearchData?.pages?.records.map((item, index) => {
                                             return (
-                                                <TouchableOpacity onPress={() => navigate(screenName.indiansDetails, { userId: item?._id })} key={index} style={[styles.row]}>
-                                                    <RenderUserIcon type='user' url={item?.avtar} userId={item?._id} height={45} isBorder={item?.subscribedMember} />
+                                                <TouchableOpacity onPress={() => {
+                                                    let obj = {
+                                                        id: item?._id,
+                                                        onSuccess: (res) => {
+                                                            console.log(res?.data)
+                                                            if (res?.data) {
+                                                                navigate(screenName.pagesDetails, { pageDetail: res?.data })
+                                                            }
+                                                        }
+                                                    }
+                                                    dispatch(onGetPageDetail(obj))
+                                                    // navigate(screenName.pagesDetails, { pageDetail: item })
+                                                }} key={index} style={[styles.row]}>
+                                                    <RenderUserIcon type='page' url={item?.logo} height={45} isBorder={item?.subscribedMember} />
                                                     <Text style={[styles.title, { color: colors.neutral_900, marginTop: 0 }]}> {item?.title}</Text>
                                                 </TouchableOpacity>
                                             )

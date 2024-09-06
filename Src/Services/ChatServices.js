@@ -311,3 +311,18 @@ export const onSendMessageRequest = request => async dispatch => {
       handleErrorRes(error, request, dispatch);
     });
 };
+
+export const onCheckMessageRequest = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
+  return makeAPIRequest({
+    method: POST,
+    url: api.checkMessageRequest,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => { });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};

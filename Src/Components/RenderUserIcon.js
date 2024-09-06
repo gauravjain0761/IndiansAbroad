@@ -57,7 +57,7 @@ export default function RenderUserIcon({
         }
         source={
           isUrl
-            ? { uri: api.IMAGE_URL + url, priority: FastImage.priority.normal }
+            ? { uri: url.includes('https://') ? url : api.IMAGE_URL + url, priority: FastImage.priority.normal }
             : type == 'user' ? Icons.userPlaceholder : type == 'group' ? Icons.groupPlaceholder : Icons.pagePlaceholder
         }
         style={styles.userImage}

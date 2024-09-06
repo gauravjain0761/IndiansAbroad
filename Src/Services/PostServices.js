@@ -490,7 +490,7 @@ export const onGetPageDetail = request => async dispatch => {
   })
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
-        dispatchAction(dispatch, SET_PAGE_DETAIL, response?.data?.data);
+        // dispatchAction(dispatch, SET_PAGE_DETAIL, response?.data?.data);
       });
     })
     .catch(error => {

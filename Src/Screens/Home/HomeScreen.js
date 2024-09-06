@@ -42,7 +42,7 @@ import { io } from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
 import { Icons } from '../../Themes/Icons';
 import { socket, socketConnect } from '../../Socket/Socket';
-import { onGetUnreadMsgCount } from '../../Services/ChatServices';
+import { onGetGroupCreateUser, onGetUnreadMsgCount } from '../../Services/ChatServices';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -81,6 +81,16 @@ export default function HomeScreen() {
     });
   }, []);
 
+  const onGetAllAppUsers = () => {
+    let obj = {
+      params: {
+        search: '',
+        groupId: 'NA'
+      }
+    }
+    dispatch(onGetGroupCreateUser(obj))
+  }
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getData();
@@ -106,6 +116,7 @@ export default function HomeScreen() {
   };
 
   useEffect(() => {
+    onGetAllAppUsers()
     if (!allPost) dispatchAction(dispatch, IS_LOADING, true);
     if (!allEvent) dispatchAction(dispatch, IS_LOADING, true);
     dispatch(getDiscussionCountry({}));
@@ -139,7 +150,7 @@ export default function HomeScreen() {
     };
     dispatch(getalluserEvent(obj));
   };
-  
+
   useEffect(() => {
     getData();
   }, [tabSelection]);
@@ -172,7 +183,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-            dispatchAction(dispatch, SET_ACTIVE_EVENT, {...item,createdBy:{_id:item?.createdBy}});
+            dispatchAction(dispatch, SET_ACTIVE_EVENT, { ...item, createdBy: { _id: item?.createdBy } });
             // dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
             navigation.navigate(screenName.EventDetailScreen);
           }}>

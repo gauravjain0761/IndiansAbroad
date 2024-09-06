@@ -88,7 +88,7 @@ export default function DiscussionForumDetailCard({ item, index }) {
           </TouchableOpacity>
         ) : null} */}
       </View>
-      {item?.mediaFiles.length > 0 && (
+      {item?.mediaFiles && item?.mediaFiles.length > 0 && (
         <PostCarousal
           // poster={item?.thumbNail}
           // isDetailScreen={isDetailScreen}
