@@ -240,3 +240,20 @@ export const getAllPageFollower = (request) => async dispatch => {
       handleErrorRes(error, request, dispatch);
     });
 };
+
+
+export const onProfileShareApi = request => async dispatch => {
+  return makeAPIRequest({
+    method: POST,
+    url: api.shareProfile,
+    data: request?.data,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {
+        successToast(response?.data?.msg);
+      });
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};

@@ -436,7 +436,7 @@ export default function IndiansDetails() {
       {shareModal && (
         <ShareProfileModal
           visible={shareModal}
-          postId={"item._id"}
+          // postId={otherUserInfo._id}
           onClose={() => setshareModal(false)}
           item={otherUserInfo}
         />

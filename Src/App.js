@@ -30,6 +30,10 @@ import {
 } from './Services/AuthServices';
 import Loader from './Components/Loader';
 import { SET_USER } from './Redux/ActionTypes';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { api } from './utils/apiConstants';
+
+
 export const toastConfig = {
   success: ({ text1, text2, type, props, ...rest }) =>
     type === 'success' && (
@@ -67,71 +71,17 @@ function App() {
     TextInput.defaultProps.allowFontScaling = false;
   }, []);
 
-  // useEffect(() => {
-
-  //   checkSession()
-  // }, [])
-
-  // const checkSession = async () => {
-  //   let token = await getAsyncToken()
-  //   console.log(token)
-  //   if (token) {
-  //     let obj = {
-  //       params: {
-  //         token: token
-  //       },
-  //       onSuccess: async (response) => {
-  //         await setAuthorization(token)
-  //         let user = await getAsyncUserInfo()
-  //         console.log('user--', user)
-  //         dispatchAction(dispatch, SET_USER, user)
-  //         if (user && user._id) {
-  //           dispatch(onGetUserInfoApi({
-  //             params: {
-  //               userId: user._id
-  //             }
-  //           }))
-  //           setTimeout(() => {
-  //             setloading(false)
-  //           }, 500);
-  //         } else {
-  //           doLogin()
-  //         }
-  //       },
-  //       onFailure: (error) => {
-  //         doLogin()
-  //       }
-  //     }
-  //     dispatch(oncheckSession(obj))
-  //   } else {
-  //     doLogin()
-  //   }
-  // }
-
-  // const doLogin = async () => {
-  //   let obj = {
-  //     data: {
-  //       email: 'jadhavharshal.510@gmail.com',
-  //       passCode: 'Trtr#789'
-  //     },
-  //     onSuccess: async (response) => {
-  //       setTimeout(() => {
-  //         setloading(false)
-  //       }, 500);
-  //     },
-  //     onFailure: (error) => {
-  //       setloading(false)
-  //     }
-  //   }
-  //   dispatch(onLoginApi(obj))
-  // }
-
-
   return (
-    <View style={ApplicationStyles.applicationView}>
-      <RootContainer />
-      <Toast config={toastConfig} position="top" topOffset={0} />
-    </View>
+    <StripeProvider
+      publishableKey={api.PUBLIC_KEY_STRIPE}
+      merchantIdentifier="merchant.online.indiansabroad" // required for Apple Pay
+    // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
+    >
+      <View style={ApplicationStyles.applicationView}>
+        <RootContainer />
+        <Toast config={toastConfig} position="top" topOffset={0} />
+      </View>
+    </StripeProvider>
   );
 }
 export default App;

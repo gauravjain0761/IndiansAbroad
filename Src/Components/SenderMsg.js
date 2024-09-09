@@ -76,6 +76,10 @@ const SenderMsg = ({ data }) => {
     dispatch(onDeleteMessageForUser(obj))
   }
 
+  const onOpenOtherUserDetail = (id) => {
+    navigation.navigate(screenName.indiansDetails, { userId: id });
+  }
+
   return (
     <View style={styles.conatiner}>
       <View style={styles.columnContainer}>
@@ -91,6 +95,7 @@ const SenderMsg = ({ data }) => {
                 :
                 <View style={styles.nameView}>
                   <Text style={styles.nameTextStyle}>{'You'}</Text>
+                  {data?.shareContentType == 'user' && <Text style={styles.sharedNAme}>{'Profile'}</Text>}
                   {data?.shareContentType == 'thread' && <Text style={styles.sharedNAme}>{'Shared Thread'}</Text>}
                   {(data?.shareContentType == 'post' || data?.shareContentType == 'cppost') && <Text style={styles.sharedNAme}>{'Shared Post'}</Text>}
                 </View>}
@@ -102,13 +107,22 @@ const SenderMsg = ({ data }) => {
               }
               {data?.shareContentType == 'post' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
+
                   {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
               }
+              {data?.shareContentType == 'user' &&
+                <TouchableOpacity onPress={() => onOpenOtherUserDetail()} style={styles.groupView}>
+                  {console.log('--------', data)}
+                  {/* <RenderUserIcon type='user' url={data?.content?.profileImage} height={30} /> */}
+                  {/* <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text> */}
+                </TouchableOpacity>
+              }
               {data?.shareContentType == 'thread' &&
                 <TouchableOpacity onPress={() => onOpenThreadDetail()} >
+
                   {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
@@ -116,6 +130,7 @@ const SenderMsg = ({ data }) => {
               }
               {data?.shareContentType == 'cppost' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
+
                   {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}

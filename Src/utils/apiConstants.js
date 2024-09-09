@@ -4,6 +4,12 @@ export const api = {
   // BASE_URL: 'http://ec2-3-95-222-146.compute-1.amazonaws.com/api',
   IMAGE_URL: 'https://cdn.indiansabroad.online/',
   WEB_CLIENT_ID: '773513820699-40j4fti3hv3hhrqk80l5jicl755capoo.apps.googleusercontent.com',
+  PUBLIC_KEY_STRIPE: 'pk_test_51NiYZbSGIl0QN5txHHxRNBhyuuXhQc125bAlOnmBhQxa3xLtsbLYPyUjaLGckqQUuMOtVS6GffwMvGeuMQVTg3If00yYyFSPJJ',
+  SECRET_KEY_STRIPE: 'sk_test_51NiYZbSGIl0QN5txQmJMeb41FQ7vYQcPiZX39vR8o0WW6JIEubtdGiXHLJ8u0vbnLcYSMhiqhkervu5Vya97qnyi008diI6etK',
+
+  // PUBLIC_KEY_STRIPE: 'pk_live_51NiYZbSGIl0QN5txYxQC4efbpt7fQmJFGdL6qWhFZwzy4DjclkUnI5GeKakWa3OMMWLK2HcSMxDvalJKcOaP04K500uw88PrbK',
+  // SECRET_KEY_STRIPE: '',
+
 
   login: '/user/login',
   checkSession: '/user/check-session',
@@ -65,6 +71,7 @@ export const api = {
   indiansList: '/user/suggestion/filter',
   pageList: '/cp/tab/list',
   regionIndianList: '/user/suggestion/regionFilter',
+  shareProfile: '/share/user',
 
   // other user
   followRequest: '/follow/request',

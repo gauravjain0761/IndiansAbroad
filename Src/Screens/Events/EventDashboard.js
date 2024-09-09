@@ -52,15 +52,15 @@ export default function EventDashboard() {
     dispatch(transactionDownloadTransAction(obj1));
   }, []);
 
-  const onRequestPayoutPress=()=>{
+  const onRequestPayoutPress = () => {
     let obj = {
       data: {
         "organizer_id": "65f03d6cae1ff52ecfc45d07",
         "amount": dashBoard?.balance,
-        "currency":"USD"
+        "currency": "USD"
       },
       onSuccess: (res) => {
-      
+
       },
     };
     dispatch(withdrawalCreateAction(obj));
@@ -155,17 +155,21 @@ export default function EventDashboard() {
           </View>
           {dashBoard && dashBoard?.events?.length !== 0 ? (
             <>
-              <View style={styles.boxView}>
-                <Text style={styles.title}>Ongoing Event</Text>
-              </View>
-              <RenderOngoingEventTable data={ongoingEventsData} />
-              <View style={styles.boxView}>
-                <Text style={styles.title}>Completed Event</Text>
-              </View>
-              <RenderOngoingEventTable
-                showAction={false}
-                data={completedEventsData}
-              />
+              {ongoingEventsData && ongoingEventsData.length > 0 && <View>
+                <View style={styles.boxView}>
+                  <Text style={styles.title}>Ongoing Event</Text>
+                </View>
+                <RenderOngoingEventTable data={ongoingEventsData} />
+              </View>}
+              {completedEventsData && completedEventsData.length > 0 && <View>
+                <View style={styles.boxView}>
+                  <Text style={styles.title}>Completed Event</Text>
+                </View>
+                <RenderOngoingEventTable
+                  showAction={false}
+                  data={completedEventsData}
+                />
+              </View>}
               <View style={styles.boxView}>
                 <Text style={styles.title}>Debited</Text>
               </View>
@@ -182,7 +186,7 @@ export default function EventDashboard() {
           )}
         </ScrollView>
         {dashBoard && dashBoard?.events?.length !== 0 && (
-          <View style={{ paddingHorizontal: 10, marginTop: 10 }}>
+          <View style={{ paddingHorizontal: 10, marginTop: 10, marginBottom: 20 }}>
             <Text style={styles.title}>Withdraw</Text>
             <View style={styles.withdrawView}>
               <View style={{ flex: 1, marginVertical: 10, paddingLeft: 5 }}>
@@ -190,7 +194,7 @@ export default function EventDashboard() {
               </View>
               <View style={styles.line} />
               <View
-                style={{ flex: 1, marginVertical: 10, justifyContent: 'center' }}>
+                style={{ flex: 1, marginVertical: 3 }}>
                 <View style={styles.priceViewTotal}>
                   <Text style={FontStyle(12, colors.primary_500)}>
                     {dashBoard?.balance ? `£${dashBoard?.balance}` : 0}
@@ -199,9 +203,9 @@ export default function EventDashboard() {
               </View>
               <View style={styles.line} />
               <TouchableOpacity
-                onPress={()=>onRequestPayoutPress()}
+                onPress={() => onRequestPayoutPress()}
                 disabled={dashBoard?.balance == 0}
-                style={{ flex: 1, marginVertical: 10, justifyContent: 'center' }}>
+                style={{ flex: 1, marginVertical: 3, }}>
                 <View
                   style={[
                     styles.btn,

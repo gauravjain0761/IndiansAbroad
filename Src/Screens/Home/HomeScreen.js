@@ -348,7 +348,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 1 }}>
-            {allEvent ? (
+            {allEvent &&
               <FlatList
                 keyExtractor={(item, index) => index.toString()}
                 refreshControl={
@@ -384,14 +384,7 @@ export default function HomeScreen() {
                   />
                 }
               />
-            ) : (
-              <NoDataFound
-                containerStyle={{
-                  top: SCREEN_HEIGHT * 0.15,
-                }}
-                text={'No local events at the moment. Keep an eye out!'}
-              />
-            )}
+            }
           </View>
           <TouchableOpacity
             onPress={() => onCreateEvent()}

@@ -6,26 +6,27 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import colors from '../Themes/Colors';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {wp} from '../Themes/Fonts';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import moment from 'moment';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../Navigation/ScreenConstants';
-import {useNavigation} from '@react-navigation/native';
-import {dispatchAction} from '../utils/apiGlobal';
-import {SET_ACTIVE_EVENT} from '../Redux/ActionTypes';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../Navigation/ScreenConstants';
+import { useNavigation } from '@react-navigation/native';
+import { dispatchAction } from '../utils/apiGlobal';
+import { SET_ACTIVE_EVENT } from '../Redux/ActionTypes';
 import {
   getSaveListAction,
   getToggleFavoriteAction,
 } from '../Services/PostServices';
 import ShareProfileModal from './ShareProfileModal';
+import ShareEventModal from './ShareEventModal';
 
-export default function EventDashboardCard({item, index, onRefresh}) {
-  const {user} = useSelector(e => e.common);
+export default function EventDashboardCard({ item, index, onRefresh }) {
+  const { user } = useSelector(e => e.common);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [isSelect, setIsSelect] = useState(item?.is_favorite);
@@ -34,8 +35,29 @@ export default function EventDashboardCard({item, index, onRefresh}) {
   const [selectData, setSelectData] = useState("");
 
   const onSharePress = async link => {
-    setshareModal(true)
-    setSelectData(link)
+    // const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: `Check out this link: ${link}`, // Your message with a link
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Handle specific activity type if needed
+        } else {
+          // Alert.alert('Link shared successfully!');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Handle dismiss action
+        Alert.alert('Share was dismissed');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error.message);
+    }
+    // };
+
+    // setshareModal(true)
+    // setSelectData(link)
     // try {
     //   const result = await Share.share({
     //     message: link,
@@ -83,7 +105,7 @@ export default function EventDashboardCard({item, index, onRefresh}) {
           style={styles.cardImage}
           source={
             item?.event_image?.location
-              ? {uri: item?.event_image?.location}
+              ? { uri: item?.event_image?.location }
               : require('../assets/Icons/eventImage.jpg')
           }
         />
@@ -110,14 +132,14 @@ export default function EventDashboardCard({item, index, onRefresh}) {
                   dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
                   navigation.navigate(screenName.AttendanceRequestScreen);
                 }}
-                style={{paddingHorizontal: 10, paddingBottom: 10}}>
+                style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
                 <Image source={Icons.checkSquare} style={ImageStyle(20, 20)} />
               </TouchableOpacity>
             )}
             {user?._id !== item?.createdBy && (
               <TouchableOpacity
                 onPress={onStarPres}
-                style={{paddingHorizontal: 10, paddingBottom: 10}}>
+                style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
                 <Image
                   source={item?.is_favorite ? Icons.star : Icons.starOutline}
                   style={ImageStyle(20, 20)}
@@ -126,14 +148,14 @@ export default function EventDashboardCard({item, index, onRefresh}) {
             )}
             <TouchableOpacity
               onPress={() => onSharePress(item?.share_link)}
-              style={{paddingHorizontal: 10, paddingBottom: 10}}>
+              style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
               <Image source={Icons.share} style={ImageStyle(24, 24)} />
             </TouchableOpacity>
           </View>
         </View>
       </View>
       {shareModal && (
-        <ShareProfileModal 
+        <ShareEventModal
           visible={shareModal}
           postId={"item._id"}
           onClose={() => setshareModal(false)}

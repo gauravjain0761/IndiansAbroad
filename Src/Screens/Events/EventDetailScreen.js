@@ -8,16 +8,16 @@ import {
   TouchableOpacity,
   Share,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
-import {currencyIcon, FontStyle, ImageStyle} from '../../utils/commonFunction';
+import { useNavigation } from '@react-navigation/native';
+import { currencyIcon, FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {hp, wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { hp, wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import RenderText from '../../Components/RenderText';
@@ -28,10 +28,11 @@ import {
   getToggleFavoriteAction,
 } from '../../Services/PostServices';
 import ShareProfileModal from '../../Components/ShareProfileModal';
+import ShareEventModal from '../../Components/ShareEventModal';
 
 export default function EventDetailScreen() {
   const navigation = useNavigation();
-  const {activeEvent, user} = useSelector(e => e.common);
+  const { activeEvent, user } = useSelector(e => e.common);
   const [isSelect, setIsSelect] = useState(activeEvent?.is_favorite);
   const [lastTap, setLastTap] = useState(0);
   const [shareModal, setshareModal] = useState(false);
@@ -78,9 +79,9 @@ export default function EventDetailScreen() {
     }
   };
 
-  const RenderRowList = ({icon, title}) => {
+  const RenderRowList = ({ icon, title }) => {
     return (
-      <View style={[ApplicationStyles.row, {marginTop: 10}]}>
+      <View style={[ApplicationStyles.row, { marginTop: 10 }]}>
         <Image source={icon} style={styles.iconRow} />
         <Text style={styles.titleDes}>{title}</Text>
       </View>
@@ -88,8 +89,26 @@ export default function EventDetailScreen() {
   };
 
   const onSharePress = async link => {
-    setshareModal(true)
-    setSelectData(link)
+    // setshareModal(true)
+    // setSelectData(link)
+    try {
+      const result = await Share.share({
+        message: `Check out this link: ${link}`, // Your message with a link
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Handle specific activity type if needed
+        } else {
+          // Alert.alert('Link shared successfully!');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Handle dismiss action
+        Alert.alert('Share was dismissed');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error.message);
+    }
+
     // try {
     //   const result = await Share.share({
     //     message: link,
@@ -125,7 +144,7 @@ export default function EventDetailScreen() {
           <Image
             source={
               activeEvent?.event_image?.location
-                ? {uri: activeEvent?.event_image?.location}
+                ? { uri: activeEvent?.event_image?.location }
                 : require('../../assets/Icons/eventImage.jpg')
             }
             style={styles.image}
@@ -146,9 +165,8 @@ export default function EventDetailScreen() {
           <RenderRowList icon={Icons.map} title={activeEvent?.address} />
           <RenderRowList
             icon={Icons.tickets}
-            title={`${currencyIcon(activeEvent?.currency)}${
-              activeEvent?.event_fee
-            }`}
+            title={`${currencyIcon(activeEvent?.currency)}${activeEvent?.event_fee
+              }`}
           />
           <RenderRowList
             icon={Icons.contacts}
@@ -156,14 +174,14 @@ export default function EventDetailScreen() {
           />
           {/* <RenderRowList icon={Icons.contacts} title={'+44 7899653486'} /> */}
           <View style={styles.bottomRow}>
-            <Text style={[styles.titleDes, {marginBottom: 10}]}>
+            <Text style={[styles.titleDes, { marginBottom: 10 }]}>
               {activeEvent?.attendeeCount}
             </Text>
             <Image source={Icons.group} style={styles.usersIcon} />
             {user?._id !== activeEvent?.createdBy?._id && (
               <TouchableOpacity
                 onPress={() => onStarPress()}
-                style={{paddingHorizontal: 10, paddingBottom: 10}}>
+                style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
                 <Image
                   source={isSelect ? Icons.star : Icons.starOutline}
                   style={ImageStyle(20, 20)}
@@ -174,7 +192,7 @@ export default function EventDetailScreen() {
               onPress={() => {
                 onSharePress(activeEvent?.share_link);
               }}
-              style={{paddingHorizontal: 10, paddingBottom: 10}}>
+              style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
               <Image source={Icons.share} style={ImageStyle(24, 24)} />
             </TouchableOpacity>
           </View>
@@ -200,34 +218,34 @@ export default function EventDetailScreen() {
             Description
           </Text>
           <RenderText
-            style={[FontStyle(12, colors.neutral_900), {marginVertical: hp(8)}]}
+            style={[FontStyle(12, colors.neutral_900), { marginVertical: hp(8) }]}
             text={activeEvent?.description}
           />
         </View>
         {user?._id !== activeEvent?.createdBy?._id && (
-          <View style={[styles.blueView, {marginVertical: hp(30)}]}>
+          <View style={[styles.blueView, { marginVertical: hp(30) }]}>
             <CommonButton
               onPress={() =>
                 navigation.navigate(screenName.AttendanceRequestScreen)
               }
               title={'Attend'}
-              extraStyle={{width: 110, height: 50}}
+              extraStyle={{ width: 110, height: 50 }}
             />
           </View>
         )}
         {user?._id == activeEvent?.createdBy?._id && (
-          <View style={[styles.blueView, {marginVertical: hp(30)}]}>
+          <View style={[styles.blueView, { marginVertical: hp(30) }]}>
             <CommonButton
               onPress={() =>
                 navigation.navigate(screenName.ListParticipantsScreen)
               }
               title={'List of Participants'}
-              extraStyle={{width: 170, height: 50}}
+              extraStyle={{ width: 170, height: 50 }}
             />
           </View>
         )}
         {shareModal && (
-          <ShareProfileModal
+          <ShareEventModal
             visible={shareModal}
             postId={'item._id'}
             onClose={() => setshareModal(false)}

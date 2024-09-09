@@ -1,24 +1,86 @@
-import { Image, ImageBackground, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
 import colors from '../../Themes/Colors'
-import { FontStyle, ImageStyle } from '../../utils/commonFunction'
-import { SCREEN_WIDTH, fontname, hp, wp } from '../../Themes/Fonts'
-import Input from '../../Components/Input'
+import { errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction'
+import { hp } from '../../Themes/Fonts'
 import CommonButton from '../../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
-import { screenName } from '../../Navigation/ScreenConstants'
-import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell, } from 'react-native-confirmation-code-field';
-import Header from '../../Components/Header'
-import Modal from 'react-native-modal';
-import ActionSheet from '../../Components/ActionSheet'
-import ImageCropPicker from 'react-native-image-crop-picker'
 import moment from 'moment'
-import PagerView from 'react-native-pager-view';
+import { initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native';
+import { useDispatch, useSelector } from 'react-redux'
+import { onStripePayment } from '../../Services/AuthServices'
+import { dispatchAction } from '../../utils/apiGlobal'
+import { IS_LOADING } from '../../Redux/ActionTypes'
 
 export default function PaymentModalScreen() {
     const navigation = useNavigation()
+    const dispatch = useDispatch()
+    const { user } = useSelector(e => e.common)
+
+    useEffect(() => {
+
+        // initializePaymentSheet()
+    }, [])
+
+
+    const fetchPaymentSheetParams = async () => {
+        let obj = {
+            data: { amount: '', }
+        };
+        const payementResponse = await dispatch(onStripePayment(obj));
+        return payementResponse?.data?.data;
+    };
+
+    const initializePaymentSheet = async () => {
+        dispatchAction(dispatch, IS_LOADING, true)
+        const { paymentIntent, ephemeralKey, customer, publishableKey } = await fetchPaymentSheetParams();
+        const { error, paymentOption } = await initPaymentSheet({
+            merchantDisplayName: "IndiansAbroad",
+            customerId: customer,
+            customerEphemeralKeySecret: ephemeralKey,
+            paymentIntentClientSecret: paymentIntent,
+            allowsDelayedPaymentMethods: true,
+            defaultBillingDetails: {
+                name: user?.first_Name + ' ' + user?.last_Name
+            },
+            googlePay: {
+                merchantCountryCode: 'US',
+                testEnv: true, // use test environment
+            },
+            applePay: {
+                merchantCountryCode: 'US',
+            },
+
+        });
+        if (!error) {
+            presentSheet()
+        } else {
+            dispatchAction(dispatch, IS_LOADING, false)
+            errorToast(error.message)
+        }
+    };
+
+    const presentSheet = async () => {
+        const { error, paymentOption } = await presentPaymentSheet();
+        if (error) {
+            console.log('stripe error--')
+            dispatchAction(dispatch, IS_LOADING, false)
+            if (error.code !== 'Canceled') {
+                errorToast(error.message)
+            }
+        } else {
+            console.log('stripe success---')
+            onStripeSuccess()
+        }
+    }
+
+    const onStripeSuccess = () => {
+        dispatchAction(dispatch, IS_LOADING, false)
+    }
+
+
     return (
         <View style={ApplicationStyles.applicationView}>
             <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>

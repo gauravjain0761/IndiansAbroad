@@ -1,65 +1,40 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  Linking,
-  Alert,
-  Share,
-} from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, Image, Linking, Alert, Share, } from 'react-native';
 import ModalContainer from './ModalContainer';
 import colors from '../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {SCREEN_HEIGHT, fontname, hp, wp} from '../Themes/Fonts';
+import { SCREEN_HEIGHT, fontname, hp, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
-import {
-  FontStyle,
-  ImageStyle,
-  errorToast,
-  searchUserByName,
-} from '../utils/commonFunction';
-import {Icons} from '../Themes/Icons';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {getFollowerList, onShareApi} from '../Services/PostServices';
-import {dispatchAction} from '../utils/apiGlobal';
-import {IS_LOADING, SET_MAIN_FOLLOWER_LIST} from '../Redux/ActionTypes';
+import { FontStyle, ImageStyle, errorToast, searchUserByName, } from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getFollowerList, onShareApi } from '../Services/PostServices';
+import { dispatchAction } from '../utils/apiGlobal';
+import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../Redux/ActionTypes';
 import SearchBar from './SearchBar';
 import NoDataFound from './NoDataFound';
+import CommonButton from './CommonButton';
+import { onProfileShareApi } from '../Services/OtherUserServices';
 
 const ShareData = [
-  {id: 1, name: 'Quick Share', icon: Icons.ic_sahre},
-  {id: 2, name: 'WhatsApp', icon: Icons.ic_whatapp},
-  {id: 3, name: 'Gmail', icon: Icons.ic_mail},
-  {id: 4, name: 'WhatsApp\nBusiness', icon: Icons.ic_w_b},
-  {id: 5, name: 'Messages', icon: Icons.ic_message},
+  { id: 1, name: 'Quick Share', icon: Icons.ic_sahre },
+  { id: 2, name: 'WhatsApp', icon: Icons.ic_whatapp },
+  { id: 3, name: 'Gmail', icon: Icons.ic_mail },
+  { id: 4, name: 'WhatsApp\nBusiness', icon: Icons.ic_w_b },
+  { id: 5, name: 'Messages', icon: Icons.ic_message },
 ];
 
-export default function ShareProfileModal({
-  visible,
-  onClose,
-  postId,
-  isThread,
-  eventShare,
-  item,
-}) {
+export default function ShareProfileModal({ visible, onClose, postId, isThread, eventShare, item, }) {
   const insets = useSafeAreaInsets();
   const dispatch = useDispatch();
-  const {followerList, user, mainFollowerList} = useSelector(e => e.common);
+  const { followerList, user, mainFollowerList } = useSelector(e => e.common);
   const [list, setlist] = useState(undefined);
   const [searchText, setSearchText] = useState('');
   const [mainList, setmainList] = useState(undefined);
 
   useEffect(() => {
-    dispatch(
-      getFollowerList({
-        data: {userId: user._id, search: ''},
-      }),
-    );
+    dispatch(getFollowerList({ data: { userId: user._id, search: '' }, }),);
   }, []);
 
   useEffect(() => {
@@ -82,17 +57,9 @@ export default function ShareProfileModal({
     setlist(temp);
   };
 
-  //   const onUpdateMain = id => {
-  //     let temp2 = Object.assign([], mainFollowerList);
-  //     temp2.forEach(element => {
-  //       if (element._id == id) {
-  //         element.isSelected = !element.isSelected;
-  //       }
-  //     });
-  //     dispatchAction(dispatch, SET_MAIN_FOLLOWER_LIST, temp2);
-  //   };
-
   const onShareIconPress = list => {
+    console.log('ayaaa---', list)
+    // onClose()
     if (list.id == 1) {
       onShare()
     } else if (list.id == 2) {
@@ -113,15 +80,12 @@ export default function ShareProfileModal({
       const message = "Check out this awesome link!";
       const url = item; // Your link here
       const whatsAppBusinessUrl = `whatsapp-business://send?text=${encodeURIComponent(message)}%20${encodeURIComponent(url)}`;
-  
       onWhatsAppBusinessUrl(whatsAppBusinessUrl);
     } else if (list.id == 5) {
       const message = `Check out this link:  ${item}`; // Your link here
       const phoneNumber = ''; // Optionally specify a phone number
-
       // Construct the URL for the SMS
       const smsUrl = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
-
       onLinkShare(smsUrl);
     }
   };
@@ -135,18 +99,18 @@ export default function ShareProfileModal({
           Alert.alert('Email client is not available');
         }
       })
-      .catch(err => console.error('An error occurred', err));
+      .catch(err => console.log('An error occurred', err));
   };
   const onWhatsAppBusinessUrl = url => {
     Linking.canOpenURL(url)
-    .then((supported) => {
-      if (supported) {
-        return Linking.openURL(url);
-      } else {
-        Alert.alert("WhatsApp Business is not installed on your device");
-      }
-    })
-    .catch((err) => console.error("An error occurred", err));
+      .then((supported) => {
+        if (supported) {
+          return Linking.openURL(url);
+        } else {
+          Alert.alert("WhatsApp Business is not installed on your device");
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
   };
 
   const onShare = async () => {
@@ -159,7 +123,7 @@ export default function ShareProfileModal({
         if (result.activityType) {
           // Handle specific activity type if needed
         } else {
-          Alert.alert('Link shared successfully!');
+          // Alert.alert('Link shared successfully!');
         }
       } else if (result.action === Share.dismissedAction) {
         // Handle dismiss action
@@ -183,21 +147,21 @@ export default function ShareProfileModal({
         data: {
           userIds: idArray.toString(),
           loginUserId: user._id,
-          type: isThread ? 'thread' : 'post',
-          contentId: postId,
+          type: 'user',
+          profileId: item._id,
         },
       };
-      dispatch(onShareApi(obj));
+      dispatch(onProfileShareApi(obj));
     } else {
       errorToast('Please select atleast one of the following');
     }
   };
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({ item, index }) => {
     return (
       <View
         key={index}
-        style={[ApplicationStyles.row, {paddingHorizontal: hp(10)}]}>
+        style={[ApplicationStyles.row, { paddingHorizontal: hp(10) }]}>
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() => setSelect(item._id)}
@@ -217,7 +181,7 @@ export default function ShareProfileModal({
           onPress={() => setSelect(item._id)}>
           <Image
             source={item?.isSelected ? Icons.checkbox1 : Icons.checkbox}
-            style={[ImageStyle(20, 20), {top: 1, marginRight: 6}]}
+            style={[ImageStyle(20, 20), { top: 1, marginRight: 6 }]}
           />
         </TouchableOpacity>
       </View>
@@ -239,32 +203,41 @@ export default function ShareProfileModal({
       <View
         style={[
           styles.modalView,
-          {height: !eventShare ? SCREEN_HEIGHT * 0.69 : 110},
         ]}>
-        {!eventShare && (
-          <>
+        <TouchableOpacity onPress={() => onClose()} style={styles.closeIcon}>
+          <Image
+            source={Icons.closeRound}
+            style={[ImageStyle(36, 36)]}
+          />
+        </TouchableOpacity>
+        <View style={styles.headerView}>
+          <View style={{ flex: 1 }}>
             <SearchBar
               value={searchText}
               onChangeText={text => {
                 setSearchText(text), onSearchName(text);
               }}
               placeholder={'Search'}
-              containerStyles={{backgroundColor: colors.neutral_300}}
+              containerStyles={{ backgroundColor: colors.neutral_300 }}
             />
-            {followerList && (
-              <FlatList
-                data={list}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                style={{maxHeight: SCREEN_HEIGHT / 1.5}}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<NoDataFound />}
-              />
-            )}
-          </>
-        )}
+          </View>
+          {/* <CommonButton onPress={() => onPressShare()} extraStyle={{ width: 100, height: 45, marginRight: wp(12) }} title={'Share'} /> */}
+        </View>
 
-        <View style={styles.rowStyle}>
+        {followerList && (
+          <FlatList
+            data={list}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            style={{ height: SCREEN_HEIGHT / 1.5 }}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={<NoDataFound />}
+          />
+        )}
+        {list && list.length > 0 && <TouchableOpacity onPress={() => onPressShare()} style={styles.blueButton}>
+          <Text style={styles.publishText}>Share</Text>
+        </TouchableOpacity>}
+        {/* <View style={styles.rowStyle}>
           {ShareData.map(item => {
             return (
               <TouchableOpacity
@@ -273,16 +246,16 @@ export default function ShareProfileModal({
                 }}>
                 <Image
                   source={item.icon}
-                  style={[styles.iconStyle, {top: item.id == 4 ? 9 : 0}]}
+                  style={[styles.iconStyle, { top: item.id == 4 ? 9 : 0 }]}
                 />
-                <Text style={[styles.listText1, {top: item.id == 4 ? 14 : 7}]}>
+                <Text style={[styles.listText1, { top: item.id == 4 ? 14 : 7 }]}>
                   {item?.name}
                 </Text>
               </TouchableOpacity>
             );
           })}
-        </View>
-        <View style={{paddingBottom: insets.bottom}} />
+        </View> */}
+        <View style={{ paddingBottom: insets.bottom }} />
       </View>
     </ModalContainer>
   );
@@ -342,4 +315,8 @@ const styles = StyleSheet.create({
     ...FontStyle(10, colors.secondary_900),
     textAlign: 'center',
   },
+  headerView: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  }
 });
