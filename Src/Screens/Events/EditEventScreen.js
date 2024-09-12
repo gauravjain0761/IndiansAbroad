@@ -33,6 +33,7 @@ import {IS_LOADING, SET_ACTIVE_EVENT} from '../../Redux/ActionTypes';
 import {dispatchAction, formDataApiCall} from '../../utils/apiGlobal';
 import {api} from '../../utils/apiConstants';
 import moment from 'moment';
+import { getDetailsListAction } from '../../Services/PostServices';
 
 export default function EditEventScreen() {
   const navigation = useNavigation();
@@ -86,7 +87,7 @@ export default function EditEventScreen() {
   const onNextPress = () => {
     if (eventTitle.trim() == '') {
       errorToast('Please enter your event title');
-    } else if (!mobileNumberCheck(contact.trim())) {
+    } else if (contact.trim() == '') {
       errorToast('Please enter a valid mobile number');
     } else if (discription.trim() == '') {
       errorToast('Please enter your Description');
@@ -138,7 +139,8 @@ export default function EditEventScreen() {
         data,
         res => {
           successToast(res?.msg);
-          dispatchAction(dispatch, SET_ACTIVE_EVENT, res?.data);
+          // dispatchAction(dispatch, SET_ACTIVE_EVENT, res?.data);
+          getEventList()
           dispatchAction(dispatch, IS_LOADING, false);
         },
         () => {
@@ -146,6 +148,16 @@ export default function EditEventScreen() {
         },
       );
     }
+  };
+
+  const getEventList = page => {
+    let obj = {
+      data: activeEvent?._id,
+      onSuccess: res => {
+    
+      },
+    };
+    dispatch(getDetailsListAction(obj));
   };
 
   return (
@@ -156,7 +168,7 @@ export default function EditEventScreen() {
         onlyLabel={'Edit Event'}
         showLeft={true}
         onLeftPress={() => {
-          navigation.goBack();
+          navigation.pop(1);
         }}
       />
       <KeyboardAwareScrollView

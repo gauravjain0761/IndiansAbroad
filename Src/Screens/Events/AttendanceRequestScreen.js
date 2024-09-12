@@ -5,12 +5,14 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import React, {useState} from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import {useNavigation} from '@react-navigation/native';
 import {
+  currencyIcon,
   emailCheck,
   errorToast,
   FontStyle,
@@ -29,7 +31,7 @@ import {
   getAttendeeCreateAction,
   getAttendeePaymentAction,
 } from '../../Services/PostServices';
-import CountryPicker from 'react-native-country-picker-modal'
+import CountryPicker from 'react-native-country-picker-modal';
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
@@ -38,6 +40,7 @@ export default function AttendanceRequestScreen() {
   const {activeEvent} = useSelector(e => e.common);
   const [show, setShow] = useState(false);
   const [code, setcode] = useState('+1');
+  const [termsCheckbox, settermsCheckbox] = useState(false);
 
   const [inputData, setInputData] = useState({
     firstName: '',
@@ -59,6 +62,8 @@ export default function AttendanceRequestScreen() {
       errorToast('Please enter a valid mobile number');
     } else if (!emailCheck(inputData.email.trim())) {
       errorToast('Please enter a valid email');
+    } else if (termsCheckbox == false) {
+      errorToast('Please select agree event guidelines');
     } else {
       let obj = {
         data: {
@@ -72,26 +77,27 @@ export default function AttendanceRequestScreen() {
           total_amount: totalAmount,
           event_id: activeEvent?._id,
         },
+        
         onSuccess: res => {
-          // navigation.navigate(screenName.EventPaymentScreen);
-          let obj = {
-            data: {
-              amount: totalAmount,
-              attendeeId: res?.data?._id,
-              currency: 'USD',
-            },
-            onSuccess: res => {
-              setInputData({
-                firstName: '',
-                lastName: '',
-                phone: '',
-                email: '',
-                numberOfTickets: 1,
-              });
-              // navigation.navigate(screenName.EventPaymentScreen);
-            },
-          };
-          dispatch(getAttendeePaymentAction(obj));
+          // let obj = {
+          //   data: {
+          //     amount: totalAmount,
+          //     attendeeId: res?.data?._id,
+          //     currency: 'USD',
+          //   },
+          //   onSuccess: res => {
+          //     setInputData({
+          //       firstName: '',
+          //       lastName: '',
+          //       phone: '',
+          //       email: '',
+          //       numberOfTickets: 1,
+          //     });
+          //     // navigation.navigate(screenName.EventPaymentScreen);
+          //   },
+          // };
+
+          // dispatch(getAttendeePaymentAction(obj));
         },
         onFailure: err => {
           errorToast(err.data?.msg);
@@ -128,13 +134,13 @@ export default function AttendanceRequestScreen() {
           />
           <View style={[styles.inputrow, {marginBottom: 0, marginTop: wp(0)}]}>
             <View>
-            <Text style={styles.labelText1}>{"Country *"}</Text>
-            <TouchableOpacity
-              style={styles.inputContainer}
-              onPress={() => setShow(true)}>
-              <Text style={styles.inputText1}>{code}</Text>
-              <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
-            </TouchableOpacity>
+              <Text style={styles.labelText1}>{'Country *'}</Text>
+              <TouchableOpacity
+                style={styles.inputContainer}
+                onPress={() => setShow(true)}>
+                <Text style={styles.inputText1}>{code}</Text>
+                <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
+              </TouchableOpacity>
             </View>
             <Input
               extraStyle={[{flex: 1, marginTop: wp(0)}]}
@@ -202,18 +208,39 @@ export default function AttendanceRequestScreen() {
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Price</Text>
             <Text
-              style={styles.ticketText}>{`£${activeEvent?.event_fee}`}</Text>
+              style={styles.ticketText}>{`${currencyIcon(activeEvent?.currency)}${activeEvent?.event_fee}`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Platform fee</Text>
-            <Text style={styles.ticketText}>{`£${
+            <Text style={styles.ticketText}>{`${currencyIcon(activeEvent?.currency)}${
               activeEvent?.platformFees || 0
             }`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Total (Price+Tax)</Text>
-            <Text style={styles.ticketText}>{`£${totalAmount}`}</Text>
+            <Text style={styles.ticketText}>{`${currencyIcon(activeEvent?.currency)}${totalAmount}`}</Text>
           </View>
+        </View>
+        <View style={styles.row}>
+          <TouchableOpacity onPress={() => settermsCheckbox(!termsCheckbox)}>
+            <Image
+              source={termsCheckbox ? Icons.checkbox1 : Icons.checkbox}
+              style={[ImageStyle(20, 20)]}
+            />
+          </TouchableOpacity>
+          <Text style={[styles.des]}>
+            I agree{' '}
+            <Text
+              style={{color: colors.primary_500}}
+              onPress={() => {
+                Linking.openURL(
+                  'https://www.indiansabroad.online/events_guidelines.html',
+                );
+              }}>
+              Event Guidelines
+            </Text>{' '}
+            of IndiansAbroad.
+          </Text>
         </View>
         <View style={[styles.blueView]}>
           <CommonButton
@@ -240,20 +267,20 @@ export default function AttendanceRequestScreen() {
         <View style={{marginBottom: 100}} />
       </KeyboardAwareScrollView>
       <CountryPicker
-          // countryCode={code.replace('+', '')}
-          visible={show}
-          onClose={() => setShow(false)}
-          withCallingCode
-          onSelect={item => {
-            setcode('+' + item?.callingCode[0]);
-            setShow(false);
-          }}
-          withCallingCodeButton
-          withFilter
-          placeholder={''}
-          withEmoji={false}
-          // withFlag
-        />
+        // countryCode={code.replace('+', '')}
+        visible={show}
+        onClose={() => setShow(false)}
+        withCallingCode
+        onSelect={item => {
+          setcode('+' + item?.callingCode[0]);
+          setShow(false);
+        }}
+        withCallingCodeButton
+        withFilter
+        placeholder={''}
+        withEmoji={false}
+        // withFlag
+      />
     </SafeAreaView>
   );
 }
@@ -355,4 +382,13 @@ const styles = StyleSheet.create({
     gap: 20,
     marginBottom: 20,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginVertical: 10,
+    marginBottom: 20,
+    alignSelf: 'center',
+  },
+  des: {...FontStyle(14, colors.neutral_900)},
 });

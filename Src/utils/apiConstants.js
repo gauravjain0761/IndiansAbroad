@@ -63,6 +63,8 @@ export const api = {
   attendeeToggleFavorite: "/attendee/toggleFavorite",
   organizerVerifyTicket: "/organizer/verifyTicket",
   transactionDownloadTrans: "/transaction/downloadTrans",
+  announcementCreate: "/announcement/create",
+  announcementCount: "/announcement/count",
 
 
 

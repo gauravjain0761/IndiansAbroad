@@ -117,13 +117,13 @@ export default function ListParticipantsScreen() {
           style={
             styles.totalText
           }>{`${particpantsList?.length} Particpants`}</Text>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={() => navigation.navigate(screenName.AnnouncementScreen)}>
           <Image
             source={Icons.megaphone}
             style={[ImageStyle(26, 26), {marginHorizontal: 10}]}
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       <View style={{borderTopWidth: 1, borderTopColor: colors.secondary_500}}>
         <SearchBar
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: wp(16),
     gap: 10,
+    marginVertical:10
   },
   totalText: {
     flex: 1,

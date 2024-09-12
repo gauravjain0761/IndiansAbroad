@@ -45,7 +45,7 @@ export default function EventDetailScreen() {
 
   useEffect(() => {
     getEventList();
-  }, [activeEvent?._id]);
+  }, [activeEvent?._id,]);
 
   const getEventList = page => {
     let obj = {
@@ -131,7 +131,7 @@ export default function EventDetailScreen() {
       <Header
         showRight={user?._id == activeEvent?.createdBy?._id ? true : false}
         icon={Icons.editEvent}
-        onRightPress={() => navigation.navigate(screenName.EditEventScreen)}
+        onRightPress={() => navigation.navigate(screenName.EditEventScreen,{createdBy: activeEvent?._id})}
         title={''}
         onlyLabel={'Event Details'}
         showLeft={true}
