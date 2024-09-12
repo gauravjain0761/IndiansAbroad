@@ -79,25 +79,25 @@ export default function AttendanceRequestScreen() {
         },
         
         onSuccess: res => {
-          // let obj = {
-          //   data: {
-          //     amount: totalAmount,
-          //     attendeeId: res?.data?._id,
-          //     currency: 'USD',
-          //   },
-          //   onSuccess: res => {
-          //     setInputData({
-          //       firstName: '',
-          //       lastName: '',
-          //       phone: '',
-          //       email: '',
-          //       numberOfTickets: 1,
-          //     });
-          //     // navigation.navigate(screenName.EventPaymentScreen);
-          //   },
-          // };
+          let obj = {
+            data: {
+              amount: totalAmount,
+              attendeeId: res?.data?._id,
+              currency: activeEvent?.currency,
+            },
+            onSuccess: res => {
+              setInputData({
+                firstName: '',
+                lastName: '',
+                phone: '',
+                email: '',
+                numberOfTickets: 1,
+              });
+              // navigation.navigate(screenName.EventPaymentScreen);
+            },
+          };
 
-          // dispatch(getAttendeePaymentAction(obj));
+          dispatch(getAttendeePaymentAction(obj));
         },
         onFailure: err => {
           errorToast(err.data?.msg);
