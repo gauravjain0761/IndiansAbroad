@@ -10,7 +10,6 @@ export const api = {
   // PUBLIC_KEY_STRIPE: 'pk_live_51NiYZbSGIl0QN5txYxQC4efbpt7fQmJFGdL6qWhFZwzy4DjclkUnI5GeKakWa3OMMWLK2HcSMxDvalJKcOaP04K500uw88PrbK',
   // SECRET_KEY_STRIPE: '',
 
-
   login: '/user/login',
   checkSession: '/user/check-session',
   getUser: '/user/getuser',

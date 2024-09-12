@@ -22,9 +22,8 @@ export const socketConnect = async (dispatch, next) => {
     let token = await getAsyncToken()
     socket = io('https://expresstest.indiansabroad.online/',
         {
-            auth: {
-                token: token,
-                // token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZjAzZDZjYWUxZmY1MmVjZmM0NWQwNyIsInR5cGUiOiJhcHB1c2VyIiwiaWF0IjoxNzI1NjE1MjI2LCJleHAiOjE3Mjc2ODg4MjZ9.RRZvJJ1wk-7_x_rn2Ynhe4Qprym9LNeGlaBrl-lHOSY"
+            extraHeaders: {
+                'Authorization': token
             }
         }
     );
