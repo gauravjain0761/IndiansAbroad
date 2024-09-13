@@ -114,18 +114,15 @@ const SenderMsg = ({ data }) => {
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'user' &&
-                <TouchableOpacity onPress={() => onOpenOtherUserDetail()} style={styles.groupView}>
-                  {console.log('--------', data)}
-                  {/* <RenderUserIcon type='user' url={data?.content?.profileImage} height={30} /> */}
-                  {/* <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text> */}
+                <TouchableOpacity onPress={() => onOpenOtherUserDetail(JSON.parse(data?.content)._id)} style={styles.userView}>
+                  <RenderUserIcon type='user' url={JSON.parse(data?.content).profileImage} height={60} />
+                  <Text style={styles.userName}>{JSON.parse(data?.content).name}</Text>
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'thread' &&
                 <TouchableOpacity onPress={() => onOpenThreadDetail()} >
-
                   {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
-                  {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'cppost' &&
@@ -266,7 +263,7 @@ const styles = StyleSheet.create({
   },
   menuChildrenContainer: {
     padding: wp(10),
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: colors.neutral_150,
     // width: 150
   },
@@ -297,6 +294,17 @@ const styles = StyleSheet.create({
   },
   groupName: {
     ...FontStyle(13, colors.neutral_900),
+  },
+  userName: {
+    ...FontStyle(13, colors.neutral_900, '700'),
+  },
+  userView: {
+    backgroundColor: colors.secondary_500,
+    marginTop: 5,
+    marginBottom: 15,
+    alignItems: 'center',
+    padding: 10,
+    paddingHorizontal: 30
   }
 });
 

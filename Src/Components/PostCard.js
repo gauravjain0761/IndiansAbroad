@@ -14,13 +14,14 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useNavigation } from '@react-navigation/native';
 import { getalluserposts, onDeletePost, onLikePost, } from '../Services/PostServices';
 import { dispatchAction } from '../utils/apiGlobal';
-import { SET_CONNECT_REQUEST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_PAGE_CONNECT_POST, } from '../Redux/ActionTypes';
+import { SET_ACCEPT_REQUEST, SET_CONNECT_REQUEST, SET_LIKED_USER_LIST, SET_LIKE_DISLIKE, SET_PAGE_CONNECT_POST, } from '../Redux/ActionTypes';
 import { onBlockUserApi, onCancelRequest, onConnectRequest, onGetOtherUserInfo, onPagesConnectRequest, } from '../Services/OtherUserServices';
 import ConfirmationModal from './ConfirmationModal';
 import ReportModal from './ReportModal';
 import ShareModal from './ShareModal';
 import RenderText from './RenderText';
 import { onOpenNewChatForUser } from '../Services/ChatServices';
+import { onAcceptRejectRequest, onGetNotification } from '../Services/AuthServices';
 
 export default function PostCard({ item, index, isDetailScreen = false, showRequestBtns = true }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -136,18 +137,35 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
   }
 
   const onPressAccept = () => {
-    // let obj = {
-    //   data: {
-    //     userId: user?._id,
-    //     requestedId: item?.createdBy?._id,
-    //     action: type,
-    //     notificationId: item?._id,
-    //   },
-    //   onSuccess: () => {
-    //     dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
-    //   },
-    // };
-    // dispatch(onAcceptRejectRequest(obj));
+
+    dispatch(onGetNotification({
+      data: { loginUserId: user?._id },
+      onSuccess: (res) => {
+        if (res.data.length > 0) {
+          let noti = res.data.filter(obj => obj?.type == 'follow-request' && item?.createdBy?._id == obj?.createdBy?._id)
+          if (noti.length > 0) {
+            let obj = {
+              data: {
+                userId: user?._id,
+                requestedId: item?.createdBy?._id,
+                action: 'accept',
+                notificationId: noti?._id,
+              },
+              onSuccess: () => {
+                dispatchAction(dispatch, SET_CONNECT_REQUEST, { followingId: item?.createdBy?._id, type: 'accept' })
+              }
+            };
+            dispatch(onAcceptRejectRequest(obj));
+          }
+        }
+      }
+    }))
+
+
+
+
+
+
   }
   // if (index == 1) {
   //   console.log(item)

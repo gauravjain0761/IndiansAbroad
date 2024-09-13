@@ -1,85 +1,36 @@
-import { Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { FlatList, Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
 import colors from '../../Themes/Colors'
 import { errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction'
-import { hp } from '../../Themes/Fonts'
+import { hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts'
 import CommonButton from '../../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
 import moment from 'moment'
 import { initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native';
 import { useDispatch, useSelector } from 'react-redux'
-import { onStripePayment } from '../../Services/AuthServices'
 import { dispatchAction } from '../../utils/apiGlobal'
 import { IS_LOADING } from '../../Redux/ActionTypes'
+import { onGetPlanList } from '../../Services/PaymentService'
+import NoDataFound from '../../Components/NoDataFound'
+import { screenName } from '../../Navigation/ScreenConstants'
 
 export default function PaymentModalScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { user } = useSelector(e => e.common)
+    const { user, planList } = useSelector(e => e.common)
+    const [selectedPlan, setselectedPlan] = useState(undefined)
 
     useEffect(() => {
-
-        // initializePaymentSheet()
+        dispatch(onGetPlanList())
     }, [])
 
-
-    const fetchPaymentSheetParams = async () => {
-        let obj = {
-            data: { amount: '', }
-        };
-        const payementResponse = await dispatch(onStripePayment(obj));
-        return payementResponse?.data?.data;
-    };
-
-    const initializePaymentSheet = async () => {
-        dispatchAction(dispatch, IS_LOADING, true)
-        const { paymentIntent, ephemeralKey, customer, publishableKey } = await fetchPaymentSheetParams();
-        const { error, paymentOption } = await initPaymentSheet({
-            merchantDisplayName: "IndiansAbroad",
-            customerId: customer,
-            customerEphemeralKeySecret: ephemeralKey,
-            paymentIntentClientSecret: paymentIntent,
-            allowsDelayedPaymentMethods: true,
-            defaultBillingDetails: {
-                name: user?.first_Name + ' ' + user?.last_Name
-            },
-            googlePay: {
-                merchantCountryCode: 'US',
-                testEnv: true, // use test environment
-            },
-            applePay: {
-                merchantCountryCode: 'US',
-            },
-
-        });
-        if (!error) {
-            presentSheet()
-        } else {
-            dispatchAction(dispatch, IS_LOADING, false)
-            errorToast(error.message)
+    useEffect(() => {
+        if (planList && planList.length > 0) {
+            setselectedPlan(planList[0]?._id)
         }
-    };
-
-    const presentSheet = async () => {
-        const { error, paymentOption } = await presentPaymentSheet();
-        if (error) {
-            console.log('stripe error--')
-            dispatchAction(dispatch, IS_LOADING, false)
-            if (error.code !== 'Canceled') {
-                errorToast(error.message)
-            }
-        } else {
-            console.log('stripe success---')
-            onStripeSuccess()
-        }
-    }
-
-    const onStripeSuccess = () => {
-        dispatchAction(dispatch, IS_LOADING, false)
-    }
-
+    }, [planList])
 
     return (
         <View style={ApplicationStyles.applicationView}>
@@ -88,24 +39,49 @@ export default function PaymentModalScreen() {
                     <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.closeStyle}>
                         <Image source={Icons.closeRound} style={[ImageStyle(30, 30), { tintColor: colors.white }]} />
                     </TouchableOpacity>
-                    <View style={styles.whiteView}>
-                        <Text style={styles.des}>The ultimate community app designed to support, connect, and empower Indians living abroad.</Text>
-                        <Text></Text>
-                        <Text style={[styles.des, { color: colors.primary_500 }]}>An app for Indians by Indians.</Text>
-                        <Text></Text>
-                        <Text style={styles.des}>Per Month</Text>
-                        <View style={styles.middleView}>
-                            <Text style={styles.rsText}>Only $1</Text>
+                    <ScrollView style={styles.whiteView}>
+                        <View style={{ marginVertical: 20 }}>
+                            <Text style={styles.des}>The ultimate community app designed to support, connect, and empower Indians living abroad.</Text>
+                            <Text></Text>
+                            <Text style={[styles.des, { color: colors.primary_500 }]}>An app for Indians by Indians.</Text>
+                            <Text></Text>
+                            {planList &&
+                                <FlatList
+
+                                    style={styles.flatlist}
+                                    columnWrapperStyle={styles.column}
+                                    numColumns={2}
+                                    bounces={false}
+                                    data={[...planList]}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item }) => {
+                                        return (
+                                            <TouchableOpacity onPress={() => setselectedPlan(item?._id)}>
+                                                <Text style={styles.des}>{item?.title}</Text>
+                                                <View style={[styles.middleView, { borderColor: item?._id == selectedPlan ? colors?.secondary_750 : colors.neutral_800, backgroundColor: item?._id == selectedPlan ? colors?.secondary_500 : colors.neutral_300 }]}>
+                                                    <Text style={styles.rsText}>Only ${item?.sell_price}</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                        );
+                                    }}
+                                    showsVerticalScrollIndicator={false}
+
+                                    ListEmptyComponent={<NoDataFound />}
+                                />
+                            }
+                            {selectedPlan &&
+                                <Text style={styles.des}>
+                                    {'\n'}{'\n'}Our mission is to create a support network and form a huge Indian community online.
+                                    {'\n'}{'\n'}
+                                    Therefore we are providing a boat load of services only for ${planList.filter(obj => obj?._id == selectedPlan)[0].sell_price} a {planList.filter(obj => obj?._id == selectedPlan)[0].duration} month.
+                                    {'\n'}{'\n'}
+                                    With your support we can make this mission successful, so let's thrive together.
+                                </Text>
+                            }
                         </View>
-                        <Text style={styles.des}>
-                            {'\n'}{'\n'}Our mission is to create a support network and form a huge Indian community online.
-                            {'\n'}{'\n'}
-                            Therefore we are providing a boat load of services only for $1 a month.
-                            {'\n'}{'\n'}
-                            With your support we can make this mission successful, so let's thrive together.
-                        </Text>
-                    </View>
-                    <CommonButton title={'Pay'} onPress={() => navigation.navigate('Home')} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
+
+                    </ScrollView>
+                    <CommonButton title={'Next'} onPress={() => navigation.navigate(screenName.PaymentAddressScreen, { selectedPlan: selectedPlan })} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
                 </SafeAreaView>
             </ImageBackground>
         </View>
@@ -123,10 +99,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginBottom: 20,
         paddingHorizontal: 10,
-        paddingVertical: 20,
+        // paddingVertical: 20,
     },
     des: {
-        ...FontStyle(14, colors.neutral_900),
+        ...FontStyle(14, colors.neutral_900, '700'),
         textAlign: 'center',
         lineHeight: 22
     },
@@ -134,14 +110,26 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.neutral_800,
         alignSelf: 'center',
-        height: hp(160),
-        width: hp(160),
+        height: 120,
+        width: 130,
         borderRadius: 4,
         backgroundColor: colors.neutral_300,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: 10
     },
     rsText: {
-        ...FontStyle(32, colors.neutral_900, '700'),
+        ...FontStyle(24, colors.neutral_900, '700'),
+        textAlign: 'center'
+    },
+    flatlist: {
+        paddingHorizontal: wp(8),
+        paddingTop: hp(10),
+        alignSelf: 'center'
+    },
+    column: {
+        width: '100%',
+        columnGap: wp(20),
+        rowGap: hp(10),
     }
 })

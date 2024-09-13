@@ -75,7 +75,6 @@ export default function SignupScreen() {
                 await GoogleSignin.signOut();
             }
             const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo.data.user)
             if (userInfo) {
                 setfirstName(userInfo?.data?.user?.givenName)
                 setlastName(userInfo?.data?.user?.familyName)
@@ -91,7 +90,6 @@ export default function SignupScreen() {
                     url: `https://people.googleapis.com/v1/people/${userInfo.data.user.id}?personFields=genders,phoneNumbers,birthdays`
                 })
                     .then(function (response) {
-                        console.log(response.data);
                         // console.log(response.data.genders[0].formattedValue)
                         // console.log(response.data.birthdays[0]);
                         console.log('-----', {

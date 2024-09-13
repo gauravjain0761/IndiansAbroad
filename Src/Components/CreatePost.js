@@ -194,7 +194,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
           </View>
 
           <View style={styles.inputBox}>
-            <TagUserModal />
+            {/* <TagUserModal /> */}
             <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
             <View style={styles.rowView}>
               <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>

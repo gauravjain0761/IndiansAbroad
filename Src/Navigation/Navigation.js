@@ -94,6 +94,7 @@ import { useDispatch } from 'react-redux';
 import PageMessaging from '../Screens/Chat/PageMessaging';
 import ChatRoomUsersScreen from '../Screens/Chat/ChatRoomUsersScreen';
 import MediaPreviewScreen from '../Screens/Chat/MediaPreviewScreen';
+import PaymentAddressScreen from '../Screens/Auth/PaymentAddressScreen';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -302,6 +303,8 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile} component={CompleteProfile} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile2} component={CompleteProfile2} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentModalScreen} component={PaymentModalScreen} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentAddressScreen} component={PaymentAddressScreen} />
+
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Walkthrough} component={Walkthrough} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyDrawer} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.indiansPage} component={IndiansPage} />

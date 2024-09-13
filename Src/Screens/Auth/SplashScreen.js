@@ -11,6 +11,7 @@ import { onGetUserInfoApi, oncheckSession } from '../../Services/AuthServices';
 import { useDispatch } from 'react-redux';
 import Loader from '../../Components/Loader';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 export default function SplashScreen() {
   const dispatch = useDispatch();
   const [loading, setloading] = useState(false);
@@ -20,7 +21,7 @@ export default function SplashScreen() {
     setTimeout(() => {
       setloading(true);
       checkSession();
-    }, 3000);
+    }, 4000);
   }, []);
 
   const checkSession = async () => {
@@ -78,7 +79,7 @@ export default function SplashScreen() {
         loading ? (
           <Loader />
         ) : (
-          <Image
+          <FastImage
             source={require('../../assets/Icons/Logo_Transition.gif')}
             style={{
               width: SCREEN_WIDTH,

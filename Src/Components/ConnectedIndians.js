@@ -70,7 +70,7 @@ export default function ConnectedIndians({ indians, cardPress, item, onUpdate, o
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <RenderUserIcon type='user' url={item?.followingId?.avtar} height={45} isBorder={item?.followingId?.subscribedMember} />
         <Text numberOfLines={1} style={styles.text1}>
-          {item?.followingId.first_Name} {item?.followingId.last_Name}
+          {item?.followingId?.first_Name} {item?.followingId?.last_Name}
         </Text>
       </View>
       <Menu

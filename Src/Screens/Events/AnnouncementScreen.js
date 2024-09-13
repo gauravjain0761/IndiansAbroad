@@ -11,53 +11,52 @@ import {
   FlatList,
   Platform,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
-import {errorToast, FontStyle, ImageStyle} from '../../utils/commonFunction';
+import { useNavigation } from '@react-navigation/native';
+import { errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {SCREEN_WIDTH, wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
-import {currenciesArray} from '../../utils/constants';
+import { currenciesArray } from '../../utils/constants';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { announcementCountAction, announcementCreateAction } from '../../Services/PostServices';
 
 export default function AnnouncementScreen() {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [discription, setdiscription] = useState('');
   const [count, setCount] = useState(0);
 
-  const {activeEvent} = useSelector(e => e.common);
+  const { activeEvent } = useSelector(e => e.common);
 
-  const announcementCount=()=>{
+  const announcementCount = () => {
     let obj = {
-        data: {
-          event_id: activeEvent?._id,
-        },
-        onSuccess: res => {
-            console.log('res?.count',res?.count);
-            
-            setCount(res?.count)
-        },
-        onFailure: err => {
-          errorToast(err.data?.msg);
-        },
-      };
-      dispatch(announcementCountAction(obj));
+      data: {
+        event_id: activeEvent?._id,
+      },
+      onSuccess: res => {
+
+        setCount(res?.count)
+      },
+      onFailure: err => {
+        errorToast(err.data?.msg);
+      },
+    };
+    dispatch(announcementCountAction(obj));
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     announcementCount()
-  },[])
+  }, [])
 
   const onNextPress = () => {
     if (discription.trim().length == 0) {
@@ -69,8 +68,8 @@ export default function AnnouncementScreen() {
           announcementContent: discription,
         },
         onSuccess: res => {
-            setdiscription("")
-            announcementCount()
+          setdiscription("")
+          announcementCount()
         },
         onFailure: err => {
           errorToast(err.data?.msg);
@@ -92,13 +91,13 @@ export default function AnnouncementScreen() {
       <View style={styles.row}>
         <Image
           source={Icons.megaphone}
-          style={[ImageStyle(26, 26), {tintColor: colors.primary_500}]}
+          style={[ImageStyle(26, 26), { tintColor: colors.primary_500 }]}
         />
         <Text style={styles.totalText}>Announcement</Text>
       </View>
       <View style={ApplicationStyles.flex}>
         <KeyboardAvoidingView
-          {...(Platform.OS === 'ios' ? {behavior: 'padding'} : {})}>
+          {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
           <ScrollView>
             <Text style={styles.titleHeader}>
               This announcement will be sent to all the registered users for

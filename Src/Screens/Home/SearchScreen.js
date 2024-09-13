@@ -96,7 +96,6 @@ export default function SearchScreen() {
                                 <View>
                                     <Text style={styles.title}>Threads</Text>
                                     {globalSearchData?.threads?.records.map((item, index) => {
-                                        console.log(item)
                                         return (
                                             <TouchableOpacity onPress={() => {
                                                 dispatchAction(dispatch, SET_ACTIVE_POST, item);
@@ -178,7 +177,6 @@ export default function SearchScreen() {
                                                     let obj = {
                                                         id: item?._id,
                                                         onSuccess: (res) => {
-                                                            console.log(res?.data)
                                                             if (res?.data) {
                                                                 navigate(screenName.pagesDetails, { pageDetail: res?.data })
                                                             }

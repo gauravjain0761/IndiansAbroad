@@ -2,6 +2,7 @@ import Toast from 'react-native-toast-message';
 import { icons } from '../theme/icons';
 import { defaultFontStyle } from '../Themes/Fonts';
 import { currenciesArray } from './constants';
+import moment from 'moment';
 
 export const infoToast = message => {
   Toast.show({ type: 'info', text1: message });
@@ -87,24 +88,28 @@ export const searchUserByName = (mainArray, field1, searchText) => {
   return arr
 }
 
-export const dateConvectTime=(inputDateStr)=>{
-// Parse the input string to extract date and time components
-const [day, month, year] = inputDateStr.split(' ')[0].split('-').map(Number);
-const [hours, minutes] = inputDateStr.split(' ')[1].split(':').map(Number);
+export const dateConvectTime = (inputDateStr) => {
+  // Parse the input string to extract date and time components
+  const [day, month, year] = inputDateStr.split(' ')[0].split('-').map(Number);
+  const [hours, minutes] = inputDateStr.split(' ')[1].split(':').map(Number);
 
-// Create a Date object in the local time zone
-const localDate = new Date(year, month - 1, day, hours, minutes);
+  // Create a Date object in the local time zone
+  const localDate = new Date(year, month - 1, day, hours, minutes);
 
-// Convert to UTC time
-const utcDate = new Date(localDate.toUTCString());
+  // Convert to UTC time
+  const utcDate = new Date(localDate.toUTCString());
 
-// Format to ISO 8601 string
-const isoString = utcDate.toISOString();
+  // Format to ISO 8601 string
+  const isoString = utcDate.toISOString();
 
-return isoString
+  return isoString
 }
 
-export const currencyIcon=(value)=>{
-    const selectValue=currenciesArray.filter((item)=>{return item.code == value})
-    return selectValue?.[0]?.symbol || "$"
+export const currencyIcon = (value) => {
+  const selectValue = currenciesArray.filter((item) => { return item.code == value })
+  return selectValue?.[0]?.symbol || "$"
+}
+
+export const getLocalTime = (utcTime) => {
+  return moment.utc(utcTime).local()
 }

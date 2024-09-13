@@ -22,8 +22,11 @@ import {
 import NoDataFound from '../../Components/NoDataFound';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { dispatchAction } from '../../utils/apiGlobal';
-import { IS_LOADING } from '../../Redux/ActionTypes';
+import { GET_CHAT_MESSAGES, IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS } from '../../Redux/ActionTypes';
 import moment from 'moment';
+import { onGetSinglePost } from '../../Services/PostServices';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { onOpenNewChatForUser } from '../../Services/ChatServices';
 
 const NotificationScreen = () => {
   const [categories, setCategories] = useState('All');
@@ -31,6 +34,7 @@ const NotificationScreen = () => {
   const { user, notificationList } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [notiArray, setnotiArray] = useState(undefined);
+  const navigation = useNavigation()
 
   useEffect(() => {
     if (!notificationList) {
@@ -52,38 +56,99 @@ const NotificationScreen = () => {
         notificationId: item?._id,
       },
       onSuccess: () => {
+        if (type == 'accept') {
+          navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id });
+        }
         dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
       },
     };
     dispatch(onAcceptRejectRequest(obj));
   };
 
+  const onPressNotification = (type, item) => {
+    if (type.includes('post')) {
+      dispatchAction(dispatch, IS_LOADING, true);
+      dispatch(onGetSinglePost({
+        data: {
+          postId: item?.postId,
+          loginUserId: user._id
+        },
+        onSuccess: (res) => {
+          if (res.data?.type == 'cppost') {
+            dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+            dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.postId });
+            navigation.navigate(screenName.PagesPostDetail);
+          } else {
+            dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.postId });
+            dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+            navigation.navigate(screenName.PostDetail);
+          }
+        }
+      }))
+    } else if (type.includes('thread')) {
+      dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.threadId });
+      dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+      navigation.navigate(screenName.DiscussionForumDetail)
+    } else if (type.includes('connect')) {
+      navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id });
+    } else if (type == 'message') {
+      if (item?.groupId?.isGroupChat) {
+        dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId, chatId: item?.groupId?._id })
+        navigation.navigate(screenName.GroupMessaging);
+      } else {
+        dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId?.users?.filter(item => item._id !== user?._id)?.[0], chatId: item?.groupId._id })
+        navigation.navigate(screenName.Messaging);
+      }
+
+
+
+
+
+
+
+
+      // let obj = {
+      //   data: {
+      //     CpUserId: item?.sender?._id,
+      //     userId: user?._id,
+      //     communityPageId: 'NA',
+      //   },
+      //   onSuccess: () => {
+      //     navigation.navigate(screenName.Messaging, { notification: item });
+      //   },
+      // };
+      // dispatch(onOpenNewChatForUser(obj));
+    }
+  }
+
+  const openChat = (item) => {
+    let obj = {
+      data: {
+        CpUserId: item?.sender?._id,
+        userId: user?._id,
+        communityPageId: 'NA',
+      },
+      onSuccess: () => {
+        navigation.navigate(screenName.Messaging, { notification: item });
+      },
+    };
+    dispatch(onOpenNewChatForUser(obj));
+  }
+
   const renderItem = ({ item, index }) => {
+
     return (
       <>
-        {item?.type !== 'follow-request' ? (
-          <View key={item?._id} style={styles.Container}>
-            <View style={styles.leftSide}>
-              <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
-              <View style={styles.nameContainer}>
-                <Text style={styles.name}>
-                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
-                  {item?.type == 'message'
-                    ? 'has sent you a message'
-                    : item?.title.trim()}
-                </Text>
-              </View>
-              <Text style={styles.time}>{item?.createdAt}</Text>
-            </View>
-          </View>
-        ) : (
+        {item?.type == 'follow-request' ? (
           <View key={item?._id} style={styles.requestContainer}>
-            <View style={styles.leftSide}>
+            <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id })} style={styles.leftSide}>
               <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
               <View style={styles.centerContainer}>
                 <Text style={styles.name}>
                   {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
-                  {item?.title.trim()}
+                  {item?.title?.trim()}
                 </Text>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
@@ -99,9 +164,41 @@ const NotificationScreen = () => {
                 </View>
               </View>
               <Text style={styles.time}>{item?.createdAt}</Text>
-            </View>
+            </TouchableOpacity>
           </View>
-        )}
+
+
+        ) :
+          item?.type == 'message-request' ? (
+            <View key={item?._id} style={styles.Container}>
+              <TouchableOpacity onPress={() => openChat(item)} style={styles.leftSide}>
+                <RenderUserIcon isBorder={item?.sender?.subscribedMember} type='user' url={item?.sender?.avtar} height={45} />
+                <View style={styles.nameContainer}>
+                  <Text style={styles.name}>
+                    {item?.sender?.first_Name} {item?.sender?.last_Name}{' '}
+                    {'has send you message request.'}
+                  </Text>
+                </View>
+                <Text style={styles.time}>{item?.createdAt}</Text>
+              </TouchableOpacity>
+            </View>
+          )
+            : (
+              <View key={item?._id} style={styles.Container}>
+                <TouchableOpacity onPress={() => onPressNotification(item?.type, item)} style={styles.leftSide}>
+                  <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
+                  <View style={styles.nameContainer}>
+                    <Text style={styles.name}>
+                      {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
+                      {item?.type == 'message'
+                        ? 'has sent you a message'
+                        : item?.title?.trim()}
+                    </Text>
+                  </View>
+                  <Text style={styles.time}>{item?.createdAt}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
       </>
     );
   };

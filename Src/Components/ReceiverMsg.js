@@ -88,7 +88,9 @@ const ReciverMsg = ({ data }) => {
     }
     dispatch(onDeleteMessageForUser(obj))
   }
-
+  const onOpenOtherUserDetail = (id) => {
+    navigation.navigate(screenName.indiansDetails, { userId: id });
+  }
 
   return (
     <View>
@@ -148,13 +150,18 @@ const ReciverMsg = ({ data }) => {
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
+                {data?.shareContentType == 'user' &&
+                  <TouchableOpacity onPress={() => onOpenOtherUserDetail(JSON.parse(data?.content)._id)} style={styles.userView}>
+                    <RenderUserIcon type='user' url={JSON.parse(data?.content).profileImage} height={60} />
+                    <Text style={styles.userName}>{JSON.parse(data?.content).name}</Text>
+                  </TouchableOpacity>
+                }
                 {data?.shareContentType == 'cppost' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
                     {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
-
                 {data?.shareContentType == 'normalmessage' ?
                   data?.content_type == 'text/plain' ?
                     <View style={{ flexDirection: 'row' }}>
@@ -284,9 +291,9 @@ const styles = StyleSheet.create({
   },
   menuChildrenContainer: {
     padding: wp(10),
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: colors.neutral_150,
-    width: 150
+    // width: 150
   },
   itemMenuTextStyle: {
     ...FontStyle(14, colors.neutral_900, '600'),
@@ -305,6 +312,17 @@ const styles = StyleSheet.create({
   },
   groupName: {
     ...FontStyle(13, colors.neutral_900),
+  },
+  userName: {
+    ...FontStyle(13, colors.neutral_900, '700'),
+  },
+  userView: {
+    backgroundColor: colors.secondary_500,
+    marginTop: 5,
+    marginBottom: 15,
+    alignItems: 'center',
+    padding: 10,
+    paddingHorizontal: 30
   },
   joinNowBtn: {
 

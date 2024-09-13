@@ -53,7 +53,6 @@ export default function CompleteProfile() {
         { title: 'Female', icon: Icons.femenine },
         { title: 'Other', icon: Icons.star }
     ]
-    console.log(googleUser)
 
     useEffect(() => {
         if (googleUser) {
@@ -77,7 +76,6 @@ export default function CompleteProfile() {
             throw new Error('Failed to download image');
         }
 
-        console.log(downloadResult)
 
         setimage({
             path: `file://${newPath}`,

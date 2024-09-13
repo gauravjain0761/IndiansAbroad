@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
-import {FontStyle, ImageStyle, searchParticipantsName, searchUserByName} from '../../utils/commonFunction';
+import { useNavigation } from '@react-navigation/native';
+import { FontStyle, ImageStyle, searchParticipantsName, searchUserByName } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import {
   getAttendeeGetByEventAction,
@@ -25,7 +25,7 @@ import {
 import SearchBar from '../../Components/SearchBar';
 export default function ListParticipantsScreen() {
   const navigation = useNavigation();
-  const {activeEvent, user} = useSelector(e => e.common);
+  const { activeEvent, user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
 
@@ -39,16 +39,16 @@ export default function ListParticipantsScreen() {
     let filteredData = particpantsList.filter(subItem => {
       return (
         subItem?.first_name?.toLowerCase()?.includes(text) ||
-        subItem?.email?.toLowerCase()?.includes(text) || 
+        subItem?.email?.toLowerCase()?.includes(text) ||
         subItem?.phone_no?.toLowerCase()?.includes(text)
       );
     });
     setParticpantsList(filteredData)
-}
+  }
 
-  useEffect(()=>{
-    searchText==0 && setParticpantsList(particpantsListData)
-  },[searchText])
+  useEffect(() => {
+    searchText == 0 && setParticpantsList(particpantsListData)
+  }, [searchText])
 
 
 
@@ -67,8 +67,7 @@ export default function ListParticipantsScreen() {
     dispatch(getAttendeeGetByEventAction(obj));
   };
 
-  const renderItem = ({item}) => {
-    console.log('itemitemitem', item);
+  const renderItem = ({ item }) => {
 
     return (
       <View style={styles.rowItem}>
@@ -90,7 +89,7 @@ export default function ListParticipantsScreen() {
             source={Icons.checkRound}
             style={[
               ImageStyle(26, 26),
-              {tintColor: colors.primary_500, marginHorizontal: 10},
+              { tintColor: colors.primary_500, marginHorizontal: 10 },
             ]}
           />
         )}
@@ -111,7 +110,7 @@ export default function ListParticipantsScreen() {
       <View style={styles.row}>
         <Image
           source={Icons.group}
-          style={[ImageStyle(26, 26), {tintColor: colors.primary_500}]}
+          style={[ImageStyle(26, 26), { tintColor: colors.primary_500 }]}
         />
         <Text
           style={
@@ -121,11 +120,11 @@ export default function ListParticipantsScreen() {
           onPress={() => navigation.navigate(screenName.AnnouncementScreen)}>
           <Image
             source={Icons.megaphone}
-            style={[ImageStyle(26, 26), {marginHorizontal: 10}]}
+            style={[ImageStyle(26, 26), { marginHorizontal: 10 }]}
           />
         </TouchableOpacity>
       </View>
-      <View style={{borderTopWidth: 1, borderTopColor: colors.secondary_500}}>
+      <View style={{ borderTopWidth: 1, borderTopColor: colors.secondary_500 }}>
         <SearchBar
           value={searchText}
           onChangeText={text => {
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: wp(16),
     gap: 10,
-    marginVertical:10
+    marginVertical: 10
   },
   totalText: {
     flex: 1,

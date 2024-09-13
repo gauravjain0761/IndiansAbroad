@@ -55,7 +55,6 @@ export default function ShareEventModal({ visible, onClose, postId, isThread, it
     };
 
     const onShareIconPress = list => {
-        console.log('ayaaa---', list)
         // onClose()
         if (list.id == 1) {
             onShare()

@@ -17,7 +17,7 @@ import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
 import { fontname, SCREEN_HEIGHT, screen_width, wp } from '../../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import { FontStyle, getLocalTime, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import PostCard from '../../Components/PostCard';
@@ -43,6 +43,7 @@ import EventDashboardCard from '../../Components/EventDashboardCard';
 import { Icons } from '../../Themes/Icons';
 import { socket, socketConnect } from '../../Socket/Socket';
 import { onGetGroupCreateUser, onGetUnreadMsgCount } from '../../Services/ChatServices';
+import moment from 'moment';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -65,6 +66,20 @@ export default function HomeScreen() {
       dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }));
     }
   }, [isFocuse]);
+
+  useEffect(() => {
+    if (user) {
+      if (!user?.subscribedMember) {
+        navigation.replace(screenName.PaymentModalScreen)
+      } else {
+        // console.log('user111----', user?.planExpiryDate, moment(user?.planExpiryDate).format('MM/DD/YYYY hh:mm'), moment().format('MM/DD/YYYY hh:mm'))
+        if (moment(user?.planExpiryDate) < moment()) {
+          navigation.replace(screenName.PaymentModalScreen)
+        }
+      }
+    }
+  }, [user])
+
 
   useEffect(() => {
     socketConnect(dispatch, flag => {

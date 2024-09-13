@@ -56,6 +56,7 @@ import {
   SET_GOOGLE_USER,
   LOG_OUT,
   SET_EVENT_FAVORITE,
+  SET_PLAN_LIST,
 } from './ActionTypes';
 
 const initialState = {
@@ -108,7 +109,8 @@ const initialState = {
   fcmToken: null,
   myPageChatUsers: undefined,
   allIndianRegion: undefined,
-  allIndianRegionCount: 0
+  allIndianRegionCount: 0,
+  planList: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -338,10 +340,16 @@ export default function (state = initialState, action) {
     }
     case SET_CONNECT_REQUEST: {
       const update = state.allPost.map(item => {
-        if (item.createdBy._id == action.payload.followingId) {
+        if (item.createdBy._id == action.payload.followingId && (action?.payload?.type && action?.payload?.type == 'accept')) {
           return {
             ...item,
-            isFollowing: action?.payload?.type && action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested',
+            requestSent: false,
+            isFollowing: action?.payload?.type && action?.payload?.type == 'accept' ? 'following' : action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested',
+          };
+        } else if (item.createdBy._id == action.payload.followingId) {
+          return {
+            ...item,
+            isFollowing: action?.payload?.type && action?.payload?.type == 'accept' ? 'following' : action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested',
           };
         } else {
           return { ...item };
@@ -349,8 +357,12 @@ export default function (state = initialState, action) {
       });
       let activePost = Object.assign({}, state.activePost)
       if (Object.keys(activePost).length > 0) {
-        if (activePost.createdBy._id == action.payload.followingId) {
-          activePost.isFollowing = action?.payload?.type && action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested'
+        if (activePost.createdBy._id == action.payload.followingId && (action?.payload?.type && action?.payload?.type == 'accept')) {
+          activePost.requestSent = false
+          activePost.isFollowing = action?.payload?.type && action?.payload?.type == 'accept' ? 'following' : action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested'
+        }
+        else if (activePost.createdBy._id == action.payload.followingId) {
+          activePost.isFollowing = action?.payload?.type && action?.payload?.type == 'accept' ? 'following' : action?.payload?.type == 'remove' ? 'notfollowing' : action?.payload?.type == 'disconnect' ? 'notfollowing' : 'requested'
         }
       }
       return { ...state, allPost: update, activePost: activePost }
@@ -656,19 +668,22 @@ export default function (state = initialState, action) {
       return { ...state, googleUser: action.payload };
     }
     case SET_EVENT_FAVORITE: {
-      const updateData=state.allEvent.map((item)=>{
-        if(item._id == action.payload){
+      const updateData = state.allEvent.map((item) => {
+        if (item._id == action.payload) {
           return {
             ...item,
-            is_favorite:!item.is_favorite
+            is_favorite: !item.is_favorite
           }
-        }else{
+        } else {
           return {
             ...item
           }
         }
       })
       return { ...state, allEvent: updateData };
+    }
+    case SET_PLAN_LIST: {
+      return { ...state, planList: action.payload };
     }
     case LOG_OUT: {
       return initialState

@@ -58,7 +58,6 @@ export default function ShareProfileModal({ visible, onClose, postId, isThread, 
   };
 
   const onShareIconPress = list => {
-    console.log('ayaaa---', list)
     // onClose()
     if (list.id == 1) {
       onShare()

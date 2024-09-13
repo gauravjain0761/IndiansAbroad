@@ -138,7 +138,12 @@ export const api = {
 
   acceptRejectRequest: '/follow/request/action',
   sendMessageRequest: '/OneTimeMessage/send',
-  checkMessageRequest: '/OneTimeMessage/msgCount'
+  checkMessageRequest: '/OneTimeMessage/msgCount',
+
+  // payment
+  getPlanList: '/subscription/plans/premium/list',
+  buyPlan: '/subscription/buy',
+  updatePaymentStatus: '/subscription/payment/update'
 };
 
 export const POST = 'POST';

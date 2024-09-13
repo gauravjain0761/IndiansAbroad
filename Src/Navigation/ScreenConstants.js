@@ -71,5 +71,6 @@ export const screenName = {
   MediaWithInputScreen: "MediaWithInputScreen",
   PageMessaging: "PageMessaging",
   ChatRoomUsersScreen: "ChatRoomUsersScreen",
-  MediaPreviewScreen: 'MediaPreviewScreen'
+  MediaPreviewScreen: 'MediaPreviewScreen',
+  PaymentAddressScreen: "PaymentAddressScreen"
 };

@@ -9,7 +9,7 @@ import {
 import React, { useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle, getLocalTime, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
@@ -66,7 +66,6 @@ export default function ChatCard({ data, cardPress, isGroup }) {
 
 
   }
-
   return (
     <TouchableOpacity
       onLongPress={() => { setlongPressModal(true) }}
@@ -85,19 +84,17 @@ export default function ChatCard({ data, cardPress, isGroup }) {
         {isGroup ? data?.chatName : currentUser?.first_Name + ' ' + currentUser?.last_Name}
       </Text>
       <Text numberOfLines={1} style={styles.text3}>
-        {data?.latestMessage?.content}
+        {data?.latestMessage?.shareContentType == 'user' ? 'Shared user' : data?.latestMessage?.content}
       </Text>
       <View style={styles.btnView}>
         <Image source={Icons.sent} style={styles.chatIcon} />
         <Text style={styles.btnText}>
-          {moment(data?.latestMessage?.createdAt).format('HH:mm')}
+          {getLocalTime(data?.latestMessage?.createdAt).format('HH:mm')}
         </Text>
       </View>
       {data?.unreadMessages > 0 && <View style={styles.unreadMsg}>
         <Text style={styles.unreadMsgText}>{data?.unreadMessages}</Text>
       </View>}
-
-
       {longPressModal &&
         <ModalContainer isVisible={longPressModal} onClose={() => setlongPressModal(false)} >
           <View style={styles.modalView}>

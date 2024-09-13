@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white,
     // borderColor: colors.neutral_500
   },
   text1: {

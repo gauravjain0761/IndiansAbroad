@@ -346,21 +346,3 @@ export const onAcceptRejectRequest = (request) => async dispatch => {
             handleErrorRes(error, request, dispatch);
         });
 };
-
-export const onStripePayment = (request) => async dispatch => {
-    // dispatchAction(dispatch, IS_LOADING, true);
-    return makeAPIRequest({
-        method: POST,
-        url: api.stripePayment,
-        data: request?.data
-    })
-        .then(async (response) => {
-            handleSuccessRes(response, request, dispatch, () => {
-                // dispatchAction(dispatch, SET_PACKAGES_ARRAY, response?.data?.data);
-            });
-            return response
-        })
-        .catch(error => {
-            handleErrorRes(error, request, dispatch);
-        });
-};

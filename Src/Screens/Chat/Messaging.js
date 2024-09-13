@@ -29,6 +29,8 @@ import { FontStyle } from '../../utils/commonFunction';
 import { hp, wp } from '../../Themes/Fonts';
 import moment from 'moment';
 import MessageRequestModal from '../../Components/MessageRequestModal';
+import { onAcceptRejectRequest, onGetNotification } from '../../Services/AuthServices';
+import { getFollowerList } from '../../Services/PostServices';
 
 const Messaging = () => {
   const { chatMessageList, user, followerList, activeChatRoomUser, allChatMessageCount } = useSelector(e => e.common);
@@ -39,7 +41,7 @@ const Messaging = () => {
   const [loading, setloading] = useState(false)
   const [page, setpage] = useState(1)
   const [messageRequestModal, setmessageRequestModal] = useState(false)
-
+  const { params } = useRoute()
 
   useFocusEffect(
     React.useCallback(() => {
@@ -82,6 +84,7 @@ const Messaging = () => {
       setmessage('')
     }
   }
+
   const fetchMoreData = () => {
     if (chatMessageList) {
       if (chatMessageList.length < allChatMessageCount) {
@@ -136,6 +139,23 @@ const Messaging = () => {
     dispatch(onCheckMessageRequest(obj));
   }
 
+  const onPressReq = (type) => {
+    let obj = {
+      data: {
+        userId: user?._id,
+        requestedId: params?.notification?.sender?._id,
+        action: type,
+        notificationId: params?.notification?._id,
+      },
+      onSuccess: () => {
+        navigation.setParams({ notification: undefined })
+        dispatch(getFollowerList({ data: { userId: user?._id, search: '' } }));
+        dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
+      },
+    };
+    dispatch(onAcceptRejectRequest(obj));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ChatHeader
@@ -146,51 +166,50 @@ const Messaging = () => {
         subscribedMember={activeChatRoomUser?.currentUser?.subscribedMember}
         onPressName={() => { dispatchAction(dispatch, SET_CHAT_DETAIL, undefined), navigation.navigate(screenName.PersonalUserDetailScreen, { user: activeChatRoomUser?.currentUser }) }}
       />
-      {/* <View style={ApplicationStyles.flex}>
+      {params?.notification ? <View style={ApplicationStyles.flex}>
         <View style={styles.requestView}>
           <Text style={styles.title}>Message request to connect</Text>
           <View style={styles.whiteView}>
-            <Text style={styles.des}>Hi Harshal,
-              I hope you're well. I'm Sagar, and I've been following your exceptional work in strategic business planning. I believe your expertise aligns perfectly with some of our challenges. I'd love to connect and discuss potential collaborations or exchange ideas. I hope you will consider accepting my request.</Text>
+            <Text style={styles.des}>Hi {user?.first_Name},{'\n'}{params?.notification?.content}</Text>
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={() => onPressReq('accept')} style={styles.button}>
             <Text style={styles.buttonText}>{'Accept'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={() => onPressReq('reject')} style={styles.button}>
             <Text style={styles.buttonText}>{'Ignore'}</Text>
           </TouchableOpacity>
         </View>
-      </View> */}
-      <FlatList
-        inverted
-        data={chatMessageList}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => {
-          return (
-            <View>
-              {checkDate(item, index)}
-              {item?.createdBy?._id !== user._id ?
-                <ReciverMsg data={item} />
-                :
-                <SenderMsg data={item} />}
-            </View>
-          )
-        }}
-        onEndReached={fetchMoreData}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={() => {
-          return (
-            <View>
-              {chatMessageList && loading && (
-                <ActivityIndicator size={'large'} color={colors.black} />
-              )}
-              <View style={{ height: 50 }} />
-            </View>
-          );
-        }}
-      />
+      </View> :
+        <FlatList
+          inverted
+          data={chatMessageList}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => {
+            return (
+              <View>
+                {checkDate(item, index)}
+                {item?.createdBy?._id !== user._id ?
+                  <ReciverMsg data={item} />
+                  :
+                  <SenderMsg data={item} />}
+              </View>
+            )
+          }}
+          onEndReached={fetchMoreData}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={() => {
+            return (
+              <View>
+                {chatMessageList && loading && (
+                  <ActivityIndicator size={'large'} color={colors.black} />
+                )}
+                <View style={{ height: 50 }} />
+              </View>
+            );
+          }}
+        />}
       {followerList?.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 ?
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
           <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
