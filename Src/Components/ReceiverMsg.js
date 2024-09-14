@@ -163,7 +163,7 @@ const ReciverMsg = ({ data }) => {
                   </TouchableOpacity>
                 }
                 {data?.shareContentType == 'normalmessage' ?
-                  data?.content_type == 'text/plain' ?
+                  data?.content_type == 'text/plain' || data?.content_type == 'link' ?
                     <View style={{ flexDirection: 'row' }}>
                       <RenderText style={styles.msgTextStyle} text={data?.content}></RenderText>
                       <Text style={[styles.timeTextStyle, { color: colors.neutral_300 }]}>  {moment(data?.createdAt).format('hh:mm A')}</Text>

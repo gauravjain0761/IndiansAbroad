@@ -176,7 +176,7 @@ const NotificationScreen = () => {
                 <View style={styles.nameContainer}>
                   <Text style={styles.name}>
                     {item?.sender?.first_Name} {item?.sender?.last_Name}{' '}
-                    {'has send you message request.'}
+                    {'has sent you a one time message request.'}
                   </Text>
                 </View>
                 <Text style={styles.time}>{item?.createdAt}</Text>

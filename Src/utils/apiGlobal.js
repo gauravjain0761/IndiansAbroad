@@ -85,6 +85,8 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
           if (onFailure) onFailure();
           if (responseJson?.message) {
             errorToast(responseJson?.message);
+          } else if (responseJson?.msg) {
+            errorToast(responseJson?.msg);
           } else errorToast('Please try again');
         }
       });
@@ -133,6 +135,8 @@ export const handleErrorRes = (err, req, dispatch, fun) => {
     dispatchAction(dispatch, IS_LOADING, false);
     if (err?.response?.data?.errors) {
       errorToast(err?.response?.data?.message);
+    } else if (err?.response?.data?.msg) {
+      errorToast(err?.response?.data?.msg);
     } else if (err?.response?.data?.message) {
       errorToast(err?.response?.data?.message);
     } else if (err?.response?.data?.error) {

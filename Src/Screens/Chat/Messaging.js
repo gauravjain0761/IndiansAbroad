@@ -124,19 +124,41 @@ const Messaging = () => {
   }
 
   const checkRequest = () => {
-    let obj = {
-      data: {
-        receiverId: activeChatRoomUser?.currentUser?._id
-      },
-      onSuccess: (res) => {
-        if (res?.msgCount == 0) {
-          setmessageRequestModal(true);
-        } else {
-          Alert.alert('You already requested to this user');
-        }
-      },
-    };
-    dispatch(onCheckMessageRequest(obj));
+
+    if (params?.notification) {
+      Alert.alert('To begin chatting with this user, please accept their connection request first.')
+    } else {
+      let obj = {
+        data: {
+          receiverId: activeChatRoomUser?.currentUser?._id
+        },
+        onSuccess: (res) => {
+          if (res?.msgCount == 0) {
+            setmessageRequestModal(true);
+          } else {
+            dispatch(getFollowerList({
+              data: { userId: user?._id, search: '' },
+              onSuccess: (res) => {
+                if (res?.data?.length > 0) {
+                  console.log(res?.data)
+                  let temp = res?.data?.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id)
+                  console.log(temp)
+                  if (temp.length > 0) {
+                    // Alert.alert('You have already requested to this user');
+                  } else {
+                    Alert.alert('You already requested to this user');
+                  }
+                }
+              }
+            }));
+            // 
+          }
+        },
+      };
+      dispatch(onCheckMessageRequest(obj));
+    }
+
+
   }
 
   const onPressReq = (type) => {
@@ -177,7 +199,7 @@ const Messaging = () => {
           <TouchableOpacity onPress={() => onPressReq('accept')} style={styles.button}>
             <Text style={styles.buttonText}>{'Accept'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => onPressReq('reject')} style={styles.button}>
+          <TouchableOpacity onPress={() => onPre('reject')} style={styles.button}>
             <Text style={styles.buttonText}>{'Ignore'}</Text>
           </TouchableOpacity>
         </View>
