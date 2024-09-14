@@ -175,7 +175,7 @@ export default function EventDetailScreen() {
           {/* <RenderRowList icon={Icons.contacts} title={'+44 7899653486'} /> */}
           <View style={styles.bottomRow}>
             <Text style={[styles.titleDes, { marginBottom: 10 }]}>
-              {activeEvent?.attendeeCount}
+              {activeEvent?.attendeeCount || 0}
             </Text>
             <Image source={Icons.group} style={styles.usersIcon} />
             {user?._id !== activeEvent?.createdBy?._id && (

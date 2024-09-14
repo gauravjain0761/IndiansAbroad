@@ -57,6 +57,7 @@ import {
   LOG_OUT,
   SET_EVENT_FAVORITE,
   SET_PLAN_LIST,
+  SET_EVENT_ATTENDANT_COUNT,
 } from './ActionTypes';
 
 const initialState = {
@@ -673,6 +674,21 @@ export default function (state = initialState, action) {
           return {
             ...item,
             is_favorite: !item.is_favorite
+          }
+        } else {
+          return {
+            ...item
+          }
+        }
+      })
+      return { ...state, allEvent: updateData };
+    }
+    case SET_EVENT_ATTENDANT_COUNT: {
+      const updateData = state.allEvent.map((item) => {
+        if (item._id == action.payload.id) {
+          return {
+            ...item,
+            attendeeCount: item.attendeeCount+1
           }
         } else {
           return {

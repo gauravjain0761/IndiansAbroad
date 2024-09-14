@@ -87,7 +87,7 @@ export default function RenderOngoingEventTable({ showAction = true, data }) {
                 <View style={{ flex: 0.8, justifyContent: 'center' }}>
                   <TouchableOpacity
                     onPress={() => {
-                      dispatchAction(dispatch, SET_ACTIVE_EVENT, item);
+                      dispatchAction(dispatch, SET_ACTIVE_EVENT, { ...item, createdBy: { _id: item?.createdBy } });
                       navigation.navigate(screenName.EventDetailScreen);
                     }}
                     style={{ justifyContent: 'center', alignItems: 'center' }}>

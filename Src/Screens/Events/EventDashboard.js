@@ -24,6 +24,7 @@ import {
   getTransactionDashboardAction,
   transactionDownloadTransAction,
   withdrawalCreateAction,
+  withdrawalDebitedAction,
 } from '../../Services/PostServices';
 import NoDataFound from '../../Components/NoDataFound';
 
@@ -31,9 +32,9 @@ export default function EventDashboard() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [dashBoard, setDashBoard] = useState({});
-  const [scanningData, setScanningData] = useState(undefined);
   const { user } = useSelector(e => e.common);
   const [ongoingEventsData, setOngoingEventsData] = useState([]);
+  const [debitedEventsData, setDebitedEventsData] = useState([]);
   const [completedEventsData, setCompletedEventsData] = useState([]);
 
   useEffect(() => {
@@ -46,10 +47,10 @@ export default function EventDashboard() {
     dispatch(getTransactionDashboardAction(obj));
     let obj1 = {
       onSuccess: res => {
-        setScanningData(res?.data);
+        setDebitedEventsData(res?.data);
       },
     };
-    dispatch(transactionDownloadTransAction(obj1));
+    dispatch(withdrawalDebitedAction(obj1));
   }, []);
 
   const onRequestPayoutPress = () => {
@@ -173,7 +174,7 @@ export default function EventDashboard() {
               <View style={styles.boxView}>
                 <Text style={styles.title}>Debited</Text>
               </View>
-              <RenderDebitedTable />
+              <RenderDebitedTable item={debitedEventsData}/>
               {/* <View style={styles.boxView}>
                 <Text style={styles.title}>Scanning Data</Text>
               </View>

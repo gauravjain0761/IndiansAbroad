@@ -59,6 +59,7 @@ export default function SavedEvents() {
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
 
+
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     getData();
@@ -91,7 +92,7 @@ export default function SavedEvents() {
 
   useEffect(() => {
     getData();
-  }, [tabSelection]);
+  }, [tabSelection,isFocuse]);
 
   console.log('allSave?.bookedTickets',allSave?.bookedTickets);
   

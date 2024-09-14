@@ -153,9 +153,7 @@ export default function EditEventScreen() {
   const getEventList = page => {
     let obj = {
       data: activeEvent?._id,
-      onSuccess: res => {
-    
-      },
+      onSuccess: res => {},
     };
     dispatch(getDetailsListAction(obj));
   };

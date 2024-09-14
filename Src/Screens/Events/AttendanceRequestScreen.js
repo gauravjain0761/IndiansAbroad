@@ -30,8 +30,11 @@ import Input from '../../Components/Input';
 import {
   getAttendeeCreateAction,
   getAttendeePaymentAction,
+  getDetailsListAction,
 } from '../../Services/PostServices';
 import CountryPicker from 'react-native-country-picker-modal';
+import {SET_EVENT_ATTENDANT_COUNT} from '../../Redux/ActionTypes';
+import { dispatchAction } from '../../utils/apiGlobal';
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
@@ -69,6 +72,7 @@ export default function AttendanceRequestScreen() {
         data: {
           first_name: inputData.firstName,
           last_name: inputData.lastName,
+          // phone_no: `${inputData.code}${inputData.phone}`,
           phone_no: `${inputData.phone}`,
           email: inputData.email,
           no_of_tickets: inputData.numberOfTickets,
@@ -77,7 +81,7 @@ export default function AttendanceRequestScreen() {
           total_amount: totalAmount,
           event_id: activeEvent?._id,
         },
-        
+
         onSuccess: res => {
           let obj = {
             data: {
@@ -86,6 +90,9 @@ export default function AttendanceRequestScreen() {
               currency: activeEvent?.currency,
             },
             onSuccess: res => {
+              dispatchAction(dispatch, SET_EVENT_ATTENDANT_COUNT, {
+                id: activeEvent?._id,
+              });
               setInputData({
                 firstName: '',
                 lastName: '',
@@ -93,6 +100,9 @@ export default function AttendanceRequestScreen() {
                 email: '',
                 numberOfTickets: 1,
               });
+              getEventList()
+              settermsCheckbox(false)
+              navigation.goBack();
               // navigation.navigate(screenName.EventPaymentScreen);
             },
           };
@@ -105,6 +115,14 @@ export default function AttendanceRequestScreen() {
       };
       dispatch(getAttendeeCreateAction(obj));
     }
+  };
+
+  const getEventList = page => {
+    let obj = {
+      data: activeEvent?._id,
+      onSuccess: res => {},
+    };
+    dispatch(getDetailsListAction(obj));
   };
 
   return (
@@ -207,18 +225,21 @@ export default function AttendanceRequestScreen() {
         <View style={styles.priceView}>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Price</Text>
-            <Text
-              style={styles.ticketText}>{`${currencyIcon(activeEvent?.currency)}${activeEvent?.event_fee}`}</Text>
+            <Text style={styles.ticketText}>{`${currencyIcon(
+              activeEvent?.currency,
+            )}${activeEvent?.event_fee}`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Platform fee</Text>
-            <Text style={styles.ticketText}>{`${currencyIcon(activeEvent?.currency)}${
-              activeEvent?.platformFees || 0
-            }`}</Text>
+            <Text style={styles.ticketText}>{`${currencyIcon(
+              activeEvent?.currency,
+            )}${activeEvent?.platformFees || 0}`}</Text>
           </View>
           <View style={styles.priceRow}>
             <Text style={styles.leftText}>Total (Price+Tax)</Text>
-            <Text style={styles.ticketText}>{`${currencyIcon(activeEvent?.currency)}${totalAmount}`}</Text>
+            <Text style={styles.ticketText}>{`${currencyIcon(
+              activeEvent?.currency,
+            )}${totalAmount}`}</Text>
           </View>
         </View>
         <View style={styles.row}>

@@ -690,6 +690,22 @@ export const transactionDownloadTransAction = request => async dispatch => {
     });
 };
 
+export const withdrawalDebitedAction = request => async dispatch => {
+  const token = await getAsyncToken();
+  console.log('token', token);
+
+  return makeAPIRequest({
+    method: GET,
+    url: api.withdrawalDebited,
+  })
+    .then(async response => {
+      handleSuccessRes(response, request, dispatch, () => {});
+    })
+    .catch(error => {
+      handleErrorRes(error, request, dispatch);
+    });
+};
+
 export const withdrawalCreateAction = request => async dispatch => {
   return makeAPIRequest({
     method: POST,
