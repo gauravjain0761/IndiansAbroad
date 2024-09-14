@@ -71,9 +71,9 @@ export default function PaymentModalScreen() {
                             }
                             {selectedPlan &&
                                 <Text style={styles.des}>
-                                    {'\n'}{'\n'}Our mission is to create a support network and form a huge Indian community online.
+                                    {'\n'}{'\n'}Our mission is to create a support network and form a huge Indian Expat community online.
                                     {'\n'}{'\n'}
-                                    Therefore we are providing a boat load of services only for ${planList.filter(obj => obj?._id == selectedPlan)[0].sell_price} a {planList.filter(obj => obj?._id == selectedPlan)[0].duration} month.
+                                    Therefore we are providing a boat load of services only for ${planList.filter(obj => obj?._id == selectedPlan)[0].sell_price} a {planList.filter(obj => obj?._id == selectedPlan)[0].duration == 1 ? 'month' : (planList.filter(obj => obj?._id == selectedPlan)[0].duration + ' months')}.
                                     {'\n'}{'\n'}
                                     With your support we can make this mission successful, so let's thrive together.
                                 </Text>

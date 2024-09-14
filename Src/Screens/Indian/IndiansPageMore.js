@@ -214,9 +214,14 @@ const styles = StyleSheet.create({
     ...FontStyle(11, colors.neutral_900, '400'),
   },
   flatList: {
-    marginTop: hp(10),
     paddingHorizontal: wp(16),
-  }
+    marginTop: 8
+    // flex: 1,
+  },
+  column: {
+    width: '100%',
+    columnGap: wp(10),
+  },
 });
 
 

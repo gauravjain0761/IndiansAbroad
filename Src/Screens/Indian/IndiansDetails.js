@@ -184,7 +184,7 @@ export default function IndiansDetails() {
           if (res?.msgCount == 0) {
             setmessageRequestModal(true);
           } else {
-            Alert.alert('You already requested to this user');
+            Alert.alert("You have already sent one-time message request to this user. You'll be able to chat with them once they accept your request.");
           }
         },
       };

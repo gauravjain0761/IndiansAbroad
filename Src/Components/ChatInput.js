@@ -23,10 +23,10 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
       // copyTo: DocumentPicker.
       type: [DocumentPicker.types.images, DocumentPicker.types.video, DocumentPicker.types.pdf]
     })
-
-    if (result.type !== DocumentPicker.types.pdf) {
+    console.log(result, DocumentPicker.types.pdf)
+    if (result.type.includes('image')) {
       navigation.navigate(screenName.MediaWithInputScreen, { result: result })
-    } else if (result.type === DocumentPicker.types.video) {
+    } else if (result.type.includes('video')) {
       createThumbnail({
         url: result.uri,
         timeStamp: 1000,
@@ -39,7 +39,7 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
       let data = {}
       data.createdBy = user?._id
       data.content = ''
-      data.content_type = result.type == DocumentPicker.types.pdf ? 'file/*' : result.type == DocumentPicker.types.images ? 'image/*' : ''
+      data.content_type = result.type.includes('pdf') ? 'file/*' : result.type.includes('image') ? 'image/*' : ''
       data.chatId = activeChatRoomUser?.chatId
       data.readBy = user?._id
       data['file'] = {
@@ -47,6 +47,7 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
         type: result.type, // or photo.type image/jpg
         name: result.name
       }
+      console.log('data---', data)
       formDataApiCall(api.addMessage, data, (res) => {
         dispatchAction(dispatch, ADD_ONE_MESSAGE, res?.data)
       }, (err) => {
@@ -54,8 +55,6 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
         errorToast('Please try again')
       })
     }
-
-
   }
 
   return (
