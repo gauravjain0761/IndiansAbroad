@@ -150,3 +150,30 @@ export const handleErrorRes = (err, req, dispatch, fun) => {
     if (req?.onFailure) req.onFailure(err?.response);
   }
 };
+
+export const handleErrorRes1 = (err, req, dispatch, fun) => {
+  if (err?.response?.status == 401) {
+    dispatchAction(dispatch, IS_LOADING, false);
+    removeAuthorization(dispatch);
+    errorToast('Please login again');
+  }else if(err?.response?.status == 404){
+
+  } else {
+    dispatchAction(dispatch, IS_LOADING, false);
+    if (err?.response?.data?.errors) {
+      errorToast(err?.response?.data?.message);
+    } else if (err?.response?.data?.msg) {
+      errorToast(err?.response?.data?.msg);
+    } else if (err?.response?.data?.message) {
+      errorToast(err?.response?.data?.message);
+    } else if (err?.response?.data?.error) {
+      errorToast(err?.response?.data?.error?.message);
+    } else if (err?.message) {
+      errorToast(err?.message);
+    } else {
+      errorToast('Something went wrong! Please try again');
+    }
+    if (fun) fun();
+    if (req?.onFailure) req.onFailure(err?.response);
+  }
+};

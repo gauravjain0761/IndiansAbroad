@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  LogBox,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,17 +72,23 @@ export default function EventDashboard() {
     const now = new Date();
     // Filter ongoing events
     const ongoingEvents = list?.events?.filter(event => {
-      if (event.start_time && event.end_time) {
+      if (event?.is_Saved && event.start_time && event.end_time) {
         const startTime = new Date(event.start_time);
         const endTime = new Date(event.end_time);
-        return startTime <= now && now <= endTime;
+        if(startTime <= now && now <= endTime){
+          return startTime <= now && now <= endTime
+        }else{
+          if(now < startTime){
+            return now < startTime
+          }
+        }
       }
       return false;
-    });
+    });    
     setOngoingEventsData(ongoingEvents);
     // Filter completed events
     const completedEvents = list?.events?.filter(event => {
-      if (event.end_time) {
+      if (event?.is_Saved && event?.end_time) {
         const endTime = new Date(event.end_time);
         return now > endTime;
       }
@@ -132,7 +139,7 @@ export default function EventDashboard() {
                 Events
               </Text>
               <Text style={FontStyle(14, colors.neutral_900)}>
-                {dashBoard?.totalEventCount || 0}
+                {ongoingEventsData?.length + completedEventsData?.length || 0}
               </Text>
             </View>
           </View>

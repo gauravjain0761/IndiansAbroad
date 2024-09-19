@@ -27,7 +27,7 @@ export default function RenderEventTicket({item}) {
               {item?.address}, {moment(item?.start_time).format('MM/DD/YYYY')}
             </Text>
             <Text style={{...FontStyle(12, colors.white)}}>
-              Starts at : {moment(item.start_time).format('HH:MM')}
+              Starts at : {moment(item.start_time).format('hh:mm A')}
             </Text>
             {/* <Text style={{...FontStyle(12, colors.white)}}>
               Confirmation Number: 4598734

@@ -63,6 +63,8 @@ export default function AttendanceRequestScreen() {
       errorToast('Please enter your last Name');
     } else if (!mobileNumberCheck(inputData.phone.trim())) {
       errorToast('Please enter a valid mobile number');
+    }else if (inputData.phone.trim().length !== 10) {
+      errorToast('Please enter a valid phone number with 10 digits');
     } else if (!emailCheck(inputData.email.trim())) {
       errorToast('Please enter a valid email');
     } else if (termsCheckbox == false) {

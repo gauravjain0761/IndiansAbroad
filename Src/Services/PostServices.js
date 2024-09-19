@@ -23,6 +23,7 @@ import {GET, POST, api} from '../utils/apiConstants';
 import {
   dispatchAction,
   handleErrorRes,
+  handleErrorRes1,
   handleSuccessRes,
   makeAPIRequest,
 } from '../utils/apiGlobal';
@@ -702,7 +703,7 @@ export const withdrawalDebitedAction = request => async dispatch => {
       handleSuccessRes(response, request, dispatch, () => {});
     })
     .catch(error => {
-      handleErrorRes(error, request, dispatch);
+      handleErrorRes1(error, request, dispatch);
     });
 };
 

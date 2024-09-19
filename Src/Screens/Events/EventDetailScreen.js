@@ -155,8 +155,8 @@ export default function EventDetailScreen() {
           <RenderRowList
             icon={Icons.clock}
             title={`${moment(activeEvent.start_time).format(
-              'HH:MM',
-            )} - ${moment(activeEvent.end_time).format('HH:MM')} `}
+              'hh:mm A',
+            )} - ${moment(activeEvent.end_time).format('hh:mm A')} `}
           />
           <RenderRowList
             icon={Icons.calenderDate}
