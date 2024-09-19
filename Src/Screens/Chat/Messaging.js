@@ -140,9 +140,7 @@ const Messaging = () => {
               data: { userId: user?._id, search: '' },
               onSuccess: (res) => {
                 if (res?.data?.length > 0) {
-                  console.log(res?.data)
                   let temp = res?.data?.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id)
-                  console.log(temp)
                   if (temp.length > 0) {
                     // Alert.alert('You have already requested to this user');
                   } else {

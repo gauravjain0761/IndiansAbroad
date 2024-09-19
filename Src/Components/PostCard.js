@@ -160,16 +160,8 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
         }
       }
     }))
-
-
-
-
-
-
   }
-  // if (index == 1) {
-  //   console.log(item)
-  // }
+
   if (item) {
     return (
       <View key={item?._id}>

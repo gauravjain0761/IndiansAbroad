@@ -101,14 +101,6 @@ const NotificationScreen = () => {
         dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId?.users?.filter(item => item._id !== user?._id)?.[0], chatId: item?.groupId._id })
         navigation.navigate(screenName.Messaging);
       }
-
-
-
-
-
-
-
-
       // let obj = {
       //   data: {
       //     CpUserId: item?.sender?._id,
@@ -203,6 +195,10 @@ const NotificationScreen = () => {
     );
   };
 
+  console.log(notificationList?.filter(
+    obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')
+  ))
+
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header logoShow={false} onLeftPress={onPressBack} showLeft />
@@ -232,7 +228,7 @@ const NotificationScreen = () => {
                       : colors?.black,
                 },
               ]}>
-              {`Connection Invite(${notificationList.filter(obj => obj?.type == 'follow-request')
+              {`Connection Invite(${notificationList.filter(obj => (obj?.type == 'follow-request' || obj?.type == 'message-request'))
                 .length
                 })`}
             </Text>
@@ -298,10 +294,7 @@ const NotificationScreen = () => {
                   </View>
                 )
               ) : notificationList?.filter(
-                obj =>
-                  obj?.type == 'follow-request' &&
-                  moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                  moment().format('DD/MM/YYYY'),
+                obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')
               ).length > 0 ? (
                 <>
                   <View style={styles.newHeader}>
@@ -312,9 +305,9 @@ const NotificationScreen = () => {
                       keyExtractor={(item, index) => index.toString()}
                       data={notificationList?.filter(
                         obj =>
-                          obj?.type == 'follow-request' &&
+                          (obj?.type == 'follow-request' || obj?.type == 'message-request') &&
                           moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                          moment().format('DD/MM/YYYY'),
+                          moment().format('DD/MM/YYYY')
                       )}
                       renderItem={renderItem}
                     />
@@ -327,9 +320,9 @@ const NotificationScreen = () => {
                       keyExtractor={(item, index) => index.toString()}
                       data={notificationList?.filter(
                         obj =>
-                          obj?.type == 'follow-request' &&
+                          (obj?.type == 'follow-request' || obj?.type == 'message-request') &&
                           moment(obj?.createdDate).format('DD/MM/YYYY') !==
-                          moment().format('DD/MM/YYYY'),
+                          moment().format('DD/MM/YYYY')
                       )}
                       renderItem={renderItem}
                     />
@@ -340,7 +333,7 @@ const NotificationScreen = () => {
                   <FlatList
                     keyExtractor={(item, index) => index.toString()}
                     data={notificationList?.filter(
-                      obj => obj?.type == 'follow-request',
+                      obj => obj?.type == 'follow-request' || obj?.type == 'message-request',
                     )}
                     renderItem={renderItem}
                   />

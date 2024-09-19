@@ -138,7 +138,6 @@ export default function GroupDetailScreen() {
                     </TouchableOpacity>}
                 </View>
                 {activeChatDetails && <View>
-                    {/* activeChatDetails?.users */}
                     <FlatList
                         data={activeChatDetails?.users}
                         renderItem={({ item, index }) => {
@@ -151,14 +150,7 @@ export default function GroupDetailScreen() {
                 </View>}
             </ScrollView>
             {modalVisible && (
-                <ImageModalShow
-                    modalVisible={modalVisible}
-                    url={selectURI}
-                    onClose={() => {
-                        setModalVisible(false);
-                    }}
-                    type='group'
-                />
+                <ImageModalShow modalVisible={modalVisible} url={selectURI} onClose={() => { setModalVisible(false) }} type='group' />
             )}
             {leaveGroupModal && (
                 <ConfirmationModal

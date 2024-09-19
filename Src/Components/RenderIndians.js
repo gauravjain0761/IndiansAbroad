@@ -26,6 +26,7 @@ export default function RenderIndians() {
     const [page, setpage] = useState(1);
     const [loading, setloading] = useState(false);
     const navigation = useNavigation()
+    const [paginationStop, setpaginationStop] = useState(false)
 
     useEffect(() => {
         let obj = {
@@ -93,7 +94,12 @@ export default function RenderIndians() {
                 page: page,
                 limit: 0,
             },
-            onSuccess: () => {
+            onSuccess: (res) => {
+                if (res?.data && res?.data?.length == 0) {
+                    setpaginationStop(true)
+                } else {
+                    setpaginationStop(false)
+                }
                 setpage(page);
                 setloading(false);
                 setRefreshing(false);
@@ -104,7 +110,7 @@ export default function RenderIndians() {
 
     const fetchMoreData = () => {
         if (allIndian) {
-            if (allIndian.length < allIndianCount) {
+            if (!paginationStop) {
                 setloading(true);
                 getIndianList(page + 1);
             }
@@ -125,7 +131,12 @@ export default function RenderIndians() {
                 page: 1,
                 limit: 0,
             },
-            onSuccess: () => {
+            onSuccess: (res) => {
+                if (res?.data && res?.data?.length == 0) {
+                    setpaginationStop(true)
+                } else {
+                    setpaginationStop(false)
+                }
                 setpage(page);
                 setloading(false);
                 setRefreshing(false);

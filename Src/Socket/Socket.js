@@ -8,12 +8,6 @@ export { socket };
 
 export const sendData = (event, data, dispatch) => {
     socket.emit(event, data);
-    // if (dispatch != "") {
-    //   dispatch({
-    //     type: "LOADING",
-    //     payload: true,
-    //   });
-    // }
 };
 
 export const socketConnect = async (dispatch, next) => {

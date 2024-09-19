@@ -40,7 +40,7 @@ import { screenName } from '../Navigation/ScreenConstants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CommonButton from './CommonButton';
 import { getAllPagePost } from '../Services/OtherUserServices';
-import TagUserModal from './TagUserModal';
+import Video, { VideoRef } from 'react-native-video';
 
 
 export default function CreatePost({ createPostModal, setcreatePostModal, isMyPage = false, page }) {
@@ -61,9 +61,8 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
     setimageArray([])
   }, [])
   const openDocPicker = async (type) => {
-
     if (imageArray.length < 9) {
-      ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
+      ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
           if (type == 'video') {
             let temp = []
@@ -74,13 +73,16 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
               }).then(response => {
                 image.thumbnail = response
                 temp.push(image)
-                setimageArray([...imageArray, ...temp])
+                setpreviewModal(true)
+                setselectedImage(image)
+                // setimageArray([...imageArray, ...temp])
+
               }).catch(err => console.log('err---', err));
             } else {
               errorToast('Video should be less than 90 seconds')
             }
           } else {
-            setimageArray([...imageArray, ...image])
+            setimageArray([...imageArray, image])
           }
         })
         .catch(err => {
@@ -172,11 +174,10 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       setselectedImage(image)
     });
   }
-  const onPressSet = () => {
-    let temp = Object.assign([], imageArray)
-    temp.splice(selectedImageIndex, 1, selectedImage)
+  const onPressAdd = () => {
+    setimageArray([...imageArray, selectedImage])
     setpreviewModal(false)
-    setimageArray(temp)
+    setselectedImage(undefined)
   }
 
   return (
@@ -210,9 +211,13 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
               <View style={styles.imageView}>
                 {imageArray.map((item, index) => {
                   return (
-                    <TouchableOpacity onPress={() => {
-                      if (item?.mime.includes('image')) { setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index) }
-                    }}>
+                    <View
+                    // onPress={() => {
+                    //   // if (item?.mime.includes('image')) {
+                    //   //   setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index)
+                    //   // }
+                    // }}
+                    >
                       {item?.mime.includes('image') ?
                         <Image source={{ uri: item.path }} style={styles.imageStyles} />
                         :
@@ -221,7 +226,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
                       <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
                         <Image source={Icons.closeRound} style={styles.closeIcon} />
                       </TouchableOpacity>
-                    </TouchableOpacity>
+                    </View>
                   )
                 })}
               </View>
@@ -234,28 +239,43 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       </TouchableWithoutFeedback>
       {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
         style={{ justifyContent: 'flex-end', margin: 0, }} >
-        <View style={[styles.modalView, { height: SCREEN_HEIGHT - insets.top - 50, backgroundColor: colors.white, borderTopEndRadius: 15, borderTopStartRadius: 15, borderWidth: 1, borderColor: colors.neutral_900 }]}>
+        <View style={[styles.modalView, { height: SCREEN_HEIGHT - insets.top, backgroundColor: colors.white, borderTopEndRadius: 15, borderTopStartRadius: 15, borderWidth: 1, borderColor: colors.neutral_900 }]}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 20, justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => setpreviewModal(false)} style={styles.backView}>
               <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', gap: wp(20) }}>
+            {/* <View style={{ flexDirection: 'row', gap: wp(20) }}>
               <TouchableOpacity onPress={() => onPressRotate()} >
                 <Text style={{ ...FontStyle(18, colors.neutral_900, '400'), }}>Rotate</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => onPressRotate()} >
                 <Text style={{ ...FontStyle(18, colors.neutral_900, '400'), }}>Crop</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
           <View style={{ flex: 1, marginVertical: 20 }}>
-            {selectedImage?.mime.includes('image') ?
+            {/* {selectedImage?.mime.includes('image') ?
               <Image source={{ uri: selectedImage.path }} style={styles.imageStyles2} />
               :
               <Image source={{ uri: selectedImage.thumbnail.path }} style={styles.imageStyles2} />
-            }
+            } */}
+
+            <Video
+              // Can be a URL or a local file.
+              source={{ uri: selectedImage.path }}
+              playInBackground={false}
+              paused={true}
+              muted={false}
+              controls={true}
+              resizeMode={'contain'}
+              poster={selectedImage.thumbnail}
+              // posterResizeMode='cover'
+              onError={(err) => console.log(err)}
+              style={styles.imageStyles2}
+            />
+
           </View>
-          <CommonButton onPress={() => onPressSet()} title={'Set'} extraStyle={{ marginHorizontal: wp(20) }} />
+          <CommonButton onPress={() => onPressAdd()} title={'Add'} extraStyle={{ marginHorizontal: wp(20) }} />
           <View style={{ marginBottom: Platform.OS == 'android' ? 20 : insets.bottom }} />
         </View>
       </ReactNativeModal>}

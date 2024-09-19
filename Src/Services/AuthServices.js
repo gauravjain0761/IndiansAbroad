@@ -15,7 +15,6 @@ export const oncheckSession = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // dispatchAction(dispatch, SET_ALL_POST, { ...response?.data, current_page: request?.data?.page })
             });
         })
         .catch(error => {
@@ -180,7 +179,6 @@ export const onForgotPass = (request) => async dispatch => {
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
                 successToast(response?.data?.msg);
-                // dispatchAction(dispatch, SET_COUNTRIES, response?.data?.data)
             });
         })
         .catch(error => {
@@ -198,7 +196,6 @@ export const onResetPass = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // dispatchAction(dispatch, SET_COUNTRIES, response?.data?.data)
             });
         })
         .catch(error => {
@@ -249,7 +246,6 @@ export const onFeedback = (request) => async dispatch => {
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
                 successToast(response?.data?.msg);
-                // dispatchAction(dispatch, MY_PAGES, undefined)
             });
         })
         .catch(error => {
@@ -267,7 +263,6 @@ export const onEnquiry = (request) => async dispatch => {
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
                 successToast(response?.data?.msg);
-                // dispatchAction(dispatch, MY_PAGES, undefined)
             });
         })
         .catch(error => {

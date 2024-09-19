@@ -99,16 +99,20 @@ const SenderMsg = ({ data }) => {
                   {data?.shareContentType == 'thread' && <Text style={styles.sharedNAme}>{'Shared Thread'}</Text>}
                   {(data?.shareContentType == 'post' || data?.shareContentType == 'cppost') && <Text style={styles.sharedNAme}>{'Shared Post'}</Text>}
                 </View>}
-              {data?.shareContentType == 'group-invitation' &&
-                <View style={styles.groupView}>
-                  <RenderUserIcon type='user' url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
-                  <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
-                </View>
-              }
+              {data?.shareContentType == 'group-invitation' && (
+                data?.invitedGroupId && Object.keys(data?.invitedGroupId).length > 0 ?
+                  <View style={styles.groupView}>
+                    <RenderUserIcon type='user' url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
+                    <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
+                  </View>
+                  :
+                  <View style={styles.groupView}>
+                    <Text style={styles.groupName}>Group Deleted</Text>
+                  </View>
+              )}
               {data?.shareContentType == 'post' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
-
-                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
+                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data.file[0]} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
@@ -121,14 +125,14 @@ const SenderMsg = ({ data }) => {
               }
               {data?.shareContentType == 'thread' &&
                 <TouchableOpacity onPress={() => onOpenThreadDetail()} >
-                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data} />}
+                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data.file[0]} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                 </TouchableOpacity>
               }
               {data?.shareContentType == 'cppost' &&
                 <TouchableOpacity onPress={() => onOpenPostDetail()} >
 
-                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
+                  {data?.file?.length > 0 && <ChatMessageMedia onPress={() => onOpenPostDetail()} data={data.file[0]} />}
                   <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                   {/* <Text style={[styles.timeTextStyle, { color: colors.primary_500 }]}>  {moment(data?.createdAt).format('HH:mm')}</Text> */}
                 </TouchableOpacity>
@@ -147,12 +151,12 @@ const SenderMsg = ({ data }) => {
                     </View>
                     : data?.content_type == 'image/*' ?
                       <View>
-                        {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                        {data?.file?.length > 0 && <ChatMessageMedia data={data.file[0]} />}
                         <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                       </View>
                       : data?.content_type == 'video/*' ?
                         <View>
-                          {data?.file?.length > 0 && <ChatMessageMedia data={data} />}
+                          {data?.file?.length > 0 && <ChatMessageMedia data={data.file[0]} />}
                           <RenderText style={[styles.msgTextStyle, { width: wp(230) }]} text={data?.content}></RenderText>
                         </View>
                         : <View style={{ height: 10 }} />

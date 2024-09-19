@@ -31,7 +31,6 @@ export const onConnectRequest = request => async dispatch => {
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         successToast(response?.data?.msg);
-        // dispatchAction(dispatch, SET_ALL_POST, { ...response?.data, current_page: request?.data?.page })
       });
     })
     .catch(error => {
@@ -138,7 +137,6 @@ export const onPagesDisConnectRequest = request => async dispatch => {
     .then(async response => {
       handleSuccessRes(response, request, dispatch, () => {
         successToast(response?.data?.msg);
-        // dispatchAction(dispatch, SET_ALL_POST, { ...response?.data, current_page: request?.data?.page })
       });
     })
     .catch(error => {
@@ -202,9 +200,6 @@ export const getAllPagePost = (request) => async dispatch => {
     params: request?.params
   })
     .then(async (response) => {
-      // handleSuccessRes(response, request, dispatch, () => {
-
-
       if (response?.status === 200 || response?.status === 201) {
         dispatchAction(dispatch, IS_LOADING, false)
         if (response?.data && response?.data?.err == 200) {
@@ -216,9 +211,6 @@ export const getAllPagePost = (request) => async dispatch => {
           if (request?.onFailure) request.onFailure(response?.data);
         }
       }
-
-
-      // });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);

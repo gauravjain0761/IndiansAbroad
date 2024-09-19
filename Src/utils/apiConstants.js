@@ -54,7 +54,7 @@ export const api = {
   getById: "/event/getById",
   transactionDashboard: "/transaction/dashboard",
   withdrawalCreate: "/withdrawal/create",
-  withdrawalDebited:"/withdrawal/debited",
+  withdrawalDebited: "/withdrawal/debited",
   //attendee
   attendeeCreate: "/attendee/create",
   attendeePayment: "/attendee/payment",

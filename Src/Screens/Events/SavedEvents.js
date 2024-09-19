@@ -92,10 +92,7 @@ export default function SavedEvents() {
 
   useEffect(() => {
     getData();
-  }, [tabSelection,isFocuse]);
-
-  console.log('allSave?.bookedTickets',allSave?.bookedTickets);
-  
+  }, [tabSelection, isFocuse]);
 
   useEffect(() => {
     Animated.timing(buttonTranslateX, {
@@ -105,7 +102,7 @@ export default function SavedEvents() {
   }, [isLeftButtonActive]);
   const ref = React.createRef(PagerView);
 
-  const renderEventItem = ({ item, index }) => {    
+  const renderEventItem = ({ item, index }) => {
     if (item?.is_Saved) {
       return (
         <TouchableOpacity

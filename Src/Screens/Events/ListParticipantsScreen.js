@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Image,
-  Text,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import { StyleSheet, View, SafeAreaView, Image, Text, TouchableOpacity, FlatList, } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -18,10 +10,7 @@ import { screenName } from '../../Navigation/ScreenConstants';
 import { wp } from '../../Themes/Fonts';
 import { Icons } from '../../Themes/Icons';
 import RenderUserIcon from '../../Components/RenderUserIcon';
-import {
-  getAttendeeGetByEventAction,
-  getDetailsListAction,
-} from '../../Services/PostServices';
+import { getAttendeeGetByEventAction, } from '../../Services/PostServices';
 import SearchBar from '../../Components/SearchBar';
 export default function ListParticipantsScreen() {
   const navigation = useNavigation();
@@ -50,8 +39,6 @@ export default function ListParticipantsScreen() {
     searchText == 0 && setParticpantsList(particpantsListData)
   }, [searchText])
 
-
-
   useEffect(() => {
     getEventList();
   }, [activeEvent?._id]);
@@ -68,15 +55,11 @@ export default function ListParticipantsScreen() {
   };
 
   const renderItem = ({ item }) => {
-
     return (
       <View style={styles.rowItem}>
         <RenderUserIcon type="user" height={45} isBorder={true} />
         <View style={ApplicationStyles.flex}>
-          <Text
-            style={
-              styles.nameText
-            }>{`${item?.first_name} ${item?.last_name}`}</Text>
+          <Text style={styles.nameText}>{`${item?.first_name} ${item?.last_name}`}</Text>
           <Text style={styles.nameText}>Confirmation Number: {item?._id}</Text>
           <Text style={styles.nameText}>
             No. of tickets : {item?.no_of_tickets}

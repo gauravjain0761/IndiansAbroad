@@ -78,7 +78,6 @@ export default function ChatCard({ data, cardPress, isGroup }) {
           type={isGroup ? 'group' : 'user'}
         // isBorder={currentUser?.subscribedMember}
         />
-        {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
       </View>
       <Text numberOfLines={1} style={styles.text1}>
         {isGroup ? data?.chatName : currentUser?.first_Name + ' ' + currentUser?.last_Name}

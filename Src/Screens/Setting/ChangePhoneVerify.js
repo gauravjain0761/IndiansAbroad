@@ -74,7 +74,6 @@ export default function ChangePhoneVerify() {
                     style={[
                       styles.cell,
                       {
-                        // borderColor: isFocused ? colors.green34 : '#EEEEEE',
                         color: colors.neutral_900,
                       },
                     ]}
@@ -148,7 +147,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 55,
     justifyContent: 'center'
-    // width: '48%',
   },
   btnText: {
     textAlign: 'center',

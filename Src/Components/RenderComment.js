@@ -39,7 +39,7 @@ export default function RenderComment({
                             onOpenOtherUserDetails()
                         }} activeOpacity={0.8} style={ApplicationStyles.flex}>
                             <Text numberOfLines={1} style={styles.username}>{item?.user ? item?.user?.first_Name : item?.createdBy?.first_Name} {item?.user ? item?.user?.last_Name : item?.createdBy?.last_Name}</Text>
-                            <Text style={styles.degreeText}>{item?.user?.profession}, {item?.user?.region}</Text>
+                            <Text style={styles.degreeText}>{item?.user ? item?.user?.profession : item?.createdBy?.profession}, {item?.user ? item?.user?.region : item?.createdBy?.region}</Text>
                             {/* <Text style={styles.commentText2}>{item?.comment}</Text> */}
                         </TouchableOpacity>
                         <View style={styles.innerRow}>

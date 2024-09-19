@@ -9,7 +9,7 @@ import {
 import React, { useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
 import { Icons } from '../Themes/Icons';
-import { FontStyle, ImageStyle } from '../utils/commonFunction';
+import { FontStyle, ImageStyle, successToast } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
@@ -43,7 +43,8 @@ export default function GroupMemberItem({ item, index, }) {
                 userId: item?._id,
                 groupId: activeChatDetails?._id
             },
-            onSuccess: () => {
+            onSuccess: (res) => {
+                successToast(`${item.first_Name} ${item.last_Name} is removed from this group`);
                 let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
                 dispatch(onGetChatDetail(obj))
             }
@@ -83,7 +84,7 @@ export default function GroupMemberItem({ item, index, }) {
                 <ConfirmationModal
                     visible={removeModal}
                     onClose={() => setremoveModal(false)}
-                    title={`Are you sure you want remove this member?`}
+                    title={`Are you sure you want remove ${item.first_Name} ${item.last_Name} from group?`}
                     successBtn={'Remove'}
                     canselBtn={'No'}
                     onPressCancel={() => setremoveModal(false)}

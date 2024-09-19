@@ -31,9 +31,7 @@ export const onBuyPlan = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // console.log('response?.data--', response?.data)
                 return response?.data
-                // dispatchAction(dispatch, SET_PLAN_LIST, response?.data?.subsrciption_plans)
             });
         })
         .catch(error => {
@@ -51,7 +49,6 @@ export const onUpdatePaymentStatus = (request) => async dispatch => {
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
 
-                // dispatchAction(dispatch, SET_PLAN_LIST, response?.data?.subsrciption_plans)
             });
         })
         .catch(error => {

@@ -31,16 +31,21 @@ export default function DiscussionForum() {
     dispatch(getDiscussionCountry({}))
   }, [])
   useEffect(() => {
-    if (discussionCountry) {
+    if (isFocused && discussionCountry) {
       let temp = discussionCountry.filter(obj => obj.isSelected)
       getThreadsList(temp[0]?._id, searchText)
     }
-  }, [discussionCountry, searchText])
+  }, [discussionCountry, searchText, isFocused])
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    let temp = discussionCountry.filter(obj => obj.isSelected)
-    getThreadsList(temp[0]?._id)
+    if (discussionCountry) {
+      let temp = discussionCountry?.filter(obj => obj.isSelected)
+      getThreadsList(temp[0]?._id)
+    }
+    else {
+      setRefreshing(false)
+    }
   }, []);
 
   const getThreadsList = (id, search) => {
@@ -82,7 +87,7 @@ export default function DiscussionForum() {
           { marginHorizontal: wp(16), justifyContent: 'space-between', marginBottom: 5 },
         ]}>
         <View style={styles.topHeader}>
-          {discussionCountry.map((item, index) => {
+          {discussionCountry && discussionCountry?.map((item, index) => {
             return (
               <TouchableOpacity onPress={() => { dispatchAction(dispatch, UPDATE_COUNTRY_DISCUSSION_LIST, item._id) }} style={[styles.btnStyle, { backgroundColor: item?.isSelected ? colors.white : colors.primary_6a7e, },]}>
                 <Text style={[styles.btnText, { color: item?.isSelected ? colors.primary_4574ca : colors.white, },]}>

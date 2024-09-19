@@ -19,7 +19,6 @@ export function defaultFontStyle(fontSize, color, fontWeight) {
     fontFamily: getFontType(fontWeight),
     fontSize: fontSize + 1,
     color: color,
-    // fontWeight: fontWeight ? fontWeight : '400',
     includeFontPadding: false
   };
 }
@@ -29,7 +28,6 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 
 export const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-// based on iphone 5s's scale
 const scale = SCREEN_WIDTH / 320;
 
 export const screen_width = SCREEN_WIDTH;

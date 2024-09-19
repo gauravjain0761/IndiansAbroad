@@ -134,10 +134,9 @@ export default function EditProfile() {
       errorToast('Please enter a city(in abroad)')
     } else if (inputData.university.trim() == '') {
       errorToast('Please enter an unversity/company')
+    } else if (inputData.profession.trim() == '') {
+      errorToast('Please enter profession')
     }
-    // else if (profession.trim() == '') {
-    //   errorToast('Please enter profession')
-    // }
     else {
 
       let data = {}
@@ -145,7 +144,7 @@ export default function EditProfile() {
         let time = new Date().getTime()
         data['avtar'] = {
           uri: image.path,
-          type: image.mime, // or photo.type image/jpg
+          type: image.mime,
           name: 'avtar_[' + time + '].' + image.path.split('.').pop()
         }
 
@@ -258,7 +257,6 @@ const styles = StyleSheet.create({
   },
   btnView: {
     backgroundColor: colors.buttonBlue,
-    // marginHorizontal: wp(20),
     marginBottom: 10,
     borderRadius: 5,
   },

@@ -145,12 +145,16 @@ export default function (state = initialState, action) {
       };
     }
     case SET_ALL_INDIANS: {
+
+      let tempArray = action.payload.current_page == 1
+        ? action.payload.data
+        : [...state.allIndian, ...action.payload.data]
+
+      let setObj = new Set(tempArray.map(JSON.stringify));
+      let output = Array.from(setObj).map(JSON.parse);
       return {
         ...state,
-        allIndian:
-          action.payload.current_page == 1
-            ? action.payload.data
-            : [...state.allIndian, ...action.payload.data],
+        allIndian: output,
         allIndianCount: action.payload.total,
       };
     }
@@ -688,7 +692,7 @@ export default function (state = initialState, action) {
         if (item._id == action.payload.id) {
           return {
             ...item,
-            attendeeCount: item.attendeeCount+1
+            attendeeCount: item.attendeeCount + 1
           }
         } else {
           return {

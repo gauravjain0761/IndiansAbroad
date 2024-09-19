@@ -8,7 +8,6 @@ export const getDiscussionCountry = (request) => async dispatch => {
     return makeAPIRequest({
         method: GET,
         url: api.countriesList,
-        // data: request?.data
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
@@ -65,7 +64,6 @@ export const onGetThreadAllComments = (request) => async dispatch => {
     return makeAPIRequest({
         method: GET,
         url: api.getThreadCommentList + request?.id,
-        // data: request?.data
     })
         .then(async (response) => {
             if (response?.status === 200 || response?.status === 201) {
@@ -111,7 +109,6 @@ export const onAddCommentThread = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // successToast(response?.data?.msg);
             });
         })
         .catch(error => {
@@ -128,7 +125,6 @@ export const onDeleteCommentThread = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // successToast(response?.data?.msg);
             });
         })
         .catch(error => {
@@ -145,7 +141,6 @@ export const onAddCommentReplyThread = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // successToast(response?.data?.msg);
             });
         })
         .catch(error => {
@@ -162,7 +157,6 @@ export const onDeleteCommentReplyThread = (request) => async dispatch => {
     })
         .then(async (response) => {
             handleSuccessRes(response, request, dispatch, () => {
-                // successToast(response?.data?.msg);
             });
         })
         .catch(error => {

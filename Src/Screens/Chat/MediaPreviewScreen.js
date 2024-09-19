@@ -10,7 +10,6 @@ import Pdf from 'react-native-pdf'
 export default function MediaPreviewScreen() {
     const { params } = useRoute()
     const navigation = useNavigation()
-    console.log(params)
     return (
         <View style={ApplicationStyles.applicationView}>
             <SafeAreaView style={ApplicationStyles.applicationView}>

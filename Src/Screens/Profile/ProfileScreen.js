@@ -46,7 +46,6 @@ import { getFollowerList } from '../../Services/PostServices';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const [menuModal, setmenuModal] = useState(false);
   const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [tabSelection, setTabSelection] = useState('POST');
@@ -248,7 +247,6 @@ export default function ProfileScreen() {
             </View>
           ) : (
             <View>
-              {/* <ScrollView> */}
               <SearchBar
                 value={searchText}
                 onChangeText={text => {
@@ -286,7 +284,6 @@ export default function ProfileScreen() {
                   showsVerticalScrollIndicator={false}
                 />
               )}
-              {/* </ScrollView> */}
             </View>
           )}
         </ScrollView>
@@ -302,77 +299,6 @@ export default function ProfileScreen() {
         />
       )}
     </SafeAreaView>
-    // <View style={ApplicationStyles.applicationView}>
-    //   <SafeAreaView edges={['top']}  >
-    //     <Header
-    //       title={'IndiansAbroad'}
-    //       showRight={true}
-    //       icon={Icons.setting}
-    //       onRightPress={() => navigate(screenName.Setting)}
-    //     />
-    //   </SafeAreaView>
-    //   {/* <ScrollView style={{flex:1}}> */}
-    //   <View style={styles.userViewStyle}>
-    //     <View style={styles.imageView}>
-    //       <RenderUserIcon height={100} isBorder />
-    //     </View>
-    //     <Text style={styles.userText}>Harshal Jadhav</Text>
-    //     <Text style={styles.userText1}>(In London)</Text>
-    //   </View>
-    //   <View style={styles.tabMainView}>
-    //     <TouchableOpacity
-    //       onPress={() => {
-    //         setTabSelection('POST');
-    //         setIsLeftButtonActive(true);
-    //         ref.current?.setPage(0);
-    //       }} style={[{}, styles.tabItemView]}>
-    //       <Text style={FontStyle( 14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'My Posts (10)'}</Text>
-    //     </TouchableOpacity>
-    //     <TouchableOpacity
-    //       onPress={() => {
-    //         setTabSelection('INDIANS');
-    //         ref.current?.setPage(1);
-    //         setIsLeftButtonActive(false);
-    //       }}
-    //       style={styles.tabItemView}>
-    //       <Text style={FontStyle( 14, tabSelection == 'INDIANS' ? colors.primary_6a7e : colors.neutral_900, '700')}>{'Connected Indians (79)'}</Text>
-    //     </TouchableOpacity>
-    //     <Animated.View style={[styles.animationView, { left: tabSelection == 'POST' ? 0 : 0, transform: [{ translateX: buttonTranslateX }], width: (SCREEN_WIDTH - 20) / 2, borderWidth: 0.9, borderColor: colors.primary_4574ca, },]} />
-    //   </View>
-    //   <PagerView
-    //     style={{ flex: 1 }}
-    //     initialPage={tabSelectionIndex}
-    //     ref={ref}
-    //     onPageSelected={e => {
-    //       setTabSelection(e?.nativeEvent?.position == 0 ? 'POST' : 'INDIANS');
-    //       setTabSelectionIndex(e?.nativeEvent?.position);
-    //       setIsLeftButtonActive(e?.nativeEvent?.position == 0 ? true : false);
-    //     }}>
-    //     <View key={'1'}>
-    //       {/* <ScrollView style={{flex:1}}> */}
-    //       <FlatList data={[0, 1, 2, 3, 4]} renderItem={renderItem} />
-    //       {/* </ScrollView> */}
-    //     </View>
-    //     <View key={'2'}>
-    //       {/* <ScrollView> */}
-    //       <SearchBar
-    //         value={searchText}
-    //         onChangeText={text => setSearchText(text)}
-    //         placeholder={'Search Indians here'}
-    //         containerStyles={{ backgroundColor: colors.white, marginTop: 5 }}
-    //       />
-    //       <FlatList
-    //         data={[1, 2]}
-    //         renderItem={({ item }) => {
-    //           return <ConnectedIndians />;
-    //         }}
-    //         showsVerticalScrollIndicator={false}
-    //       />
-    //       {/* </ScrollView> */}
-    //     </View>
-    //   </PagerView>
-    //   {/* </ScrollView> */}
-    // </View>
   );
 }
 

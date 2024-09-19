@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.buttonBlue,
     marginBottom: 10,
     borderRadius: 5,
-    // width: '48%',
     marginTop: 65,
   },
   autoBtn: {
@@ -210,7 +209,6 @@ const styles = StyleSheet.create({
   },
   topHeader: {
     flexDirection: 'row',
-    // alignItems: 'center',
     backgroundColor: colors.buttonBlue,
     paddingHorizontal: 3,
     paddingVertical: 3,

@@ -123,30 +123,36 @@ const ReciverMsg = ({ data }) => {
                         data?.createdBy?.last_Name}
                     </Text>
                     {data?.shareContentType == 'thread' && <Text style={styles.sharedNAme}>{'Shared Thread'}</Text>}
-
                     {(data?.shareContentType == 'post' || data?.shareContentType == 'cppost') && <Text style={styles.sharedNAme}>{'Shared Post'}</Text>}
                   </View>}
                 {data?.shareContentType == 'group-invitation' &&
-                  <View style={{ marginBottom: 15, }}>
-                    <View style={styles.groupView}>
-                      <RenderUserIcon type='user' url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
-                      <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
+                  (data?.invitedGroupId && Object.keys(data?.invitedGroupId).length > 0 ?
+                    <View style={{ marginBottom: 15, }}>
+                      <View style={styles.groupView}>
+                        <RenderUserIcon type='user' url={data?.invitedGroupId?.chatLogo[0]?.cdnlocation} height={30} />
+                        <Text style={styles.groupName}>{data?.invitedGroupId?.chatName}</Text>
+                      </View>
+                      {!data?.joinedGroup && <TouchableOpacity onPress={() => onPressJoinNowBtn()} style={styles.joinNowBtn}>
+                        <Text style={styles.joinNowText}>Join Now</Text>
+                      </TouchableOpacity>}
                     </View>
-                    {!data?.joinedGroup && <TouchableOpacity onPress={() => onPressJoinNowBtn()} style={styles.joinNowBtn}>
-                      <Text style={styles.joinNowText}>Join Now</Text>
-                    </TouchableOpacity>}
-                  </View>
-
+                    :
+                    <View style={{ marginBottom: 15, }}>
+                      <View style={styles.groupView}>
+                        <Text style={styles.groupName}>Group Deleted</Text>
+                      </View>
+                    </View>
+                  )
                 }
                 {data?.shareContentType == 'post' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
+                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data.file[0]} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
                 {data?.shareContentType == 'thread' &&
                   <TouchableOpacity onPress={() => onOpenThreadDetail()} >
-                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data} />}
+                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenThreadDetail()} data={data.file[0]} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
@@ -158,7 +164,7 @@ const ReciverMsg = ({ data }) => {
                 }
                 {data?.shareContentType == 'cppost' &&
                   <TouchableOpacity onPress={() => onOpenPostDetail()} >
-                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data} />}
+                    {data?.file?.length > 0 && < ChatMessageMedia onPress={() => onOpenPostDetail()} data={data.file[0]} />}
                     <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                   </TouchableOpacity>
                 }
@@ -174,12 +180,12 @@ const ReciverMsg = ({ data }) => {
                       </View>
                       : data?.content_type == 'image/*' ?
                         <View>
-                          {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                          {data?.file?.length > 0 && <ChatMessageMedia data={data.file[0]} />}
                           <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                         </View>
                         : data?.content_type == 'video/*' ?
                           <View>
-                            {data?.file?.length > 0 && < ChatMessageMedia data={data} />}
+                            {data?.file?.length > 0 && <ChatMessageMedia data={data.file[0]} />}
                             <RenderText style={[styles.msgTextStyle]} text={data?.content}></RenderText>
                           </View>
                           : <View style={{ height: 10 }} />

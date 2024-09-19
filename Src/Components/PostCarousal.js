@@ -12,9 +12,11 @@ import { createThumbnail } from 'react-native-create-thumbnail';
 export default function PostCarousal({ images, isDetailScreen, poster }) {
     const [currentIndex, setindex] = useState(0)
     const [thumbnail, setthumbnail] = useState(undefined)
+
     useEffect(() => {
         images.forEach(element => {
-            if (element.contentType.includes('video')) {
+            if (element.metadata?.contentType.includes('video')) {
+
                 createThumbnail({
                     url: element?.location,
                     timeStamp: 1000,
@@ -30,7 +32,7 @@ export default function PostCarousal({ images, isDetailScreen, poster }) {
         <View>
             {images.length == 1 ?
                 <View>
-                    {images[0]?.contentType.includes('video') ?
+                    {images[0]?.metadata?.contentType.includes('video') ?
                         <Video
                             // Can be a URL or a local file.
                             source={{ uri: images[0].location }}
@@ -64,7 +66,7 @@ export default function PostCarousal({ images, isDetailScreen, poster }) {
                         snapEnabled={true}
                         renderItem={({ item, index }) => (
                             <View>
-                                {item?.contentType.includes('video') ?
+                                {item?.metadata?.contentType.includes('video') ?
                                     <Video
                                         // Can be a URL or a local file.
                                         source={{ uri: item.location }}

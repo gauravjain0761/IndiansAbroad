@@ -1,22 +1,31 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import FastImage from 'react-native-fast-image'
 import { SCREEN_WIDTH, wp } from '../Themes/Fonts'
 import { Icons } from '../Themes/Icons'
 import colors from '../Themes/Colors'
 import { useNavigation } from '@react-navigation/native'
 import { screenName } from '../Navigation/ScreenConstants'
+import { createThumbnail } from 'react-native-create-thumbnail'
 
-export default function ChatMessageMedia({ data, onPress }) {
+export default function ChatMessageMedia({ data, onPress, type }) {
     const navigation = useNavigation()
+
+    useEffect(() => {
+        if (data?.metadata?.contentType.includes('video')) {
+            createThumbnail({
+                url: data?.location,
+                timeStamp: 1000,
+            }).then(response => {
+                data.thumbnail = response.path
+            }).catch(err => console.log('err==', err));
+        }
+    }, [data])
+
     return (
-        <TouchableOpacity onPress={() => onPress ? onPress() : navigation.navigate(screenName.MediaPreviewScreen, { url: data?.file[0] })} onLongPress={() => { }} >
-            <FastImage
-                source={data?.file[0]?.location == '' ? Icons.logo : { uri: data?.file[0]?.location }}
-                resizeMode={FastImage.resizeMode.cover}
-                style={styles.imageView}
-            />
-            {data?.file[0]?.metadata?.contentType?.includes('video') && <View style={styles.mainViewPlayBtn}>
+        <TouchableOpacity onPress={() => onPress ? onPress() : navigation.navigate(screenName.MediaPreviewScreen, { url: file })} onLongPress={() => { }} >
+            <FastImage source={data?.metadata?.contentType?.includes('video') ? data?.thumbnail : data?.location == '' ? Icons.logo : { uri: data?.location }} resizeMode={FastImage.resizeMode.cover} style={[styles.imageView, { backgroundColor: data?.location == '' ? colors.secondary_500 : undefined }]} />
+            {data?.metadata?.contentType?.includes('video') && <View style={styles.mainViewPlayBtn}>
                 <View style={styles.videoPlayIcon}>
                     <Image source={Icons.playVideo} style={styles.playBtn} />
                 </View>
@@ -29,7 +38,7 @@ const styles = StyleSheet.create({
     imageView: {
         width: wp(250),
         height: wp(250),
-        marginVertical: 5
+        marginVertical: 5,
     },
     videoPlayIcon: {
         backgroundColor: colors.white,

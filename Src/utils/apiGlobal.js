@@ -16,7 +16,6 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
     };
     axios(option)
       .then(response => {
-        // console.log("res--->", api.BASE_URL + url, data, params);
         console.log("res--->", api.BASE_URL + url, data, params, response?.data);
         if (response.status === 200 || response.status === 201) {
           resolve(response);
@@ -25,23 +24,13 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
         }
       })
       .catch(error => {
-        console.log(
-          'err--->',
-          api.BASE_URL + url,
-          data,
-          params,
-          error,
-          error?.response?.status,
-          error?.response
-        );
+        console.log('err--->', api.BASE_URL + url, data, params, error?.response?.status, error?.response);
         reject(error);
       });
   });
 
 export const setAuthorization = async authToken => {
   const token = await getAsyncToken();
-  console.log('token', token);
-
   if (authToken == '') {
     axios.defaults.headers.common['Authorization'] = `${token}`;
   } else {
@@ -68,17 +57,12 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
   }
   return fetch(api.BASE_URL + url, {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'multipart/form-data',
-      Authorization: token,
-    },
+    headers: { Accept: 'application/json', 'Content-Type': 'multipart/form-data', Authorization: token, },
     body: formData,
   })
     .then(response => {
-      console.log('responsedasda', response);
       return response.json().then(responseJson => {
-        console.log("responseJson", responseJson);
+        console.log("responseJson", url, data, responseJson);
         if (responseJson.err == 200 || responseJson.statusCode == 200) {
           onSuccess(responseJson);
         } else {
@@ -92,7 +76,7 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
       });
     })
     .catch(err => {
-      console.log('err---', err)
+      console.log('err---', url, data, err)
       if (onFailure) onFailure(err);
       errorToast('Please try again');
     });
@@ -127,12 +111,11 @@ export const handleSuccessRes = (res, req, dispatch, fun) => {
 };
 
 export const handleErrorRes = (err, req, dispatch, fun) => {
+  dispatchAction(dispatch, IS_LOADING, false);
   if (err?.response?.status == 401) {
-    dispatchAction(dispatch, IS_LOADING, false);
     removeAuthorization(dispatch);
     errorToast('Please login again');
   } else {
-    dispatchAction(dispatch, IS_LOADING, false);
     if (err?.response?.data?.errors) {
       errorToast(err?.response?.data?.message);
     } else if (err?.response?.data?.msg) {

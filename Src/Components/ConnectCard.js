@@ -118,30 +118,33 @@ export default function ConnectCard({
       activeOpacity={0.9}
       onPress={cardPress}
       style={[styles.header]}>
-      <View
-        style={styles.imageStyle}>
-        <RenderUserIcon
-          url={userAvtar}
-          height={78}
-          activeOpacity={1}
-          isBorder={subscribedMember}
-          type={!indians ? 'page' : 'user'}
-        />
-        {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
+      <View>
+        <View
+          style={styles.imageStyle}>
+          <RenderUserIcon
+            url={userAvtar}
+            height={78}
+            activeOpacity={1}
+            isBorder={subscribedMember}
+            type={!indians ? 'page' : 'user'}
+          />
+          {/* <Image source={Icons.bell} style={ImageStyle(18, 18)} /> */}
+        </View>
+        <Text numberOfLines={1} style={styles.text1}>
+          {name}
+        </Text>
+        {!indians && (
+          <Text numberOfLines={1} style={styles.text2}>
+            {city}
+          </Text>
+        )}
+        {indians && (
+          <Text numberOfLines={2} style={styles.text3}>
+            {universityORcompany}
+          </Text>
+        )}
       </View>
-      <Text numberOfLines={1} style={styles.text1}>
-        {name}
-      </Text>
-      {!indians && (
-        <Text numberOfLines={1} style={styles.text2}>
-          {city}
-        </Text>
-      )}
-      {indians && (
-        <Text numberOfLines={2} style={styles.text3}>
-          {universityORcompany}
-        </Text>
-      )}
+
 
       {indians ? (
         isFollowing == 1 ? (
@@ -181,16 +184,15 @@ export default function ConnectCard({
 const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.secondary_500,
-    // borderRadius: wp(20),
     paddingHorizontal: wp(10),
-    // justifyContent: 'center',
     alignItems: 'center',
     paddingTop: hp(7),
-    // paddingBottom: hp(28),
     width: '49%',
     flex: 1,
     marginBottom: hp(7),
-    minHeight: hp(160),
+    // minHeight: hp(160),
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   textInput: {
     borderRadius: 8,
@@ -209,17 +211,20 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center'
     // backgroundColor: colors.white,
     // borderColor: colors.neutral_500
   },
   text1: {
     marginTop: 5,
     ...FontStyle(14, colors.neutral_900, '700'),
+    textAlign: 'center'
   },
   text2: {
     marginTop: 2,
     // lineHeight: 16,
     ...FontStyle(12, colors.neutral_900, '400'),
+    textAlign: 'center'
   },
   text3: {
     // marginTop:2,
@@ -237,7 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 5,
     marginBottom: hp(9),
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   btnText: {
     ...FontStyle(12, colors.white),

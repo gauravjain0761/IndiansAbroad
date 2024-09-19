@@ -190,7 +190,9 @@ export const onRemoveMember = request => async dispatch => {
     data: request?.data,
   })
     .then(async response => {
-      handleSuccessRes(response, request, dispatch, () => { });
+      handleSuccessRes(response, request, dispatch, () => {
+
+      });
     })
     .catch(error => {
       handleErrorRes(error, request, dispatch);

@@ -72,7 +72,6 @@ export default function HomeScreen() {
       if (!user?.subscribedMember) {
         navigation.replace(screenName.PaymentModalScreen)
       } else {
-        // console.log('user111----', user?.planExpiryDate, moment(user?.planExpiryDate).format('MM/DD/YYYY hh:mm'), moment().format('MM/DD/YYYY hh:mm'))
         if (moment(user?.planExpiryDate) < moment()) {
           navigation.replace(screenName.PaymentModalScreen)
         }

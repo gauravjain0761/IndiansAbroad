@@ -31,6 +31,8 @@ import { screenName } from '../../Navigation/ScreenConstants';
 import {
   onAddCommentReplyThread,
   onDeleteCommentReplyThread,
+  onGetThreadAllComments,
+  onGetThreadDetail,
   onGetThreadRepliesComment,
 } from '../../Services/DiscussionServices';
 
@@ -52,6 +54,7 @@ export default function RepliesComments() {
       activePostAllComments?.filter(obj => obj._id == params?.commentId)[0],
     );
   }, [activePostAllComments]);
+
 
   useEffect(() => {
     if (params?.isThread) {
@@ -77,19 +80,18 @@ export default function RepliesComments() {
       },
       onSuccess: () => {
         if (params?.isThread) {
-          dispatch(
-            onGetThreadRepliesComment({
-              id: params?.commentId,
-            }),
-          );
+          dispatch(onGetThreadRepliesComment({ id: params?.commentId, }));
+          dispatch(onGetThreadDetail({ data: { threadId: activePost?._id, } }))
+          dispatch(onGetThreadAllComments({ id: activePost?._id }))
         } else {
           dispatch(
             onGetRepliesComment({
               data: { postId: params?.postId, commentId: params?.commentId },
             }),
           );
+          onGetAllCommentCall()
         }
-        onGetAllCommentCall()
+
       },
     };
     dispatch(
@@ -179,7 +181,14 @@ export default function RepliesComments() {
                 id: params?.commentId,
               }),
             );
-            onGetAllCommentCall()
+            dispatch(onGetThreadDetail({
+              data: {
+                threadId: activePost?._id,
+              }
+            }))
+            dispatch(onGetThreadAllComments({
+              id: activePost?._id
+            }))
           },
         };
         dispatch(onAddCommentReplyThread(obj));
@@ -269,10 +278,7 @@ export default function RepliesComments() {
                         ? activeComment?.user?.last_Name
                         : activeComment?.createdBy?.last_Name}
                     </Text>
-                    <Text style={styles.degreeText}>
-                      {activeComment?.user?.profession},{' '}
-                      {activeComment?.user?.region}
-                    </Text>
+                    <Text style={styles.degreeText}>{activeComment?.user ? activeComment?.user?.profession : activeComment?.createdBy?.profession}, {activeComment?.user ? activeComment?.user?.region : activeComment?.createdBy?.region}</Text>
                     <Text style={styles.commentText2}>
                       {activeComment?.comment}
                     </Text>

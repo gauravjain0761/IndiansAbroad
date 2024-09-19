@@ -21,7 +21,7 @@ import { io } from 'socket.io-client';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { sendData, socket } from '../../Socket/Socket';
 import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
-import { ADD_ONE_MESSAGE, SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
+import { ADD_ONE_MESSAGE, IS_LOADING, SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -30,6 +30,9 @@ import { createThumbnail } from 'react-native-create-thumbnail';
 import DocumentPicker, { pick } from 'react-native-document-picker';
 import { api } from '../../utils/apiConstants';
 import { errorToast } from '../../utils/commonFunction';
+import Pdf from 'react-native-pdf';
+import CommonButton from '../../Components/CommonButton';
+import { wp } from '../../Themes/Fonts';
 
 export default function MediaWithInputScreen() {
     const { chatMessageList, user, followerList, activeChatRoomUser, allChatMessageCount } = useSelector(e => e.common);
@@ -43,7 +46,7 @@ export default function MediaWithInputScreen() {
         let data = {}
         data.createdBy = user?._id
         data.content = message.trim()
-        data.content_type = params?.result?.type?.includes('image') ? 'image/*' : 'video/*'
+        data.content_type = params?.result.type.includes('pdf') ? 'file/*' : params?.result?.type?.includes('image') ? 'image/*' : 'video/*'
         data.chatId = activeChatRoomUser?.chatId
         data.readBy = user?._id
         data['file'] = {
@@ -51,12 +54,15 @@ export default function MediaWithInputScreen() {
             type: params?.result.type, // or photo.type image/jpg
             name: params?.result.name
         }
+        dispatchAction(dispatch, IS_LOADING, true)
         formDataApiCall(api.addMessage, data, (res) => {
             console.log('red-----', res)
             navigation.goBack()
+            dispatchAction(dispatch, IS_LOADING, false)
             dispatchAction(dispatch, ADD_ONE_MESSAGE, res?.data)
         }, (err) => {
             console.log(err)
+            dispatchAction(dispatch, IS_LOADING, false)
         })
     }
 
@@ -67,23 +73,46 @@ export default function MediaWithInputScreen() {
                 {params?.result?.type?.includes('image') ?
                     <Image source={{ uri: params?.result?.uri }} style={styles.image} />
                     :
-                    <Video
-                        // Can be a URL or a local file.
-                        source={{ uri: params?.result?.uri }}
-                        playInBackground={false}
-                        paused={true}
-                        muted={false}
-                        controls={true}
-                        resizeMode={'contain'}
-                        poster={params?.result?.thumbnail}
-                        posterResizeMode='cover'
-                        onError={(err) => console.log(err)}
-                        style={styles.backgroundVideo}
-                    />
+                    params?.result?.type?.includes('pdf') ?
+                        <Pdf
+                            trustAllCerts={false}
+                            source={{ uri: params?.result?.uri }}
+                            onLoadComplete={(numberOfPages, filePath) => {
+                                console.log(`Number of pages: ${numberOfPages}`);
+                            }}
+                            onPageChanged={(page, numberOfPages) => {
+                                console.log(`Current page: ${page}`);
+                            }}
+                            onError={(error) => {
+                                console.log('error---', error);
+                            }}
+                            onPressLink={(uri) => {
+                                console.log(`Link pressed: ${uri}`);
+                            }}
+                            style={{ flex: 1, backgroundColor: colors.white }} />
+                        :
+                        <Video
+                            // Can be a URL or a local file.
+                            source={{ uri: params?.result?.uri }}
+                            playInBackground={false}
+                            paused={true}
+                            muted={false}
+                            controls={true}
+                            resizeMode={'contain'}
+                            poster={params?.result?.thumbnail}
+                            posterResizeMode='cover'
+                            onError={(err) => console.log(err)}
+                            style={styles.backgroundVideo}
+                        />
                 }
             </View>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
-                <ChatInput showMediaAdd={false} message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
+                {params?.result?.type?.includes('pdf') ?
+                    <CommonButton onPress={() => onSendMessage()} title={'Send'} extraStyle={{ marginHorizontal: wp(20) }} />
+                    :
+                    <ChatInput showMediaAdd={false} message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
+
+                }
             </KeyboardAvoidingView>
         </SafeAreaView>
     )

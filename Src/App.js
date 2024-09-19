@@ -75,7 +75,6 @@ function App() {
     <StripeProvider
       publishableKey={api.PUBLIC_KEY_STRIPE}
       merchantIdentifier="merchant.online.indiansabroad" // required for Apple Pay
-    // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
     >
       <View style={ApplicationStyles.applicationView}>
         <RootContainer />
@@ -92,27 +91,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
     width: SCREEN_WIDTH,
-    // paddingRight: 50,
-    // borderRadius: 5,
-    // borderLeftWidth: 6,
-    // borderLeftColor: colors.red_ED7C7C,
-    // borderWidth: 1.5,
-    // borderColor: colors.red_ED7C7C,
   },
   textStyleToastSuccess: {
     backgroundColor: colors.green_20CA60,
     paddingVertical: 10,
     paddingHorizontal: 30,
     width: SCREEN_WIDTH,
-    // paddingRight: 50,
-    // borderRadius: 5,
-    // borderLeftWidth: 6,
-    // borderLeftColor: colors.green_20CA60,
-    // borderWidth: 1.5,
-    // borderColor: colors.green_20CA60,
   },
   textStyleToast: {
-    // marginLeft: hp(2)
     ...FontStyle(16, colors.white),
     textAlign: 'center',
   },
