@@ -138,6 +138,7 @@ export default function Input({
           keyboardType={keyboardType ? keyboardType : 'default'}
           multiline={isPassword ? false : true}
           editable={editable}
+          maxLength={maxLength}
         />
         {isPassword && (
           <TouchableOpacity onPress={() => setpasswordHide(!passwordHide)}>
