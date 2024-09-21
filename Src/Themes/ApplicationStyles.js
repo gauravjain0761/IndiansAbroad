@@ -23,6 +23,9 @@ export default ApplicationStyles = StyleSheet.create({
   titleText: {
     ...FontStyle(27, colors.white, '700',),
   },
+  titleTextBlack: {
+    ...FontStyle(27, colors.neutral_900, '700',),
+  },
   backIcon: {
     borderWidth: 1,
     paddingHorizontal: 10,

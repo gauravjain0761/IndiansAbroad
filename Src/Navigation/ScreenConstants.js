@@ -72,5 +72,6 @@ export const screenName = {
   PageMessaging: "PageMessaging",
   ChatRoomUsersScreen: "ChatRoomUsersScreen",
   MediaPreviewScreen: 'MediaPreviewScreen',
-  PaymentAddressScreen: "PaymentAddressScreen"
+  PaymentAddressScreen: "PaymentAddressScreen",
+  EditGroup: "EditGroup"
 };

@@ -1,17 +1,13 @@
-import { FlatList, Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
 import colors from '../../Themes/Colors'
-import { errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction'
-import { hp, SCREEN_WIDTH, wp } from '../../Themes/Fonts'
+import { FontStyle, ImageStyle } from '../../utils/commonFunction'
+import { hp, wp } from '../../Themes/Fonts'
 import CommonButton from '../../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
-import moment from 'moment'
-import { initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native';
 import { useDispatch, useSelector } from 'react-redux'
-import { dispatchAction } from '../../utils/apiGlobal'
-import { IS_LOADING } from '../../Redux/ActionTypes'
 import { onGetPlanList } from '../../Services/PaymentService'
 import NoDataFound from '../../Components/NoDataFound'
 import { screenName } from '../../Navigation/ScreenConstants'
@@ -34,56 +30,54 @@ export default function PaymentModalScreen() {
 
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView style={ApplicationStyles.flex}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.closeStyle}>
-                        <Image source={Icons.closeRound} style={[ImageStyle(30, 30), { tintColor: colors.white }]} />
-                    </TouchableOpacity>
-                    <ScrollView style={styles.whiteView}>
-                        <View style={{ marginVertical: 20 }}>
-                            <Text style={styles.des}>The ultimate community app designed to support, connect, and empower Indians living abroad.</Text>
-                            <Text></Text>
-                            <Text style={[styles.des, { color: colors.primary_500 }]}>An app for Indians by Indians.</Text>
-                            <Text></Text>
-                            {planList &&
-                                <FlatList
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView style={ApplicationStyles.flex}>
+                <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.closeStyle}>
+                    <Image source={Icons.closeRound} style={[ImageStyle(30, 30), { tintColor: colors.black }]} />
+                </TouchableOpacity>
+                <ScrollView style={styles.whiteView}>
+                    <View style={{ marginVertical: 20 }}>
+                        <Text style={styles.des}>The ultimate community app designed to support, connect, and empower Indians living abroad.</Text>
+                        <Text></Text>
+                        <Text style={[styles.des, { color: colors.primary_500 }]}>An app for Indians by Indians.</Text>
+                        <Text></Text>
+                        {planList &&
+                            <FlatList
+                                style={styles.flatlist}
+                                columnWrapperStyle={styles.column}
+                                numColumns={2}
+                                bounces={false}
+                                data={[...planList]}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item }) => {
+                                    return (
+                                        <TouchableOpacity onPress={() => setselectedPlan(item?._id)}>
+                                            <Text style={styles.des}>{item?.title}</Text>
+                                            <View style={[styles.middleView, { borderColor: item?._id == selectedPlan ? colors?.secondary_750 : colors.neutral_800, backgroundColor: item?._id == selectedPlan ? colors?.secondary_500 : colors.neutral_300 }]}>
+                                                <Text style={styles.rsText}>Only ${item?.sell_price}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    );
+                                }}
+                                showsVerticalScrollIndicator={false}
 
-                                    style={styles.flatlist}
-                                    columnWrapperStyle={styles.column}
-                                    numColumns={2}
-                                    bounces={false}
-                                    data={[...planList]}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    renderItem={({ item }) => {
-                                        return (
-                                            <TouchableOpacity onPress={() => setselectedPlan(item?._id)}>
-                                                <Text style={styles.des}>{item?.title}</Text>
-                                                <View style={[styles.middleView, { borderColor: item?._id == selectedPlan ? colors?.secondary_750 : colors.neutral_800, backgroundColor: item?._id == selectedPlan ? colors?.secondary_500 : colors.neutral_300 }]}>
-                                                    <Text style={styles.rsText}>Only ${item?.sell_price}</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        );
-                                    }}
-                                    showsVerticalScrollIndicator={false}
-
-                                    ListEmptyComponent={<NoDataFound />}
-                                />
-                            }
-                            {selectedPlan &&
-                                <Text style={styles.des}>
-                                    {'\n'}{'\n'}Our mission is to create a support network and form a huge Indian Expat community online.
-                                    {'\n'}{'\n'}
-                                    Therefore we are providing a boat load of services only for ${planList.filter(obj => obj?._id == selectedPlan)[0].sell_price} a {planList.filter(obj => obj?._id == selectedPlan)[0].duration == 1 ? 'month' : (planList.filter(obj => obj?._id == selectedPlan)[0].duration + ' months')}.
-                                    {'\n'}{'\n'}
-                                    With your support we can make this mission successful, so let's thrive together.
-                                </Text>
-                            }
-                        </View>
-
-                    </ScrollView>
-                    <CommonButton title={'Next'} onPress={() => navigation.navigate(screenName.PaymentAddressScreen, { selectedPlan: selectedPlan })} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
-                </SafeAreaView>
-            </ImageBackground>
+                                ListEmptyComponent={<NoDataFound />}
+                            />
+                        }
+                        {selectedPlan &&
+                            <Text style={styles.des}>
+                                {'\n'}{'\n'}Our mission is to create a support network and form a huge Indian Expat community online.
+                                {'\n'}{'\n'}
+                                Therefore we are providing a boat load of services only for ${planList.filter(obj => obj?._id == selectedPlan)[0].sell_price} a {planList.filter(obj => obj?._id == selectedPlan)[0].duration == 1 ? 'month' : (planList.filter(obj => obj?._id == selectedPlan)[0].duration + ' months')}.
+                                {'\n'}{'\n'}
+                                With your support we can make this mission successful, so let's thrive together.
+                            </Text>
+                        }
+                    </View>
+                </ScrollView>
+                <CommonButton title={'Next'} onPress={() => navigation.navigate(screenName.PaymentAddressScreen, { selectedPlan: selectedPlan })} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
+            </SafeAreaView>
+            {/* </ImageBackground> */}
         </View>
     )
 }

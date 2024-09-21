@@ -28,34 +28,34 @@ export default function Walkthrough() {
     const insets = useSafeAreaInsets();
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView style={ApplicationStyles.flex}>
-                    <View style={[styles.headerPosition, { top: insets.top }]}>
-                        <Header showLeft logoShow={false} />
-                    </View>
-                    <PagerView ref={PagerViewRef} onPageSelected={e => { setpage(e.nativeEvent.position) }} style={[ApplicationStyles.flex, { marginTop: wp(40) }]} initialPage={0}>
-                        {data.map((item, index) => {
-                            return (
-                                <View key={index} style={[ApplicationStyles.flex]}>
-                                    {/* <View style={{ marginBottom: 20 }}> */}
-                                    <Image source={item.image} style={{ width: SCREEN_WIDTH, height: '70%', resizeMode: 'contain', marginBottom: 10 }} />
-                                    {/* </View> */}
-                                    <Text style={{ ...FontStyle(18, colors.white, '700'), marginHorizontal: wp(10), marginBottom: 10 }}>{item.title}</Text>
-                                    <Text style={{ ...FontStyle(14, colors.white), marginHorizontal: wp(10), lineHeight: 22 }}>{item.des}</Text>
-                                </View>
-                            )
-                        })}
-                    </PagerView>
-                    {page < data.length - 1 ?
-                        <TouchableOpacity onPress={() => PagerViewRef.current.setPage(page + 1)} >
-                            <Image source={Icons.Arrow_circle_right} style={styles.rightIcon} />
-                        </TouchableOpacity>
-                        : <CommonButton title={'Explore'} onPress={() => resetNavigation('Home')} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView style={ApplicationStyles.flex}>
+                <View style={[styles.headerPosition, { top: insets.top }]}>
+                    <Header showLeft logoShow={false} />
+                </View>
+                <PagerView ref={PagerViewRef} onPageSelected={e => { setpage(e.nativeEvent.position) }} style={[ApplicationStyles.flex, { marginTop: wp(40) }]} initialPage={0}>
+                    {data.map((item, index) => {
+                        return (
+                            <View key={index} style={[ApplicationStyles.flex]}>
+                                {/* <View style={{ marginBottom: 20 }}> */}
+                                <Image source={item.image} style={{ width: SCREEN_WIDTH, height: '70%', resizeMode: 'contain', marginBottom: 10 }} />
+                                {/* </View> */}
+                                <Text style={{ ...FontStyle(18, colors.neutral_900, '700'), marginHorizontal: wp(10), marginBottom: 10 }}>{item.title}</Text>
+                                <Text style={{ ...FontStyle(14, colors.neutral_900), marginHorizontal: wp(10), lineHeight: 22 }}>{item.des}</Text>
+                            </View>
+                        )
+                    })}
+                </PagerView>
+                {page < data.length - 1 ?
+                    <TouchableOpacity onPress={() => PagerViewRef.current.setPage(page + 1)} >
+                        <Image source={Icons.Arrow_circle_right} style={styles.rightIcon} />
+                    </TouchableOpacity>
+                    : <CommonButton title={'Explore'} onPress={() => resetNavigation('Home')} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
 
-                        // : <CommonButton title={'Explore'} onPress={() => navigation.navigate(screenName.PaymentModalScreen)} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
-                    }
-                </SafeAreaView>
-            </ImageBackground>
+                    // : <CommonButton title={'Explore'} onPress={() => navigation.navigate(screenName.PaymentModalScreen)} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
+                }
+            </SafeAreaView>
+            {/* </ImageBackground> */}
         </View>
     )
 }
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     rightIcon: {
         width: 50,
         height: 50,
-        tintColor: colors.white,
+        tintColor: colors.neutral_900,
         marginBottom: 10,
         alignSelf: 'center'
     },

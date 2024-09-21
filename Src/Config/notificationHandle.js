@@ -26,13 +26,13 @@ export const onBackgroundNotificationPress = () => {
 };
 
 export const onMessage = () => {
-  if (Platform.OS === 'android') {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('A new FCM message arrived! ACTIVE APP', remoteMessage);
-      onDisplayNotification(remoteMessage);
-    });
-    return unsubscribe;
-  }
+  // if (Platform.OS === 'android') {
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    console.log('A new FCM message arrived! ACTIVE APP', remoteMessage);
+    onDisplayNotification(remoteMessage);
+  });
+  return unsubscribe;
+  // }
 };
 
 async function onDisplayNotification(message) {

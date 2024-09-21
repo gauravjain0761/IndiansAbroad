@@ -22,7 +22,7 @@ import ConfirmationModal from '../../Components/ConfirmationModal';
 export default function GroupDetailScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const { chatMessageList, user, activeChatRoomUser, activeChatDetails, activeChatMediaLinks } = useSelector(e => e.common);
+    const { user, activeChatRoomUser, activeChatDetails, activeChatMediaLinks } = useSelector(e => e.common);
     const [tabSelection, setTabSelection] = useState('media');
     const [visible, setVisible] = useState(false);
     const listData = [1, 2, 3, 4]
@@ -44,7 +44,6 @@ export default function GroupDetailScreen() {
             }
         ))
     }
-
 
     useEffect(() => {
         let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
@@ -87,9 +86,9 @@ export default function GroupDetailScreen() {
                             }
                             onRequestClose={hideMenu}
                             style={styles.menu}>
-                            <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { }, 500); }}>
+                            {user?._id == activeChatDetails?.createdBy?._id && <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { navigation.navigate(screenName.EditGroup) }, 500); }}>
                                 Edit
-                            </MenuItem>
+                            </MenuItem>}
                             <MenuItem textStyle={styles.itemText} onPress={() => { hideMenu(), setTimeout(() => { setleaveGroupModal(true) }, 500) }}>
                                 Leave Group
                             </MenuItem>

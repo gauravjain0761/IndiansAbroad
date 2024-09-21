@@ -96,7 +96,7 @@ export default function PageMessaging() {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
                     if (item?.createdBy?._id !== user._id) {
-                        return <ReciverMsg data={item} />;
+                        return <ReciverMsg isPage={true} data={item} />;
                     } else {
                         return <SenderMsg data={item} />;
                     }

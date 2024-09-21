@@ -60,56 +60,56 @@ export default function OTPScreen() {
 
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <Header showLeft logoShow={false} />
-                    <View style={{ marginHorizontal: wp(20) }}>
-                        <Text style={styles.title}>OTP Verification</Text>
-                        <Text style={styles.des}>We have sent a verification code to</Text>
-                        <Text style={styles.des}>{params?.code}-{params?.phone}</Text>
-                        <CodeField
-                            ref={ref}
-                            {...props}
-                            value={value}
-                            onChangeText={setValue}
-                            cellCount={CELL_COUNT}
-                            rootStyle={styles.codeFieldRoot}
-                            keyboardType="number-pad"
-                            textContentType="oneTimeCode"
-                            autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
-                            testID="my-code-input"
-                            renderCell={({ index, symbol, isFocused }) => (
-                                <Text
-                                    key={index}
-                                    style={[styles.cell, isFocused && styles.focusCell]}
-                                    onLayout={getCellOnLayoutHandler(index)}>
-                                    {symbol || (isFocused ? <Cursor /> : null)}
-                                </Text>
-                            )}
-                        />
-                        <CommonButton title={'Verify'} onPress={() => onPressVerify()} />
-                        <TouchableOpacity onPress={() => { onResendOtp() }} style={styles.signUpView}>
-                            <Text style={styles.signUpText}>Didn't receive the code? <Text style={{ color: colors.primary_500 }}>Resend</Text></Text>
-                        </TouchableOpacity>
-                    </View>
-                </SafeAreaView>
-            </ImageBackground>
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView style={{ flex: 1 }}>
+                <Header showLeft logoShow={false} />
+                <View style={{ marginHorizontal: wp(20) }}>
+                    <Text style={styles.title}>OTP Verification</Text>
+                    <Text style={styles.des}>We have sent a verification code to</Text>
+                    <Text style={styles.des}>{params?.code}-{params?.phone}</Text>
+                    <CodeField
+                        ref={ref}
+                        {...props}
+                        value={value}
+                        onChangeText={setValue}
+                        cellCount={CELL_COUNT}
+                        rootStyle={styles.codeFieldRoot}
+                        keyboardType="number-pad"
+                        textContentType="oneTimeCode"
+                        autoComplete={Platform.select({ android: 'sms-otp', default: 'one-time-code' })}
+                        testID="my-code-input"
+                        renderCell={({ index, symbol, isFocused }) => (
+                            <Text
+                                key={index}
+                                style={[styles.cell, isFocused && styles.focusCell]}
+                                onLayout={getCellOnLayoutHandler(index)}>
+                                {symbol || (isFocused ? <Cursor /> : null)}
+                            </Text>
+                        )}
+                    />
+                    <CommonButton title={'Verify'} onPress={() => onPressVerify()} />
+                    <TouchableOpacity onPress={() => { onResendOtp() }} style={styles.signUpView}>
+                        <Text style={styles.signUpText}>Didn't receive the code? <Text style={{ color: colors.primary_500 }}>Resend</Text></Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+            {/* </ImageBackground> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    title: { ...FontStyle(24, colors.white, '700'), marginBottom: hp(20) },
-    des: { ...FontStyle(14, colors.white), },
+    title: { ...FontStyle(24, colors.neutral_900, '700'), marginBottom: hp(20) },
+    des: { ...FontStyle(14, colors.neutral_900), },
     codeFieldRoot: { marginVertical: 30, },
-    cell: { width: 45, height: 45, borderWidth: 5, borderColor: colors.white, textAlign: 'center', ...FontStyle(20, colors.white, '700'), textAlignVertical: 'center' },
+    cell: { width: 45, height: 45, borderWidth: 5, borderColor: colors.neutral_900, textAlign: 'center', ...FontStyle(20, colors.neutral_900, '700'), textAlignVertical: 'center' },
     focusCell: { borderColor: '#fff', },
     signUpView: {
         marginTop: 10,
         alignSelf: 'center'
     },
     signUpText: {
-        ...FontStyle(14, colors.white),
+        ...FontStyle(14, colors.neutral_900),
         marginVertical: 10
     }
 })

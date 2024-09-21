@@ -19,27 +19,27 @@ export default function SecurityScreen() {
     const { navigate } = useNavigation()
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView style={ApplicationStyles.flex}>
-                    <Header showLeft title={''} />
-                    <View style={styles.transparent}>
-                        <Image source={Icons.logo} style={ImageStyle(90, 90)} />
-                        <Text style={ApplicationStyles.titleText}>IndiansAbroad</Text>
-                        <Text style={styles.title2}>Dear IndiansAbroad Member</Text>
-                        <View style={styles.rowView}>
-                            <Image source={Icons.Verified_user} style={ImageStyle(28, 28)} />
-                            <Text style={styles.des2}>Your privacy is our priority</Text>
-                        </View>
-                        <Text style={styles.des}>We are requesting your information solely to help you join our platform and deliver exceptional services. We guarantee that your information will not be shared with anyone for any other purpose.</Text>
-                        <CommonButton title={"Let's go"} onPress={() => navigate(screenName.SignupScreen)} extraStyle={styles.btn} />
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView style={ApplicationStyles.flex}>
+                <Header showLeft title={''} />
+                <View style={styles.transparent}>
+                    <Image source={Icons.logo} style={ImageStyle(90, 90)} />
+                    <Text style={ApplicationStyles.titleTextBlack}>IndiansAbroad</Text>
+                    <Text style={styles.title2}>Dear IndiansAbroad Member</Text>
+                    <View style={styles.rowView}>
+                        <Image source={Icons.Verified_user} style={ImageStyle(28, 28)} />
+                        <Text style={styles.des2}>Your privacy is our priority</Text>
                     </View>
-                </SafeAreaView>
-                <SafeAreaView>
-                    <Text style={[FontStyle(20, colors.white, '700'), { textAlign: 'center' }]}>Connecting Indian Expats Worldwide</Text>
-                    <Text style={[FontStyle(18, colors.neutral_300, '700'), { textAlign: 'center' }]}>An app for Indians by Indians </Text>
-                </SafeAreaView>
+                    <Text style={styles.des}>We are requesting your information solely to help you join our platform and deliver exceptional services. We guarantee that your information will not be shared with anyone for any other purpose.</Text>
+                    <CommonButton title={"Let's go"} onPress={() => navigate(screenName.SignupScreen)} extraStyle={styles.btn} />
+                </View>
+            </SafeAreaView>
+            <SafeAreaView>
+                <Text style={[FontStyle(20, colors.neutral_900, '700'), { textAlign: 'center' }]}>Connecting Indian Expats Worldwide</Text>
+                <Text style={[FontStyle(18, colors.primary_500, '700'), { textAlign: 'center' }]}>An app for Indians by Indians </Text>
+            </SafeAreaView>
 
-            </ImageBackground>
+            {/* </ImageBackground> */}
         </View>
     )
 }
@@ -47,7 +47,7 @@ export default function SecurityScreen() {
 const styles = StyleSheet.create({
     transparent: {
         // paddingTop: 15,
-        // backgroundColor: colors.whiteOpacity,
+        // backgroundColor: colors.neutral_900Opacity,
         marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
         // flex: 1
     },
     loginText: {
-        ...FontStyle(24, colors.white, '700'),
+        ...FontStyle(24, colors.neutral_900, '700'),
         alignSelf: 'center',
         marginVertical: 10
     },
     des: {
-        ...FontStyle(16, colors.white),
+        ...FontStyle(16, colors.neutral_900),
         alignSelf: 'center',
         marginBottom: 20
     },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     forgotText: {
-        ...FontStyle(14, colors.white),
+        ...FontStyle(14, colors.neutral_900),
         paddingVertical: 15
     },
     signUpView: {
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     signUpText: {
-        ...FontStyle(14, colors.white),
+        ...FontStyle(14, colors.neutral_900),
         marginVertical: 10
     },
     title2: {
-        ...FontStyle(28, colors.white, '700'),
+        ...FontStyle(28, colors.neutral_900, '700'),
         textAlign: 'center',
         marginTop: 30,
         lineHeight: 30
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         gap: 5
     },
     des2: {
-        ...FontStyle(18, colors.white, '700'),
+        ...FontStyle(18, colors.neutral_900, '700'),
     },
     btn: {
         marginTop: hp(50),

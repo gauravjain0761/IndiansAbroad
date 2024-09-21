@@ -37,7 +37,6 @@ export default function DiscussionForumDetail() {
         }))
     }, [])
 
-    console.log('activePostAllComments===', JSON.stringify(activePostAllComments))
 
     const onOpenReplies = (item) => {
         dispatchAction(dispatch, SET_REPLIES_COMMENTS, undefined)

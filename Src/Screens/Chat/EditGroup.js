@@ -15,18 +15,20 @@ import Input from '../../Components/Input';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import ActionSheet from '../../Components/ActionSheet';
 import ReactNativeModal from 'react-native-modal';
-import { IS_LOADING, SET_MAIN_FOLLOWER_LIST } from '../../Redux/ActionTypes';
+import { IS_LOADING, SET_ACTIVE_CHAT_ROOM_USER } from '../../Redux/ActionTypes';
 import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import NoDataFound from '../../Components/NoDataFound';
 import CommonButton from '../../Components/CommonButton';
-import { onGetGroupCreateUser } from '../../Services/ChatServices';
+import { onGetChatDetail, onGetGroupCreateUser } from '../../Services/ChatServices';
 import { api } from '../../utils/apiConstants';
 
 
-export default function CreateGroup() {
+export default function EditGroup() {
   const { navigate, goBack } = useNavigation();
   const [searchText, setSearchText] = useState('');
   const dispatch = useDispatch();
+  const { chatMessageList, user, groupCreateAllUsers, activeChatRoomUser, activeChatDetails, activeChatMediaLinks } = useSelector(e => e.common);
+
   const actionItems = [
     {
       id: 1,
@@ -48,7 +50,6 @@ export default function CreateGroup() {
   const [image, setimage] = useState(undefined)
   const [groupName, setgroupName] = useState('')
   const [des, setdes] = useState('')
-  const { user, groupCreateAllUsers } = useSelector(e => e.common)
   const [list, setlist] = useState(undefined)
   const [selectedUsers, setselectedUsers] = useState([])
 
@@ -65,6 +66,22 @@ export default function CreateGroup() {
     }
     dispatch(onGetGroupCreateUser(obj))
   }, [])
+  console.log(activeChatDetails, image, activeChatRoomUser?.chatId)
+
+  useEffect(() => {
+    setgroupName(activeChatDetails?.chatName)
+    setdes(activeChatDetails?.chatDesc)
+    if (activeChatDetails?.users?.length > 0) {
+      let user = activeChatDetails?.users?.filter(obj => obj._id !== user?._id)
+      let temp = []
+      user.forEach(element => {
+        temp.push(element?._id)
+      });
+      setselectedUsers(temp)
+    }
+    setimage(activeChatDetails?.chatLogo?.length > 0 ? activeChatDetails?.chatLogo[0]?.location : undefined)
+  }, [])
+
 
 
   const setSelect = (id) => {
@@ -93,7 +110,7 @@ export default function CreateGroup() {
       }).then(image => {
         setimage(image)
       }).catch(error => { console.log('err---', error); });
-    }, 500);
+    }, 1000);
   };
   const openGallery = () => {
     closeActionSheet()
@@ -132,7 +149,7 @@ export default function CreateGroup() {
     setlist(arr)
   }
 
-  const onCreateGroup = () => {
+  const onEditGroup = () => {
     if (groupName.trim() == '') {
       errorToast('Please enter group name')
     } else if (des.trim() == '') {
@@ -141,6 +158,7 @@ export default function CreateGroup() {
       errorToast('Please select at least one member')
     } else {
       let data = {}
+      data.chatId = activeChatRoomUser?.chatId
       data.chatName = groupName.trim()
       data.chatDesc = des.trim()
       data.isGroupChat = true
@@ -156,9 +174,11 @@ export default function CreateGroup() {
       selectedUsers.map((element, index) => {
         data['users' + "[" + index + "]"] = element
       })
-      data['users' + "[" + selectedUsers.length + "]"] = user?._id
+      // data['users' + "[" + selectedUsers.length + "]"] = user?._id
       dispatchAction(dispatch, IS_LOADING, true)
-      formDataApiCall(api.createGroup, data, (res) => {
+      formDataApiCall(api.editGroup, data, (res) => {
+        dispatch(onGetChatDetail(obj))
+        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: { ...activeChatRoomUser?.currentUser, chatName: res?.chatName, chatLogo: res?.chatLogo }, chatId: activeChatRoomUser.chatId })
         dispatchAction(dispatch, IS_LOADING, false)
         successToast(res.msg)
         goBack()
@@ -175,7 +195,7 @@ export default function CreateGroup() {
       <View style={{ marginHorizontal: wp(20), flexDirection: 'row', alignItems: 'center', }}>
         <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.addImage}>
           {image ?
-            <Image style={{ width: 66, height: 66, borderRadius: 66 / 2 }} source={image ? { uri: image.path } : Icons.camera} />
+            <Image style={{ width: 66, height: 66, borderRadius: 66 / 2 }} source={image?.path ? { uri: image.path } : { uri: image }} />
             :
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
               <Image source={Icons.addImage1} style={styles.addImage1} />
@@ -195,7 +215,7 @@ export default function CreateGroup() {
         <TouchableOpacity style={{ height: 55, justifyContent: 'center' }} onPress={() => goBack()}>
           <Text style={styles.cancelBtn}>Cancel</Text>
         </TouchableOpacity>
-        <CommonButton onPress={() => onCreateGroup()} title={'Create'} extraStyle={{ paddingHorizontal: 20 }} />
+        <CommonButton onPress={() => onEditGroup()} title={'Edit'} extraStyle={{ paddingHorizontal: 20 }} />
       </View>
     </SafeAreaView>
   );

@@ -40,30 +40,30 @@ export default function NewPassword() {
 
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView>
-                    <Header showLeft logoShow={false} />
-                </SafeAreaView>
-                <KeyboardAvoidingView style={{ flex: 1 }} {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
-                    <ScrollView >
-                        <View style={{ marginHorizontal: wp(20) }}>
-                            <Text style={styles.title}>Reset Password</Text>
-                            <Text style={styles.des}>Set your new password</Text>
-                            <Input value={password} placeholder={'New Password'} onChangeText={(text) => setpassword(text)} isPassword />
-                            <View style={styles.hightView} />
-                            <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
-                            <CommonButton title={'Continue'} onPress={() => onSend()} extraStyle={styles.btn} />
-                        </View>
-                    </ScrollView>
-                </KeyboardAvoidingView>
-            </ImageBackground>
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView>
+                <Header showLeft logoShow={false} />
+            </SafeAreaView>
+            <KeyboardAvoidingView style={{ flex: 1 }} {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
+                <ScrollView >
+                    <View style={{ marginHorizontal: wp(20) }}>
+                        <Text style={styles.title}>Reset Password</Text>
+                        <Text style={styles.des}>Set your new password</Text>
+                        <Input value={password} placeholder={'New Password'} onChangeText={(text) => setpassword(text)} isPassword />
+                        <View style={styles.hightView} />
+                        <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
+                        <CommonButton title={'Continue'} onPress={() => onSend()} extraStyle={styles.btn} />
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+            {/* </ImageBackground> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    title: { ...FontStyle(24, colors.white, '700'), marginBottom: hp(20) },
-    des: { ...FontStyle(14, colors.white), marginBottom: hp(70) },
+    title: { ...FontStyle(24, colors.neutral_900, '700'), marginBottom: hp(20) },
+    des: { ...FontStyle(14, colors.neutral_900), marginBottom: hp(70) },
     btn: {
         marginTop: hp(50)
     },

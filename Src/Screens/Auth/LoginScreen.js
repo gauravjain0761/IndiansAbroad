@@ -55,46 +55,46 @@ export default function LoginScreen() {
 
   return (
     <View style={ApplicationStyles.applicationView}>
-      <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <Header title={''} />
-          <View style={styles.transparent}>
-            <Image source={Icons.logo} style={ImageStyle(90, 90)} />
-            <Text style={ApplicationStyles.titleText}>IndiansAbroad</Text>
-          </View>
-          <View style={{ marginHorizontal: wp(20) }}>
-            <Text style={styles.loginText}>Login</Text>
-            <Text style={styles.des}>Enter email address for login</Text>
-            <Input
-              keyboardType={'email-address'}
-              value={email}
-              placeholder={'Email Address'}
-              onChangeText={text => setemail(text)}
-            />
-            <View style={styles.hightView} />
-            <Input
-              value={password}
-              placeholder={'Password'}
-              onChangeText={text => setpassword(text)}
-              isPassword
-            />
-            <TouchableOpacity
-              onPress={() => navigation.navigate(screenName.ForgotPassword)}
-              style={styles.forotView}>
-              <Text style={styles.forgotText}>Forgot password?</Text>
-            </TouchableOpacity>
-            <CommonButton title={'Login'} onPress={() => onLogin()} />
-            <TouchableOpacity
-              onPress={() => navigation.navigate(screenName.SecurityScreen)}
-              style={styles.signUpView}>
-              <Text style={styles.signUpText}>
-                Not a member yet?{' '}
-                <Text style={{ color: colors.primary_500 }}>Sign Up</Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
-      </ImageBackground>
+      {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+      <SafeAreaView style={{ flex: 1 }}>
+        <Header title={''} />
+        <View style={styles.transparent}>
+          <Image source={Icons.logo} style={ImageStyle(90, 90)} />
+          <Text style={ApplicationStyles.titleTextBlack}>IndiansAbroad</Text>
+        </View>
+        <View style={{ marginHorizontal: wp(20) }}>
+          <Text style={styles.loginText}>Login</Text>
+          <Text style={styles.des}>Enter email address for login</Text>
+          <Input
+            keyboardType={'email-address'}
+            value={email}
+            placeholder={'Email Address'}
+            onChangeText={text => setemail(text)}
+          />
+          <View style={styles.hightView} />
+          <Input
+            value={password}
+            placeholder={'Password'}
+            onChangeText={text => setpassword(text)}
+            isPassword
+          />
+          <TouchableOpacity
+            onPress={() => navigation.navigate(screenName.ForgotPassword)}
+            style={styles.forotView}>
+            <Text style={styles.forgotText}>Forgot password?</Text>
+          </TouchableOpacity>
+          <CommonButton title={'Login'} onPress={() => onLogin()} />
+          <TouchableOpacity
+            onPress={() => navigation.navigate(screenName.SecurityScreen)}
+            style={styles.signUpView}>
+            <Text style={styles.signUpText}>
+              Not a member yet?{' '}
+              <Text style={{ color: colors.primary_500 }}>Sign Up</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      {/* </ImageBackground> */}
     </View>
   );
 }
@@ -109,12 +109,12 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   loginText: {
-    ...FontStyle(24, colors.white, '700'),
+    ...FontStyle(24, colors.neutral_900, '700'),
     alignSelf: 'center',
     marginVertical: 10,
   },
   des: {
-    ...FontStyle(16, colors.white),
+    ...FontStyle(16, colors.neutral_900),
     alignSelf: 'center',
     marginBottom: 20,
   },
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   forgotText: {
-    ...FontStyle(14, colors.white),
+    ...FontStyle(14, colors.neutral_900),
     paddingVertical: 15,
   },
   signUpView: {
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   signUpText: {
-    ...FontStyle(14, colors.white),
+    ...FontStyle(14, colors.neutral_900),
     marginVertical: 10,
   },
 });

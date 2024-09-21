@@ -20,7 +20,7 @@ import RenderFileMessageView from './RenderFileMessageView';
 import ConfirmationModal from './ConfirmationModal';
 
 
-const ReciverMsg = ({ data }) => {
+const ReciverMsg = ({ data, isPage = false }) => {
   const [visible, setVisible] = useState(false);
   const { user } = useSelector(e => e.common)
   const dispatch = useDispatch()
@@ -118,7 +118,7 @@ const ReciverMsg = ({ data }) => {
 
                   <View style={styles.nameView}>
                     <Text style={styles.nameTextStyle}>
-                      {data?.createdBy?.first_Name +
+                      {isPage ? 'Page Owner' : data?.createdBy?.first_Name +
                         ' ' +
                         data?.createdBy?.last_Name}
                     </Text>

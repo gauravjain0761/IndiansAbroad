@@ -117,78 +117,78 @@ export default function SignupScreen() {
 
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView>
-                    <Header showLeft title={''} />
-                    <KeyboardAvoidingView
-                        {...(Platform.OS === 'ios'
-                            ? {
-                                behavior: 'padding',
-                            }
-                            : {})}>
-                        <ScrollView>
-                            <View style={styles.transparent}>
-                                <Image source={Icons.logo} style={ImageStyle(75, 75)} />
-                                <Text style={styles.titleText2}>IndiansAbroad</Text>
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView>
+                <Header showLeft title={''} />
+                <KeyboardAvoidingView
+                    {...(Platform.OS === 'ios'
+                        ? {
+                            behavior: 'padding',
+                        }
+                        : {})}>
+                    <ScrollView>
+                        <View style={styles.transparent}>
+                            <Image source={Icons.logo} style={ImageStyle(75, 75)} />
+                            <Text style={styles.titleText2}>IndiansAbroad</Text>
+                        </View>
+                        <View style={{ marginHorizontal: wp(20) }}>
+                            <Text style={styles.loginText}>Sign Up</Text>
+                            <TouchableOpacity onPress={() => onPressGoogle()} style={[styles.blueButton]}>
+                                <Image source={Icons.googlePlus} style={styles.googleLogo} />
+                                <Text style={styles.publishText}>{'Sign up with google'}</Text>
+                            </TouchableOpacity>
+                            <View style={styles.orView}>
+                                <View style={styles.line} />
+                                <Text style={styles.des}>Or</Text>
+                                <View style={styles.line} />
                             </View>
-                            <View style={{ marginHorizontal: wp(20) }}>
-                                <Text style={styles.loginText}>Sign Up</Text>
-                                <TouchableOpacity onPress={() => onPressGoogle()} style={[styles.blueButton]}>
-                                    <Image source={Icons.googlePlus} style={styles.googleLogo} />
-                                    <Text style={styles.publishText}>{'Sign up with google'}</Text>
+                            <Text style={styles.des}>Please fill the details to create an account.</Text>
+                            <View style={styles.hightView} />
+                            <View style={styles.inputrow}>
+                                <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={firstName} placeholder={'First Name'} onChangeText={(text) => setfirstName(text)} />
+                                <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={lastName} placeholder={'Last Name'} onChangeText={(text) => setlastName(text)} />
+                            </View>
+                            <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
+                            <View style={styles.hightView} />
+                            <View style={[styles.inputrow, { marginBottom: 0 }]}>
+                                <TouchableOpacity
+                                    style={styles.inputContainer}
+                                    onPress={() => setShow(true)}>
+                                    <Text style={styles.inputText}>{code}</Text>
+                                    <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
                                 </TouchableOpacity>
-                                <View style={styles.orView}>
-                                    <View style={styles.line} />
-                                    <Text style={styles.des}>Or</Text>
-                                    <View style={styles.line} />
-                                </View>
-                                <Text style={styles.des}>Please fill the details to create an account.</Text>
-                                <View style={styles.hightView} />
-                                <View style={styles.inputrow}>
-                                    <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={firstName} placeholder={'First Name'} onChangeText={(text) => setfirstName(text)} />
-                                    <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={lastName} placeholder={'Last Name'} onChangeText={(text) => setlastName(text)} />
-                                </View>
-                                <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
-                                <View style={styles.hightView} />
-                                <View style={[styles.inputrow, { marginBottom: 0 }]}>
-                                    <TouchableOpacity
-                                        style={styles.inputContainer}
-                                        onPress={() => setShow(true)}>
-                                        <Text style={styles.inputText}>{code}</Text>
-                                        <Image source={Icons.down_arrow} style={ImageStyle(15, 15)} />
-                                    </TouchableOpacity>
-                                    <Input extraStyle={{ flex: 1 }} keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
-                                </View>
-                                {/* <Input type={'dob'} value={dob !== '' ? moment(dob).format('MMMM,DD YYYY') : ''} onChangeText={(text) => setdob(text)} placeholder={'Select your Birthdate'} /> */}
-
-                                <View style={styles.hightView} />
-                                <Input value={password} placeholder={'Password'} onChangeText={(text) => setpassword(text)} isPassword />
-                                <View style={styles.hightView} />
-                                <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
-                                <View style={styles.hightView} />
-                                <CommonButton title={'Next'} onPress={() => onLogin()} />
-                                <CountryPicker
-                                    // countryCode={code.replace('+', '')}
-                                    visible={show}
-                                    onClose={() => setShow(false)}
-                                    withCallingCode
-                                    onSelect={(item) => {
-                                        setcode('+' + item?.callingCode[0]);
-                                        setShow(false);
-                                    }}
-                                    withCallingCodeButton
-                                    withFilter
-                                    placeholder={''}
-                                    withEmoji={false}
-                                // withFlag
-                                />
+                                <Input extraStyle={{ flex: 1 }} keyboardType={'phone-pad'} value={mobile} placeholder={'Mobile Number'} onChangeText={(text) => setmobile(text)} />
                             </View>
-                            <View style={{ height: 100 }}></View>
-                        </ScrollView>
-                    </KeyboardAvoidingView>
-                </SafeAreaView>
+                            {/* <Input type={'dob'} value={dob !== '' ? moment(dob).format('MMMM,DD YYYY') : ''} onChangeText={(text) => setdob(text)} placeholder={'Select your Birthdate'} /> */}
 
-            </ImageBackground>
+                            <View style={styles.hightView} />
+                            <Input value={password} placeholder={'Password'} onChangeText={(text) => setpassword(text)} isPassword />
+                            <View style={styles.hightView} />
+                            <Input value={confirmPassword} placeholder={'Confirm Password'} onChangeText={(text) => setconfirmPassword(text)} isPassword />
+                            <View style={styles.hightView} />
+                            <CommonButton title={'Next'} onPress={() => onLogin()} />
+                            <CountryPicker
+                                // countryCode={code.replace('+', '')}
+                                visible={show}
+                                onClose={() => setShow(false)}
+                                withCallingCode
+                                onSelect={(item) => {
+                                    setcode('+' + item?.callingCode[0]);
+                                    setShow(false);
+                                }}
+                                withCallingCodeButton
+                                withFilter
+                                placeholder={''}
+                                withEmoji={false}
+                            // withFlag
+                            />
+                        </View>
+                        <View style={{ height: 100 }}></View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+
+            {/* </ImageBackground> */}
         </View>
     )
 }
@@ -202,15 +202,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     loginText: {
-        ...FontStyle(18, colors.white, '700'),
+        ...FontStyle(18, colors.neutral_900, '700'),
         alignSelf: 'center',
         marginVertical: 10
     },
     titleText2: {
-        ...FontStyle(20, colors.white, '700',),
+        ...FontStyle(20, colors.neutral_900, '700',),
     },
     des: {
-        ...FontStyle(12, colors.white),
+        ...FontStyle(12, colors.neutral_900),
         alignSelf: 'center',
     },
     hightView: {
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     forgotText: {
-        ...FontStyle(14, colors.white),
+        ...FontStyle(14, colors.neutral_900),
         paddingVertical: 15
     },
     signUpView: {
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     signUpText: {
-        ...FontStyle(14, colors.white),
+        ...FontStyle(14, colors.neutral_900),
         marginVertical: 10
     },
     publishText: {

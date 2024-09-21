@@ -20,6 +20,11 @@ export default function PageChatMoreMenu({ onReport, onPressDisconnect, visible,
                     <Text style={styles.text}>Clear Chat</Text>
                 </TouchableOpacity>}
 
+                <TouchableOpacity onPress={() => onClose()} style={styles.row}>
+                    <Image style={styles.image} source={Icons.close} />
+                    <Text style={styles.text}>Cancel</Text>
+                </TouchableOpacity>
+
                 <View style={{ paddingBottom: insets.bottom }} />
             </View>
         </ModalContainer>

@@ -135,6 +135,7 @@ export const api = {
   deleteMessageForMe: '/message/deletemessage',
   openChatList: '/cp/chat/list',
   deleteChat: '/chat/delete',
+  editGroup: '/chat/edit',
 
 
   acceptRejectRequest: '/follow/request/action',

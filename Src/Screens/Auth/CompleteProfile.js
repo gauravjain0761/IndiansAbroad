@@ -166,61 +166,60 @@ export default function CompleteProfile() {
 
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView style={{ flex: 1 }}>
-                    <Header showLeft logoShow={false} />
-                    <View style={{ marginHorizontal: wp(20) }}>
-                        <Text style={styles.title}>Complete Your Profile</Text>
-                        <Text style={styles.des}>To proceed, please complete your profile</Text>
-                        <Text style={styles.des}>information</Text>
-                        <TouchableOpacity style={styles.uploadPhotoView}>
-                            <View>
-                                <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.innerUploadView}>
-                                    {image ?
-                                        <Image style={styles.uploadImage} source={image ? { uri: image.path } : Icons.camera} />
-                                        :
-                                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                            <Image style={styles.cameraIcon} source={image ? { uri: image.path } : Icons.camera} />
-                                            <Text style={styles.uploadText}>{'Upload Photo'}</Text>
-                                        </View>
-                                    }
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView style={{ flex: 1 }}>
+                <Header showLeft logoShow={false} />
+                <View style={{ marginHorizontal: wp(20) }}>
+                    <Text style={styles.title}>Complete Your Profile</Text>
+                    <Text style={styles.des}>To proceed, please complete your profile</Text>
+                    <Text style={styles.des}>information</Text>
+                    <TouchableOpacity style={styles.uploadPhotoView}>
+                        <View>
+                            <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.innerUploadView}>
+                                {image ?
+                                    <Image style={styles.uploadImage} source={image ? { uri: image.path } : Icons.camera} />
+                                    :
+                                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                        <Image style={styles.cameraIcon} source={image ? { uri: image.path } : Icons.camera} />
+                                        <Text style={styles.uploadText}>{'Upload Photo'}</Text>
+                                    </View>
+                                }
+                            </TouchableOpacity>
+                            <Modal
+                                onBackdropPress={() => closeActionSheet()}
+                                isVisible={actionSheet}
+                                style={{ margin: 0, justifyContent: 'flex-end', }}>
+                                <ActionSheet actionItems={actionItems} onCancel={closeActionSheet} />
+                            </Modal>
+                        </View>
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={styles.des}>What is your gender?*</Text>
+                        <View style={styles.row}>
+                            {data.map((item, index) => (
+                                <TouchableOpacity key={index} style={[styles.genderOption, { backgroundColor: gender !== item?.title ? colors.white : colors.neutral_900 }]} onPress={() => setgender(item.title)}>
+                                    <Image style={[ImageStyle(20, 20), { tintColor: gender == item?.title ? colors.white : colors.neutral_900 }]} source={item.icon} />
+                                    <Text style={[styles.des, { color: gender == item?.title ? colors.white : colors.neutral_900 }]}>{item.title}</Text>
                                 </TouchableOpacity>
-                                <Modal
-                                    onBackdropPress={() => closeActionSheet()}
-                                    isVisible={actionSheet}
-                                    style={{ margin: 0, justifyContent: 'flex-end', }}>
-                                    <ActionSheet actionItems={actionItems} onCancel={closeActionSheet} />
-                                </Modal>
-                            </View>
-                        </TouchableOpacity>
-                        <View>
-                            <Text style={styles.des}>What is your gender?*</Text>
-                            <View style={styles.row}>
-                                {data.map((item, index) => (
-                                    <TouchableOpacity key={index} style={[styles.genderOption, { backgroundColor: gender !== item?.title ? colors.white : colors.neutral_900 }]} onPress={() => setgender(item.title)}>
-                                        <Image style={[ImageStyle(20, 20), { tintColor: gender == item?.title ? colors.white : colors.neutral_900 }]} source={item.icon} />
-                                        <Text style={[styles.des, { color: gender == item?.title ? colors.white : colors.neutral_900 }]}>{item.title}</Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
+                            ))}
                         </View>
-                        <View>
-                            <Text style={[styles.des, { marginBottom: 10 }]}>What is your Birthdate ?*</Text>
-                            <Input type={'dob'} value={dob !== '' ? moment(dob).format('MMMM,DD YYYY') : ''} onChangeText={(text) => setdob(text)} placeholder={'Select your Birthdate'} />
-                        </View>
-                        <CommonButton title={'Next'} onPress={() => onNext()} extraStyle={styles.btn} />
-
                     </View>
-                </SafeAreaView>
+                    <View>
+                        <Text style={[styles.des, { marginBottom: 10 }]}>What is your Birthdate ?*</Text>
+                        <Input type={'dob'} value={dob !== '' ? moment(dob).format('MMMM,DD YYYY') : ''} onChangeText={(text) => setdob(text)} placeholder={'Select your Birthdate'} />
+                    </View>
+                    <CommonButton title={'Next'} onPress={() => onNext()} extraStyle={styles.btn} />
 
-            </ImageBackground>
+                </View>
+            </SafeAreaView>
+            {/* </ImageBackground> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    title: { ...FontStyle(24, colors.white, '700'), },
-    des: { ...FontStyle(14, colors.white) },
+    title: { ...FontStyle(24, colors.neutral_900, '700'), },
+    des: { ...FontStyle(14, colors.neutral_900) },
     uploadPhotoView: {
         height: 126,
         width: 126,

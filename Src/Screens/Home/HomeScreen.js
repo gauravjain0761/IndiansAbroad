@@ -79,29 +79,12 @@ export default function HomeScreen() {
     }
   }, [user])
 
-
   useEffect(() => {
-    socketConnect(dispatch, flag => {
-      if (flag) {
-        /**
-         * Client server socket connection true so
-         */
-      } else {
-        /**
-         * Client server socket connection fail so
-         * TODO: Refresh popup code Goes here
-         */
-      }
-    });
+    socketConnect(dispatch, flag => { });
   }, []);
 
   const onGetAllAppUsers = () => {
-    let obj = {
-      params: {
-        search: '',
-        groupId: 'NA'
-      }
-    }
+    let obj = { params: { search: '', groupId: 'NA' } }
     dispatch(onGetGroupCreateUser(obj))
   }
 
@@ -116,11 +99,7 @@ export default function HomeScreen() {
 
   const getPostList = page => {
     let obj = {
-      data: {
-        createdBy: user?._id,
-        page: page,
-        limit: 0,
-      },
+      data: { createdBy: user?._id, page: page, limit: 0, },
       onSuccess: () => {
         setpage(page);
         setloading(false);

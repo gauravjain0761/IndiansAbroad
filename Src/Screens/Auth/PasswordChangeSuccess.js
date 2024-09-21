@@ -20,23 +20,23 @@ export default function PasswordChangeSuccess() {
     }
     return (
         <View style={ApplicationStyles.applicationView}>
-            <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}>
-                <SafeAreaView>
-                    <Header showLeft logoShow={false} />
-                </SafeAreaView>
-                <View style={styles.hightView}>
-                    <Image source={Icons.checkCircle} style={ImageStyle(130, 130)} />
-                    <Text style={styles.des}>Paasword changed successfully</Text>
-                    <CommonButton title={'Done'} onPress={() => onSend()} extraStyle={styles.btn} />
-                </View>
-            </ImageBackground>
+            {/* <ImageBackground style={ApplicationStyles.flex} source={Icons.loginBg}> */}
+            <SafeAreaView>
+                <Header showLeft logoShow={false} />
+            </SafeAreaView>
+            <View style={styles.hightView}>
+                <Image source={Icons.checkCircle} style={ImageStyle(130, 130)} />
+                <Text style={styles.des}>Paasword changed successfully</Text>
+                <CommonButton title={'Done'} onPress={() => onSend()} extraStyle={styles.btn} />
+            </View>
+            {/* </ImageBackground> */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    title: { ...FontStyle(24, colors.white, '700'), marginBottom: hp(20) },
-    des: { ...FontStyle(20, colors.white, '700'), marginTop: hp(40) },
+    title: { ...FontStyle(24, colors.neutral_900, '700'), marginBottom: hp(20) },
+    des: { ...FontStyle(20, colors.neutral_900, '700'), marginTop: hp(40) },
     btn: {
         marginTop: hp(20),
         width: '100%'

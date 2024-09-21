@@ -110,6 +110,7 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false,
         <Text style={styles.headerTextStyle}>{name}</Text>
       </TouchableOpacity>
 
+
       <TouchableOpacity onPress={() => { isPage ? setmoreMenuPage(true) : isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
         <Image source={Icons.more} style={ImageStyle(14, 14)} />
       </TouchableOpacity>
@@ -117,7 +118,7 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false,
       {moreMenuPage && <PageChatMoreMenu
         onPressClear={() => { setmoreMenuPage(false), setTimeout(() => { setclearChatModal(true) }, 500) }}
         visible={moreMenuPage}
-        onClose={() => setmoreMenu(false)} />}
+        onClose={() => setmoreMenuPage(false)} />}
 
       {moreMenu && <MessageScreenMoreMenu
         onPressClear={() => { setmoreMenu(false), setTimeout(() => { setclearChatModal(true) }, 500) }}

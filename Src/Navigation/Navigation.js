@@ -95,6 +95,7 @@ import PageMessaging from '../Screens/Chat/PageMessaging';
 import ChatRoomUsersScreen from '../Screens/Chat/ChatRoomUsersScreen';
 import MediaPreviewScreen from '../Screens/Chat/MediaPreviewScreen';
 import PaymentAddressScreen from '../Screens/Auth/PaymentAddressScreen';
+import EditGroup from '../Screens/Chat/EditGroup';
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
@@ -283,7 +284,6 @@ export default function Navigation() {
       });
   };
 
-
   useEffect(() => {
     onNotificationPress();
     onBackgroundNotificationPress();
@@ -304,7 +304,6 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CompleteProfile2} component={CompleteProfile2} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentModalScreen} component={PaymentModalScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.PaymentAddressScreen} component={PaymentAddressScreen} />
-
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.Walkthrough} component={Walkthrough} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name="Home" component={MyDrawer} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.indiansPage} component={IndiansPage} />
@@ -318,6 +317,7 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateDiscussion} component={CreateDiscussion} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MyConnections} component={MyConnections} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.CreateGroup} component={CreateGroup} />
+      <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.EditGroup} component={EditGroup} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.NotificationScreen} component={NotificationScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.IndiansPageMore} component={IndiansPageMore} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.IndiansPageUpdate} component={IndiansPageUpdate} />
@@ -358,8 +358,6 @@ export default function Navigation() {
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.GroupMediaScreen} component={GroupMediaScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.AddMemberScreen} component={AddMemberScreen} />
       <Stack.Screen options={({ navigation }) => ({ ...headerStyleTransparent })} name={screenName.MediaWithInputScreen} component={MediaWithInputScreen} />
-
-
     </Stack.Navigator>
   );
 }
