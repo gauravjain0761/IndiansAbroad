@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,23 +14,24 @@ import ReciverMsg from '../../Components/ReceiverMsg';
 import colors from '../../Themes/Colors';
 import SenderMsg from '../../Components/SenderMsg';
 import ChatInput from '../../Components/ChatInput';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {io} from 'socket.io-client';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {sendData, socket} from '../../Socket/Socket';
-import {getChatMessage, onGetUnreadMsgCount} from '../../Services/ChatServices';
-import {dispatchAction} from '../../utils/apiGlobal';
-import {SET_CHAT_DETAIL} from '../../Redux/ActionTypes';
+import { io } from 'socket.io-client';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { sendData, socket } from '../../Socket/Socket';
+import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
+import { dispatchAction } from '../../utils/apiGlobal';
+import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import moment from 'moment';
-import {FontStyle} from '../../utils/commonFunction';
-import {hp} from '../../Themes/Fonts';
+import { FontStyle } from '../../utils/commonFunction';
+import { hp } from '../../Themes/Fonts';
+import { replaceMentionValues } from 'react-native-controlled-mentions';
 export default function GroupMessaging() {
-  const {chatMessageList, user, activeChatRoomUser, allChatMessageCount} =
+  const { chatMessageList, user, tagPart, activeChatRoomUser, allChatMessageCount } =
     useSelector(e => e.common);
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -43,7 +44,6 @@ export default function GroupMessaging() {
       getData(1);
     }, []),
   );
-
   const getData = page => {
     let obj = {
       data: {
@@ -67,14 +67,16 @@ export default function GroupMessaging() {
       receivedBy: user?._id,
       chatId: activeChatRoomUser?.chatId,
     });
-    dispatch(onGetUnreadMsgCount({data: {userId: user?._id}}));
+    dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }));
   }, []);
 
   const onSendMessage = () => {
+
+    // console.log(replaceMentionValues(message, ({ id }) => `@${id}`))
     if (message.trim() !== '') {
       let messageData = {
         chatId: activeChatRoomUser?.chatId,
-        content: message.trim(),
+        content: replaceMentionValues(message.trim(), ({ id }) => `@${id}`),
         content_type: 'text/plain',
         createdBy: user?._id,
         readBy: [user?._id],
@@ -110,8 +112,8 @@ export default function GroupMessaging() {
               {today === currentDate
                 ? 'Today'
                 : yesterday === currentDate
-                ? 'Yesterday'
-                : currentDate}
+                  ? 'Yesterday'
+                  : currentDate}
             </Text>
           </View>
           <View style={styles.textLine} />
@@ -130,8 +132,8 @@ export default function GroupMessaging() {
                 {today === currentDate
                   ? 'Today'
                   : yesterday === currentDate
-                  ? 'Yesterday'
-                  : currentDate}
+                    ? 'Yesterday'
+                    : currentDate}
               </Text>
             </View>
             <View style={styles.textLine} />
@@ -157,7 +159,7 @@ export default function GroupMessaging() {
         inverted
         data={chatMessageList}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           return (
             <View>
               {checkDate(item, index)}
@@ -177,7 +179,7 @@ export default function GroupMessaging() {
               {chatMessageList && loading && (
                 <ActivityIndicator size={'large'} color={colors.black} />
               )}
-              <View style={{height: 50}} />
+              <View style={{ height: 50 }} />
             </View>
           );
         }}
@@ -187,6 +189,7 @@ export default function GroupMessaging() {
           message={message}
           setmessage={setmessage}
           onSend={() => onSendMessage()}
+          isGroup={true}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

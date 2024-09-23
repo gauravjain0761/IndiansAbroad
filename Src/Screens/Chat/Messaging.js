@@ -197,7 +197,7 @@ const Messaging = () => {
           <TouchableOpacity onPress={() => onPressReq('accept')} style={styles.button}>
             <Text style={styles.buttonText}>{'Accept'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => onPre('reject')} style={styles.button}>
+          <TouchableOpacity onPress={() => onPressReq('reject')} style={styles.button}>
             <Text style={styles.buttonText}>{'Ignore'}</Text>
           </TouchableOpacity>
         </View>
@@ -230,18 +230,23 @@ const Messaging = () => {
             );
           }}
         />}
-      {followerList?.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 ?
+      {params?.fromMyPage ?
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
           <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
         </KeyboardAvoidingView>
         :
-        <View>
+        followerList?.filter(obj => obj?.followingId?._id == activeChatRoomUser?.currentUser?._id).length > 0 ?
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
             <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
           </KeyboardAvoidingView>
-          <TouchableOpacity onPress={() => checkRequest()} style={{ position: 'absolute', zIndex: 1, left: 0, right: 0, bottom: 0, top: 0 }}>
-          </TouchableOpacity>
-        </View>
+          :
+          <View>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : null}>
+              <ChatInput message={message} setmessage={setmessage} onSend={() => onSendMessage()} />
+            </KeyboardAvoidingView>
+            <TouchableOpacity onPress={() => checkRequest()} style={{ position: 'absolute', zIndex: 1, left: 0, right: 0, bottom: 0, top: 0 }}>
+            </TouchableOpacity>
+          </View>
       }
       {messageRequestModal &&
         <MessageRequestModal userId={activeChatRoomUser?.currentUser?._id} visible={messageRequestModal} onClose={() => setmessageRequestModal(false)} />

@@ -145,7 +145,10 @@ export const api = {
   // payment
   getPlanList: '/subscription/plans/premium/list',
   buyPlan: '/subscription/buy',
-  updatePaymentStatus: '/subscription/payment/update'
+  updatePaymentStatus: '/subscription/payment/update',
+
+  // logout
+  onLogout: '/user/logout'
 };
 
 export const POST = 'POST';

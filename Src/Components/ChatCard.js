@@ -19,6 +19,7 @@ import ModalContainer from './ModalContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { onDeleteChat, onLeaveFromGroup } from '../Services/ChatServices';
 import ConfirmationModal from './ConfirmationModal';
+import RenderText from './RenderText';
 
 
 export default function ChatCard({ data, cardPress, isGroup }) {
@@ -82,9 +83,10 @@ export default function ChatCard({ data, cardPress, isGroup }) {
       <Text numberOfLines={1} style={styles.text1}>
         {isGroup ? data?.chatName : currentUser?.first_Name + ' ' + currentUser?.last_Name}
       </Text>
-      <Text numberOfLines={1} style={styles.text3}>
+      <RenderText numberOfLines={1} style={styles.text3} text={data?.latestMessage?.shareContentType == 'user' ? 'Shared user' : data?.latestMessage?.content} />
+      {/* <Text numberOfLines={1} style={styles.text3}>
         {data?.latestMessage?.shareContentType == 'user' ? 'Shared user' : data?.latestMessage?.content}
-      </Text>
+      </Text> */}
       <View style={styles.btnView}>
         <Image source={Icons.sent} style={styles.chatIcon} />
         <Text style={styles.btnText}>

@@ -23,7 +23,7 @@ export default function ChatMessageMedia({ data, onPress, type }) {
     }, [data])
 
     return (
-        <TouchableOpacity onPress={() => onPress ? onPress() : navigation.navigate(screenName.MediaPreviewScreen, { url: file })} onLongPress={() => { }} >
+        <TouchableOpacity onPress={() => onPress ? onPress() : navigation.navigate(screenName.MediaPreviewScreen, { url: data })} onLongPress={() => { }} >
             <FastImage source={data?.metadata?.contentType?.includes('video') ? data?.thumbnail : data?.location == '' ? Icons.logo : { uri: data?.location }} resizeMode={FastImage.resizeMode.cover} style={[styles.imageView, { backgroundColor: data?.location == '' ? colors.secondary_500 : undefined }]} />
             {data?.metadata?.contentType?.includes('video') && <View style={styles.mainViewPlayBtn}>
                 <View style={styles.videoPlayIcon}>

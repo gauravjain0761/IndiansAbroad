@@ -71,7 +71,7 @@ export default function ChatRoomUsersScreen() {
     const onPressItem = (item, currentUser) => {
         dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
         dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser, chatId: item._id })
-        navigate(screenName.Messaging);
+        navigate(screenName.Messaging, { fromMyPage: true });
     };
 
 

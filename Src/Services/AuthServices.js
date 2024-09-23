@@ -22,6 +22,29 @@ export const oncheckSession = (request) => async dispatch => {
         });
 };
 
+
+export const onCallLogoutApi = (request) => async dispatch => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    return makeAPIRequest({
+        method: POST,
+        url: api.onLogout,
+    })
+        .then(async (response) => {
+            removeAuthorization(dispatch)
+            resetNavigation(screenName.LoginScreen)
+            handleSuccessRes(response, request, dispatch, () => {
+                // removeAuthorization(dispatch)
+                // resetNavigation(screenName.LoginScreen)
+            });
+        })
+        .catch(error => {
+            removeAuthorization(dispatch)
+            resetNavigation(screenName.LoginScreen)
+            // handleErrorRes(error, request, dispatch);
+        });
+};
+
+
 export const onLoginApi = (request) => async dispatch => {
     dispatchAction(dispatch, IS_LOADING, true)
     return makeAPIRequest({

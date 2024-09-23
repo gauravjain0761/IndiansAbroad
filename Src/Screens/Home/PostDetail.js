@@ -26,6 +26,7 @@ import { screenName } from '../../Navigation/ScreenConstants';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import CommentInput from '../../Components/CommentInput';
 import RenderComment from '../../Components/RenderComment';
+import { replaceMentionValues } from 'react-native-controlled-mentions';
 
 export default function PostDetail() {
   const navigation = useNavigation();
@@ -134,7 +135,7 @@ export default function PostDetail() {
         data: {
           postId: activePost._id,
           createdBy: user._id,
-          comment: commentText.trim(),
+          comment: replaceMentionValues(commentText.trim(), ({ id }) => `@${id}`),
         },
         onSuccess: () => {
           setcommentText('');

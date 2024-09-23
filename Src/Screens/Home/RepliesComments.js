@@ -35,6 +35,7 @@ import {
   onGetThreadDetail,
   onGetThreadRepliesComment,
 } from '../../Services/DiscussionServices';
+import { replaceMentionValues } from 'react-native-controlled-mentions';
 
 export default function RepliesComments() {
   const { goBack } = useNavigation();
@@ -145,7 +146,7 @@ export default function RepliesComments() {
                 </Text>
                 <RenderText
                   style={styles.commentText2}
-                  text={item?.reply}></RenderText>
+                  text={item?.reply} />
                 {/* <Text style={styles.commentText2}>{item?.reply}</Text> */}
               </View>
               {item?.createdBy?._id == user._id && (
@@ -172,7 +173,7 @@ export default function RepliesComments() {
             threadId: params?.threadId,
             commentId: params?.commentId,
             createdBy: user._id,
-            reply: commentText.trim(),
+            reply: replaceMentionValues(commentText.trim(), ({ id }) => `@${id}`),
           },
           onSuccess: () => {
             setcommentText('');
@@ -198,7 +199,7 @@ export default function RepliesComments() {
             postId: params?.postId,
             commentId: params?.commentId,
             createdBy: user._id,
-            reply: commentText.trim(),
+            reply: replaceMentionValues(commentText.trim(), ({ id }) => `@${id}`),
           },
           onSuccess: () => {
             setcommentText('');
@@ -234,7 +235,6 @@ export default function RepliesComments() {
         },
       }),
     );
-
   };
 
   return (
@@ -279,9 +279,12 @@ export default function RepliesComments() {
                         : activeComment?.createdBy?.last_Name}
                     </Text>
                     <Text style={styles.degreeText}>{activeComment?.user ? activeComment?.user?.profession : activeComment?.createdBy?.profession}, {activeComment?.user ? activeComment?.user?.region : activeComment?.createdBy?.region}</Text>
-                    <Text style={styles.commentText2}>
+                    <RenderText
+                      style={styles.commentText2}
+                      text={activeComment?.comment} />
+                    {/* <Text style={styles.commentText2}>
                       {activeComment?.comment}
-                    </Text>
+                    </Text> */}
                   </View>
                 </View>
               </View>

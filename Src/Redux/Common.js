@@ -58,6 +58,7 @@ import {
   SET_EVENT_FAVORITE,
   SET_PLAN_LIST,
   SET_EVENT_ATTENDANT_COUNT,
+  SET_TAG_PART,
 } from './ActionTypes';
 
 const initialState = {
@@ -111,7 +112,8 @@ const initialState = {
   myPageChatUsers: undefined,
   allIndianRegion: undefined,
   allIndianRegionCount: 0,
-  planList: undefined
+  planList: undefined,
+  tagPart: undefined
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -704,6 +706,9 @@ export default function (state = initialState, action) {
     }
     case SET_PLAN_LIST: {
       return { ...state, planList: action.payload };
+    }
+    case SET_TAG_PART: {
+      return { ...state, tagPart: action.payload };
     }
     case LOG_OUT: {
       return initialState

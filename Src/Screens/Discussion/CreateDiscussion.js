@@ -16,7 +16,7 @@ import Header from '../../Components/Header';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../../Themes/Colors';
 import { Icons } from '../../Themes/Icons';
-import { errorToast, FontStyle, ImageStyle, successToast } from '../../utils/commonFunction';
+import { errorToast, FontStyle, ImageStyle, renameKey, successToast } from '../../utils/commonFunction';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,10 +29,12 @@ import { IS_LOADING } from '../../Redux/ActionTypes';
 import { api } from '../../utils/apiConstants';
 import { onGetThreadList } from '../../Services/DiscussionServices';
 import Video, { VideoRef } from 'react-native-video';
+import { replaceMentionValues, useMentions } from 'react-native-controlled-mentions';
+import TagUserInput from '../../Components/TagUserInput';
 
 export default function CreateDiscussion() {
   const { navigate, goBack } = useNavigation();
-  const { discussionCountry, threadList, user } = useSelector(e => e.common)
+  const { discussionCountry, threadList, user, groupCreateAllUsers } = useSelector(e => e.common)
   const [selectedType, setselectedType] = useState('')
   const [postText, setpostText] = useState('');
   const [postDes, setpostDes] = useState('');
@@ -42,6 +44,21 @@ export default function CreateDiscussion() {
   const insets = useSafeAreaInsets();
   const [selectedImage, setselectedImage] = useState(undefined)
   const [selectedImageIndex, setselectedImageIndex] = useState(undefined)
+
+  const triggersConfig = {
+    mention: {
+      trigger: '@',
+      textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+      isInsertSpaceAfterMention: true,
+    },
+  };
+
+  const { textInputProps, triggers } = useMentions({
+    value: postDes,
+    onChange: setpostDes,
+    triggersConfig
+  });
+
 
   useEffect(() => {
     setpreviewModal(false)
@@ -131,7 +148,7 @@ export default function CreateDiscussion() {
 
         data.title = postText.trim()
         data.createdBy = user._id
-        data.message = postDes.trim()
+        data.message = replaceMentionValues(postDes.trim(), ({ id }) => `@${id}`)
         data.countryId = selectedType._id
         dispatchAction(dispatch, IS_LOADING, true)
         formDataApiCall(api.createThread, data, (res) => {
@@ -175,65 +192,67 @@ export default function CreateDiscussion() {
           }}
         />
         <KeyboardAvoidingView {...(Platform.OS === 'ios' ? { behavior: 'padding', } : {})}>
-          <ScrollView>
-            <Text style={styles.startText}>Start writing</Text>
-            <Text style={styles.startText1}>
-              Your thread will be posted in the {selectedType.countryName !== 'World Wide' ? 'Local' : selectedType.countryName} discussion forum
-            </Text>
+          {/* <ScrollView nestedScrollEnabled> */}
+          <Text style={styles.startText}>Start writing</Text>
+          <Text style={styles.startText1}>
+            Your thread will be posted in the {selectedType.countryName !== 'World Wide' ? 'Local' : selectedType.countryName} discussion forum
+          </Text>
+          <TextInput
+            onChangeText={text => setpostText(text)}
+            value={postText}
+            style={styles.inputTitle}
+            placeholder="Title"
+            placeholderTextColor={colors.neutral_500}
+            multiline={true}
+          />
+          <View style={styles.inputBox}>
             <TextInput
-              onChangeText={text => setpostText(text)}
-              value={postText}
-              style={styles.inputTitle}
-              placeholder="Title"
-              placeholderTextColor={colors.neutral_500}
+              // onChangeText={text => setpostDes(text)}
+              // value={postDes}
+              {...textInputProps}
+              style={styles.input}
+              placeholder="Write Here"
               multiline={true}
+              placeholderTextColor={colors.neutral_500}
             />
-            <View style={styles.inputBox}>
-              <TextInput
-                onChangeText={text => setpostDes(text)}
-                value={postDes}
-                style={styles.input}
-                placeholder="Write Here"
-                multiline={true}
-                placeholderTextColor={colors.neutral_500}
-              />
-              <View style={styles.rowView}>
-                <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
-                  <Image source={Icons.photoUpload} style={styles.photoUpload} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
-                  <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
-                </TouchableOpacity>
+            <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
+            <View style={styles.rowView}>
+              <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
+                <Image source={Icons.photoUpload} style={styles.photoUpload} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => openDocPicker('video')} style={styles.button}>
+                <Image source={Icons.videoUpload} style={[styles.photoUpload, { bottom: 5.5, height: 34, width: 40 },]} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View>
+            {imageArray.length > 0 &&
+              <View style={styles.imageView}>
+                {imageArray.map((item, index) => {
+                  return (
+                    <View
+                    //  onPress={() => {
+                    //   if (item?.mime.includes('image')) { setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index) }
+                    // }}
+                    >
+                      {item?.mime.includes('image') ?
+                        <Image source={{ uri: item.path }} style={styles.imageStyles} />
+                        :
+                        <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
+                      }
+                      <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
+                        <Image source={Icons.closeRound} style={styles.closeIcon} />
+                      </TouchableOpacity>
+                    </View>
+                  )
+                })}
               </View>
-            </View>
-            <View>
-              {imageArray.length > 0 &&
-                <View style={styles.imageView}>
-                  {imageArray.map((item, index) => {
-                    return (
-                      <View
-                      //  onPress={() => {
-                      //   if (item?.mime.includes('image')) { setpreviewModal(true), setselectedImage(item), setselectedImageIndex(index) }
-                      // }}
-                      >
-                        {item?.mime.includes('image') ?
-                          <Image source={{ uri: item.path }} style={styles.imageStyles} />
-                          :
-                          <Image source={{ uri: item.thumbnail.path }} style={styles.imageStyles} />
-                        }
-                        <TouchableOpacity onPress={() => onDelete(index)} style={styles.closeIconStyle}>
-                          <Image source={Icons.closeRound} style={styles.closeIcon} />
-                        </TouchableOpacity>
-                      </View>
-                    )
-                  })}
-                </View>
-              }
-            </View>
-            <TouchableOpacity onPress={() => onPublish()} style={styles.blueButton}>
-              <Text style={styles.publishText}>Publish</Text>
-            </TouchableOpacity>
-          </ScrollView>
+            }
+          </View>
+          <TouchableOpacity onPress={() => onPublish()} style={styles.blueButton}>
+            <Text style={styles.publishText}>Publish</Text>
+          </TouchableOpacity>
+          {/* </ScrollView> */}
         </KeyboardAvoidingView>
       </SafeAreaView>
       {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
@@ -318,7 +337,7 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   input: {
-    height: 160,
+    height: 100,
     textAlignVertical: 'top',
     padding: 15,
     paddingLeft: 20,

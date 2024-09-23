@@ -1,46 +1,26 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  TextInput,
-  Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Platform
-} from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import Header from '../Components/Header';
-import PagerView from 'react-native-pager-view';
-import { SCREEN_HEIGHT, SCREEN_WIDTH, fontname, hp, wp } from '../Themes/Fonts';
-import { FontStyle, ImageStyle, errorToast, successToast } from '../utils/commonFunction';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, hp, wp } from '../Themes/Fonts';
+import { FontStyle, ImageStyle, errorToast, renameKey, successToast } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import SearchBar from '../Components/SearchBar';
-import ConnectCard from '../Components/ConnectCard';
-import PostCard from '../Components/PostCard';
-import ModalContainer from '../Components/ModalContainer';
 import { Icons } from '../Themes/Icons';
-import { openImagePickerForMultiple } from '../utils/Global';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import { createThumbnail } from "react-native-create-thumbnail";
-import { getalluserposts, onCreatePost } from '../Services/PostServices';
+import { getalluserposts } from '../Services/PostServices';
 import { api } from '../utils/apiConstants';
 import { dispatchAction, formDataApiCall } from '../utils/apiGlobal';
 import { IS_LOADING } from '../Redux/ActionTypes';
 import ReactNativeModal from 'react-native-modal';
-import { navigationRef } from '../Navigation/RootContainer';
-import { screenName } from '../Navigation/ScreenConstants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CommonButton from './CommonButton';
 import { getAllPagePost } from '../Services/OtherUserServices';
-import Video, { VideoRef } from 'react-native-video';
+import Video from 'react-native-video';
+import { MentionInput, replaceMentionValues, useMentions } from 'react-native-controlled-mentions';
+import RenderUserIcon from './RenderUserIcon';
+import TagUserInput from './TagUserInput';
+
 
 
 export default function CreatePost({ createPostModal, setcreatePostModal, isMyPage = false, page }) {
@@ -52,6 +32,20 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
   const [selectedImage, setselectedImage] = useState(undefined)
   const [selectedImageIndex, setselectedImageIndex] = useState(undefined)
   const { user, groupCreateAllUsers } = useSelector(e => e.common)
+
+  const triggersConfig = {
+    mention: {
+      trigger: '@',
+      textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+      isInsertSpaceAfterMention: true
+    },
+  };
+
+  const { textInputProps, triggers } = useMentions({
+    value: postText,
+    onChange: setpostText,
+    triggersConfig,
+  });
 
   useEffect(() => {
     setpreviewModal(false)
@@ -115,7 +109,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
           });
         }
       }
-      data.message = postText.trim()
+      data.message = replaceMentionValues(postText.trim(), ({ id }) => `@${id}`)
       data.createdBy = user._id
       data.shareType = 'public'
       data.type = isMyPage ? 'cppost' : 'post'
@@ -174,6 +168,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       setselectedImage(image)
     });
   }
+
   const onPressAdd = () => {
     setimageArray([...imageArray, selectedImage])
     setpreviewModal(false)
@@ -195,8 +190,16 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
           </View>
 
           <View style={styles.inputBox}>
-            {/* <TagUserModal /> */}
-            <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
+            <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
+
+            <TextInput
+              // onChangeText={text => setpostText(text)}
+              // value={postText}
+              {...textInputProps}
+              style={styles.input}
+              placeholder="Write Here"
+              multiline={true}
+              placeholderTextColor={colors.neutral_500} />
             <View style={styles.rowView}>
               <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
                 <Image source={Icons.photoUpload} style={styles.photoUpload} />
@@ -315,7 +318,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   input: {
-    height: hp(170),
+    height: 110,
     textAlignVertical: 'top',
     padding: 15,
     ...FontStyle(14, colors.neutral_900),

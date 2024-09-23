@@ -1,29 +1,44 @@
-import { FlatList, ScrollView, StyleSheet, KeyboardAvoidingView, TouchableOpacity, Text, View, Image, SafeAreaView, TextInput, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Header from '../Components/Header';
-import ApplicationStyles from '../Themes/ApplicationStyles';
-import { useNavigation } from '@react-navigation/native';
-import PostCard from '../Components/PostCard';
-import { FontStyle, ImageStyle, errorToast } from '../utils/commonFunction';
+import { StyleSheet, KeyboardAvoidingView, TouchableOpacity, View, Image, TextInput, Platform } from 'react-native'
+import React, { } from 'react'
+import { FontStyle, ImageStyle, renameKey } from '../utils/commonFunction';
 import { Icons } from '../Themes/Icons';
-import { fontname } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import RenderUserIcon from '../Components/RenderUserIcon';
-import { useDispatch, useSelector } from 'react-redux';
-import { onAddComment, onCommentLike, onDeleteComment, onGetAllComments, onGetSinglePost } from '../Services/PostServices';
-import { api } from '../utils/apiConstants';
-import { dispatchAction } from '../utils/apiGlobal';
-import { SET_LIKE_COMMENTS, SET_REPLIES_COMMENTS } from '../Redux/ActionTypes';
-import { screenName } from '../Navigation/ScreenConstants';
+import { useSelector } from 'react-redux';
+import { useMentions } from 'react-native-controlled-mentions';
+import TagUserInput from './TagUserInput';
 
 export default function CommentInput({ onComment, commentText, onChangeText, placeholder }) {
-    const { user } = useSelector(e => e.common)
+    const { user, groupCreateAllUsers } = useSelector(e => e.common)
+    const triggersConfig = {
+        mention: {
+            trigger: '@',
+            textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+            isInsertSpaceAfterMention: true,
+
+        },
+    };
+
+    const { textInputProps, triggers } = useMentions({
+        value: commentText,
+        onChange: onChangeText,
+        triggersConfig
+    });
 
     return (
         <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+            <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
+
             <View style={styles.commnetInput}>
                 <RenderUserIcon url={user?.avtar} type='user' height={46} isBorder={user?.subscribedMember} />
-                <TextInput multiline={true} value={commentText} onChangeText={(text) => onChangeText(text)} style={styles.input} placeholder={placeholder} placeholderTextColor={colors.neutral_500} />
+                <TextInput multiline={true}
+                    // value={commentText} 
+                    // onChangeText={(text) => onChangeText(text)} 
+                    // multiline={true}
+                    {...textInputProps}
+                    style={styles.input}
+                    placeholder={placeholder}
+                    placeholderTextColor={colors.neutral_500} />
                 <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                     <Image source={Icons.send} style={ImageStyle(24, 24)} />
                 </TouchableOpacity>

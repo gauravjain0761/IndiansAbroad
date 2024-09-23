@@ -12,6 +12,7 @@ import PostMoreModal from './PostMoreModal';
 import { api } from '../utils/apiConstants';
 import FastImage from 'react-native-fast-image';
 import ShareModal from './ShareModal';
+import RenderText from './RenderText';
 
 export default function DiscussionForumCard({ item, index }) {
   const [menuModal, setmenuModal] = useState(false);
@@ -22,9 +23,10 @@ export default function DiscussionForumCard({ item, index }) {
         <Text style={styles.username}>
           {item?.title}
         </Text>
-        <Text numberOfLines={2} style={styles.degreeText}>
+        <RenderText numberOfLines={2} style={styles.degreeText} text={item?.message} />
+        {/* <RenderText numberOfLines={2} style={styles.degreeText}>
           {item?.message}
-        </Text>
+        </RenderText> */}
         <View style={[ApplicationStyles.row]}>
           <Text style={[styles.degreeText1, { color: colors.neutral_700 }]}>
             {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}

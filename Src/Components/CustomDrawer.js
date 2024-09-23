@@ -18,6 +18,7 @@ import { resetNavigation } from '../utils/Global';
 import ConfirmationModal from './ConfirmationModal';
 import RenderUserIcon from './RenderUserIcon';
 import { dispatchAction, removeAuthorization } from '../utils/apiGlobal';
+import { onCallLogoutApi } from '../Services/AuthServices';
 
 export default function CustomDrawer() {
     const navigation = useNavigation();
@@ -86,8 +87,8 @@ ${user?.first_Name} ${user?.last_Name}`
 
     const onPressLogout = async () => {
         setlogoutModal(false)
-        removeAuthorization(dispatch)
-        resetNavigation(screenName.LoginScreen)
+        dispatch(onCallLogoutApi())
+
     }
 
     return (

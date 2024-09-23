@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
 import { hp, wp } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
-import { errorToast, FontStyle } from '../utils/commonFunction';
+import { FontStyle, renameKey } from '../utils/commonFunction';
 import DocumentPicker, { pick } from 'react-native-document-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import { dispatchAction, formDataApiCall } from '../utils/apiGlobal';
-import { api } from '../utils/apiConstants';
-import { ADD_ONE_MESSAGE } from '../Redux/ActionTypes';
 import { useNavigation } from '@react-navigation/native';
 import { screenName } from '../Navigation/ScreenConstants';
 import { createThumbnail } from 'react-native-create-thumbnail';
@@ -16,9 +13,11 @@ import TagUserInput from './TagUserInput';
 import ActionSheet from '../Components/ActionSheet'
 import Modal from 'react-native-modal';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import { useMentions } from 'react-native-controlled-mentions';
+import ApplicationStyles from '../Themes/ApplicationStyles';
+import RenderUserIcon from './RenderUserIcon';
 
-
-const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
+const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup = false }) => {
   const { user, activeChatRoomUser, groupCreateAllUsers } = useSelector(e => e.common)
   const dispatch = useDispatch()
   const navigation = useNavigation()
@@ -65,14 +64,14 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
             name: 'chatMedia_[' + time + '].' + image.path.split('.').pop()
           }
           if (type.includes('photo')) {
-            navigation.navigate(screenName.MediaWithInputScreen, { result: image })
+            navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: image })
           } else if (type.includes('video')) {
             createThumbnail({
               url: image.path,
               timeStamp: 1000,
             }).then(response => {
               image.thumbnail = response
-              navigation.navigate(screenName.MediaWithInputScreen, { result: image })
+              navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: image })
             }).catch(err => console.log('err---', err));
           }
         })
@@ -91,109 +90,157 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
         type: [DocumentPicker.types.images, DocumentPicker.types.video, DocumentPicker.types.pdf]
       })
       if (result.type.includes('image')) {
-        navigation.navigate(screenName.MediaWithInputScreen, { result: result })
+        navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
       } else if (result.type.includes('video')) {
         createThumbnail({
           url: result.uri,
           timeStamp: 1000,
         }).then(response => {
           result.thumbnail = response
-          navigation.navigate(screenName.MediaWithInputScreen, { result: result })
+          navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
         }).catch(err => console.log('err---', err));
       } else {
-
-        navigation.navigate(screenName.MediaWithInputScreen, { result: result })
-
-
-        // let data = {}
-        // data.createdBy = user?._id
-        // data.content = ''
-        // data.content_type = result.type.includes('pdf') ? 'file/*' : result.type.includes('image') ? 'image/*' : ''
-        // data.chatId = activeChatRoomUser?.chatId
-        // data.readBy = user?._id
-        // data['file'] = {
-        //   uri: result.uri,
-        //   type: result.type, // or photo.type image/jpg
-        //   name: result.name
-        // }
-        // console.log('data---', data)
-        // formDataApiCall(api.addMessage, data, (res) => {
-        //   dispatchAction(dispatch, ADD_ONE_MESSAGE, res?.data)
-        // }, (err) => {
-        //   console.log(err)
-        //   errorToast('Please try again')
-        // })
+        navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
       }
     }, 500);
   }
 
-  const onChangeText = (value, props) => {
-    const lastChar = message.substr(message.length - 1)
-    const currentChar = value.substr(value.length - 1)
-    const spaceCheck = /[^@A-Za-z_]/g
-    setmessage(value)
-    if (value.length === 0) {
-      setshowTagModal(false)
-    } else {
-      if (spaceCheck.test(lastChar) && currentChar != '@') {
-        setshowTagModal(false)
-      } else {
-        const checkSpecialChar = currentChar.match(/[^@A-Za-z_]/)
-        if (checkSpecialChar === null || currentChar === '@') {
-          const pattern = new RegExp(`\\B@[a-z0-9_-]+|\\B@`, `gi`);
-          const matches = value.match(pattern) || []
-          if (matches.length > 0) {
-            getUserSuggestions(matches[matches.length - 1])
-            setshowTagModal(true)
-          } else {
-            setshowTagModal(false)
-          }
-        } else if (checkSpecialChar != null) {
-          setshowTagModal(false)
-        }
-      }
-    }
-  }
+  // const onChangeText = (value, props) => {
+  //   const lastChar = message.substr(message.length - 1)
+  //   const currentChar = value.substr(value.length - 1)
+  //   const spaceCheck = /[^@A-Za-z_]/g
+  //   setmessage(value)
+  //   if (value.length === 0) {
+  //     setshowTagModal(false)
+  //   } else {
+  //     if (spaceCheck.test(lastChar) && currentChar != '@') {
+  //       setshowTagModal(false)
+  //     } else {
+  //       const checkSpecialChar = currentChar.match(/[^@A-Za-z_]/)
+  //       if (checkSpecialChar === null || currentChar === '@') {
+  //         const pattern = new RegExp(`\\B@[a-z0-9_-]+|\\B@`, `gi`);
+  //         const matches = value.match(pattern) || []
+  //         if (matches.length > 0) {
+  //           getUserSuggestions(matches[matches.length - 1])
+  //           setshowTagModal(true)
+  //         } else {
+  //           setshowTagModal(false)
+  //         }
+  //       } else if (checkSpecialChar != null) {
+  //         setshowTagModal(false)
+  //       }
+  //     }
+  //   }
+  // }
 
-  const getUserSuggestions = (keyword) => {
-    if (Array.isArray(groupCreateAllUsers)) {
-      if (keyword.slice(1) === '') {
-        setuserList([...groupCreateAllUsers])
-      } else {
-        const userDataList = groupCreateAllUsers.filter(obj => obj.first_Name.toLowerCase().indexOf(keyword.toLowerCase().slice(1)) !== -1)
-        setuserList([...userDataList])
-      }
-    }
-  }
+  // const getUserSuggestions = (keyword) => {
+  //   if (Array.isArray(groupCreateAllUsers)) {
+  //     if (keyword.slice(1) === '') {
+  //       setuserList([...groupCreateAllUsers])
+  //     } else {
+  //       const userDataList = groupCreateAllUsers.filter(obj => obj.first_Name.toLowerCase().indexOf(keyword.toLowerCase().slice(1)) !== -1)
+  //       setuserList([...userDataList])
+  //     }
+  //   }
+  // }
+
+  // const renderSuggestions = (suggestions) => (
+  //   { keyword, onSuggestionPress },
+  // ) => {
+  //   if (keyword == null) {
+  //     return null;
+  //   }
+  //   return (
+  //     <ScrollView style={{ backgroundColor: colors.white, maxHeight: 200, bottom: 0 }}>
+  //       {suggestions
+  //         .filter(one => one.name.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()))
+  //         .map(one => (
+  //           <View key={one.id}>
+  //             <TouchableOpacity activeOpacity={0.5} onPress={() => onSuggestionPress(one)} style={[ApplicationStyles.row, styles.listView]}>
+  //               <RenderUserIcon url={one?.avtar} type='user' userId={one?._id} height={30} isBorder={one?.subscribedMember} />
+  //               <Text style={styles.listText}>{one?.name}</Text>
+  //             </TouchableOpacity>
+  //           </View>
+  //         ))
+  //       }
+  //     </ScrollView>
+  //   );
+  // };
+
+  // const renderMentionSuggestions = renderSuggestions(renameKey(activeChatRoomUser?.currentUser?.users.filter(obj => obj._id !== user._id)));
+
+  const triggersConfig = {
+    mention: {
+      trigger: '@',
+      textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+      isInsertSpaceAfterMention: true,
+
+    },
+  };
+
+  const { textInputProps, triggers } = useMentions({
+    value: message,
+    onChange: setmessage,
+    triggersConfig
+  });
 
   return (
     <View>
-      {showTagModal &&
-        <View style={{}}>
-          <TagUserInput data={userList} onPressUser={(user) => {
-            console.log(user)
-          }} />
-        </View>
+      {isGroup &&
+        <TagUserInput {...triggers.mention} data={renameKey(activeChatRoomUser?.currentUser?.users.filter(obj => obj._id !== user._id))} />
       }
       <View style={styles.conatiner}>
-        {showMediaAdd && <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.plusBoxStyle}>
-          <Image
-            style={styles.plusIconStyle}
-            resizeMode="contain"
-            source={Icons.plus}
-          />
-        </TouchableOpacity>}
+        {showMediaAdd &&
+          <View style={styles.mainBox}>
+            <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.plusBoxStyle}>
+              <Image
+                style={styles.plusIconStyle}
+                resizeMode="contain"
+                source={Icons.plus}
+              />
+            </TouchableOpacity>
+          </View>}
         <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputStyle}
-            placeholder="Type Here"
-            placeholderTextColor={colors.secondary_500}
-            value={message}
-            onChangeText={(text) => setmessage(text)}
-            multiline={true}
-          />
+          {isGroup ?
+            // <MentionInput
+            //   value={message}
+            //   onChange={setmessage}
+            //   partTypes={[
+            //     {
+            //       trigger: '@',
+            //       renderSuggestions: renderMentionSuggestions,
+            //       textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+            //     },
+            //     {
+            //       pattern: /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{1,256}\.(xn--)?[a-z0-9-]{2,20}\b([-a-zA-Z0-9@:%_\+\[\],.~#?&\/=]*[-a-zA-Z0-9@:%_\+\]~#?&\/=])*/gi,
+            //       textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+            //     },
+            //   ]}
+            //   placeholder="Type here..."
+            //   placeholderTextColor={colors.secondary_500}
+            //   multiline={true}
+            //   style={{ ...FontStyle(15, colors.black, '600'), paddingHorizontal: wp(10), maxHeight: hp(130), textAlignVertical: 'center' }}
+            // />
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Type Here"
+              placeholderTextColor={colors.secondary_500}
+              // onChangeText={(text) => setmessage(text)}
+              multiline={true}
+              {...textInputProps}
+            />
+            :
+            <TextInput
+              style={styles.inputStyle}
+              placeholder="Type Here"
+              placeholderTextColor={colors.secondary_500}
+              value={message}
+              onChangeText={(text) => setmessage(text)}
+              multiline={true}
+            />
+          }
         </View>
-        <TouchableOpacity onPress={() => onSend()}>
+        <TouchableOpacity style={styles.mainBox} onPress={() => onSend()}>
           <Image
             source={Icons.send}
             resizeMode="contain"
@@ -214,7 +261,7 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true }) => {
 const styles = StyleSheet.create({
   conatiner: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingVertical: hp(5),
     paddingHorizontal: wp(10),
     backgroundColor: colors.secondary_500,
@@ -246,16 +293,30 @@ const styles = StyleSheet.create({
   inputStyle: {
     paddingHorizontal: wp(10),
     ...FontStyle(15, colors.black, '600'),
+    // maxHeight: hp(130),
+
   },
   sendIconStyle: {
     height: wp(25),
     width: wp(25),
   },
+  listText: {
+    ...FontStyle(12, colors.neutral_900),
+    marginLeft: 15,
+    flex: 1
+  },
+  listView: {
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    // backgroundColor: colors.inputBg,
+  },
+  mainBox: {
+    height: hp(45),
+    justifyContent: 'center'
+  }
 });
 
 export default ChatInput;
-
-
 
 // import * as React from 'react';
 // import { FC, useState } from 'react';

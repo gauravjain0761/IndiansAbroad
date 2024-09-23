@@ -113,3 +113,12 @@ export const currencyIcon = (value) => {
 export const getLocalTime = (utcTime) => {
   return moment.utc(utcTime).local()
 }
+
+export const renameKey = (arr, oldKey, newKey) => {
+  // const arr = JSON.parse(json)
+  arr.forEach(obj => {
+    obj.id = obj._id;
+    obj.name = obj.first_Name + ' ' + obj.last_Name;
+  });
+  return arr
+}

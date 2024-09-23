@@ -21,7 +21,7 @@ export default function SplashScreen() {
     setTimeout(() => {
       setloading(true);
       checkSession();
-    }, 4000);
+    }, 2000);
   }, []);
 
   const checkSession = async () => {
