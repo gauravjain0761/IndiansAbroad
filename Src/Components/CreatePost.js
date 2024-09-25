@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ApplicationStyles from '../Themes/ApplicationStyles';
-import { SCREEN_HEIGHT, SCREEN_WIDTH, hp, wp } from '../Themes/Fonts';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../Themes/Fonts';
 import { FontStyle, ImageStyle, errorToast, renameKey, successToast } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
@@ -17,8 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CommonButton from './CommonButton';
 import { getAllPagePost } from '../Services/OtherUserServices';
 import Video from 'react-native-video';
-import { MentionInput, replaceMentionValues, useMentions } from 'react-native-controlled-mentions';
-import RenderUserIcon from './RenderUserIcon';
+import { replaceTriggerValues, useMentions } from 'react-native-controlled-mentions';
 import TagUserInput from './TagUserInput';
 
 
@@ -109,7 +107,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
           });
         }
       }
-      data.message = replaceMentionValues(postText.trim(), ({ id }) => `@${id}`)
+      data.message = replaceTriggerValues(postText.trim(), ({ id }) => `@${id}`)
       data.createdBy = user._id
       data.shareType = 'public'
       data.type = isMyPage ? 'cppost' : 'post'

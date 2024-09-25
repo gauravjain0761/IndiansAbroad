@@ -321,7 +321,7 @@ export default ChatInput;
 // import * as React from 'react';
 // import { FC, useState } from 'react';
 // import { Pressable, SafeAreaView, Text, View } from 'react-native';
-// import { MentionInput, MentionSuggestionsProps, Suggestion, replaceMentionValues } from 'react-native-controlled-mentions';
+// import { MentionInput, MentionSuggestionsProps, Suggestion, replaceTriggerValues } from 'react-native-controlled-mentions';
 
 // const users = [
 //   { id: '1', name: 'David Tabaka' },
@@ -371,7 +371,7 @@ export default ChatInput;
 //   const [value, setValue] = useState('Hello @[Mary](2)! How are you?');
 
 //   console.log(value)
-//   console.log(replaceMentionValues(value, ({ id }) => `@${id}`))
+//   console.log(replaceTriggerValues(value, ({ id }) => `@${id}`))
 
 //   return (
 //     <SafeAreaView>

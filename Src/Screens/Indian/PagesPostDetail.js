@@ -19,7 +19,7 @@ import PagePostCard from '../../Components/PagePostCard';
 import CommentInput from '../../Components/CommentInput';
 import RenderComment from '../../Components/RenderComment';
 import ConfirmationModal from '../../Components/ConfirmationModal';
-import { replaceMentionValues } from 'react-native-controlled-mentions';
+import { replaceTriggerValues } from 'react-native-controlled-mentions';
 
 export default function PagesPostDetail() {
   const navigation = useNavigation()
@@ -107,7 +107,7 @@ export default function PagesPostDetail() {
         data: {
           postId: activePost?._id,
           createdBy: user._id,
-          comment: replaceMentionValues(commentText.trim(), ({ id }) => `@${id}`)
+          comment: replaceTriggerValues(commentText.trim(), ({ id }) => `@${id}`)
         },
         onSuccess: () => {
           setcommentText('')

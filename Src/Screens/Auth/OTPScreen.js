@@ -81,7 +81,7 @@ export default function OTPScreen() {
                         renderCell={({ index, symbol, isFocused }) => (
                             <Text
                                 key={index}
-                                style={[styles.cell, isFocused && styles.focusCell]}
+                                style={[styles.cell]}
                                 onLayout={getCellOnLayoutHandler(index)}>
                                 {symbol || (isFocused ? <Cursor /> : null)}
                             </Text>

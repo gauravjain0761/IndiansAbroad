@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
-import { errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction';
+import { errorToast, FontStyle, ImageStyle, renameKey } from '../../utils/commonFunction';
 import { Icons } from '../../Themes/Icons';
 import colors from '../../Themes/Colors';
 import RenderUserIcon from '../../Components/RenderUserIcon';
@@ -16,15 +16,33 @@ import { screenName } from '../../Navigation/ScreenConstants';
 import { dispatchAction } from '../../utils/apiGlobal';
 import ShareModal from '../../Components/ShareModal';
 import ConfirmationModal from '../../Components/ConfirmationModal';
+import { replaceTriggerValues, useMentions } from 'react-native-controlled-mentions';
+import TagUserInput from '../../Components/TagUserInput';
 
 export default function DiscussionForumDetail() {
     const navigation = useNavigation()
     const [commentText, setcommentText] = useState('')
-    const { activePost, user, activePostAllComments } = useSelector(e => e.common)
+    const { activePost, user, activePostAllComments, groupCreateAllUsers } = useSelector(e => e.common)
     const dispatch = useDispatch()
     const [shareModal, setshareModal] = useState(false);
     const [deleteModal, setdeleteModal] = useState(false)
     const [selectedComment, setselectedComment] = useState(undefined)
+
+    const triggersConfig = {
+        mention: {
+            trigger: '@',
+            textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+            isInsertSpaceAfterMention: true,
+
+        },
+    };
+
+    const { textInputProps, triggers } = useMentions({
+        value: commentText,
+        onChange: setcommentText,
+        triggersConfig
+    });
+
 
     useEffect(() => {
         dispatch(onGetThreadDetail({
@@ -61,7 +79,7 @@ export default function DiscussionForumDetail() {
                 data: {
                     threadId: activePost._id,
                     createdBy: user._id,
-                    comment: commentText.trim()
+                    comment: replaceTriggerValues(commentText.trim(), ({ id }) => `@${id}`)
                 },
                 onSuccess: () => {
                     dispatch(onGetThreadDetail({
@@ -109,7 +127,7 @@ export default function DiscussionForumDetail() {
                     <View style={{ marginBottom: 10 }}>
                         <DiscussionForumDetailCard item={activePost} />
                     </View>
-                    <Text style={styles.commentText1}>{activePost?.commentCount} Responses</Text>
+                    {/* <Text style={styles.commentText1}>{activePost?.commentCount} Responses</Text> */}
                     {activePostAllComments && activePostAllComments.length > 0 && <FlatList
                         keyExtractor={(item, index) => index.toString()}
                         data={activePostAllComments}
@@ -119,8 +137,16 @@ export default function DiscussionForumDetail() {
                     />}
                 </ScrollView>
                 <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
+                    <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
                     <View style={styles.commnetInput}>
-                        <TextInput value={commentText} onChangeText={(text) => setcommentText(text)} multiline={true} style={styles.input} placeholder='Add Response' placeholderTextColor={colors.neutral_500} />
+                        <TextInput
+                            // value={commentText}
+                            // onChangeText={(text) => setcommentText(text)}
+                            {...textInputProps}
+                            multiline={true}
+                            style={styles.input}
+                            placeholder='Add Response'
+                            placeholderTextColor={colors.neutral_500} />
                         <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                             <Image source={Icons.send} style={ImageStyle(24, 24)} />
                         </TouchableOpacity>

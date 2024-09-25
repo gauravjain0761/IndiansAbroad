@@ -16,7 +16,7 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
     };
     axios(option)
       .then(response => {
-        console.log("res--->", api.BASE_URL + url, data, params, response?.data);
+        console.log("res--->", api.BASE_URL + url, data, params, response?.data, response.status);
         if (response.status === 200 || response.status === 201) {
           resolve(response);
         } else {
@@ -76,9 +76,9 @@ export const formDataApiCall = async (url, data, onSuccess, onFailure) => {
       });
     })
     .catch(err => {
-      console.log('err---', url, data, err)
+      console.log('err---', url, data, err.message)
       if (onFailure) onFailure(err);
-      errorToast('Please try again');
+      errorToast(err ? err.message : 'Please try again');
     });
 };
 
@@ -139,7 +139,7 @@ export const handleErrorRes1 = (err, req, dispatch, fun) => {
     dispatchAction(dispatch, IS_LOADING, false);
     removeAuthorization(dispatch);
     errorToast('Please login again');
-  }else if(err?.response?.status == 404){
+  } else if (err?.response?.status == 404) {
 
   } else {
     dispatchAction(dispatch, IS_LOADING, false);

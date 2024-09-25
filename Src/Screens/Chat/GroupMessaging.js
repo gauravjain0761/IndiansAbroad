@@ -29,7 +29,7 @@ import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import moment from 'moment';
 import { FontStyle } from '../../utils/commonFunction';
 import { hp } from '../../Themes/Fonts';
-import { replaceMentionValues } from 'react-native-controlled-mentions';
+import { replaceTriggerValues } from 'react-native-controlled-mentions';
 export default function GroupMessaging() {
   const { chatMessageList, user, tagPart, activeChatRoomUser, allChatMessageCount } =
     useSelector(e => e.common);
@@ -72,11 +72,11 @@ export default function GroupMessaging() {
 
   const onSendMessage = () => {
 
-    // console.log(replaceMentionValues(message, ({ id }) => `@${id}`))
+    // console.log(replaceTriggerValues(message, ({ id }) => `@${id}`))
     if (message.trim() !== '') {
       let messageData = {
         chatId: activeChatRoomUser?.chatId,
-        content: replaceMentionValues(message.trim(), ({ id }) => `@${id}`),
+        content: replaceTriggerValues(message.trim(), ({ id }) => `@${id}`),
         content_type: 'text/plain',
         createdBy: user?._id,
         readBy: [user?._id],

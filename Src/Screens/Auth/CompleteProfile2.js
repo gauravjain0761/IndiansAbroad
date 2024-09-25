@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Platform, StyleSheet, ScrollView, Text, TouchableOpacity, View, SafeAreaView, KeyboardAvoidingView } from 'react-native'
+import { Image, ImageBackground, Platform, StyleSheet, ScrollView, Text, TouchableOpacity, View, SafeAreaView, KeyboardAvoidingView, Linking } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
@@ -112,7 +112,7 @@ export default function CompleteProfile2() {
                                     style={[ImageStyle(20, 20)]}
                                 />
                             </TouchableOpacity>
-                            <Text style={[styles.des, { flex: 1 }]}>I agree terms and conditions of IndiansAbroad</Text>
+                            <Text onPress={() => Linking.openURL('https://www.indiansabroad.online/terms')} style={[{ flex: 1, ...FontStyle(13, colors.primary_500, '700') }]}>I agree terms and conditions of IndiansAbroad</Text>
                         </View>
                         <CommonButton extraStyle={{ marginBottom: hp(100) }} title={'Finish'} onPress={() => onNext()} />
                     </ScrollView>

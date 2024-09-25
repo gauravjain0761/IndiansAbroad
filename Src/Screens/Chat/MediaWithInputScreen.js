@@ -33,7 +33,7 @@ import { errorToast } from '../../utils/commonFunction';
 import Pdf from 'react-native-pdf';
 import CommonButton from '../../Components/CommonButton';
 import { wp } from '../../Themes/Fonts';
-import { replaceMentionValues } from 'react-native-controlled-mentions';
+import { replaceTriggerValues } from 'react-native-controlled-mentions';
 
 export default function MediaWithInputScreen() {
     const { chatMessageList, user, followerList, activeChatRoomUser, allChatMessageCount } = useSelector(e => e.common);
@@ -46,7 +46,7 @@ export default function MediaWithInputScreen() {
     const onSendMessage = () => {
         let data = {}
         data.createdBy = user?._id
-        data.content = replaceMentionValues(message.trim(), ({ id }) => `@${id}`)
+        data.content = replaceTriggerValues(message.trim(), ({ id }) => `@${id}`)
         data.content_type = params?.result.type.includes('pdf') ? 'file/*' : params?.result?.type?.includes('image') ? 'image/*' : 'video/*'
         data.chatId = activeChatRoomUser?.chatId
         data.readBy = user?._id

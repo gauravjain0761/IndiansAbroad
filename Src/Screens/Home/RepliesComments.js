@@ -1,13 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
-  Image,
-} from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, ScrollView, TouchableOpacity, FlatList, Image, } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
@@ -16,26 +7,14 @@ import { FontStyle, ImageStyle, errorToast } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  onAddCommentReply,
-  onDeleteCommentReply,
-  onGetAllComments,
-  onGetRepliesComment,
-  onGetSinglePost,
-} from '../../Services/PostServices';
+import { onAddCommentReply, onDeleteCommentReply, onGetAllComments, onGetRepliesComment, onGetSinglePost, } from '../../Services/PostServices';
 import { Icons } from '../../Themes/Icons';
 import ConfirmationModal from '../../Components/ConfirmationModal';
 import CommentInput from '../../Components/CommentInput';
 import RenderText from '../../Components/RenderText';
 import { screenName } from '../../Navigation/ScreenConstants';
-import {
-  onAddCommentReplyThread,
-  onDeleteCommentReplyThread,
-  onGetThreadAllComments,
-  onGetThreadDetail,
-  onGetThreadRepliesComment,
-} from '../../Services/DiscussionServices';
-import { replaceMentionValues } from 'react-native-controlled-mentions';
+import { onAddCommentReplyThread, onDeleteCommentReplyThread, onGetThreadAllComments, onGetThreadDetail, onGetThreadRepliesComment, } from '../../Services/DiscussionServices';
+import { replaceTriggerValues } from 'react-native-controlled-mentions';
 
 export default function RepliesComments() {
   const { goBack } = useNavigation();
@@ -119,7 +98,7 @@ export default function RepliesComments() {
           <View
             style={[
               styles.verticalLine,
-              { height: isLastIndex ? '15%' : '100%' },
+              { height: isLastIndex ? '33%' : '100%' },
             ]}
           />
           <View style={[styles.horizontalLine, { marginTop: '8%' }]} />
@@ -173,7 +152,7 @@ export default function RepliesComments() {
             threadId: params?.threadId,
             commentId: params?.commentId,
             createdBy: user._id,
-            reply: replaceMentionValues(commentText.trim(), ({ id }) => `@${id}`),
+            reply: replaceTriggerValues(commentText.trim(), ({ id }) => `@${id}`),
           },
           onSuccess: () => {
             setcommentText('');
@@ -199,7 +178,7 @@ export default function RepliesComments() {
             postId: params?.postId,
             commentId: params?.commentId,
             createdBy: user._id,
-            reply: replaceMentionValues(commentText.trim(), ({ id }) => `@${id}`),
+            reply: replaceTriggerValues(commentText.trim(), ({ id }) => `@${id}`),
           },
           onSuccess: () => {
             setcommentText('');

@@ -27,7 +27,7 @@ export default function SecurityScreen() {
                     <Text style={ApplicationStyles.titleTextBlack}>IndiansAbroad</Text>
                     <Text style={styles.title2}>Dear IndiansAbroad Member</Text>
                     <View style={styles.rowView}>
-                        <Image source={Icons.Verified_user} style={ImageStyle(28, 28)} />
+                        <Image source={Icons.Verified_user} style={[ImageStyle(28, 28), { tintColor: colors.neutral_900 }]} />
                         <Text style={styles.des2}>Your privacy is our priority</Text>
                     </View>
                     <Text style={styles.des}>We are requesting your information solely to help you join our platform and deliver exceptional services. We guarantee that your information will not be shared with anyone for any other purpose.</Text>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 10,
         marginBottom: 20,
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
         gap: 5
     },
     des2: {

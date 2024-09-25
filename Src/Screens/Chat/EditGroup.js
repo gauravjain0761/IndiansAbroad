@@ -191,7 +191,7 @@ export default function EditGroup() {
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header title={''} showLeft={true} showRight={false} onLeftPress={() => goBack()} />
-      <Text style={styles.chatText}>Create Group</Text>
+      <Text style={styles.chatText}>Edit Group</Text>
       <View style={{ marginHorizontal: wp(20), flexDirection: 'row', alignItems: 'center', }}>
         <TouchableOpacity onPress={() => setActionSheet(true)} style={styles.addImage}>
           {image ?
@@ -208,9 +208,9 @@ export default function EditGroup() {
         <Input onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
       </View>
       <Input extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
-      <Text style={styles.searchText}>Add Group Member</Text>
+      {/* <Text style={styles.searchText}>Add Group Member</Text>
       <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search'} containerStyles={{ marginVertical: 5 }} />
-      {list && <FlatList keyExtractor={(item, index) => index.toString()} data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />}
+      {list && <FlatList keyExtractor={(item, index) => index.toString()} data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />} */}
       <View style={styles.footer}>
         <TouchableOpacity style={{ height: 55, justifyContent: 'center' }} onPress={() => goBack()}>
           <Text style={styles.cancelBtn}>Cancel</Text>

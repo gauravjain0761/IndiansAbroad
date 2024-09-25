@@ -153,7 +153,7 @@ export default function ProfileScreen() {
             <Text style={styles.userText}>
               {user?.first_Name} {user?.last_Name}
             </Text>
-            <Text style={styles.userText1}>{user?.catchLine}</Text>
+            <Text style={styles.userText1}>{user?.catchLine !== '' ? user?.catchLine : 'I am proud to be a member of IndiansAbroad community.'}</Text>
           </View>
           <View style={styles.tabMainView}>
             <TouchableOpacity
@@ -172,14 +172,7 @@ export default function ProfileScreen() {
                       : colors.neutral_900,
                 }}
               />
-              <Text
-                style={FontStyle(
-                  14,
-                  tabSelection == 'POST'
-                    ? colors.primary_6a7e
-                    : colors.neutral_900,
-                  '700',
-                )}>
+              <Text style={FontStyle(14, tabSelection == 'POST' ? colors.primary_6a7e : colors.neutral_900, '700',)}>
                 {' (' +
                   (otherUserAllPost ? otherUserAllPost?.totalPosts : 0) +
                   ')'}

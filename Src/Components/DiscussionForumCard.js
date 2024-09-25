@@ -37,13 +37,13 @@ export default function DiscussionForumCard({ item, index }) {
           </View>
         </View>
         <View style={[ApplicationStyles.row, { marginTop: 3, alignItems: 'flex-end', }]}>
-          <Text style={styles.valueText}>{item?.commentCount}</Text>
+          {/* <Text style={styles.valueText}>{item?.commentCount}</Text>
           <TouchableOpacity >
             <Image
               source={Icons.userChat}
               style={[styles.share, { marginRight: wp(12), marginLeft: 3 }]}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity onPress={() => setshareModal(true)}>
             <Image source={Icons.share} style={styles.share} />
           </TouchableOpacity>

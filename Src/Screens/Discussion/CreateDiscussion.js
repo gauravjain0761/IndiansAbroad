@@ -29,7 +29,7 @@ import { IS_LOADING } from '../../Redux/ActionTypes';
 import { api } from '../../utils/apiConstants';
 import { onGetThreadList } from '../../Services/DiscussionServices';
 import Video, { VideoRef } from 'react-native-video';
-import { replaceMentionValues, useMentions } from 'react-native-controlled-mentions';
+import { replaceTriggerValues, useMentions } from 'react-native-controlled-mentions';
 import TagUserInput from '../../Components/TagUserInput';
 
 export default function CreateDiscussion() {
@@ -148,7 +148,7 @@ export default function CreateDiscussion() {
 
         data.title = postText.trim()
         data.createdBy = user._id
-        data.message = replaceMentionValues(postDes.trim(), ({ id }) => `@${id}`)
+        data.message = replaceTriggerValues(postDes.trim(), ({ id }) => `@${id}`)
         data.countryId = selectedType._id
         dispatchAction(dispatch, IS_LOADING, true)
         formDataApiCall(api.createThread, data, (res) => {

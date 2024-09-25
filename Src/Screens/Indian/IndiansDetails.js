@@ -175,7 +175,8 @@ export default function IndiansDetails() {
         },
       };
       dispatch(onOpenNewChatForUser(obj));
-    } else if (otherUserInfo?.isFollowing == 'notfollowing') {
+      // } else if (otherUserInfo?.isFollowing == 'notfollowing') {
+    } else {
       let obj = {
         data: {
           receiverId: otherUserInfo?._id,
@@ -190,9 +191,10 @@ export default function IndiansDetails() {
       };
       dispatch(onCheckMessageRequest(obj));
       // setmessageRequestModal(true);
-    } else if (otherUserInfo?.isFollowing == 'requested') {
-      Alert.alert('You already requested to this user');
     }
+    // else if (otherUserInfo?.isFollowing == 'requested') {
+    //   Alert.alert('You already requested to this user');
+    // }
   };
 
   return (
@@ -226,9 +228,9 @@ export default function IndiansDetails() {
               <Text style={styles.userText}>
                 {otherUserInfo?.first_Name} {otherUserInfo?.last_Name}
               </Text>
-              {otherUserInfo?.catchLine !== '' && (
-                <Text style={styles.userText1}>{otherUserInfo?.catchLine}</Text>
-              )}
+              {/* {otherUserInfo?.catchLine !== '' && ( */}
+              <Text style={styles.userText1}>{otherUserInfo?.catchLine !== '' ? otherUserInfo?.catchLine : 'I am proud to be a member of IndiansAbroad community.'}</Text>
+              {/* )} */}
               <View style={[ApplicationStyles.row, { alignSelf: 'center' }]}>
                 {otherUserInfo?.isFollowing == 'notfollowing' && (
                   <TouchableOpacity
