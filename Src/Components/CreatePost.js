@@ -18,6 +18,7 @@ import { getAllPagePost } from '../Services/OtherUserServices';
 import Video from 'react-native-video';
 import { replaceTriggerValues, useMentions } from 'react-native-controlled-mentions';
 import TagUserInput from './TagUserInput';
+import ApplicationStyles from '../Themes/ApplicationStyles';
 
 
 
@@ -56,9 +57,10 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
     if (imageArray.length < 9) {
       ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
+          console.log(image)
           if (type == 'video') {
             let temp = []
-            if (image.duration <= 90000) {
+            if (image.duration <= 120000 && image.size <= 300000000) {
               createThumbnail({
                 url: image.path,
                 timeStamp: 1000,
@@ -67,14 +69,16 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
                 temp.push(image)
                 setpreviewModal(true)
                 setselectedImage(image)
-                // setimageArray([...imageArray, ...temp])
-
               }).catch(err => console.log('err---', err));
             } else {
-              errorToast('Video should be less than 90 seconds')
+              errorToast('Video should be less than 120 seconds and 300 MB ')
             }
           } else {
-            setimageArray([...imageArray, image])
+            if (image.size <= 20000000) {
+              setimageArray([...imageArray, image])
+            } else {
+              errorToast('Image should be less than 20 MB')
+            }
           }
         })
         .catch(err => {
@@ -189,7 +193,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
 
           <View style={styles.inputBox}>
             <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
-
             <TextInput
               // onChangeText={text => setpostText(text)}
               // value={postText}
@@ -197,6 +200,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
               style={styles.input}
               placeholder="Write Here"
               multiline={true}
+              maxLength={2000}
               placeholderTextColor={colors.neutral_500} />
             <View style={styles.rowView}>
               <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
@@ -245,24 +249,9 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
             <TouchableOpacity onPress={() => setpreviewModal(false)} style={styles.backView}>
               <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
             </TouchableOpacity>
-            {/* <View style={{ flexDirection: 'row', gap: wp(20) }}>
-              <TouchableOpacity onPress={() => onPressRotate()} >
-                <Text style={{ ...FontStyle(18, colors.neutral_900, '400'), }}>Rotate</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => onPressRotate()} >
-                <Text style={{ ...FontStyle(18, colors.neutral_900, '400'), }}>Crop</Text>
-              </TouchableOpacity>
-            </View> */}
           </View>
           <View style={{ flex: 1, marginVertical: 20 }}>
-            {/* {selectedImage?.mime.includes('image') ?
-              <Image source={{ uri: selectedImage.path }} style={styles.imageStyles2} />
-              :
-              <Image source={{ uri: selectedImage.thumbnail.path }} style={styles.imageStyles2} />
-            } */}
-
             <Video
-              // Can be a URL or a local file.
               source={{ uri: selectedImage.path }}
               playInBackground={false}
               paused={true}
@@ -270,7 +259,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
               controls={true}
               resizeMode={'contain'}
               poster={selectedImage.thumbnail}
-              // posterResizeMode='cover'
               onError={(err) => console.log(err)}
               style={styles.imageStyles2}
             />

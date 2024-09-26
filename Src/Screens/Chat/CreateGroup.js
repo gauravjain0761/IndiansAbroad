@@ -105,7 +105,11 @@ export default function CreateGroup() {
         height: SCREEN_WIDTH,
         width: SCREEN_WIDTH,
       }).then(image => {
-        setimage(image)
+        if (image.size <= 20000000) {
+          setimage(image)
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
       }).catch(error => { console.log('err---', error); });
     }, 1000);
 
@@ -185,9 +189,9 @@ export default function CreateGroup() {
             <ActionSheet actionItems={actionItems} onCancel={closeActionSheet} />
           </ReactNativeModal>
         </TouchableOpacity>
-        <Input onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
+        <Input maxLength={100} onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
       </View>
-      <Input extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
+      <Input maxLength={300} extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
       <Text style={styles.searchText}>Add Group Member</Text>
       <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search'} containerStyles={{ marginVertical: 5 }} />
       {list && <FlatList keyExtractor={(item, index) => index.toString()} data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />}

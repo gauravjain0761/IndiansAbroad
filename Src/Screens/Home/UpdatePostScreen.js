@@ -1,20 +1,28 @@
-import { StyleSheet, Text, SafeAreaView, KeyboardAvoidingView, ScrollView, View, TouchableOpacity, TextInput, Image, Platform } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Header from '../../Components/Header'
-import ApplicationStyles from '../../Themes/ApplicationStyles'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { FontStyle, successToast } from '../../utils/commonFunction'
-import { SCREEN_WIDTH, wp } from '../../Themes/Fonts'
-import colors from '../../Themes/Colors'
-import { useDispatch, useSelector } from 'react-redux'
-import { onDeletePostMedia } from '../../Services/PostServices'
-import { api } from '../../utils/apiConstants'
-import { Icons } from '../../Themes/Icons'
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, SafeAreaView, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { FontStyle, ImageStyle, errorToast, renameKey, successToast } from '../../utils/commonFunction';
+import colors from '../../Themes/Colors';
+import { Icons } from '../../Themes/Icons';
+import ImageCropPicker from 'react-native-image-crop-picker';
 import { createThumbnail } from "react-native-create-thumbnail";
-import FastImage from 'react-native-fast-image'
-import ImageCropPicker from 'react-native-image-crop-picker'
-import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal'
-import { IS_LOADING } from '../../Redux/ActionTypes'
+import { getalluserposts, onDeletePostMedia } from '../../Services/PostServices';
+import { api } from '../../utils/apiConstants';
+import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
+import { IS_LOADING } from '../../Redux/ActionTypes';
+import ReactNativeModal from 'react-native-modal';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getAllPagePost } from '../../Services/OtherUserServices';
+import Video from 'react-native-video';
+import { replaceTriggerValues, useMentions } from 'react-native-controlled-mentions';
+import TagUserInput from '../../Components/TagUserInput';
+import CommonButton from '../../Components/CommonButton';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import Header from '../../Components/Header';
+import FastImage from 'react-native-fast-image';
+
+
 
 export default function UpdatePostScreen() {
     const { goBack } = useNavigation()
@@ -25,14 +33,23 @@ export default function UpdatePostScreen() {
     const [postText, setpostText] = useState('');
     const [imageArray, setimageArray] = useState([])
     const [deletedArray, setdeletedArray] = useState([])
-    const { user } = useSelector(e => e.common)
+    const { user, groupCreateAllUsers } = useSelector(e => e.common)
+    const [previewModal, setpreviewModal] = useState(false)
+    const insets = useSafeAreaInsets();
+    const [selectedImage, setselectedImage] = useState(undefined)
 
     useEffect(() => {
         // setimageArray(params?.item?.mediaFiles)
         let temp = Object.assign([], params?.item?.mediaFiles)
-        setpostText(params?.item?.message ? params?.item?.message : '')
-        if (temp.length > 0) {
+        let text = params?.item?.message ? params?.item?.message : ''
+        if (text !== '') {
+            text = params?.item?.message.replace(/(?<=\s|^\s?)@[A-z0-9]+(?=\s|\s?$)/g, (match) => {
+                return `{@}[${groupCreateAllUsers.filter(obj => obj._id == match.replace('@', ''))[0]?.first_Name} ${groupCreateAllUsers.filter(obj => obj._id == match.replace('@', ''))[0]?.last_Name}](${match.replace('@', '')})`
+            });
+        }
+        setpostText(text)
 
+        if (temp.length > 0) {
             temp.forEach(element => {
                 if (element?.contentType.includes('video')) {
                     createThumbnail({
@@ -49,24 +66,30 @@ export default function UpdatePostScreen() {
 
     const openDocPicker = async (type) => {
         if (imageArray.length < 9) {
-            ImageCropPicker.openPicker({ maxFiles: 9 - imageArray.length, multiple: type == 'video' ? false : true, mediaType: type, freeStyleCropEnabled: true, })
+            ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
                 .then(image => {
                     if (type == 'video') {
                         let temp = []
-                        if (image.duration <= 90000) {
+                        if (image.duration <= 120000 && image.size <= 300000000) {
                             createThumbnail({
                                 url: image.path,
                                 timeStamp: 1000,
                             }).then(response => {
                                 image.thumbnail = response
                                 temp.push(image)
-                                setimageArray([...imageArray, ...temp])
+                                setpreviewModal(true)
+                                setselectedImage(image)
                             }).catch(err => console.log('err---', err));
                         } else {
-                            errorToast('Video should be less than 90 seconds')
+                            errorToast('Video should be less than 120 seconds and 300 MB ')
                         }
+
                     } else {
-                        setimageArray([...imageArray, ...image])
+                        if (image.size <= 20000000) {
+                            setimageArray([...imageArray, image])
+                        } else {
+                            errorToast('Image should be less than 20 MB')
+                        }
                     }
                 })
                 .catch(err => {
@@ -83,6 +106,16 @@ export default function UpdatePostScreen() {
             let deletArr = Object.assign([], deletedArray)
             deletArr.push(temp[index])
             setdeletedArray(deletArr)
+
+            // let tempObj = {
+            //     data: {
+            //         postId: params?.item?._id,
+            //         mediaPath: temp[index].path
+            //     }
+            // }
+            // dispatch(onDeletePostMedia(tempObj))
+
+
         }
         temp.splice(index, 1)
         setimageArray(temp)
@@ -107,26 +140,11 @@ export default function UpdatePostScreen() {
                             }
                         }
                     });
-                    // imageArray.forEach((element, index) => {
-                    //     let time = new Date().getTime() + index
-                    //     if (imageArray[index].mime) {
-                    //         tempArray.push('mediaFiles' + "[" + time + "]");
-                    //         tempArray.push({
-                    //             uri: imageArray[index].path,
-                    //             type: imageArray[index].mime, // or photo.type image/jpg
-                    //             name: imageArray[index]?.mime.includes('image') ? 'image_[' + time + '].' + imageArray[index].path.split('.').pop() : 'video_[' + time + '].' + imageArray[index].path.split('.').pop(),
-                    //         });
-                    //     }
-                    // });
-                    // var ob2 = {};
-                    // for (var i = 0; i < tempArray.length; i += 2) {
-                    //     ob2[tempArray[i]] = tempArray[i + 1];
-                    // }
-                    // data = { ...data, ...ob2 }
+
                 }
             }
             data.postId = params?.item?._id
-            data.message = postText.trim()
+            data.message = replaceTriggerValues(postText.trim(), ({ id }) => `@${id}`)
             data.createdBy = user._id
             data.shareType = params?.item?.shareType
             data.type = params?.item?.type
@@ -161,6 +179,25 @@ export default function UpdatePostScreen() {
             errorToast('Please enter post text or select image')
         }
     }
+    const onPressAdd = () => {
+        setimageArray([...imageArray, selectedImage])
+        setpreviewModal(false)
+        setselectedImage(undefined)
+    }
+
+    const triggersConfig = {
+        mention: {
+            trigger: '@',
+            textStyle: { ...FontStyle(15, colors.primary_4574ca, '700') },
+            isInsertSpaceAfterMention: true
+        },
+    };
+
+    const { textInputProps, triggers } = useMentions({
+        value: postText,
+        onChange: setpostText,
+        triggersConfig,
+    });
 
     return (
         <SafeAreaView style={ApplicationStyles.applicationView}>
@@ -177,7 +214,8 @@ export default function UpdatePostScreen() {
                 <ScrollView>
                     <View style={{ paddingHorizontal: 0, marginTop: 8, }}>
                         <View style={styles.inputBox}>
-                            <TextInput onChangeText={text => setpostText(text)} value={postText} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
+                            <TextInput maxLength={2000}  {...textInputProps} style={styles.input} placeholder="Write Here" multiline={true} placeholderTextColor={colors.neutral_500} />
+                            <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
                             <View style={styles.rowView}>
                                 <TouchableOpacity onPress={() => openDocPicker('photo')} style={styles.button}>
                                     <Image source={Icons.photoUpload} style={styles.photoUpload} />
@@ -216,7 +254,37 @@ export default function UpdatePostScreen() {
                         <Text style={styles.publishText}>Update</Text>
                     </TouchableOpacity>
                 </ScrollView>
+
+
+
             </KeyboardAvoidingView>
+            {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
+                style={{ justifyContent: 'flex-end', margin: 0, }} >
+                <View style={[styles.modalView, { height: SCREEN_HEIGHT - insets.top, backgroundColor: colors.white, borderTopEndRadius: 15, borderTopStartRadius: 15, borderWidth: 1, borderColor: colors.neutral_900, }]}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 20, justifyContent: 'space-between', marginTop: 10 }}>
+                        <TouchableOpacity onPress={() => setpreviewModal(false)} style={styles.backView}>
+                            <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1, marginVertical: 20 }}>
+                        <Video
+                            source={{ uri: selectedImage.path }}
+                            playInBackground={false}
+                            paused={true}
+                            muted={false}
+                            controls={true}
+                            resizeMode={'contain'}
+                            poster={selectedImage.thumbnail}
+                            onError={(err) => console.log(err)}
+                            style={styles.imageStyles2}
+                        />
+
+                    </View>
+                    <CommonButton onPress={() => onPressAdd()} title={'Add'} extraStyle={{ marginHorizontal: wp(20) }} />
+                    <View style={{ marginBottom: Platform.OS == 'android' ? 20 : insets.bottom }} />
+                </View>
+            </ReactNativeModal>}
+
         </SafeAreaView>
     )
 }
@@ -311,5 +379,19 @@ const styles = StyleSheet.create({
     closeIcon: {
         height: 20,
         width: 20,
-    }
+    },
+    backView: {
+        borderWidth: 1,
+        paddingHorizontal: 10,
+        paddingVertical: 3,
+        borderRadius: 12,
+        borderColor: colors.primary_500,
+        backgroundColor: colors.btnBg,
+    },
+    modalView: {
+        backgroundColor: colors.inputBg,
+    },
+    imageStyles2: {
+        flex: 1, width: SCREEN_WIDTH - 10, resizeMode: 'contain', marginHorizontal: 5
+    },
 })

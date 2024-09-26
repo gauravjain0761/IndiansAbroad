@@ -92,18 +92,18 @@ export default function CompleteProfile2() {
                         <Text style={styles.des}>information</Text>
                         <View style={styles.inputView}>
                             <Text style={styles.des}>Where are you from in India ?*</Text>
-                            <Input extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City'} />
+                            <Input maxLength={50} extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City'} />
 
-                            <Input extraStyle={styles.input} value={district} onChangeText={(text) => setdistrict(text)} placeholder={'District'} />
-                            <Input extraStyle={styles.input} value={state} onChangeText={(text) => setstate(text)} placeholder={'State'} />
+                            <Input maxLength={50} extraStyle={styles.input} value={district} onChangeText={(text) => setdistrict(text)} placeholder={'District'} />
+                            <Input maxLength={50} extraStyle={styles.input} value={state} onChangeText={(text) => setstate(text)} placeholder={'State'} />
 
                         </View>
                         <View style={styles.inputView}>
                             <Text style={styles.des}>Abroad information*</Text>
                             {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
-                            <Input extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'City'} />
-                            <Input extraStyle={styles.input} value={unversity} onChangeText={(text) => setunversity(text)} placeholder={'University/Company'} />
-                            <Input extraStyle={styles.input} value={profession} onChangeText={(text) => setprofession(text)} placeholder={'Profession'} />
+                            <Input maxLength={50} extraStyle={styles.input} value={rigion} onChangeText={(text) => setrigion(text)} placeholder={'City'} />
+                            <Input maxLength={200} extraStyle={styles.input} value={unversity} onChangeText={(text) => setunversity(text)} placeholder={'University/Company'} />
+                            <Input maxLength={200} extraStyle={styles.input} value={profession} onChangeText={(text) => setprofession(text)} placeholder={'Profession'} />
                         </View>
                         <View style={styles.row}>
                             <TouchableOpacity onPress={() => settermsCheckbox(!termsCheckbox)}>

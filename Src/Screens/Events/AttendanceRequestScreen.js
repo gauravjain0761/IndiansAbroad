@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   currencyIcon,
   emailCheck,
@@ -20,12 +20,12 @@ import {
   mobileNumberCheck,
 } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
 import {
   getAttendeeCreateAction,
@@ -33,14 +33,14 @@ import {
   getDetailsListAction,
 } from '../../Services/PostServices';
 import CountryPicker from 'react-native-country-picker-modal';
-import {SET_EVENT_ATTENDANT_COUNT} from '../../Redux/ActionTypes';
+import { SET_EVENT_ATTENDANT_COUNT } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   const dispatch = useDispatch();
-  const {activeEvent} = useSelector(e => e.common);
+  const { activeEvent } = useSelector(e => e.common);
   const [show, setShow] = useState(false);
   const [code, setcode] = useState('+1');
   const [termsCheckbox, settermsCheckbox] = useState(false);
@@ -63,7 +63,7 @@ export default function AttendanceRequestScreen() {
       errorToast('Please enter your last Name');
     } else if (!mobileNumberCheck(inputData.phone.trim())) {
       errorToast('Please enter a valid mobile number');
-    }else if (inputData.phone.trim().length !== 10) {
+    } else if (inputData.phone.trim().length !== 10) {
       errorToast('Please enter a valid phone number with 10 digits');
     } else if (!emailCheck(inputData.email.trim())) {
       errorToast('Please enter a valid email');
@@ -122,7 +122,7 @@ export default function AttendanceRequestScreen() {
   const getEventList = page => {
     let obj = {
       data: activeEvent?._id,
-      onSuccess: res => {},
+      onSuccess: res => { },
     };
     dispatch(getDetailsListAction(obj));
   };
@@ -144,15 +144,17 @@ export default function AttendanceRequestScreen() {
             value={inputData?.firstName}
             label={'Your first name *'}
             placeholder={''}
-            onChangeText={text => setInputData({...inputData, firstName: text})}
+            maxLength={25}
+            onChangeText={text => setInputData({ ...inputData, firstName: text })}
           />
           <Input
             value={inputData?.lastName}
             label={'Your last name *'}
             placeholder={''}
-            onChangeText={text => setInputData({...inputData, lastName: text})}
+            maxLength={25}
+            onChangeText={text => setInputData({ ...inputData, lastName: text })}
           />
-          <View style={[styles.inputrow, {marginBottom: 0, marginTop: wp(0)}]}>
+          <View style={[styles.inputrow, { marginBottom: 0, marginTop: wp(0) }]}>
             <View>
               <Text style={styles.labelText1}>{'Country *'}</Text>
               <TouchableOpacity
@@ -163,13 +165,13 @@ export default function AttendanceRequestScreen() {
               </TouchableOpacity>
             </View>
             <Input
-              extraStyle={[{flex: 1, marginTop: wp(0)}]}
+              extraStyle={[{ flex: 1, marginTop: wp(0) }]}
               keyboardType={'phone-pad'}
               label={'Phone No *'}
               value={inputData?.phone}
               placeholder={'Mobile Number'}
               maxLength={10}
-              onChangeText={text => setInputData({...inputData, phone: text})}
+              onChangeText={text => setInputData({ ...inputData, phone: text })}
             />
           </View>
           {/* <Input
@@ -183,7 +185,8 @@ export default function AttendanceRequestScreen() {
             value={inputData?.email}
             label={'Your email *'}
             placeholder={''}
-            onChangeText={text => setInputData({...inputData, email: text})}
+            maxLength={100}
+            onChangeText={text => setInputData({ ...inputData, email: text })}
           />
           <View style={styles.ticketView}>
             <Text style={styles.labelText}>No of tickets *</Text>
@@ -199,7 +202,7 @@ export default function AttendanceRequestScreen() {
                   style={styles.numberBtn}>
                   <Image
                     source={Icons.minus}
-                    style={[ImageStyle(10, 10), {tintColor: colors.white}]}
+                    style={[ImageStyle(10, 10), { tintColor: colors.white }]}
                   />
                 </TouchableOpacity>
               )}
@@ -218,7 +221,7 @@ export default function AttendanceRequestScreen() {
                 style={styles.numberBtn}>
                 <Image
                   source={Icons.add}
-                  style={[ImageStyle(12, 12), {tintColor: colors.white}]}
+                  style={[ImageStyle(12, 12), { tintColor: colors.white }]}
                 />
               </TouchableOpacity>
             </View>
@@ -254,7 +257,7 @@ export default function AttendanceRequestScreen() {
           <Text style={[styles.des]}>
             I agree{' '}
             <Text
-              style={{color: colors.primary_500}}
+              style={{ color: colors.primary_500 }}
               onPress={() => {
                 Linking.openURL(
                   'https://www.indiansabroad.online/events_guidelines.html',
@@ -269,25 +272,25 @@ export default function AttendanceRequestScreen() {
           <CommonButton
             onPress={() => onNextPress()}
             title={'Checkout'}
-            extraStyle={{width: 140, height: 45}}
+            extraStyle={{ width: 140, height: 45 }}
           />
         </View>
-        <Text style={[styles.ticketText, {textAlign: 'center'}]}>
+        <Text style={[styles.ticketText, { textAlign: 'center' }]}>
           {'\n'}IndiansAbroad{'\n'}
         </Text>
-        <Text style={[styles.leftText, {textAlign: 'center'}]}>
+        <Text style={[styles.leftText, { textAlign: 'center' }]}>
           Secure payments via
         </Text>
-        <Text style={[styles.leftText, {textAlign: 'center'}]}>
+        <Text style={[styles.leftText, { textAlign: 'center' }]}>
           We accept Visa
         </Text>
-        <Text style={[styles.leftText, {textAlign: 'center'}]}>
+        <Text style={[styles.leftText, { textAlign: 'center' }]}>
           We accept Mastercard
         </Text>
-        <Text style={[styles.leftText, {textAlign: 'center'}]}>
+        <Text style={[styles.leftText, { textAlign: 'center' }]}>
           We accept Maestro
         </Text>
-        <View style={{marginBottom: 100}} />
+        <View style={{ marginBottom: 100 }} />
       </KeyboardAwareScrollView>
       <CountryPicker
         // countryCode={code.replace('+', '')}
@@ -302,7 +305,7 @@ export default function AttendanceRequestScreen() {
         withFilter
         placeholder={''}
         withEmoji={false}
-        // withFlag
+      // withFlag
       />
     </SafeAreaView>
   );
@@ -413,5 +416,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'center',
   },
-  des: {...FontStyle(14, colors.neutral_900)},
+  des: { ...FontStyle(14, colors.neutral_900) },
 });

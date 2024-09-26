@@ -80,7 +80,11 @@ export default function CreatePage({ onSuccessCreate }) {
                 height: SCREEN_WIDTH,
                 width: SCREEN_WIDTH,
             }).then(image => {
-                setimage(image)
+                if (image.size <= 20000000) {
+                    setimage(image)
+                } else {
+                    errorToast('Image should be less than 20 MB')
+                }
             }).catch(error => { console.log('err---', error); });
         }, 500);
 
@@ -161,23 +165,23 @@ export default function CreatePage({ onSuccessCreate }) {
                             </Modal>
                         </View>
                     </TouchableOpacity>
-                    <Input extraStyle={styles.input} value={title}
+                    <Input maxLength={100} extraStyle={styles.input} value={title}
                         onChangeText={(text) => setTitle(text)}
                         placeholder={'Title*'} />
-                    <Input extraStyle={styles.input} value={about}
+                    <Input maxLength={500} extraStyle={styles.input} value={about}
                         onChangeText={(text) => setAbout(text)}
                         placeholder={'About*'} />
-                    <Input extraStyle={styles.input} value={catchLine}
+                    <Input maxLength={150} extraStyle={styles.input} value={catchLine}
                         onChangeText={(text) => setCatchLine(text)}
                         placeholder={'Catchline'} />
-                    <Input extraStyle={styles.input} value={website}
+                    <Input maxLength={100} extraStyle={styles.input} value={website}
                         onChangeText={(text) => setwebsite(text)}
                         placeholder={'Website'} />
                     <Text style={styles.locationText}>Location</Text>
                     {countries && <Input extraStyle={styles.input} value={country ? country?._id : ''} onChangeText={(text) => { setcountry(text) }} placeholder={'Country*'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
                     {/* <Input extraStyle={styles.input} value={region} onChangeText={(text) => setregion(text)} placeholder={'Region*'} /> */}
 
-                    <Input extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City*'} />
+                    <Input maxLength={50} extraStyle={styles.input} value={city} onChangeText={(text) => setcity(text)} placeholder={'City*'} />
                     <CommonButton title={'CREATE PAGE'} onPress={() => onPressCreatePage()} extraStyle={{ width: '50%', alignSelf: 'center', marginTop: 20, marginBottom: 50 }} />
                 </ScrollView>
             </KeyboardAvoidingView>

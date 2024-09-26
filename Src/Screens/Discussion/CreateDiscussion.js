@@ -74,7 +74,7 @@ export default function CreateDiscussion() {
         .then(image => {
           if (type == 'video') {
             let temp = []
-            if (image.duration <= 90000) {
+            if (image.duration <= 120000 && image.size <= 300000000) {
               createThumbnail({
                 url: image.path,
                 timeStamp: 1000,
@@ -86,10 +86,15 @@ export default function CreateDiscussion() {
                 setselectedImage(image)
               }).catch(err => console.log('err---', err));
             } else {
-              errorToast('Video should be less than 90 seconds')
+              errorToast('Video should be less than 120 seconds and 300 MB ')
             }
+
           } else {
-            setimageArray([...imageArray, image])
+            if (image.size <= 20000000) {
+              setimageArray([...imageArray, image])
+            } else {
+              errorToast('Image should be less than 20 MB')
+            }
           }
         })
         .catch(err => {
@@ -204,6 +209,7 @@ export default function CreateDiscussion() {
             placeholder="Title"
             placeholderTextColor={colors.neutral_500}
             multiline={true}
+            maxLength={100}
           />
           <View style={styles.inputBox}>
             <TextInput
@@ -213,6 +219,7 @@ export default function CreateDiscussion() {
               style={styles.input}
               placeholder="Write Here"
               multiline={true}
+              maxLength={2000}
               placeholderTextColor={colors.neutral_500}
             />
             <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />

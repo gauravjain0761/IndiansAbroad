@@ -8,43 +8,48 @@ import {
   TextInput,
   Linking,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {errorToast, FontStyle, ImageStyle, successToast} from '../../utils/commonFunction';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { errorToast, FontStyle, ImageStyle, successToast } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {SCREEN_WIDTH, wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
 import RenderSteps from '../../Components/RenderSteps';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import moment from 'moment';
-import {currenciesArray} from '../../utils/constants';
-import {dispatchAction, formDataApiCall} from '../../utils/apiGlobal';
-import {IS_LOADING} from '../../Redux/ActionTypes';
-import {api} from '../../utils/apiConstants';
+import { currenciesArray } from '../../utils/constants';
+import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
+import { IS_LOADING } from '../../Redux/ActionTypes';
+import { api } from '../../utils/apiConstants';
 
 export default function CreateEvent4() {
   const navigation = useNavigation();
-  const {user} = useSelector(e => e.common);
+  const { user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [name, setname] = useState('');
   const [image, setimage] = useState(null);
   const [termsCheckbox, settermsCheckbox] = useState(false);
-  const {params} = useRoute();
+  const { params } = useRoute();
 
   const onSelectImage = () => {
     ImageCropPicker.openPicker({
       mediaType: 'photo',
       cropping: true,
+
     })
       .then(image => {
-        setimage(image);
+        if (image.size <= 20000000) {
+          setimage(image);
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
       })
       .catch(error => {
         console.log('err---', error);
@@ -53,10 +58,10 @@ export default function CreateEvent4() {
 
   const onNextPress = () => {
     if (name.trim() == null) {
-      errorToast('Please enter your name');
+      errorToast('Please enter responsible person name');
     } else if (image == null) {
       errorToast('Please select upload your Passport ID*');
-    }else if(termsCheckbox == false){
+    } else if (termsCheckbox == false) {
       errorToast('Please select agree event guidelines');
     } else {
       let data = {};
@@ -98,7 +103,7 @@ export default function CreateEvent4() {
         }}
       />
       <KeyboardAwareScrollView extraScrollHeight={50}>
-        <View style={{paddingHorizontal: wp(16)}}>
+        <View style={{ paddingHorizontal: wp(16) }}>
           <RenderSteps totalStep={4} currentStep={4} />
           <Text style={styles.titleDes}>
             Please provide the name of the responsible person. In case of any
@@ -110,6 +115,7 @@ export default function CreateEvent4() {
             value={name}
             placeholder={'Name'}
             onChangeText={text => setname(text)}
+            maxLength={100}
           />
           <Text style={styles.titleDes}>
             To ensure the legitimacy of our events and protect our community
@@ -117,12 +123,12 @@ export default function CreateEvent4() {
             assured, your personal information will remain confidential and will
             not be shared with anyone for any other purposes.
           </Text>
-          <Text style={[styles.title, {marginTop: 0, textAlign: 'center'}]}>
+          <Text style={[styles.title, { marginTop: 0, textAlign: 'center' }]}>
             Upload your Passport ID*
           </Text>
           <TouchableOpacity onPress={() => onSelectImage()}>
             {image ? (
-              <Image source={{uri: image.path}} style={styles.uploadImage} />
+              <Image source={{ uri: image.path }} style={styles.uploadImage} />
             ) : (
               <View style={styles.uploadView}>
                 <Image source={Icons.photoUpload} style={styles.photoUpload} />
@@ -140,7 +146,7 @@ export default function CreateEvent4() {
             <Text style={[styles.des]}>
               I agree{' '}
               <Text
-                style={{color: colors.primary_500}}
+                style={{ color: colors.primary_500 }}
                 onPress={() => {
                   Linking.openURL(
                     'https://www.indiansabroad.online/events_guidelines.html',
@@ -156,7 +162,7 @@ export default function CreateEvent4() {
           <CommonButton
             onPress={() => onNextPress()}
             title={'Create'}
-            extraStyle={{width: 140, height: 45}}
+            extraStyle={{ width: 140, height: 45 }}
           />
         </View>
       </KeyboardAwareScrollView>
@@ -211,7 +217,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'center',
   },
-  des: {...FontStyle(14, colors.neutral_900)},
+  des: { ...FontStyle(14, colors.neutral_900) },
   blueView: {
     backgroundColor: colors.secondary_500,
     paddingVertical: 10,

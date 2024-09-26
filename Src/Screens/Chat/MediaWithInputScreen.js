@@ -1,35 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     View,
-    Text,
     SafeAreaView,
-    FlatList,
     StyleSheet,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator,
     Image,
 } from 'react-native';
-import ChatHeader from '../../Components/ChatHeader';
-import ReciverMsg from '../../Components/ReceiverMsg';
 import colors from '../../Themes/Colors';
-import SenderMsg from '../../Components/SenderMsg';
 import ChatInput from '../../Components/ChatInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
-import { io } from 'socket.io-client';
-import { screenName } from '../../Navigation/ScreenConstants';
-import { sendData, socket } from '../../Socket/Socket';
-import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
-import { ADD_ONE_MESSAGE, IS_LOADING, SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { ADD_ONE_MESSAGE, IS_LOADING } from '../../Redux/ActionTypes';
 import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import Video, { VideoRef } from 'react-native-video';
-import { createThumbnail } from 'react-native-create-thumbnail';
-import DocumentPicker, { pick } from 'react-native-document-picker';
+import Video from 'react-native-video';
 import { api } from '../../utils/apiConstants';
-import { errorToast } from '../../utils/commonFunction';
 import Pdf from 'react-native-pdf';
 import CommonButton from '../../Components/CommonButton';
 import { wp } from '../../Themes/Fonts';

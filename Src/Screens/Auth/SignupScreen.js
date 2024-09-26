@@ -145,8 +145,8 @@ export default function SignupScreen() {
                             <Text style={styles.des}>Please fill the details to create an account.</Text>
                             <View style={styles.hightView} />
                             <View style={styles.inputrow}>
-                                <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={firstName} placeholder={'First Name'} onChangeText={(text) => setfirstName(text)} />
-                                <Input extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={lastName} placeholder={'Last Name'} onChangeText={(text) => setlastName(text)} />
+                                <Input maxLength={25} extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={firstName} placeholder={'First Name'} onChangeText={(text) => setfirstName(text)} />
+                                <Input maxLength={25} extraStyle={{ flex: 1 }} keyboardType={'email-address'} value={lastName} placeholder={'Last Name'} onChangeText={(text) => setlastName(text)} />
                             </View>
                             <Input keyboardType={'email-address'} value={email} placeholder={'Email Address'} onChangeText={(text) => setemail(text)} />
                             <View style={styles.hightView} />

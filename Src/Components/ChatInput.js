@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
 import { hp, wp } from '../Themes/Fonts';
 import colors from '../Themes/Colors';
 import { Icons } from '../Themes/Icons';
-import { FontStyle, renameKey } from '../utils/commonFunction';
+import { errorToast, FontStyle, renameKey } from '../utils/commonFunction';
 import DocumentPicker, { pick } from 'react-native-document-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
@@ -64,15 +64,25 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup =
             name: 'chatMedia_[' + time + '].' + image.path.split('.').pop()
           }
           if (type.includes('photo')) {
-            navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: image })
-          } else if (type.includes('video')) {
-            createThumbnail({
-              url: image.path,
-              timeStamp: 1000,
-            }).then(response => {
-              image.thumbnail = response
+            if (image.size <= 20000000) {
               navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: image })
-            }).catch(err => console.log('err---', err));
+            } else {
+              errorToast('Image should be less than 20 MB')
+            }
+
+          } else if (type.includes('video')) {
+
+            if (image.duration <= 120000 && image.size <= 300000000) {
+              createThumbnail({
+                url: image.path,
+                timeStamp: 1000,
+              }).then(response => {
+                image.thumbnail = response
+                navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: image })
+              }).catch(err => console.log('err---', err));
+            } else {
+              errorToast('Video should be less than 120 seconds and 300 MB ')
+            }
           }
         })
         .catch(err => {
@@ -86,21 +96,35 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup =
     closeActionSheet()
     setTimeout(async () => {
       const [result] = await pick({
-        // copyTo: DocumentPicker.
         type: [DocumentPicker.types.images, DocumentPicker.types.video, DocumentPicker.types.pdf]
       })
+
+      console.log('result--', result)
       if (result.type.includes('image')) {
-        navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
-      } else if (result.type.includes('video')) {
-        createThumbnail({
-          url: result.uri,
-          timeStamp: 1000,
-        }).then(response => {
-          result.thumbnail = response
+        if (result.size <= 20000000) {
           navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
-        }).catch(err => console.log('err---', err));
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
+      } else if (result.type.includes('video')) {
+        if (result.size <= 300000000) {
+          createThumbnail({
+            url: result.uri,
+            timeStamp: 1000,
+          }).then(response => {
+            result.thumbnail = response
+            navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
+          }).catch(err => console.log('err---', err));
+        } else {
+          errorToast('Video should be less than 120 seconds and 300 MB ')
+        }
+
       } else {
-        navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
+        if (result.size <= 50000000) {
+          navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })
+        } else {
+          errorToast('File should be less than 50 MB')
+        }
       }
     }, 500);
   }
@@ -228,6 +252,7 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup =
               // onChangeText={(text) => setmessage(text)}
               multiline={true}
               {...textInputProps}
+              maxLength={2000}
             />
             :
             <TextInput
@@ -237,6 +262,7 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup =
               value={message}
               onChangeText={(text) => setmessage(text)}
               multiline={true}
+              maxLength={2000}
             />
           }
         </View>

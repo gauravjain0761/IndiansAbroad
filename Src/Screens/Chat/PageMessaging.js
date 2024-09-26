@@ -22,6 +22,7 @@ import { sendData, socket } from '../../Socket/Socket';
 import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
 import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
+import { errorToast } from '../../utils/commonFunction';
 
 
 export default function PageMessaging() {
@@ -60,7 +61,7 @@ export default function PageMessaging() {
         dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }))
     }, []);
     const onSendMessage = () => {
-        if (message.trim() !== '') {
+        if (message.trim() !== '' && message.trim().length <= 2000) {
             let messageData = {
                 chatId: activeChatRoomUser?.chatId,
                 content: message.trim(),
@@ -70,6 +71,8 @@ export default function PageMessaging() {
             }
             socket.emit('msgSendText', { message: messageData, room: activeChatRoomUser?.chatId })
             setmessage('')
+        } else {
+            errorToast('Message should be less than or equal to 2000 characters.')
         }
     }
     const fetchMoreData = () => {

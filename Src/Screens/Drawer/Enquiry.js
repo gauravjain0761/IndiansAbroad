@@ -82,6 +82,7 @@ export default function Enquiry() {
                     onChangeText={(text) => setsubject(text)}
                     placeholderTextColor={colors.neutral_400}
                     multiline={true}
+                    maxLength={100}
                 />
                 <TextInput
                     placeholder={'Write your message'}
@@ -89,6 +90,7 @@ export default function Enquiry() {
                     multiline={true}
                     placeholderTextColor={colors.neutral_500}
                     value={message}
+                    maxLength={500}
                     onChangeText={(text) => setmessage(text)}
                 />
                 <CommonButton title={'Submit'} onPress={() => onPressSubmit()} extraStyle={[styles.btnView]} />

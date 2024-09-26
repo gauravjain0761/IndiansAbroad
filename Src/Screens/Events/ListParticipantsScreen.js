@@ -12,14 +12,15 @@ import { Icons } from '../../Themes/Icons';
 import RenderUserIcon from '../../Components/RenderUserIcon';
 import { getAttendeeGetByEventAction, } from '../../Services/PostServices';
 import SearchBar from '../../Components/SearchBar';
+import NoDataFound from '../../Components/NoDataFound';
 export default function ListParticipantsScreen() {
   const navigation = useNavigation();
   const { activeEvent, user } = useSelector(e => e.common);
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
 
-  const [particpantsListData, setParticpantsListData] = useState([]);
-  const [particpantsList, setParticpantsList] = useState([]);
+  const [particpantsListData, setParticpantsListData] = useState(undefined);
+  const [particpantsList, setParticpantsList] = useState(undefined);
 
   const onSearchName = (search) => {
     // let arr = searchParticipantsName(particpantsList, undefined, search)
@@ -47,8 +48,8 @@ export default function ListParticipantsScreen() {
     let obj = {
       data: activeEvent?._id,
       onSuccess: res => {
-        setParticpantsList(res?.data);
-        setParticpantsListData(res?.data);
+        setParticpantsList(res ? res?.data : []);
+        setParticpantsListData(res ? res?.data : []);
       },
     };
     dispatch(getAttendeeGetByEventAction(obj));
@@ -117,12 +118,13 @@ export default function ListParticipantsScreen() {
         />
       </View>
       <View style={ApplicationStyles.flex}>
-        <FlatList
+        {particpantsList && <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={particpantsList}
           renderItem={renderItem}
           ItemSeparatorComponent={() => <View style={styles.line} />}
-        />
+          ListEmptyComponent={<NoDataFound text={'No participants'} />}
+        />}
       </View>
     </SafeAreaView>
   );

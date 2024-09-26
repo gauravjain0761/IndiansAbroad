@@ -20,7 +20,7 @@ import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
 import { api } from '../../utils/apiConstants';
 import { IS_LOADING } from '../../Redux/ActionTypes';
 
-const TextInputView = ({ value, onChangeText, placeholder, label }) => {
+const TextInputView = ({ value, onChangeText, placeholder, label, maxLength }) => {
   return (
     <View style={styles.inputStyle}>
       <Text style={styles.labelText}>{label}</Text>
@@ -30,6 +30,7 @@ const TextInputView = ({ value, onChangeText, placeholder, label }) => {
         value={value}
         onChangeText={onChangeText}
         placeholderTextColor={colors.neutral_500}
+        maxLength={maxLength}
       />
     </View>
   );
@@ -111,7 +112,11 @@ export default function IndiansPageUpdate() {
         height: SCREEN_WIDTH,
         width: SCREEN_WIDTH,
       }).then(image => {
-        setimage(image)
+        if (image.size <= 20000000) {
+          setimage(image)
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
       }).catch(error => { console.log('err---', error); });
     }, 500);
 
@@ -231,16 +236,16 @@ export default function IndiansPageUpdate() {
             </View>
           </TouchableOpacity>
 
-          <TextInputView onChangeText={(text) => setTitle(text)} value={title} label="Title" placeholder={'Title*'} />
-          <TextInputView onChangeText={(text) => setAbout(text)} value={about} label="About" placeholder={'About*'} />
-          <TextInputView onChangeText={(text) => setCatchLine(text)} value={catchLine} label="Catchline" placeholder={'Catchline'} />
-          <TextInputView onChangeText={(text) => setwebsite(text)} value={website} label="Website" placeholder={'Website'} />
+          <TextInputView maxLength={100} onChangeText={(text) => setTitle(text)} value={title} label="Title" placeholder={'Title*'} />
+          <TextInputView maxLength={150} onChangeText={(text) => setAbout(text)} value={about} label="About" placeholder={'About*'} />
+          <TextInputView maxLength={150} onChangeText={(text) => setCatchLine(text)} value={catchLine} label="Catchline" placeholder={'Catchline'} />
+          <TextInputView maxLength={100} onChangeText={(text) => setwebsite(text)} value={website} label="Website" placeholder={'Website'} />
           <Text style={styles.locationText}>Location</Text>
           {countries &&
             <DropView value={country} onChangeText={(text) => { setcountry(text?._id) }} label="India" placeholder={'City*'} />
           }
           {/* <TextInputView onChangeText={(text) => setregion(text)} value={region} placeholder={'Region*'} label="Region*" /> */}
-          <TextInputView onChangeText={(text) => setcity(text)} value={city} label="City" placeholder={'City*'} />
+          <TextInputView maxLength={50} onChangeText={(text) => setcity(text)} value={city} label="City" placeholder={'City*'} />
           {/* <TouchableOpacity style={[styles.btnView, {}]} onPress={() => { }}>
             <Text style={styles.btnText}>Update Page</Text>
           </TouchableOpacity> */}

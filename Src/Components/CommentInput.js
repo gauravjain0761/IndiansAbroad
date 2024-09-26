@@ -25,6 +25,7 @@ export default function CommentInput({ onComment, commentText, onChangeText, pla
         triggersConfig
     });
 
+
     return (
         <KeyboardAvoidingView  {...(Platform.OS === 'ios' ? { behavior: 'padding' } : {})}>
             <TagUserInput {...triggers.mention} data={!groupCreateAllUsers ? [] : renameKey(groupCreateAllUsers.filter(obj => obj._id !== user._id))} />
@@ -38,7 +39,8 @@ export default function CommentInput({ onComment, commentText, onChangeText, pla
                     {...textInputProps}
                     style={styles.input}
                     placeholder={placeholder}
-                    placeholderTextColor={colors.neutral_500} />
+                    placeholderTextColor={colors.neutral_500}
+                    maxLength={500} />
                 <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>
                     <Image source={Icons.send} style={ImageStyle(24, 24)} />
                 </TouchableOpacity>

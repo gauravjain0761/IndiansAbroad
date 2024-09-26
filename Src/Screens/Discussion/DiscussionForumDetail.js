@@ -74,7 +74,7 @@ export default function DiscussionForumDetail() {
     }
 
     const onComment = () => {
-        if (commentText.trim() !== '') {
+        if (commentText.trim() !== '' && commentText.trim() <= 500) {
             let obj = {
                 data: {
                     threadId: activePost._id,
@@ -95,7 +95,7 @@ export default function DiscussionForumDetail() {
             }
             dispatch(onAddCommentThread(obj))
         } else {
-            errorToast('Please enter a comment')
+            errorToast('Comment should be less than or equal to 500 characters.');
         }
     }
 
@@ -145,6 +145,7 @@ export default function DiscussionForumDetail() {
                             {...textInputProps}
                             multiline={true}
                             style={styles.input}
+                            maxLength={500}
                             placeholder='Add Response'
                             placeholderTextColor={colors.neutral_500} />
                         <TouchableOpacity onPress={() => onComment()} style={styles.sendButton}>

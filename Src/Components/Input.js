@@ -8,15 +8,15 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ApplicationStyles from '../Themes/ApplicationStyles';
-import {Icons} from '../Themes/Icons';
-import {FontStyle, ImageStyle} from '../utils/commonFunction';
+import { Icons } from '../Themes/Icons';
+import { FontStyle, ImageStyle } from '../utils/commonFunction';
 import colors from '../Themes/Colors';
-import {fontname, hp, screen_width, wp} from '../Themes/Fonts';
+import { fontname, hp, screen_width, wp } from '../Themes/Fonts';
 import RenderUserIcon from './RenderUserIcon';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 
 export default function Input({
   value,
@@ -60,7 +60,7 @@ export default function Input({
         onPress={showDatePicker}
         activeOpacity={1}
         style={styles.inputContainer}>
-        <Text style={[styles.inputText,{color:value?colors.neutral_900: colors.neutral_500}]}>{value ? value:placeholder}</Text>
+        <Text style={[styles.inputText, { color: value ? colors.neutral_900 : colors.neutral_500 }]}>{value ? value : placeholder}</Text>
         {/* <TextInput
           placeholder={placeholder}
           style={styles.inputText}
@@ -140,6 +140,7 @@ export default function Input({
           editable={editable}
           maxLength={maxLength}
         />
+
         {isPassword && (
           <TouchableOpacity onPress={() => setpasswordHide(!passwordHide)}>
             <Image
@@ -149,6 +150,7 @@ export default function Input({
           </TouchableOpacity>
         )}
       </View>
+      {/* {maxLength ? <Text style={ApplicationStyles.maxText}>max {maxLength} character</Text> : null} */}
     </View>
   );
 }

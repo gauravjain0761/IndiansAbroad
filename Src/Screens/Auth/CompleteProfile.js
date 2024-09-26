@@ -109,7 +109,11 @@ export default function CompleteProfile() {
                 height: SCREEN_WIDTH,
                 width: SCREEN_WIDTH,
             }).then(image => {
-                setimage(image)
+                if (image.size <= 20000000) {
+                    setimage(image)
+                } else {
+                    errorToast('Image should be less than 20 MB')
+                }
             }).catch(error => { console.log('err---', error); });
         }, 500);
 

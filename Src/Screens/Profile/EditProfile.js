@@ -54,7 +54,7 @@ export default function EditProfile() {
     cityAbroad: '',
     university: '',
     profession: '',
-    link: '',
+    // link: '',
     catchLine: '',
     district: ''
   });
@@ -79,7 +79,7 @@ export default function EditProfile() {
       cityAbroad: user?.region,
       university: user?.universityORcompany,
       profession: user?.profession,
-      link: user?.websitelink,
+      // link: user?.websitelink,
       catchLine: user?.catchLine.length > 0 ? user?.catchLine : 'I am proud to be a member of IndiansAbroad community.'
     })
   }, [user])
@@ -108,7 +108,11 @@ export default function EditProfile() {
         height: SCREEN_WIDTH,
         width: SCREEN_WIDTH,
       }).then(image => {
-        setimage(image)
+        if (image.size <= 20000000) {
+          setimage(image)
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
       }).catch(error => { console.log('err---', error); });
     }, 500);
     closeActionSheet();
@@ -138,7 +142,6 @@ export default function EditProfile() {
       errorToast('Please enter profession')
     }
     else {
-
       let data = {}
       if (image?.path) {
         let time = new Date().getTime()
@@ -147,7 +150,6 @@ export default function EditProfile() {
           type: image.mime,
           name: 'avtar_[' + time + '].' + image.path.split('.').pop()
         }
-
       }
       if (user.first_Name !== inputData.firstName) { data.first_Name = inputData.firstName.trim() }
       if (user.last_Name !== inputData.lastName) { data.last_Name = inputData.lastName.trim() }
@@ -160,7 +162,7 @@ export default function EditProfile() {
       if (user.region !== inputData.cityAbroad) { data.region = inputData.cityAbroad }
       if (user.universityORcompany !== inputData.university) { data.universityORcompany = inputData.university }
       if (user?.profession !== inputData.profession) { data.profession = inputData.profession }
-      if (user?.websitelink !== inputData.link) { data.websitelink = inputData.link }
+      // if (user?.websitelink !== inputData.link) { data.websitelink = inputData.link }
       if (Object.keys(data).length > 0) {
         data.userId = user?._id
         dispatchAction(dispatch, IS_LOADING, true)
@@ -206,18 +208,18 @@ export default function EditProfile() {
         {user?.catchLine && <View style={styles.cardView}>
           <Text style={styles.cardText}>{user?.catchLine}</Text>
         </View>}
-        <Input editable={false} value={inputData?.firstName} label={'First Name'} placeholder={'First Name'} onChangeText={(text) => setInputData({ ...inputData, firstName: text })} />
-        <Input editable={false} value={inputData?.lastName} label={'Last Name'} placeholder={'Last Name'} onChangeText={(text) => setInputData({ ...inputData, lastName: text })} />
-        <Input value={inputData?.catchLine} label={'Catchline'} placeholder={'Catchline'} onChangeText={(text) => setInputData({ ...inputData, catchLine: text })} />
+        <Input maxLength={25} editable={false} value={inputData?.firstName} label={'First Name'} placeholder={'First Name'} onChangeText={(text) => setInputData({ ...inputData, firstName: text })} />
+        <Input maxLength={25} editable={false} value={inputData?.lastName} label={'Last Name'} placeholder={'Last Name'} onChangeText={(text) => setInputData({ ...inputData, lastName: text })} />
+        <Input maxLength={150} value={inputData?.catchLine} label={'Catchline'} placeholder={'Catchline'} onChangeText={(text) => setInputData({ ...inputData, catchLine: text })} />
         <Input label={'Your birthday'} type={'dob'} value={inputData.dob !== '' ? moment(inputData.dob).format('DD MMMM YYYY') : ''} onChangeText={(text) => setInputData({ ...inputData, dob: text })} placeholder={'Select your Birthdate'} />
-        <Input placeholder={'City'} onChangeText={(text) => setInputData({ ...inputData, city: text })} value={inputData?.city} label={'City'} />
-        <Input placeholder={'District'} onChangeText={(text) => setInputData({ ...inputData, district: text })} value={inputData?.district} label={'District'} />
-        <Input placeholder={'State'} value={inputData?.state} label={'State'} onChangeText={(text) => setInputData({ ...inputData, state: text })} />
+        <Input maxLength={50} placeholder={'City'} onChangeText={(text) => setInputData({ ...inputData, city: text })} value={inputData?.city} label={'City'} />
+        <Input maxLength={50} placeholder={'District'} onChangeText={(text) => setInputData({ ...inputData, district: text })} value={inputData?.district} label={'District'} />
+        <Input maxLength={50} placeholder={'State'} value={inputData?.state} label={'State'} onChangeText={(text) => setInputData({ ...inputData, state: text })} />
         {countries && <Input label={'Country (In Abroad)'} extraStyle={styles.input} value={inputData.country ? inputData.country?._id : ''} onChangeText={(text) => setInputData({ ...inputData, country: text })} placeholder={'Country'} type={'dropdown'} data={countries} labelField={'countryName'} valueField={'_id'} />}
-        <Input value={inputData?.cityAbroad} label={'City (In Abroad)'} placeholder={'City (In Abroad)'} onChangeText={(text) => setInputData({ ...inputData, cityAbroad: text })} />
-        <Input value={inputData?.university} label={'University/Company'} placeholder={'University/Company'} onChangeText={(text) => setInputData({ ...inputData, university: text })} />
-        <Input value={inputData?.profession} label={'Profession'} placeholder={'Profession'} onChangeText={(text) => setInputData({ ...inputData, profession: text })} />
-        <Input value={inputData?.link} label={'Link(If Any)'} placeholder={'Link'} onChangeText={(text) => setInputData({ ...inputData, link: text })} />
+        <Input maxLength={50} value={inputData?.cityAbroad} label={'City (In Abroad)'} placeholder={'City (In Abroad)'} onChangeText={(text) => setInputData({ ...inputData, cityAbroad: text })} />
+        <Input maxLength={200} value={inputData?.university} label={'University/Company'} placeholder={'University/Company'} onChangeText={(text) => setInputData({ ...inputData, university: text })} />
+        <Input maxLength={200} value={inputData?.profession} label={'Profession'} placeholder={'Profession'} onChangeText={(text) => setInputData({ ...inputData, profession: text })} />
+        {/* <Input value={inputData?.link} label={'Link(If Any)'} placeholder={'Link'} onChangeText={(text) => setInputData({ ...inputData, link: text })} /> */}
         <TouchableOpacity onPress={() => onSave()} style={[styles.btnView, { marginTop: 20 }]}>
           <Text style={styles.btnText}>Confirm</Text>
         </TouchableOpacity>

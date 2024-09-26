@@ -37,7 +37,7 @@ export default function RenderText({ text, style, showReadMore, numberOfLines = 
                     //     },
                     // },
                     {
-                        pattern: /(?<=\s|^\s?)@[A-z0-9]+(?=\s|\s?$)/g,
+                        pattern: /@[A-z0-9]+(?=\s|\s?$)/g,
                         style: { ...style, fontFamily: 'OpenSans-Bold' },
                         getLinkText: (replacerArgs) => replacerArgs[0].replace('@', '') == user?._id ? `@${user?.first_Name} ${user?.last_Name}` : groupCreateAllUsers ? `@${groupCreateAllUsers.filter(obj => obj._id == replacerArgs[0].replace('@', ''))[0]?.first_Name} ${groupCreateAllUsers.filter(obj => obj._id == replacerArgs[0].replace('@', ''))[0]?.last_Name}` : '',
                         onPress: (match) => {

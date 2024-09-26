@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   dateConvectTime,
   emailCheck,
@@ -20,24 +20,24 @@ import {
   successToast,
 } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {SCREEN_WIDTH, wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
-import {currenciesArray} from '../../utils/constants';
-import {IS_LOADING, SET_ACTIVE_EVENT} from '../../Redux/ActionTypes';
-import {dispatchAction, formDataApiCall} from '../../utils/apiGlobal';
-import {api} from '../../utils/apiConstants';
+import { currenciesArray } from '../../utils/constants';
+import { IS_LOADING, SET_ACTIVE_EVENT } from '../../Redux/ActionTypes';
+import { dispatchAction, formDataApiCall } from '../../utils/apiGlobal';
+import { api } from '../../utils/apiConstants';
 import moment from 'moment';
 import { getDetailsListAction } from '../../Services/PostServices';
 
 export default function EditEventScreen() {
   const navigation = useNavigation();
-  const {activeEvent, user, getCurrenciesList} = useSelector(e => e.common);
+  const { activeEvent, user, getCurrenciesList } = useSelector(e => e.common);
 
   const dispatch = useDispatch();
   const [image, setimage] = useState(null);
@@ -45,8 +45,8 @@ export default function EditEventScreen() {
   const [contact, setcontact] = useState('');
   const [discription, setdiscription] = useState('');
   const [link, setlink] = useState('');
-  const [starts, setstarts] = useState({date: '', start: '', end: ''});
-  const [ends, setends] = useState({date: '', start: '', end: ''});
+  const [starts, setstarts] = useState({ date: '', start: '', end: '' });
+  const [ends, setends] = useState({ date: '', start: '', end: '' });
   const [currency, setcurrency] = useState(undefined);
   const [price, setprice] = useState('');
   const [available, setavailable] = useState('');
@@ -77,7 +77,11 @@ export default function EditEventScreen() {
       cropping: true,
     })
       .then(image => {
-        setimage(image);
+        if (image.size <= 20000000) {
+          setimage(image);
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
       })
       .catch(error => {
         console.log('err---', error);
@@ -93,9 +97,9 @@ export default function EditEventScreen() {
       errorToast('Please enter your Description');
     } else if (starts.date == '') {
       errorToast('Please select starts date');
-    }  else if (ends.date == '') {
+    } else if (ends.date == '') {
       errorToast('Please select ends date');
-    }  else if (link.trim() == '') {
+    } else if (link.trim() == '') {
       errorToast('Please enter your address');
     } else if (currency == '') {
       errorToast('Please enter select currency');
@@ -153,7 +157,7 @@ export default function EditEventScreen() {
   const getEventList = page => {
     let obj = {
       data: activeEvent?._id,
-      onSuccess: res => {},
+      onSuccess: res => { },
     };
     dispatch(getDetailsListAction(obj));
   };
@@ -171,7 +175,7 @@ export default function EditEventScreen() {
       />
       <KeyboardAwareScrollView
         extraScrollHeight={50}
-        style={{paddingHorizontal: wp(16)}}>
+        style={{ paddingHorizontal: wp(16) }}>
         <TouchableOpacity onPress={() => onSelectImage()}>
           {activeEvent?.event_image?.location ? (
             <Image
@@ -209,7 +213,7 @@ export default function EditEventScreen() {
           placeholder={'Description'}
           style={[
             styles.inputText,
-            {height: 192, textAlignVertical: 'top', paddingTop: 10},
+            { height: 192, textAlignVertical: 'top', paddingTop: 10 },
           ]}
           multiline={true}
           placeholderTextColor={colors.neutral_500}
@@ -225,7 +229,7 @@ export default function EditEventScreen() {
         <Text style={styles.labelText}>Starts</Text>
         <View style={styles.rowViewDate}>
           <Input
-            extraStyle={{flex: 1}}
+            extraStyle={{ flex: 1 }}
             showCalenderIcon={false}
             type={'dob'}
             mode='datetime'
@@ -235,7 +239,7 @@ export default function EditEventScreen() {
                 ? moment(starts.date).format('MMM,DD YYYY hh:mm A')
                 : ''
             }
-            onChangeText={text => setstarts({...starts, date: text})}
+            onChangeText={text => setstarts({ ...starts, date: text })}
             placeholder={'Choose Date'}
           />
           {/* <Input
@@ -261,15 +265,15 @@ export default function EditEventScreen() {
         <Text style={[styles.labelText]}>Ends</Text>
         <View style={styles.rowViewDate}>
           <Input
-            extraStyle={{flex: 1}}
+            extraStyle={{ flex: 1 }}
             showCalenderIcon={false}
             type={'dob'}
             mode='datetime'
             date={ends.date}
             value={
-              ends.date !== '' ?  moment(ends.date).format('MMM,DD YYYY hh:mm A') : ''
+              ends.date !== '' ? moment(ends.date).format('MMM,DD YYYY hh:mm A') : ''
             }
-            onChangeText={text => setends({...ends, date: text})}
+            onChangeText={text => setends({ ...ends, date: text })}
             placeholder={'Choose Date'}
           />
           {/* <Input
@@ -295,7 +299,7 @@ export default function EditEventScreen() {
         <Text style={styles.labelText}>Event fee</Text>
         <View style={styles.rowViewDate}>
           <Input
-            extraStyle={{width: '35%'}}
+            extraStyle={{ width: '35%' }}
             value={currency ? currency : ''}
             onChangeText={text => {
               setcurrency(text.currencyCode);
@@ -308,7 +312,7 @@ export default function EditEventScreen() {
           />
           <Input
             keyboardType="number-pad"
-            extraStyle={{flex: 1}}
+            extraStyle={{ flex: 1 }}
             value={price}
             placeholder={'Price per ticket'}
             onChangeText={text => setprice(text)}
@@ -316,7 +320,7 @@ export default function EditEventScreen() {
         </View>
         <Input
           keyboardType="number-pad"
-          extraStyle={{flex: 1, marginTop: wp(10)}}
+          extraStyle={{ flex: 1, marginTop: wp(10) }}
           value={available}
           placeholder={'Number of tickets available'}
           onChangeText={text => setavailable(text)}

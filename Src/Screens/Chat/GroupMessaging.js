@@ -27,7 +27,7 @@ import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices
 import { dispatchAction } from '../../utils/apiGlobal';
 import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import moment from 'moment';
-import { FontStyle } from '../../utils/commonFunction';
+import { errorToast, FontStyle } from '../../utils/commonFunction';
 import { hp } from '../../Themes/Fonts';
 import { replaceTriggerValues } from 'react-native-controlled-mentions';
 export default function GroupMessaging() {
@@ -73,7 +73,7 @@ export default function GroupMessaging() {
   const onSendMessage = () => {
 
     // console.log(replaceTriggerValues(message, ({ id }) => `@${id}`))
-    if (message.trim() !== '') {
+    if (message.trim() !== '' && message.trim().length <= 2000) {
       let messageData = {
         chatId: activeChatRoomUser?.chatId,
         content: replaceTriggerValues(message.trim(), ({ id }) => `@${id}`),
@@ -86,6 +86,8 @@ export default function GroupMessaging() {
         room: activeChatRoomUser?.chatId,
       });
       setmessage('');
+    } else {
+      errorToast('Message should be less than or equal to 2000 characters.')
     }
   };
 

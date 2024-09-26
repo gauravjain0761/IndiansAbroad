@@ -122,7 +122,11 @@ export default function EditGroup() {
         height: SCREEN_WIDTH,
         width: SCREEN_WIDTH,
       }).then(image => {
-        setimage(image)
+        if (image.size <= 20000000) {
+          setimage(image)
+        } else {
+          errorToast('Image should be less than 20 MB')
+        }
       }).catch(error => { console.log('err---', error); });
     }, 1000);
 
@@ -177,6 +181,7 @@ export default function EditGroup() {
       // data['users' + "[" + selectedUsers.length + "]"] = user?._id
       dispatchAction(dispatch, IS_LOADING, true)
       formDataApiCall(api.editGroup, data, (res) => {
+        let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
         dispatch(onGetChatDetail(obj))
         dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: { ...activeChatRoomUser?.currentUser, chatName: res?.chatName, chatLogo: res?.chatLogo }, chatId: activeChatRoomUser.chatId })
         dispatchAction(dispatch, IS_LOADING, false)
@@ -205,9 +210,9 @@ export default function EditGroup() {
             <ActionSheet actionItems={actionItems} onCancel={closeActionSheet} />
           </ReactNativeModal>
         </TouchableOpacity>
-        <Input onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
+        <Input maxLength={100} onChangeText={setgroupName} value={groupName} placeholder={'Group Name'} extraStyle={styles.inputText} />
       </View>
-      <Input extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
+      <Input maxLength={300} extraStyle={styles.inputText1} onChangeText={setdes} value={des} placeholder={'Description of group'} />
       {/* <Text style={styles.searchText}>Add Group Member</Text>
       <SearchBar value={searchText} onChangeText={text => { setSearchText(text), onSearchName(text) }} placeholder={'Search'} containerStyles={{ marginVertical: 5 }} />
       {list && <FlatList keyExtractor={(item, index) => index.toString()} data={list} renderItem={renderItem} showsVerticalScrollIndicator={false} ListEmptyComponent={<NoDataFound />} />} */}

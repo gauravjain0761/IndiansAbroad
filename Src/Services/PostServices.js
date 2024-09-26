@@ -607,10 +607,20 @@ export const getAttendeeGetByEventAction = request => async dispatch => {
     url: `${api.attendeeGetByEvent}/${request?.data}`,
   })
     .then(async response => {
+      console.log('succc')
       handleSuccessRes(response, request, dispatch, () => { });
     })
     .catch(error => {
-      handleErrorRes(error, request, dispatch);
+      if (error?.response && error?.response?.data) {
+        if (error?.response?.data?.err == 300) {
+          request?.onSuccess()
+        } else {
+          handleErrorRes(error, request, dispatch);
+        }
+      } else {
+        handleErrorRes(error, request, dispatch);
+      }
+
     });
 };
 

@@ -46,4 +46,5 @@ export default ApplicationStyles = StyleSheet.create({
     borderColor: colors.neutral_400,
     marginTop: 12,
   },
+  maxText: { alignSelf: 'flex-end', ...FontStyle(10, colors.neutral_500) }
 });

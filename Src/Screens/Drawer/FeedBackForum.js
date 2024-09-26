@@ -80,6 +80,7 @@ export default function FeedBackForum() {
                     placeholderTextColor={colors.neutral_500}
                     value={suggestion}
                     onChangeText={(text) => setsuggestion(text)}
+                    maxLength={500}
                 />
                 <CommonButton title={'Submit'} onPress={() => onPressSubmit()} extraStyle={[styles.btnView]} />
             </KeyboardAwareScrollView>

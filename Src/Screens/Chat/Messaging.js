@@ -25,7 +25,7 @@ import { getChatMessage, onCheckMessageRequest, onGetUnreadMsgCount } from '../.
 import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import { FontStyle } from '../../utils/commonFunction';
+import { errorToast, FontStyle } from '../../utils/commonFunction';
 import { hp, wp } from '../../Themes/Fonts';
 import moment from 'moment';
 import MessageRequestModal from '../../Components/MessageRequestModal';
@@ -72,7 +72,7 @@ const Messaging = () => {
   }, []);
 
   const onSendMessage = () => {
-    if (message.trim() !== '') {
+    if (message.trim() !== '' && message.trim().length <= 2000) {
       let messageData = {
         chatId: activeChatRoomUser?.chatId,
         content: message.trim(),
@@ -82,6 +82,8 @@ const Messaging = () => {
       }
       socket.emit('msgSendText', { message: messageData, room: activeChatRoomUser?.chatId })
       setmessage('')
+    } else {
+      errorToast('Message should be less than or equal to 2000 characters.')
     }
   }
 

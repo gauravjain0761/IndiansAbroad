@@ -102,7 +102,7 @@ export default function PagesPostDetail() {
   }
 
   const onComment = () => {
-    if (commentText.trim() !== '') {
+    if (commentText.trim() !== '' && commentText.trim() <= 500) {
       let obj = {
         data: {
           postId: activePost?._id,
@@ -127,7 +127,7 @@ export default function PagesPostDetail() {
       }
       dispatch(onAddComment(obj))
     } else {
-      errorToast('Please enter a comment')
+      errorToast('Comment should be less than or equal to 500 characters.');
     }
   }
 

@@ -7,33 +7,33 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {dateConvectTime, errorToast, FontStyle, ImageStyle} from '../../utils/commonFunction';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { dateConvectTime, errorToast, FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
-import {useDispatch, useSelector} from 'react-redux';
-import {screenName} from '../../Navigation/ScreenConstants';
-import {SCREEN_WIDTH, wp} from '../../Themes/Fonts';
-import {Icons} from '../../Themes/Icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { screenName } from '../../Navigation/ScreenConstants';
+import { SCREEN_WIDTH, wp } from '../../Themes/Fonts';
+import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
 import RenderSteps from '../../Components/RenderSteps';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import moment from 'moment';
-import {currenciesArray} from '../../utils/constants';
-import {getalluserEventCreate} from '../../Services/PostServices';
+import { currenciesArray } from '../../utils/constants';
+import { getalluserEventCreate } from '../../Services/PostServices';
 export default function CreateEvent2() {
   const navigation = useNavigation();
-  const {user,getCurrenciesList} = useSelector(e => e.common);
+  const { user, getCurrenciesList } = useSelector(e => e.common);
   const dispatch = useDispatch();
-  const {params} = useRoute();
+  const { params } = useRoute();
   const [type, settype] = useState('Onsite');
   const [link, setlink] = useState('');
-  const [starts, setstarts] = useState({date: '', start: '', end: ''});
-  const [ends, setends] = useState({date: '', start: '', end: ''});
+  const [starts, setstarts] = useState({ date: '', start: '', end: '' });
+  const [ends, setends] = useState({ date: '', start: '', end: '' });
   const [currency, setcurrency] = useState(null);
   const [price, setprice] = useState('');
   const [available, setavailable] = useState('');
@@ -45,7 +45,7 @@ export default function CreateEvent2() {
       errorToast('Please select starts date');
     } else if (ends.date == '') {
       errorToast('Please select ends date');
-    }  else if (address.trim() == '') {
+    } else if (address.trim() == '') {
       errorToast('Please enter your address');
     } else if (currency.trim() == '') {
       errorToast('Please enter select currency');
@@ -66,7 +66,7 @@ export default function CreateEvent2() {
           end_time: ends.date,
           event_fee: price,
           no_of_tickets: available,
-          currency:currency
+          currency: currency
         },
         onSuccess: (res) => {
           navigation.navigate(screenName.CreateEvent3, {
@@ -76,8 +76,8 @@ export default function CreateEvent2() {
           setavailable("")
           setprice("")
           setcurrency(null)
-          setstarts({date: '', start: '', end: ''})
-          setends({date: '', start: '', end: ''})
+          setstarts({ date: '', start: '', end: '' })
+          setends({ date: '', start: '', end: '' })
         },
       };
       dispatch(getalluserEventCreate(obj));
@@ -96,9 +96,9 @@ export default function CreateEvent2() {
       />
       <KeyboardAwareScrollView
         extraScrollHeight={50}
-        style={{paddingHorizontal: wp(16)}}>
+        style={{ paddingHorizontal: wp(16) }}>
         <RenderSteps totalStep={4} currentStep={2} />
-        <View style={[ApplicationStyles.row, {gap: 20}]}>
+        <View style={[ApplicationStyles.row, { gap: 20 }]}>
           <TouchableOpacity
             onPress={() => settype('Onsite')}
             style={styles.radioView}>
@@ -121,15 +121,16 @@ export default function CreateEvent2() {
           </TouchableOpacity>
         </View>
         <Input
-          extraStyle={{marginTop: 5}}
+          extraStyle={{ marginTop: 5 }}
           value={address}
           placeholder={'Venue / URL Link'}
+          maxLength={100}
           onChangeText={text => setaddress(text)}
         />
         <Text style={styles.title}>Starts</Text>
         <View style={styles.rowViewDate}>
           <Input
-            extraStyle={{flex: 1}}
+            extraStyle={{ flex: 1 }}
             showCalenderIcon={false}
             type={'dob'}
             mode='datetime'
@@ -138,7 +139,7 @@ export default function CreateEvent2() {
                 ? moment(starts.date).format('MMM,DD YYYY hh:mm A')
                 : ''
             }
-            onChangeText={text => setstarts({...starts, date: text})}
+            onChangeText={text => setstarts({ ...starts, date: text })}
             placeholder={'Choose Date and Time'}
           />
 
@@ -164,17 +165,17 @@ export default function CreateEvent2() {
             placeholder={'Time'}
           /> */}
         </View>
-        <Text style={[styles.title, {marginTop: 20}]}>Ends</Text>
+        <Text style={[styles.title, { marginTop: 20 }]}>Ends</Text>
         <View style={styles.rowViewDate}>
           <Input
-            extraStyle={{flex: 1}}
+            extraStyle={{ flex: 1 }}
             showCalenderIcon={false}
             type={'dob'}
             mode='datetime'
             value={
               ends.date !== '' ? moment(ends.date).format('MMM,DD YYYY hh:mm A') : ''
             }
-            onChangeText={text => setends({...ends, date: text})}
+            onChangeText={text => setends({ ...ends, date: text })}
             placeholder={'Choose Date and Time'}
           />
           {/* <Input
@@ -200,7 +201,7 @@ export default function CreateEvent2() {
         <Text style={styles.title}>Event fee</Text>
         <View style={styles.rowViewDate}>
           <Input
-            extraStyle={{width: '35%'}}
+            extraStyle={{ width: '35%' }}
             value={currency ? currency : ''}
             onChangeText={text => {
               setcurrency(text.currencyCode);
@@ -213,7 +214,7 @@ export default function CreateEvent2() {
           />
           <Input
             keyboardType="number-pad"
-            extraStyle={{flex: 1}}
+            extraStyle={{ flex: 1 }}
             value={price}
             placeholder={'Price per ticket'}
             onChangeText={text => setprice(text)}
@@ -221,7 +222,7 @@ export default function CreateEvent2() {
         </View>
         <Input
           keyboardType="number-pad"
-          extraStyle={{flex: 1, marginTop: wp(10)}}
+          extraStyle={{ flex: 1, marginTop: wp(10) }}
           value={available}
           placeholder={'Number of tickets available'}
           onChangeText={text => setavailable(text)}
@@ -266,6 +267,6 @@ const styles = StyleSheet.create({
   rowViewDate: {
     flexDirection: 'row',
     gap: wp(10),
-    alignItems:'center'
+    alignItems: 'center'
   },
 });
