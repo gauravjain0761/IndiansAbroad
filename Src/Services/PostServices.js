@@ -558,6 +558,7 @@ export const getDetailsListAction = request => async dispatch => {
 };
 
 export const getAttendeeCreateAction = request => async dispatch => {
+  dispatchAction(dispatch, IS_LOADING, true)
   return makeAPIRequest({
     method: POST,
     url: api.attendeeCreate,

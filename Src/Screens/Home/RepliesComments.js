@@ -145,7 +145,7 @@ export default function RepliesComments() {
   };
 
   const onComment = () => {
-    if (commentText.trim() !== '' && commentText.trim().length <= 500) {
+    if (commentText.trim() !== '') {
       if (params?.isThread) {
         let obj = {
           data: {
@@ -193,7 +193,7 @@ export default function RepliesComments() {
         dispatch(onAddCommentReply(obj));
       }
     } else {
-      errorToast('Comment should be less than or equal to 500 characters.');
+      errorToast('Please enter comment');
     }
   };
 

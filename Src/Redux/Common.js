@@ -59,6 +59,7 @@ import {
   SET_PLAN_LIST,
   SET_EVENT_ATTENDANT_COUNT,
   SET_TAG_PART,
+  SET_NOTIFICATION_CLICK,
 } from './ActionTypes';
 
 const initialState = {
@@ -113,7 +114,8 @@ const initialState = {
   allIndianRegion: undefined,
   allIndianRegionCount: 0,
   planList: undefined,
-  tagPart: undefined
+  tagPart: undefined,
+  isNotificationClick: false
 };
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -712,6 +714,9 @@ export default function (state = initialState, action) {
     }
     case LOG_OUT: {
       return initialState
+    }
+    case SET_NOTIFICATION_CLICK: {
+      return { ...state, isNotificationClick: action.payload };
     }
     default:
       return state;

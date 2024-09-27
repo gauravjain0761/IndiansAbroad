@@ -1,4 +1,4 @@
-import { FlatListComponent, Image, StyleSheet, Text, View } from 'react-native';
+import { FlatListComponent, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import colors from '../../Themes/Colors';
 import { SCREEN_WIDTH } from '../../Themes/Fonts';
@@ -21,7 +21,7 @@ export default function SplashScreen() {
     setTimeout(() => {
       setloading(true);
       checkSession();
-    }, 2000);
+    }, Platform.OS == 'ios' ? 3000 : 2000);
   }, []);
 
   const checkSession = async () => {

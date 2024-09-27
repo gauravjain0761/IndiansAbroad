@@ -1,23 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  TouchableOpacity,
-  FlatList,
-  RefreshControl,
-  ActivityIndicator,
-  Image,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableOpacity, FlatList, RefreshControl, ActivityIndicator, Image, Platform, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
-import { fontname, SCREEN_HEIGHT, screen_width, wp } from '../../Themes/Fonts';
-import { FontStyle, getLocalTime, ImageStyle } from '../../utils/commonFunction';
+import { SCREEN_HEIGHT, wp } from '../../Themes/Fonts';
+import { FontStyle, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import PostCard from '../../Components/PostCard';
@@ -26,22 +14,14 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { screenName } from '../../Navigation/ScreenConstants';
 import { getalluserEvent, getalluserposts, getFollowerList } from '../../Services/PostServices';
 import { dispatchAction } from '../../utils/apiGlobal';
-import {
-  IS_LOADING,
-  SET_ACTIVE_EVENT,
-  SET_ACTIVE_POST,
-  SET_ACTIVE_POST_COMMENTS,
-  SET_ALL_EVENTS,
-  SET_GLOBAL_SEARCH,
-} from '../../Redux/ActionTypes';
+import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_GLOBAL_SEARCH, SET_NOTIFICATION_CLICK, } from '../../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
 import { onUpdateFbToken } from '../../Services/AuthServices';
 import { getDiscussionCountry } from '../../Services/DiscussionServices';
-import { io } from 'socket.io-client';
 import EventDashboardCard from '../../Components/EventDashboardCard';
 import { Icons } from '../../Themes/Icons';
-import { socket, socketConnect } from '../../Socket/Socket';
+import { socketConnect } from '../../Socket/Socket';
 import { onGetGroupCreateUser, onGetUnreadMsgCount } from '../../Services/ChatServices';
 import moment from 'moment';
 
@@ -54,12 +34,19 @@ export default function HomeScreen() {
   const [isLeftButtonActive, setIsLeftButtonActive] = useState(true);
   const [createPostModal, setcreatePostModal] = useState(false);
   const navigation = useNavigation();
-  const { allPost, allPostsCount, user, allEvent, allEventCount, fcmToken } =
+  const { allPost, allPostsCount, user, allEvent, allEventCount, fcmToken, isNotificationClick } =
     useSelector(e => e.common);
   const isFocuse = useIsFocused();
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
+  console.log(isNotificationClick)
+  useEffect(() => {
+    if (isNotificationClick) {
+      navigation.navigate(screenName.NotificationScreen)
+      dispatchAction(dispatch, SET_NOTIFICATION_CLICK, false)
+    }
+  }, [isNotificationClick])
 
   useEffect(() => {
     if (isFocuse) {

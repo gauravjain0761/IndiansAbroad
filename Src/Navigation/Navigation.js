@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import HomeScreen from '../Screens/Home/HomeScreen';
 import {
   CardStyleInterpolators,
@@ -59,11 +59,6 @@ import Messaging from '../Screens/Chat/Messaging';
 import ForgotPassword from '../Screens/Auth/ForgotPassword';
 import NewPassword from '../Screens/Auth/NewPassword';
 import PasswordChangeSuccess from '../Screens/Auth/PasswordChangeSuccess';
-import {
-  onBackgroundNotificationPress,
-  onMessage,
-  onNotificationPress,
-} from '../Config/notificationHandle';
 import EventDetailScreen from '../Screens/Events/EventDetailScreen';
 import AttendanceRequestScreen from '../Screens/Events/AttendanceRequestScreen';
 import EventPaymentScreen from '../Screens/Events/EventPaymentScreen';
@@ -85,11 +80,11 @@ import GroupMediaScreen from '../Screens/Chat/GroupMediaScreen';
 import AddMemberScreen from '../Screens/Chat/AddMemberScreen';
 import MediaWithInputScreen from '../Screens/Chat/MediaWithInputScreen';
 import { requestNotificationUserPermission } from '../Config/firebaseConfig';
-import notifee from '@notifee/react-native';
+import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import firebase from '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import { dispatchAction } from '../utils/apiGlobal';
-import { SET_FCM_TOKEN } from '../Redux/ActionTypes';
+import { SET_FCM_TOKEN, SET_NOTIFICATION_CLICK } from '../Redux/ActionTypes';
 import { useDispatch } from 'react-redux';
 import PageMessaging from '../Screens/Chat/PageMessaging';
 import ChatRoomUsersScreen from '../Screens/Chat/ChatRoomUsersScreen';
@@ -234,6 +229,7 @@ const headerStyleTransparent = {
 const Stack = createStackNavigator();
 export default function Navigation() {
   const dispatch = useDispatch()
+  const navigation = useNavigation()
 
   useEffect(() => {
     messaging().setAutoInitEnabled(true);
@@ -285,10 +281,84 @@ export default function Navigation() {
   };
 
   useEffect(() => {
-    onNotificationPress();
-    onBackgroundNotificationPress();
-    onMessage();
+    notifee.cancelAllNotifications();
+    notifee.cancelTriggerNotifications();
+    // onNotificationPress();
+    // onBackgroundNotificationPress();
+    // onMessage();
   }, []);
+
+  useEffect(() => {
+    // onDisplayNotificationII()
+    return notifee.onForegroundEvent(({ type, detail }) => {
+      switch (type) {
+        case EventType.PRESS:
+          console.log(detail)
+          checkNotification(detail.notification, undefined);
+          break;
+      }
+    });
+  }, []);
+
+  const checkNotification = (remoteMessage) => {
+    // if (type == 'open') { setlastTap(0) }
+    notifee.cancelAllNotifications()
+    notifee.cancelTriggerNotifications()
+    console.log('checkNotification-----')
+    dispatchAction(dispatch, SET_NOTIFICATION_CLICK, true)
+    // navigation.navigate(screenName.NotificationScreen)
+  }
+  useEffect(() => {
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage.notification,
+        );
+        checkNotification(remoteMessage);
+      }
+    });
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(async remoteMessage => {
+        console.log('getInitialNotification', remoteMessage);
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+        }
+      });
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+    });
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', remoteMessage);
+      onDisplayNotification(remoteMessage);
+    });
+    return unsubscribe;
+  }, []);
+  async function onDisplayNotification(message) {
+
+    await notifee.requestPermission();
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+    });
+    notifee.displayNotification({
+      title: message.notification.title,
+      body: message.notification.body,
+      android: {
+        channelId,
+        smallIcon: '@drawable/ic_stat_name',
+      },
+      ios: {
+        // sound: 'noti.wav',
+      },
+    });
+  }
 
   return (
     <Stack.Navigator>

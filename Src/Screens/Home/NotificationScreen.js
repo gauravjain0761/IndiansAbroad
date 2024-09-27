@@ -1,5 +1,6 @@
 import {
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -35,12 +36,23 @@ const NotificationScreen = () => {
   const dispatch = useDispatch();
   const [notiArray, setnotiArray] = useState(undefined);
   const navigation = useNavigation()
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     if (!notificationList) {
       dispatchAction(dispatch, IS_LOADING, true);
     }
     dispatch(onGetNotification({ data: { loginUserId: user?._id } }));
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(onGetNotification({
+      data: { loginUserId: user?._id }, onSuccess: () => {
+        setRefreshing(false)
+      }
+    }));
+
   }, []);
 
   const onPressBack = () => {
@@ -65,53 +77,51 @@ const NotificationScreen = () => {
     dispatch(onAcceptRejectRequest(obj));
   };
 
-  const onPressNotification = (type, item) => {
-    if (type.includes('post')) {
-      dispatchAction(dispatch, IS_LOADING, true);
-      dispatch(onGetSinglePost({
-        data: {
-          postId: item?.postId,
-          loginUserId: user._id
-        },
-        onSuccess: (res) => {
-          if (res.data?.type == 'cppost') {
-            dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
-            dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.postId });
-            navigation.navigate(screenName.PagesPostDetail);
-          } else {
-            dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.postId });
-            dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
-            navigation.navigate(screenName.PostDetail);
-          }
+  const openPost = (item) => {
+    dispatchAction(dispatch, IS_LOADING, true);
+    dispatch(onGetSinglePost({
+      data: { postId: item?.postId, loginUserId: user._id },
+      onSuccess: (res) => {
+        if (res.data?.type == 'cppost') {
+          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+          dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.postId });
+          navigation.navigate(screenName.PagesPostDetail);
+        } else {
+          dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.postId });
+          dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+          navigation.navigate(screenName.PostDetail);
         }
-      }))
-    } else if (type.includes('thread')) {
-      dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.threadId });
-      dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
-      navigation.navigate(screenName.DiscussionForumDetail)
+      }
+    }))
+  }
+
+  const openThread = (item) => {
+    dispatchAction(dispatch, SET_ACTIVE_POST, { _id: item?.threadId });
+    dispatchAction(dispatch, SET_ACTIVE_POST_COMMENTS, undefined);
+    navigation.navigate(screenName.DiscussionForumDetail)
+  }
+
+  const openMessageScreen = (item) => {
+    if (item?.groupId?.isGroupChat) {
+      dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+      dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId, chatId: item?.groupId?._id })
+      navigation.navigate(screenName.GroupMessaging);
+    } else {
+      dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
+      dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId?.users?.filter(item => item._id !== user?._id)?.[0], chatId: item?.groupId._id })
+      navigation.navigate(screenName.Messaging);
+    }
+  }
+
+  const onPressNotification = (type, item) => {
+    if (type.includes('post') || type == 'commentTag' || type == 'mention') {
+      openPost(item)
+    } else if (type.includes('thread') || type == 'threadCommentTagged' || type == 'mentionthread') {
+      openThread(item)
     } else if (type.includes('connect')) {
       navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id });
     } else if (type == 'message') {
-      if (item?.groupId?.isGroupChat) {
-        dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
-        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId, chatId: item?.groupId?._id })
-        navigation.navigate(screenName.GroupMessaging);
-      } else {
-        dispatchAction(dispatch, GET_CHAT_MESSAGES, undefined);
-        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: item?.groupId?.users?.filter(item => item._id !== user?._id)?.[0], chatId: item?.groupId._id })
-        navigation.navigate(screenName.Messaging);
-      }
-      // let obj = {
-      //   data: {
-      //     CpUserId: item?.sender?._id,
-      //     userId: user?._id,
-      //     communityPageId: 'NA',
-      //   },
-      //   onSuccess: () => {
-      //     navigation.navigate(screenName.Messaging, { notification: item });
-      //   },
-      // };
-      // dispatch(onOpenNewChatForUser(obj));
+      openMessageScreen(item)
     }
   }
 
@@ -138,19 +148,12 @@ const NotificationScreen = () => {
             <TouchableOpacity onPress={() => navigation.navigate(screenName.indiansDetails, { userId: item?.createdBy?._id })} style={styles.leftSide}>
               <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
               <View style={styles.centerContainer}>
-                <Text style={styles.name}>
-                  {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
-                  {item?.title?.trim()}
-                </Text>
+                <Text style={styles.name}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}{item?.title?.trim()}</Text>
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity
-                    onPress={() => onPressReq(item, 'accept')}
-                    style={styles.button}>
+                  <TouchableOpacity onPress={() => onPressReq(item, 'accept')} style={styles.button}>
                     <Text style={styles.buttonText}>{'Accept'}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => onPressReq(item, 'reject')}
-                    style={styles.button}>
+                  <TouchableOpacity onPress={() => onPressReq(item, 'reject')} style={styles.button}>
                     <Text style={styles.buttonText}>{'Ignore'}</Text>
                   </TouchableOpacity>
                 </View>
@@ -158,18 +161,13 @@ const NotificationScreen = () => {
               <Text style={styles.time}>{item?.createdAt}</Text>
             </TouchableOpacity>
           </View>
-
-
         ) :
           item?.type == 'message-request' ? (
             <View key={item?._id} style={styles.Container}>
               <TouchableOpacity onPress={() => openChat(item)} style={styles.leftSide}>
                 <RenderUserIcon isBorder={item?.sender?.subscribedMember} type='user' url={item?.sender?.avtar} height={45} />
                 <View style={styles.nameContainer}>
-                  <Text style={styles.name}>
-                    {item?.sender?.first_Name} {item?.sender?.last_Name}{' '}
-                    {'has sent you a one time message request.'}
-                  </Text>
+                  <Text style={styles.name}>{item?.sender?.first_Name} {item?.sender?.last_Name}{' '}{'has sent you a one time message request.'}</Text>
                 </View>
                 <Text style={styles.time}>{item?.createdAt}</Text>
               </TouchableOpacity>
@@ -180,12 +178,8 @@ const NotificationScreen = () => {
                 <TouchableOpacity onPress={() => onPressNotification(item?.type, item)} style={styles.leftSide}>
                   <RenderUserIcon isBorder={item?.createdBy?.subscribedMember} type='user' url={item?.createdBy?.avtar} height={45} />
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>
-                      {item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}
-                      {item?.type == 'message'
-                        ? 'has sent you a message'
-                        : item?.title?.trim()}
-                    </Text>
+                    {/* <Text>{item.type}</Text> */}
+                    <Text style={styles.name}>{item?.createdBy?.first_Name} {item?.createdBy?.last_Name}{' '}{item?.type == 'message' ? 'has sent you a message' : item?.title?.trim()}</Text>
                   </View>
                   <Text style={styles.time}>{item?.createdAt}</Text>
                 </TouchableOpacity>
@@ -195,10 +189,18 @@ const NotificationScreen = () => {
     );
   };
 
-  console.log(notificationList?.filter(
-    obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')
-  ))
-
+  const RenderFlatList = ({ data }) => {
+    return (
+      <FlatList
+        keyExtractor={(item, index) => index.toString()}
+        data={data}
+        ItemSeparatorComponent={() => (
+          <View style={styles.separator}></View>
+        )}
+        renderItem={renderItem}
+      />
+    )
+  }
   return (
     <SafeAreaView style={ApplicationStyles.applicationView}>
       <Header logoShow={false} onLeftPress={onPressBack} showLeft />
@@ -206,144 +208,71 @@ const NotificationScreen = () => {
       {notificationList && (
         <View style={styles.categoriesContainer}>
           <TouchableOpacity style={styles.btnView} onPress={() => setCategories('All')}>
-            <Text
-              style={[
-                styles.categoriesTitle,
-                {
-                  color:
-                    categories == 'All' ? colors?.tertiary1_500 : colors?.black,
-                },
-              ]}>
+            <Text style={[styles.categoriesTitle, { color: categories == 'All' ? colors?.tertiary1_500 : colors?.black, },]}>
               {`All`}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnView} onPress={() => setCategories('Requests')}>
-            <Text
-              style={[
-                styles.categoriesTitle,
-                {
-                  color:
-                    categories == 'Requests'
-                      ? colors?.tertiary1_500
-                      : colors?.black,
-                },
-              ]}>
-              {`Connection Invite(${notificationList.filter(obj => (obj?.type == 'follow-request' || obj?.type == 'message-request'))
-                .length
-                })`}
+            <Text style={[styles.categoriesTitle, { color: categories == 'Requests' ? colors?.tertiary1_500 : colors?.black, },]}>
+              {`Connection Invite(${notificationList.filter(obj => (obj?.type == 'follow-request' || obj?.type == 'message-request')).length})`}
             </Text>
           </TouchableOpacity>
         </View>
       )}
       {notificationList && (
-        <ScrollView style={{ marginTop: 0 }}>
+        <ScrollView refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        } style={{ marginTop: 0 }}>
           {notificationList?.length > 0 ? (
             <View style={ApplicationStyles.flex}>
               {categories == 'All' ? (
-                notificationList?.filter(
-                  obj =>
-                    moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                    moment().format('DD/MM/YYYY'),
-                ).length > 0 ? (
-                  <>
+                notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY'),).length > 0 ? (
+                  <View>
                     <View style={styles.newHeader}>
                       <Text style={styles.HeaderTitle}>{'New'}</Text>
                     </View>
                     <View style={styles.notificationcontainer}>
-                      <FlatList
-                        keyExtractor={(item, index) => index.toString()}
-                        data={notificationList?.filter(
-                          obj =>
-                            moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                            moment().format('DD/MM/YYYY'),
-                        )}
-                        ItemSeparatorComponent={() => (
-                          <View style={styles.separator}></View>
-                        )}
-                        renderItem={renderItem}
-                      />
+                      <RenderFlatList data={notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY'),)} />
                     </View>
-                    <View style={styles.newHeader}>
-                      <Text style={styles.HeaderTitle}>{'Older'}</Text>
-                    </View>
-                    <View style={styles.notificationcontainer}>
-                      <FlatList
-                        keyExtractor={(item, index) => index.toString()}
-                        data={notificationList?.filter(
-                          obj =>
-                            moment(obj?.createdDate).format('DD/MM/YYYY') !==
-                            moment().format('DD/MM/YYYY'),
-                        )}
-                        ItemSeparatorComponent={() => (
-                          <View style={styles.separator}></View>
-                        )}
-                        renderItem={renderItem}
-                      />
-                    </View>
-                  </>
+                    {notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') !== moment().format('DD/MM/YYYY'),).length > 0 &&
+                      <View>
+                        <View style={styles.newHeader}>
+                          <Text style={styles.HeaderTitle}>{'Older'}</Text>
+                        </View>
+                        <View style={styles.notificationcontainer}>
+                          <RenderFlatList data={notificationList?.filter(obj => moment(obj?.createdDate).format('DD/MM/YYYY') !== moment().format('DD/MM/YYYY'),)} />
+                        </View>
+                      </View>
+                    }
+                  </View>
                 ) : (
                   <View style={styles.notificationcontainer}>
-                    <FlatList
-                      keyExtractor={(item, index) => index.toString()}
-                      data={notificationList}
-                      ItemSeparatorComponent={() => (
-                        <View style={styles.separator}></View>
-                      )}
-                      renderItem={renderItem}
-                    />
+                    <RenderFlatList data={notificationList} />
                   </View>
                 )
-              ) : notificationList?.filter(
-                obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')
-              ).length > 0 ? (
+              ) : notificationList?.filter(obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY')).length > 0 ? (
                 <>
                   <View style={styles.newHeader}>
                     <Text style={styles.HeaderTitle}>{'New'}</Text>
                   </View>
                   <View style={styles.notificationcontainer}>
-                    <FlatList
-                      keyExtractor={(item, index) => index.toString()}
-                      data={notificationList?.filter(
-                        obj =>
-                          (obj?.type == 'follow-request' || obj?.type == 'message-request') &&
-                          moment(obj?.createdDate).format('DD/MM/YYYY') ==
-                          moment().format('DD/MM/YYYY')
-                      )}
-                      renderItem={renderItem}
-                    />
+                    <RenderFlatList data={notificationList?.filter(obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') == moment().format('DD/MM/YYYY'))} />
                   </View>
                   <View style={styles.newHeader}>
                     <Text style={styles.HeaderTitle}>{'Older'}</Text>
                   </View>
                   <View style={styles.notificationcontainer}>
-                    <FlatList
-                      keyExtractor={(item, index) => index.toString()}
-                      data={notificationList?.filter(
-                        obj =>
-                          (obj?.type == 'follow-request' || obj?.type == 'message-request') &&
-                          moment(obj?.createdDate).format('DD/MM/YYYY') !==
-                          moment().format('DD/MM/YYYY')
-                      )}
-                      renderItem={renderItem}
-                    />
+                    <RenderFlatList data={notificationList?.filter(obj => (obj?.type == 'follow-request' || obj?.type == 'message-request') && moment(obj?.createdDate).format('DD/MM/YYYY') !== moment().format('DD/MM/YYYY'))} />
                   </View>
                 </>
               ) : (
                 <View style={styles.notificationcontainer}>
-                  <FlatList
-                    keyExtractor={(item, index) => index.toString()}
-                    data={notificationList?.filter(
-                      obj => obj?.type == 'follow-request' || obj?.type == 'message-request',
-                    )}
-                    renderItem={renderItem}
-                  />
+                  <RenderFlatList data={notificationList?.filter(obj => obj?.type == 'follow-request' || obj?.type == 'message-request',)} />
                 </View>
               )}
             </View>
           ) : (
-            <NoDataFound
-              text={'No notifications yet – exciting updates coming soon!'}
-            />
+            <NoDataFound text={'No notifications yet – exciting updates coming soon!'} />
           )}
         </ScrollView>
       )}

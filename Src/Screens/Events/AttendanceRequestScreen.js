@@ -57,6 +57,7 @@ export default function AttendanceRequestScreen() {
     Number(activeEvent?.event_fee) * inputData.numberOfTickets;
 
   const onNextPress = () => {
+    // navigation.navigate(screenName.EventPaymentScreen);
     if (inputData.firstName.trim() == '') {
       errorToast('Please enter your first Name');
     } else if (inputData.lastName.trim() == '') {
@@ -83,32 +84,20 @@ export default function AttendanceRequestScreen() {
           total_amount: totalAmount,
           event_id: activeEvent?._id,
         },
-
         onSuccess: res => {
           let obj = {
-            data: {
-              amount: totalAmount,
-              attendeeId: res?.data?._id,
-              currency: activeEvent?.currency,
-            },
+            data: { amount: totalAmount, attendeeId: res?.data?._id, currency: activeEvent?.currency, },
             onSuccess: res => {
               dispatchAction(dispatch, SET_EVENT_ATTENDANT_COUNT, {
                 id: activeEvent?._id,
               });
-              setInputData({
-                firstName: '',
-                lastName: '',
-                phone: '',
-                email: '',
-                numberOfTickets: 1,
-              });
+              setInputData({ firstName: '', lastName: '', phone: '', email: '', numberOfTickets: 1, });
               getEventList()
               settermsCheckbox(false)
               navigation.goBack();
               // navigation.navigate(screenName.EventPaymentScreen);
             },
           };
-
           dispatch(getAttendeePaymentAction(obj));
         },
         onFailure: err => {
@@ -143,14 +132,14 @@ export default function AttendanceRequestScreen() {
           <Input
             value={inputData?.firstName}
             label={'Your first name *'}
-            placeholder={''}
+            placeholder={'Enter your first name'}
             maxLength={25}
             onChangeText={text => setInputData({ ...inputData, firstName: text })}
           />
           <Input
             value={inputData?.lastName}
             label={'Your last name *'}
-            placeholder={''}
+            placeholder={'Enter your last name'}
             maxLength={25}
             onChangeText={text => setInputData({ ...inputData, lastName: text })}
           />
@@ -184,7 +173,7 @@ export default function AttendanceRequestScreen() {
           <Input
             value={inputData?.email}
             label={'Your email *'}
-            placeholder={''}
+            placeholder={'Enter your email'}
             maxLength={100}
             onChangeText={text => setInputData({ ...inputData, email: text })}
           />

@@ -74,7 +74,7 @@ export default function DiscussionForumDetail() {
     }
 
     const onComment = () => {
-        if (commentText.trim() !== '' && commentText.trim() <= 500) {
+        if (commentText.trim() !== '') {
             let obj = {
                 data: {
                     threadId: activePost._id,
@@ -95,7 +95,7 @@ export default function DiscussionForumDetail() {
             }
             dispatch(onAddCommentThread(obj))
         } else {
-            errorToast('Comment should be less than or equal to 500 characters.');
+            errorToast('Please enter comment');
         }
     }
 

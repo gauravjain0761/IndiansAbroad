@@ -130,7 +130,7 @@ export default function PostDetail() {
   };
 
   const onComment = () => {
-    if (commentText.trim() !== '' && commentText.trim().length <= 500) {
+    if (commentText.trim() !== '') {
       let obj = {
         data: {
           postId: activePost._id,
@@ -159,7 +159,7 @@ export default function PostDetail() {
       };
       dispatch(onAddComment(obj));
     } else {
-      errorToast('Comment should be less than or equal to 500 characters.');
+      errorToast('Please enter comment');
     }
   };
 
