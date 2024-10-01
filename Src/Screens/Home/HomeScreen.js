@@ -40,7 +40,7 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = React.useState(false);
   const [page, setpage] = useState(1);
   const [loading, setloading] = useState(false);
-  console.log(isNotificationClick)
+
   useEffect(() => {
     if (isNotificationClick) {
       navigation.navigate(screenName.NotificationScreen)

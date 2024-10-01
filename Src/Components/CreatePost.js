@@ -57,7 +57,6 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
     if (imageArray.length < 9) {
       ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
-          console.log(image)
           if (type == 'video') {
             let temp = []
             if (image.duration <= 120000 && image.size <= 300000000) {

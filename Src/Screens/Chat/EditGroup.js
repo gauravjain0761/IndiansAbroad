@@ -66,7 +66,6 @@ export default function EditGroup() {
     }
     dispatch(onGetGroupCreateUser(obj))
   }, [])
-  console.log(activeChatDetails, image, activeChatRoomUser?.chatId)
 
   useEffect(() => {
     setgroupName(activeChatDetails?.chatName)

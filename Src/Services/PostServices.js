@@ -340,7 +340,6 @@ export const onGlobalSearchApi = request => async dispatch => {
       });
     })
     .catch(error => {
-      console.log(error);
       handleErrorRes(error, request, dispatch);
     });
 };
@@ -608,7 +607,6 @@ export const getAttendeeGetByEventAction = request => async dispatch => {
     url: `${api.attendeeGetByEvent}/${request?.data}`,
   })
     .then(async response => {
-      console.log('succc')
       handleSuccessRes(response, request, dispatch, () => { });
     })
     .catch(error => {
@@ -641,8 +639,6 @@ export const getSaveListAction = request => async dispatch => {
 };
 
 export const getToggleFavoriteAction = request => async dispatch => {
-  const token = await getAsyncToken();
-  console.log('token', token);
 
   return makeAPIRequest({
     method: POST,
@@ -661,8 +657,6 @@ export const getToggleFavoriteAction = request => async dispatch => {
 };
 
 export const organizerVerifyTicketAction = request => async dispatch => {
-  const token = await getAsyncToken();
-  console.log('token', token);
 
   return makeAPIRequest({
     method: POST,
@@ -680,8 +674,6 @@ export const organizerVerifyTicketAction = request => async dispatch => {
 };
 
 export const transactionDownloadTransAction = request => async dispatch => {
-  const token = await getAsyncToken();
-  console.log('token', token);
 
   return makeAPIRequest({
     method: GET,
@@ -696,8 +688,6 @@ export const transactionDownloadTransAction = request => async dispatch => {
 };
 
 export const withdrawalDebitedAction = request => async dispatch => {
-  const token = await getAsyncToken();
-  console.log('token', token);
 
   return makeAPIRequest({
     method: GET,

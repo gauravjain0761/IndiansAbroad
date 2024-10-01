@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { Icons } from '../Themes/Icons';
 import { FontStyle, ImageStyle } from '../utils/commonFunction';
@@ -162,6 +162,29 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
     }))
   }
 
+  const onPressPageMessage = () => {
+    if (item?.followingCommunityPage == 'following') {
+      let obj = {
+        data: {
+          CpUserId: item?.cpId?.createdBy?._id,
+          userId: user?._id,
+          communityPageId: item?.cpId?._id
+        },
+        isPage: true,
+        onSuccess: () => {
+          navigation.navigate(screenName.PageMessaging)
+          // navigation.dispatch(
+          //   StackActions.replace(screenName.Messaging)
+          // );
+        }
+      }
+      dispatch(onOpenNewChatForUser(obj))
+
+    } else {
+      Alert.alert('You need to connect to this page to send a message.');
+    }
+  }
+
   if (item) {
     return (
       <View key={item?._id}>
@@ -229,7 +252,7 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
                   </TouchableOpacity>
                   :
 
-                  <TouchableOpacity style={styles.messageView}>
+                  <TouchableOpacity onPress={() => onPressPageMessage()} style={styles.messageView}>
                     <Image
                       source={Icons.messageIcon}
                       style={ImageStyle(30, 30, 'cover')}

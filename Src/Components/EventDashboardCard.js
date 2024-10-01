@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     height: 236,
     width: '100%',
+    borderRadius: 4,
   },
   footer: {
     paddingLeft: 5,

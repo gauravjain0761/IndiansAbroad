@@ -17,9 +17,9 @@ export default function RootContainer() {
 
   return (
     <NavigationContainer ref={navigationRef}>
+      <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
 
       <View style={ApplicationStyles.applicationView}>
-        <StatusBar backgroundColor={colors.white} barStyle="dark-content" />
         <Navigation />
         {preLoader ? <Loader /> : null}
       </View>

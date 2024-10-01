@@ -91,7 +91,7 @@ export default function DiscussionForumDetailCard({ item, index }) {
       {item?.mediaFiles && item?.mediaFiles.length > 0 && (
         <PostCarousal
           // poster={item?.thumbNail}
-          // isDetailScreen={isDetailScreen}
+          isDetailScreen={true}
           images={item?.mediaFiles}
         />
       )}

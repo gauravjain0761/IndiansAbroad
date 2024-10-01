@@ -99,7 +99,6 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup =
         type: [DocumentPicker.types.images, DocumentPicker.types.video, DocumentPicker.types.pdf]
       })
 
-      console.log('result--', result)
       if (result.type.includes('image')) {
         if (result.size <= 20000000) {
           navigation.navigate(screenName.MediaWithInputScreen, { isGroup: isGroup, result: result })

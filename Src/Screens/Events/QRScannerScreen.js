@@ -37,8 +37,6 @@ export default function QRScannerScreen() {
         ticketId: item,
       },
       onSuccess: (res) => {
-        console.log('res', res);
-
         navigation.navigate(screenName.QRSuccessScreen, { data: res })
       },
     };
@@ -60,11 +58,9 @@ export default function QRScannerScreen() {
             if (res?.values?.length === 0) {
               errorToast("We couldn't detect a valid QR code")
             } else {
-              console.log('res', res);
               const url = res?.values[0];
               const parts = url.split('/');
               const ticketId = parts[parts.length - 1];
-              console.log(ticketId);
               onStarPres(ticketId)
             }
           })
@@ -82,7 +78,6 @@ export default function QRScannerScreen() {
       const url = e.data;
       const parts = url.split('/');
       const ticketId = parts[parts.length - 1];
-      console.log(ticketId);
       onStarPres(ticketId)
     }
   };

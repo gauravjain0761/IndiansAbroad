@@ -71,8 +71,6 @@ export default function GroupMessaging() {
   }, []);
 
   const onSendMessage = () => {
-
-    // console.log(replaceTriggerValues(message, ({ id }) => `@${id}`))
     if (message.trim() !== '' && message.trim().length <= 2000) {
       let messageData = {
         chatId: activeChatRoomUser?.chatId,

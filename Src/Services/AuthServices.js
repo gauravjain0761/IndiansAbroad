@@ -30,7 +30,6 @@ export const onCallLogoutApi = (request) => async dispatch => {
         url: api.onLogout,
     })
         .then(async (response) => {
-            console.log('succc')
             // removeAuthorization(dispatch)
             // resetNavigation(screenName.LoginScreen)
             handleSuccessRes(response, request, dispatch, () => {

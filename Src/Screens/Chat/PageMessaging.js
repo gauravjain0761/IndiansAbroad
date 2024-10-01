@@ -22,7 +22,9 @@ import { sendData, socket } from '../../Socket/Socket';
 import { getChatMessage, onGetUnreadMsgCount } from '../../Services/ChatServices';
 import { SET_CHAT_DETAIL } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
-import { errorToast } from '../../utils/commonFunction';
+import { errorToast, FontStyle } from '../../utils/commonFunction';
+import moment from 'moment';
+import { hp } from '../../Themes/Fonts';
 
 
 export default function PageMessaging() {
@@ -83,6 +85,36 @@ export default function PageMessaging() {
             }
         }
     }
+
+    const checkDate = (item, index) => {
+        let dateFormat = 'DD MMMM YYYY';
+        let today = moment().format(dateFormat);
+        let yesterday = moment().subtract(1, 'days').format(dateFormat);
+        let currentDate = moment(item?.createdAt).format(dateFormat);
+        if (index == chatMessageList.length - 1) {
+            return (
+                <View style={styles.datesContainer}>
+                    <View style={styles.textLine} />
+                    <View>
+                        <Text style={styles.dateText}>{today === currentDate ? 'Today' : yesterday === currentDate ? 'Yesterday' : currentDate}</Text>
+                    </View>
+                    <View style={styles.textLine} />
+                </View>
+            )
+        } else if (index + 1 <= chatMessageList.length - 1) {
+            let prevDate = moment(chatMessageList[index + 1].createdAt).format(dateFormat);
+            if (currentDate !== prevDate) {
+                return <View style={styles.datesContainer}>
+                    <View style={styles.textLine} />
+                    <View>
+                        <Text style={styles.dateText}>{today === currentDate ? 'Today' : yesterday === currentDate ? 'Yesterday' : currentDate}</Text>
+                    </View>
+                    <View style={styles.textLine} />
+                </View>
+            }
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <ChatHeader
@@ -98,11 +130,15 @@ export default function PageMessaging() {
                 data={chatMessageList}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
-                    if (item?.createdBy?._id !== user._id) {
-                        return <ReciverMsg isPage={true} data={item} />;
-                    } else {
-                        return <SenderMsg data={item} />;
-                    }
+                    return (
+                        <View>
+                            {checkDate(item, index)}
+                            {item?.createdBy?._id !== user._id ?
+                                <ReciverMsg isPage={true} data={item} />
+                                :
+                                <SenderMsg data={item} />}
+                        </View>
+                    )
                 }}
                 onEndReached={fetchMoreData}
                 onEndReachedThreshold={0.5}
@@ -128,5 +164,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.white,
+    },
+    datesContainer: {
+        flexDirection: 'row', alignItems: 'center', marginVertical: hp(10),
+    },
+    textLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: colors.neutral_400
+    },
+    dateText: {
+        textAlign: 'center',
+        marginHorizontal: hp(10),
+        ...FontStyle(11, colors.neutral_900),
+
     },
 });

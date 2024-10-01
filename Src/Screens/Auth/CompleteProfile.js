@@ -141,7 +141,6 @@ export default function CompleteProfile() {
             data.phonenumber = user?.phonenumber
             data.email = user?.email
             data.gender = gender.toLowerCase()
-            console.log(data)
             dispatchAction(dispatch, IS_LOADING, true)
             formDataApiCall(api.registerstepone, data, (res) => {
                 dispatchAction(dispatch, IS_LOADING, false)

@@ -109,11 +109,22 @@ const ChatHeader = ({ url, name, subscribedMember, onPressName, isGroup = false,
         <RenderUserIcon isBorder={subscribedMember} type={isGroup ? 'group' : 'user'} url={url} height={50} />
         <Text style={styles.headerTextStyle}>{name}</Text>
       </TouchableOpacity>
+      {isPage ?
+        (chatMessageList?.length > 0 ?
+          <TouchableOpacity onPress={() => { isPage ? chatMessageList.length > 0 ? setmoreMenuPage(true) : {} : isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
+            <Image source={Icons.more} style={ImageStyle(14, 14)} />
+          </TouchableOpacity>
+          : null)
+        :
+        <TouchableOpacity onPress={() => { isPage ? chatMessageList.length > 0 ? setmoreMenuPage(true) : {} : isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
+          <Image source={Icons.more} style={ImageStyle(14, 14)} />
+        </TouchableOpacity>
+      }
 
 
-      <TouchableOpacity onPress={() => { isPage ? setmoreMenuPage(true) : isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
+      {/* <TouchableOpacity onPress={() => { isPage ? chatMessageList.length > 0 ? setmoreMenuPage(true) : {} : isGroup ? setmoreMenuGroup(true) : setmoreMenu(true) }} style={styles.menuIcon}>
         <Image source={Icons.more} style={ImageStyle(14, 14)} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {moreMenuPage && <PageChatMoreMenu
         onPressClear={() => { setmoreMenuPage(false), setTimeout(() => { setclearChatModal(true) }, 500) }}

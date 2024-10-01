@@ -18,6 +18,7 @@ import {
   FontStyle,
   ImageStyle,
   mobileNumberCheck,
+  successToast,
 } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,8 +34,9 @@ import {
   getDetailsListAction,
 } from '../../Services/PostServices';
 import CountryPicker from 'react-native-country-picker-modal';
-import { SET_EVENT_ATTENDANT_COUNT } from '../../Redux/ActionTypes';
+import { IS_LOADING, SET_EVENT_ATTENDANT_COUNT } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
+import { initPaymentSheet, presentPaymentSheet } from '@stripe/stripe-react-native';
 
 export default function AttendanceRequestScreen() {
   const navigation = useNavigation();
@@ -44,6 +46,8 @@ export default function AttendanceRequestScreen() {
   const [show, setShow] = useState(false);
   const [code, setcode] = useState('+1');
   const [termsCheckbox, settermsCheckbox] = useState(false);
+  const [attendeeId, setattendeeId] = useState(undefined)
+  console.log(attendeeId)
 
   const [inputData, setInputData] = useState({
     firstName: '',
@@ -85,20 +89,9 @@ export default function AttendanceRequestScreen() {
           event_id: activeEvent?._id,
         },
         onSuccess: res => {
-          let obj = {
-            data: { amount: totalAmount, attendeeId: res?.data?._id, currency: activeEvent?.currency, },
-            onSuccess: res => {
-              dispatchAction(dispatch, SET_EVENT_ATTENDANT_COUNT, {
-                id: activeEvent?._id,
-              });
-              setInputData({ firstName: '', lastName: '', phone: '', email: '', numberOfTickets: 1, });
-              getEventList()
-              settermsCheckbox(false)
-              navigation.goBack();
-              // navigation.navigate(screenName.EventPaymentScreen);
-            },
-          };
-          dispatch(getAttendeePaymentAction(obj));
+          console.log('res------', res)
+          setattendeeId(res?.data?.attendee?._id)
+          fetchPaymentSheetParams(res)
         },
         onFailure: err => {
           errorToast(err.data?.msg);
@@ -106,6 +99,58 @@ export default function AttendanceRequestScreen() {
       };
       dispatch(getAttendeeCreateAction(obj));
     }
+  };
+
+  const openPaymentSheet = async () => {
+    const { error, paymentOption } = await presentPaymentSheet();
+    console.log(error)
+    if (error) {
+      dispatchAction(dispatch, IS_LOADING, false)
+      if (error.code !== 'Canceled') {
+        errorToast(error.message)
+      }
+    } else {
+      onStripeSuccess()
+    }
+  }
+
+  const onStripeSuccess = () => {
+    let obj = {
+      data: { attendeeId: attendeeId },
+      onSuccess: res => {
+        dispatchAction(dispatch, SET_EVENT_ATTENDANT_COUNT, {
+          id: activeEvent?._id,
+        });
+        successToast('Payment Successful')
+        getEventList()
+        settermsCheckbox(false)
+        navigation.goBack();
+      },
+    }
+    dispatch(getAttendeePaymentAction(obj))
+  }
+
+
+  const fetchPaymentSheetParams = async (res) => {
+    dispatchAction(dispatch, IS_LOADING, true)
+    const { error, paymentOption } = await initPaymentSheet({
+      merchantDisplayName: "IndiansAbroad",
+      customerId: res?.data?.customer,
+      customerEphemeralKeySecret: res?.data?.ephemeralKey,
+      paymentIntentClientSecret: res?.data?.paymentIntent,
+      allowsDelayedPaymentMethods: true,
+      defaultBillingDetails: {
+        name: user?.first_Name + ' ' + user.last_Name,
+        email: user?.email,
+      },
+    });
+    if (!error) {
+      openPaymentSheet()
+    } else {
+      dispatchAction(dispatch, IS_LOADING, false)
+      errorToast(error.message);
+    }
+
   };
 
   const getEventList = page => {
@@ -407,3 +452,22 @@ const styles = StyleSheet.create({
   },
   des: { ...FontStyle(14, colors.neutral_900) },
 });
+
+
+
+
+
+// let obj = {
+//   data: { amount: totalAmount, attendeeId: res?.data?._id, currency: activeEvent?.currency, },
+//   onSuccess: res => {
+//     dispatchAction(dispatch, SET_EVENT_ATTENDANT_COUNT, {
+//       id: activeEvent?._id,
+//     });
+//     setInputData({ firstName: '', lastName: '', phone: '', email: '', numberOfTickets: 1, });
+//     getEventList()
+//     settermsCheckbox(false)
+//     navigation.goBack();
+//     // navigation.navigate(screenName.EventPaymentScreen);
+//   },
+// };
+// dispatch(getAttendeePaymentAction(obj));

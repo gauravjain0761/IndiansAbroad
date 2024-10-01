@@ -74,6 +74,7 @@ export default function PaymentAddressScreen() {
                     defaultBillingDetails: {
                         name: user?.first_Name + ' ' + user.last_Name,
                         email: user?.email,
+                        address: 'India MH'
                     },
                 });
                 if (!error) {
