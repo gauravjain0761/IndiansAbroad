@@ -1,4 +1,4 @@
-import { FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ApplicationStyles from '../../Themes/ApplicationStyles'
 import { Icons } from '../../Themes/Icons'
@@ -11,12 +11,99 @@ import { useDispatch, useSelector } from 'react-redux'
 import { onGetPlanList } from '../../Services/PaymentService'
 import NoDataFound from '../../Components/NoDataFound'
 import { screenName } from '../../Navigation/ScreenConstants'
-
+import {
+    requestPurchase, useIAP, validateReceiptIos, purchaseUpdatedListener,
+    purchaseErrorListener,
+} from 'react-native-iap';
+import * as RNIap from "react-native-iap";
+import { dispatchAction } from '../../utils/apiGlobal'
+import { IS_LOADING } from '../../Redux/ActionTypes'
 export default function PaymentModalScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const { user, planList } = useSelector(e => e.common)
     const [selectedPlan, setselectedPlan] = useState(undefined)
+
+    const {
+        connected,
+        // products,
+        promotedProductsIOS,
+        subscriptions,
+        purchaseHistory,
+        availablePurchases,
+        currentPurchase,
+        currentPurchaseError,
+        initConnectionError,
+        finishTransaction,
+        getProducts,
+        getSubscriptions,
+        getAvailablePurchases,
+        getPurchaseHistory,
+    } = useIAP();
+    const [products, setProducts] = useState(undefined);
+
+    useEffect(() => {
+        if (Platform.OS == 'ios') {
+            dispatchAction(dispatch, IS_LOADING, false)
+            RNIap.initConnection().then(() => {
+                RNIap.getProducts({ skus: ['com.ia.month', 'com.ia.year'] })
+                    .then((res) => {
+                        console.log('here--', res)
+                        setProducts(res[0]);
+                        dispatchAction(dispatch, IS_LOADING, false)
+                    })
+                    .catch((err) => {
+                        console.log("err--", err);
+                    });
+            });
+        }
+
+        const subscription = purchaseUpdatedListener((purchase) => {
+            console.log('-------', purchase)
+            if (purchase.productId == 'com.ia.month') {
+                dispatchAction(dispatch, IS_LOADING, false)
+                RNIap.finishTransaction(purchase.transactionId);
+                RNIap.clearTransactionIOS();
+                const receipt = purchase.transactionReceipt;
+                if (receipt) {
+                    onPurchasePlan(purchase);
+                }
+            }
+        });
+        const subscriptionError = purchaseErrorListener((error) => {
+            if (error.productId == 'com.ia.month') {
+                dispatchAction(dispatch, IS_LOADING, false)
+            }
+        });
+        return () => {
+            subscription.remove();
+            subscriptionError.remove();
+            RNIap.endConnection();
+        };
+    }, [])
+
+    const onPurchasePlan = (purchase) => {
+        console.log('purchase----', purchase)
+    }
+
+    const onSubscribeClick = () => {
+        if (Platform.OS == 'ios') {
+            dispatchAction(dispatch, IS_LOADING, true)
+            RNIap.requestPurchase({ sku: 'com.ia.month' }).then(async (res) => {
+                console.log('res--', res)
+                if (res?.transactionReceipt) {
+                    const result = await RNIap.validateReceiptIos(res?.transactionReceipt, true);
+                    console.log(result);
+                }
+                dispatchAction(dispatch, IS_LOADING, false)
+            }).catch(error => {
+                console.log('----', error)
+                dispatchAction(dispatch, IS_LOADING, false)
+            });
+            // requestPurchase({ sku: item?.product_id });
+        }
+    }
+
 
     useEffect(() => {
         dispatch(onGetPlanList())
@@ -75,7 +162,11 @@ export default function PaymentModalScreen() {
                         }
                     </View>
                 </ScrollView>
-                <CommonButton title={'Next'} onPress={() => navigation.navigate(screenName.PaymentAddressScreen, { selectedPlan: selectedPlan })} extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
+                <CommonButton title={'Next'} onPress={() =>
+                    // navigation.navigate(screenName.PaymentAddressScreen, { selectedPlan: selectedPlan })
+                    onSubscribeClick()
+
+                } extraStyle={{ marginBottom: 10, marginHorizontal: 10 }} />
             </SafeAreaView>
             {/* </ImageBackground> */}
         </View>

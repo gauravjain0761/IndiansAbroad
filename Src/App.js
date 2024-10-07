@@ -32,6 +32,7 @@ import Loader from './Components/Loader';
 import { SET_USER } from './Redux/ActionTypes';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { api } from './utils/apiConstants';
+import { withIAPContext } from 'react-native-iap';
 
 
 export const toastConfig = {
@@ -83,7 +84,7 @@ function App() {
     </StripeProvider>
   );
 }
-export default App;
+export default withIAPContext(App);
 
 const styles = StyleSheet.create({
   toastStyle: {

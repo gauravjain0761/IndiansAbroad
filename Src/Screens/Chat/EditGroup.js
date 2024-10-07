@@ -182,7 +182,7 @@ export default function EditGroup() {
       formDataApiCall(api.editGroup, data, (res) => {
         let obj = { data: { userId: user?._id, chatId: activeChatRoomUser?.chatId } }
         dispatch(onGetChatDetail(obj))
-        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: { ...activeChatRoomUser?.currentUser, chatName: res?.chatName, chatLogo: res?.chatLogo }, chatId: activeChatRoomUser.chatId })
+        dispatchAction(dispatch, SET_ACTIVE_CHAT_ROOM_USER, { currentUser: { ...activeChatRoomUser?.currentUser, chatDesc: res?.data?.chatDesc, chatName: res?.data?.chatName, chatLogo: res?.data?.chatLogo }, chatId: activeChatRoomUser.chatId })
         dispatchAction(dispatch, IS_LOADING, false)
         successToast(res.msg)
         goBack()

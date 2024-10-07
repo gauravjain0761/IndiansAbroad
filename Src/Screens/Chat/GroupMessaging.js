@@ -142,7 +142,6 @@ export default function GroupMessaging() {
       }
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ChatHeader

@@ -172,7 +172,6 @@ export default function PostDetail() {
           navigation.goBack();
         }}
       />
-
       <ScrollView>
         <View style={{ marginBottom: 10 }}>
           <PostCard isDetailScreen={true} item={activePost} />

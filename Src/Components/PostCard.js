@@ -163,7 +163,7 @@ export default function PostCard({ item, index, isDetailScreen = false, showRequ
   }
 
   const onPressPageMessage = () => {
-    if (item?.followingCommunityPage == 'following') {
+    if (item[isDetailScreen ? "isFollowing" : "followingCommunityPage"] == 'following') {
       let obj = {
         data: {
           CpUserId: item?.cpId?.createdBy?._id,

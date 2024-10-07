@@ -55,15 +55,15 @@ export default function HomeScreen() {
   }, [isFocuse]);
 
   useEffect(() => {
-    if (user) {
-      if (!user?.subscribedMember) {
-        navigation.replace(screenName.PaymentModalScreen)
-      } else {
-        if (moment(user?.planExpiryDate) < moment()) {
-          navigation.replace(screenName.PaymentModalScreen)
-        }
-      }
-    }
+    // if (user) {
+    //   if (!user?.subscribedMember) {
+    navigation.replace(screenName.PaymentModalScreen)
+    //   } else {
+    //     if (moment(user?.planExpiryDate) < moment()) {
+    //       navigation.replace(screenName.PaymentModalScreen)
+    //     }
+    //   }
+    // }
   }, [user])
 
   useEffect(() => {

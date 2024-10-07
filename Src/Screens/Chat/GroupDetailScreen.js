@@ -105,7 +105,7 @@ export default function GroupDetailScreen() {
                         <RenderUserIcon type='group' url={activeChatDetails?.chatLogo[0]?.cdnlocation} height={100} isBorder={false} />
                     </TouchableOpacity>
                     <Text style={styles.userText}>{activeChatDetails?.chatName}</Text>
-
+                    <Text style={styles.userText1}>{activeChatDetails?.chatDesc}</Text>
                 </View>
                 <View style={styles.memberView}>
                     <Text style={styles.title}>Media & Links</Text>
@@ -190,7 +190,12 @@ const styles = StyleSheet.create({
     userText: {
         ...FontStyle(18, colors.neutral_900, '700'),
         textAlign: 'center',
-        marginVertical: 10
+        marginTop: 10
+    },
+    userText1: {
+        ...FontStyle(12, colors.neutral_900, '400'),
+        textAlign: 'center',
+        marginBottom: 10
     },
     title: {
         ...FontStyle(18, colors.neutral_900, '700'),

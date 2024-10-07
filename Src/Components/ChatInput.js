@@ -55,7 +55,6 @@ const ChatInput = ({ message, setmessage, onSend, showMediaAdd = true, isGroup =
     setTimeout(async () => {
       ImageCropPicker.openPicker({ cropping: type == 'photo', mediaType: type, freeStyleCropEnabled: true, })
         .then(image => {
-          console.log(image)
           let time = new Date().getTime()
           image = {
             ...image,

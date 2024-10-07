@@ -90,13 +90,6 @@ export default function SignupScreen() {
                     url: `https://people.googleapis.com/v1/people/${userInfo.data.user.id}?personFields=genders,phoneNumbers,birthdays`
                 })
                     .then(function (response) {
-                        // console.log(response.data.genders[0].formattedValue)
-                        // console.log(response.data.birthdays[0]);
-                        console.log('-----', {
-                            gender: response.data.genders ? response.data.genders[0].formattedValue : undefined,
-                            // birthday: response.data.birthdays[0].date,
-                            ...userInfo?.data?.user
-                        })
                         dispatchAction(dispatch, SET_GOOGLE_USER, {
                             gender: response.data.genders[0].formattedValue,
                             // birthday: response.data.birthdays[0].date,

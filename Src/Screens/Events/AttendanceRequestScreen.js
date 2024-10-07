@@ -1,25 +1,9 @@
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Image,
-  Text,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import { StyleSheet, View, SafeAreaView, Image, Text, TouchableOpacity, Linking } from 'react-native';
 import React, { useState } from 'react';
 import Header from '../../Components/Header';
 import ApplicationStyles from '../../Themes/ApplicationStyles';
 import { useNavigation } from '@react-navigation/native';
-import {
-  currencyIcon,
-  emailCheck,
-  errorToast,
-  FontStyle,
-  ImageStyle,
-  mobileNumberCheck,
-  successToast,
-} from '../../utils/commonFunction';
+import { currencyIcon, emailCheck, errorToast, FontStyle, ImageStyle, mobileNumberCheck, successToast, } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { screenName } from '../../Navigation/ScreenConstants';
@@ -28,11 +12,7 @@ import { Icons } from '../../Themes/Icons';
 import CommonButton from '../../Components/CommonButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Input from '../../Components/Input';
-import {
-  getAttendeeCreateAction,
-  getAttendeePaymentAction,
-  getDetailsListAction,
-} from '../../Services/PostServices';
+import { getAttendeeCreateAction, getAttendeePaymentAction, getDetailsListAction, } from '../../Services/PostServices';
 import CountryPicker from 'react-native-country-picker-modal';
 import { IS_LOADING, SET_EVENT_ATTENDANT_COUNT } from '../../Redux/ActionTypes';
 import { dispatchAction } from '../../utils/apiGlobal';
@@ -47,7 +27,6 @@ export default function AttendanceRequestScreen() {
   const [code, setcode] = useState('+1');
   const [termsCheckbox, settermsCheckbox] = useState(false);
   const [attendeeId, setattendeeId] = useState(undefined)
-  console.log(attendeeId)
 
   const [inputData, setInputData] = useState({
     firstName: '',
