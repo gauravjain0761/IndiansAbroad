@@ -5,7 +5,7 @@ import ApplicationStyles from '../../Themes/ApplicationStyles';
 import Header from '../../Components/Header';
 import PagerView from 'react-native-pager-view';
 import { SCREEN_HEIGHT, wp } from '../../Themes/Fonts';
-import { FontStyle, ImageStyle } from '../../utils/commonFunction';
+import { FontStyle, getLocalTime, ImageStyle } from '../../utils/commonFunction';
 import colors from '../../Themes/Colors';
 import SearchBar from '../../Components/SearchBar';
 import PostCard from '../../Components/PostCard';
@@ -17,7 +17,7 @@ import { dispatchAction } from '../../utils/apiGlobal';
 import { IS_LOADING, SET_ACTIVE_EVENT, SET_ACTIVE_POST, SET_ACTIVE_POST_COMMENTS, SET_GLOBAL_SEARCH, SET_NOTIFICATION_CLICK, } from '../../Redux/ActionTypes';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoDataFound from '../../Components/NoDataFound';
-import { onUpdateFbToken } from '../../Services/AuthServices';
+import { onGetUserInfoApi, onUpdateFbToken } from '../../Services/AuthServices';
 import { getDiscussionCountry } from '../../Services/DiscussionServices';
 import EventDashboardCard from '../../Components/EventDashboardCard';
 import { Icons } from '../../Themes/Icons';
@@ -51,19 +51,24 @@ export default function HomeScreen() {
   useEffect(() => {
     if (isFocuse) {
       dispatch(onGetUnreadMsgCount({ data: { userId: user?._id } }));
+      // dispatch(onGetUserInfoApi({
+      //   params: { userId: user._id, },
+      // }))
     }
   }, [isFocuse]);
 
+  console.log('---', user?.subscribedMember, user?.planExpiryDate, getLocalTime(user?.planExpiryDate).format('HH:mm'), moment(user?.planExpiryDate).format('YYYY-MM-DD hh:mm:ss a'))
+
   useEffect(() => {
-    // if (user) {
-    //   if (!user?.subscribedMember) {
-    navigation.replace(screenName.PaymentModalScreen)
-    //   } else {
-    //     if (moment(user?.planExpiryDate) < moment()) {
-    //       navigation.replace(screenName.PaymentModalScreen)
-    //     }
-    //   }
-    // }
+    if (user) {
+      if (!user?.subscribedMember) {
+        navigation.replace(screenName.PaymentModalScreen)
+      } else {
+        if (moment(user?.planExpiryDate) < moment()) {
+          navigation.replace(screenName.PaymentModalScreen)
+        }
+      }
+    }
   }, [user])
 
   useEffect(() => {

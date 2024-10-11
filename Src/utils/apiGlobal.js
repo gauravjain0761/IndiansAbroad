@@ -16,7 +16,10 @@ export const makeAPIRequest = ({ method, url, data, params, headers }) =>
     };
     axios(option)
       .then(response => {
-        console.log("res--->", api.BASE_URL + url, data, params, response?.data, response.status);
+        if (!url.includes('groupcreate') && !url.includes('getalluserposts')) {
+          console.log("res--->", api.BASE_URL + url, data, params, response?.data, response.status);
+        }
+
         if (response.status === 200 || response.status === 201) {
           resolve(response);
         } else {

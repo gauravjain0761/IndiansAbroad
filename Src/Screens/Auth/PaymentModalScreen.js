@@ -8,7 +8,7 @@ import { hp, wp } from '../../Themes/Fonts'
 import CommonButton from '../../Components/CommonButton'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { onGetPlanList } from '../../Services/PaymentService'
+import { onGetPlanList, onUpdateReceipt } from '../../Services/PaymentService'
 import NoDataFound from '../../Components/NoDataFound'
 import { screenName } from '../../Navigation/ScreenConstants'
 import {
@@ -18,32 +18,30 @@ import {
 import * as RNIap from "react-native-iap";
 import { dispatchAction } from '../../utils/apiGlobal'
 import { IS_LOADING } from '../../Redux/ActionTypes'
+import { onGetUserInfoApi } from '../../Services/AuthServices'
+var plan = undefined
 export default function PaymentModalScreen() {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const { user, planList } = useSelector(e => e.common)
     const [selectedPlan, setselectedPlan] = useState(undefined)
-
-    const {
-        connected,
-        // products,
-        promotedProductsIOS,
-        subscriptions,
-        purchaseHistory,
-        availablePurchases,
-        currentPurchase,
-        currentPurchaseError,
-        initConnectionError,
-        finishTransaction,
-        getProducts,
-        getSubscriptions,
-        getAvailablePurchases,
-        getPurchaseHistory,
-    } = useIAP();
     const [products, setProducts] = useState(undefined);
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    // const restoreSubscriptions = async () => {
+    //     try {
+    //         const purchases = await RNIap.getAvailablePurchases();
+    //         // console.log('ppp---', purchases)
+    //         // Handle restored purchases
+    //     } catch (error) {
+    //         console.error('Error restoring purchases:', error);
+    //     }
+    // };
+    console.log(selectedPlan)
 
     useEffect(() => {
         if (Platform.OS == 'ios') {
+            // restoreSubscriptions()
             dispatchAction(dispatch, IS_LOADING, false)
             RNIap.initConnection().then(() => {
                 RNIap.getProducts({ skus: ['com.ia.month', 'com.ia.year'] })
@@ -58,22 +56,44 @@ export default function PaymentModalScreen() {
             });
         }
 
-        const subscription = purchaseUpdatedListener((purchase) => {
+        const subscription = purchaseUpdatedListener(async (purchase) => {
             console.log('-------', purchase)
-            if (purchase.productId == 'com.ia.month') {
-                dispatchAction(dispatch, IS_LOADING, false)
-                RNIap.finishTransaction(purchase.transactionId);
-                RNIap.clearTransactionIOS();
-                const receipt = purchase.transactionReceipt;
-                if (receipt) {
-                    onPurchasePlan(purchase);
+            const { transactionId, transactionReceipt, productId } = purchase;
+            // let plan = planList.filter(obj => obj._id == selectedPlan)
+            // console.log('plan--', plan)
+            // if (plan.length > 0) {
+            if (isProcessing) return; // Skip if already processing a purchase
+            setIsProcessing(true);
+            if (transactionId && transactionReceipt) {
+                try {
+                    const receipt = purchase.transactionReceipt;
+                    if (receipt) {
+                        onPurchasePlan(purchase, selectedPlan);
+                    }
+                } catch (error) {
+                    console.log('Error finishing transaction:', error);
                 }
+            } else {
+                console.log('Transaction ID or receipt is missing');
             }
+            setIsProcessing(false);
+            // if (purchase.productId == 'com.ia.month') {
+            // dispatchAction(dispatch, IS_LOADING, false)
+            // try {
+            //     console.log(purchase.transactionId)
+            //     await RNIap.finishTransaction(purchase);
+            //     let res = await RNIap.validateReceiptIos(purchase.transactionReceipt, true)
+            //     console.log('res--', res)
+            // } catch (error) {
+            //     console.warn('Failed to finish transaction:', error);
+            // }
+            // }
         });
         const subscriptionError = purchaseErrorListener((error) => {
-            if (error.productId == 'com.ia.month') {
-                dispatchAction(dispatch, IS_LOADING, false)
-            }
+            // if (error.productId == 'com.ia.month') {
+            console.log('purchaase error:', error);
+            dispatchAction(dispatch, IS_LOADING, false)
+            // }
         });
         return () => {
             subscription.remove();
@@ -82,25 +102,57 @@ export default function PaymentModalScreen() {
         };
     }, [])
 
-    const onPurchasePlan = (purchase) => {
-        console.log('purchase----', purchase)
+    const onPurchasePlan = (purchase, planId) => {
+        console.log('ayaa', selectedPlan)
+        let obj = {
+            data: {
+                receipt: purchase.transactionReceipt,
+                planId: plan
+
+            },
+            onSuccess: async (res) => {
+                await RNIap.finishTransaction({ purchase });
+                console.log('api res--')
+                dispatch(onGetUserInfoApi({
+                    params: { userId: user._id, },
+                    onSuccess: () => { navigation.replace("Home") }
+                }))
+
+            }
+        }
+        dispatch(onUpdateReceipt(obj))
     }
 
     const onSubscribeClick = () => {
         if (Platform.OS == 'ios') {
-            dispatchAction(dispatch, IS_LOADING, true)
-            RNIap.requestPurchase({ sku: 'com.ia.month' }).then(async (res) => {
-                console.log('res--', res)
-                if (res?.transactionReceipt) {
-                    const result = await RNIap.validateReceiptIos(res?.transactionReceipt, true);
-                    console.log(result);
-                }
-                dispatchAction(dispatch, IS_LOADING, false)
-            }).catch(error => {
-                console.log('----', error)
-                dispatchAction(dispatch, IS_LOADING, false)
-            });
-            // requestPurchase({ sku: item?.product_id });
+            let plan = planList.filter(obj => obj._id == selectedPlan)
+            if (plan.length > 0) {
+                console.log('plan[0].applePlanId--', plan[0].applePlanId)
+                dispatchAction(dispatch, IS_LOADING, true)
+                RNIap.requestSubscription({ sku: plan[0].applePlanId }).then(async (res) => {
+                    // console.log('res requestSubscription--', res)
+                    // if (res.transactionReceipt) {
+                    //     try {
+                    //         const receipt = res.transactionReceipt;
+                    //         if (receipt) {
+                    //             onPurchasePlan(res);
+                    //         }
+                    //     } catch (error) {
+                    //         console.log('Error finishing transaction:', error);
+                    //     }
+                    // } else {
+                    //     console.log('Transaction ID or receipt is missing');
+                    // }
+                }).catch(error => {
+                    console.log('error requestSubscription----', error)
+                    dispatchAction(dispatch, IS_LOADING, false)
+                });
+            }
+
+
+
+        } else {
+            navigation.navigate(screenName.PaymentAddressScreen, { selectedPlan: selectedPlan })
         }
     }
 
@@ -112,6 +164,7 @@ export default function PaymentModalScreen() {
     useEffect(() => {
         if (planList && planList.length > 0) {
             setselectedPlan(planList[0]?._id)
+            plan = planList[0]?._id
         }
     }, [planList])
 
@@ -138,7 +191,7 @@ export default function PaymentModalScreen() {
                                 keyExtractor={(item, index) => index.toString()}
                                 renderItem={({ item }) => {
                                     return (
-                                        <TouchableOpacity onPress={() => setselectedPlan(item?._id)}>
+                                        <TouchableOpacity onPress={() => { setselectedPlan(item?._id), plan = item?._id }}>
                                             <Text style={styles.des}>{item?.title}</Text>
                                             <View style={[styles.middleView, { borderColor: item?._id == selectedPlan ? colors?.secondary_750 : colors.neutral_800, backgroundColor: item?._id == selectedPlan ? colors?.secondary_500 : colors.neutral_300 }]}>
                                                 <Text style={styles.rsText}>Only ${item?.sell_price}</Text>

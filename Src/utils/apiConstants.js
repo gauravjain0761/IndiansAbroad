@@ -146,6 +146,7 @@ export const api = {
   getPlanList: '/subscription/plans/premium/list',
   buyPlan: '/subscription/buy',
   updatePaymentStatus: '/subscription/payment/update',
+  updateReceipt: '/payment/update/receipt',
 
   // logout
   onLogout: '/user/logout'

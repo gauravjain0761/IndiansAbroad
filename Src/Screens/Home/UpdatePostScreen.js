@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, SafeAreaView, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform } from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, ScrollView, SafeAreaView, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform, StatusBar } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../../Themes/Fonts';
@@ -66,20 +66,25 @@ export default function UpdatePostScreen() {
 
     const openDocPicker = async (type) => {
         if (imageArray.length < 9) {
-            ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
-                .then(image => {
+            await ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
+                .then(async (image) => {
                     if (type == 'video') {
                         let temp = []
                         if (image.duration <= 120000 && image.size <= 300000000) {
-                            createThumbnail({
+                            dispatchAction(dispatch, IS_LOADING, true)
+                            await createThumbnail({
                                 url: image.path,
                                 timeStamp: 1000,
                             }).then(response => {
+                                dispatchAction(dispatch, IS_LOADING, false)
                                 image.thumbnail = response
                                 temp.push(image)
                                 setpreviewModal(true)
                                 setselectedImage(image)
-                            }).catch(err => console.log('err---', err));
+                            }).catch(err => {
+                                dispatchAction(dispatch, IS_LOADING, false)
+                                console.log('err---', err)
+                            });
                         } else {
                             errorToast('Video should be less than 120 seconds and 300 MB ')
                         }
@@ -261,7 +266,7 @@ export default function UpdatePostScreen() {
             {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
                 style={{ justifyContent: 'flex-end', margin: 0, }} >
                 <View style={[styles.modalView, { height: SCREEN_HEIGHT - insets.top, backgroundColor: colors.white, borderTopEndRadius: 15, borderTopStartRadius: 15, borderWidth: 1, borderColor: colors.neutral_900, }]}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 20, justifyContent: 'space-between', marginTop: 10 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight + 10 : 20, justifyContent: 'space-between', marginTop: 10 }}>
                         <TouchableOpacity onPress={() => setpreviewModal(false)} style={styles.backView}>
                             <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
                         </TouchableOpacity>

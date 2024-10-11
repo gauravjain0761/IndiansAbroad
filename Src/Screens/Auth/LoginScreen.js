@@ -32,6 +32,8 @@ import { requestNotificationUserPermission } from '../../Config/firebaseConfig';
 export default function LoginScreen() {
   const [email, setemail] = useState(__DEV__ ? 'ritvas.codetown@gmail.com' : '',);
   const [password, setpassword] = useState(__DEV__ ? 'Test@123' : '');
+  // const [email, setemail] = useState('ritvas.codetown@gmail.com');
+  // const [password, setpassword] = useState('Test@123');
   const navigation = useNavigation();
   const dispatch = useDispatch();
 

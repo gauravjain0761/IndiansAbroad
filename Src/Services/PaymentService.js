@@ -40,6 +40,25 @@ export const onBuyPlan = (request) => async dispatch => {
 };
 
 
+export const onUpdateReceipt = (request) => async dispatch => {
+
+    return makeAPIRequest({
+        method: POST,
+        url: api.updateReceipt,
+        data: request?.data,
+    })
+        .then(async (response) => {
+            handleSuccessRes(response, request, dispatch, () => {
+                return response?.data
+            });
+        })
+        .catch(error => {
+            handleErrorRes(error, request, dispatch);
+        });
+};
+
+
+
 export const onUpdatePaymentStatus = (request) => async dispatch => {
     return makeAPIRequest({
         method: POST,
@@ -55,3 +74,6 @@ export const onUpdatePaymentStatus = (request) => async dispatch => {
             handleErrorRes(error, request, dispatch);
         });
 };
+
+
+

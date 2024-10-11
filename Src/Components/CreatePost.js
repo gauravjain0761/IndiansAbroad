@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert, Keyboard, TouchableWithoutFeedback, Platform, StatusBar } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SCREEN_HEIGHT, SCREEN_WIDTH, wp } from '../Themes/Fonts';
@@ -19,6 +19,7 @@ import Video from 'react-native-video';
 import { replaceTriggerValues, useMentions } from 'react-native-controlled-mentions';
 import TagUserInput from './TagUserInput';
 import ApplicationStyles from '../Themes/ApplicationStyles';
+import Loader from './Loader';
 
 
 
@@ -30,7 +31,8 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
   const insets = useSafeAreaInsets();
   const [selectedImage, setselectedImage] = useState(undefined)
   const [selectedImageIndex, setselectedImageIndex] = useState(undefined)
-  const { user, groupCreateAllUsers } = useSelector(e => e.common)
+  const { user, groupCreateAllUsers, preLoader } = useSelector(e => e.common)
+  const [loading, setloading] = useState(false)
 
   const triggersConfig = {
     mention: {
@@ -55,20 +57,23 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
   }, [])
   const openDocPicker = async (type) => {
     if (imageArray.length < 9) {
-      ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
-        .then(image => {
+      await ImageCropPicker.openPicker({ cropping: type == 'video' ? false : true, maxFiles: 9 - imageArray.length, multiple: false, mediaType: type, freeStyleCropEnabled: true, })
+        .then(async (image) => {
           if (type == 'video') {
-            let temp = []
             if (image.duration <= 120000 && image.size <= 300000000) {
-              createThumbnail({
+              setloading(true)
+              await createThumbnail({
                 url: image.path,
                 timeStamp: 1000,
               }).then(response => {
+                setloading(false)
                 image.thumbnail = response
-                temp.push(image)
                 setpreviewModal(true)
                 setselectedImage(image)
-              }).catch(err => console.log('err---', err));
+              }).catch(err => {
+                setloading(false)
+                console.log('err---', err)
+              });
             } else {
               errorToast('Video should be less than 120 seconds and 300 MB ')
             }
@@ -180,7 +185,9 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
     <ReactNativeModal onBackButtonPress={() => Keyboard.dismiss()} onBackdropPress={() => Keyboard.dismiss()} avoidKeyboard isVisible={createPostModal} backdropOpacity={0}
       style={{ justifyContent: 'flex-end', margin: 0 }} >
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+
         <View style={styles.modalView}>
+          {loading && <Loader />}
           <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 28, }}>
             <TouchableOpacity onPress={() => onCloseModal()} style={styles.backView}>
               <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
@@ -244,7 +251,7 @@ export default function CreatePost({ createPostModal, setcreatePostModal, isMyPa
       {selectedImage && previewModal && <ReactNativeModal onBackButtonPress={() => setpreviewModal(false)} onBackdropPress={() => setpreviewModal(false)} avoidKeyboard isVisible={previewModal} backdropOpacity={0}
         style={{ justifyContent: 'flex-end', margin: 0, }} >
         <View style={[styles.modalView, { height: SCREEN_HEIGHT - insets.top, backgroundColor: colors.white, borderTopEndRadius: 15, borderTopStartRadius: 15, borderWidth: 1, borderColor: colors.neutral_900 }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: 20, justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: wp(20), paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight + 10 : 20, justifyContent: 'space-between' }}>
             <TouchableOpacity onPress={() => setpreviewModal(false)} style={styles.backView}>
               <Image source={Icons.left_arrow} style={ImageStyle(15, 15)} />
             </TouchableOpacity>

@@ -30,6 +30,7 @@ export const onGetThreadList = (request) => async dispatch => {
                 dispatchAction(dispatch, IS_LOADING, false)
                 if (response?.data && response?.data?.err == 200) {
                     dispatchAction(dispatch, SET_THREAD_LIST, response?.data?.Threads)
+                    if (request?.onSuccess) request?.onSuccess(response?.data);
                 } else {
                     if (response?.data && response?.data?.err == 300) {
                         dispatchAction(dispatch, SET_THREAD_LIST, response?.data?.Threads)

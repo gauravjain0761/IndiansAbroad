@@ -49,6 +49,7 @@ export default function DiscussionForum() {
   }, []);
 
   const getThreadsList = (id, search) => {
+    // setRefreshing(false);
     let obj = {
       data: {
         page: 0,
@@ -58,11 +59,15 @@ export default function DiscussionForum() {
       },
       onSuccess: () => {
         setRefreshing(false);
+      },
+      onFailure: () => {
+        setRefreshing(false)
       }
     }
     dispatch(onGetThreadList(obj))
   }
 
+  console.log(refreshing)
 
   const renderItem = ({ item, index }) => {
     return (
@@ -121,6 +126,7 @@ export default function DiscussionForum() {
             </View>
           );
         }}
+        style={{ flex: 1 }}
         ListEmptyComponent={<NoDataFound />}
       />}
     </View>
